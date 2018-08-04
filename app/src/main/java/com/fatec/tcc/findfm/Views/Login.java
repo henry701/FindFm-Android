@@ -46,7 +46,7 @@ public class Login extends AppCompatActivity {
         initRequests();
         this.loginController = new LoginController(getApplicationContext(), getResources());
         this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando..");
+        dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
     }
@@ -79,6 +79,7 @@ public class Login extends AppCompatActivity {
             },
             (ErrorResponse errorResponse) ->
             {
+                dialog.hide();
                 // TODO: On Business Error login (senha errada por ex)
             },
             (Exception error) ->
@@ -95,7 +96,10 @@ public class Login extends AppCompatActivity {
         loginRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/info_gerais/banheiros"));
     }
 
-    public void btnEntrar_Click(View v) {
+    public void btnEntrar_Click(View v)
+    {
+
+        this.dialog.show();
 
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
@@ -111,7 +115,6 @@ public class Login extends AppCompatActivity {
         );
         loginRequest.setRequestObject(requestObject);
         loginRequest.execute(getApplicationContext());
-        this.dialog.show();
 
     }
 

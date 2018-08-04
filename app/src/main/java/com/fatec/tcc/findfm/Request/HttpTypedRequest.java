@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Request;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -57,7 +58,7 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
             requestObject,
             (TResponse response) ->
             {
-                // Logging...?
+                Log.i("[LOG CHAMADAS TYPED]", "Success!");
                 onSuccess.accept(response);
             },
             (VolleyError error) ->
@@ -67,12 +68,12 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
                 {
                     ErrorResponseException errorResponseException = (ErrorResponseException) innerException;
                     TErrorResponse errorResponse = (TErrorResponse) errorResponseException.getErrorResponse();
-                    // Logging...?
+                    Log.w("[LOG CHAMADAS TYPED]", "Error Business");
                     onBusinessError.accept(errorResponse);
                 }
                 else
                 {
-                    // Logging...?
+                    Log.e("[LOG CHAMADAS TYPED]", "Error Critical");
                     onCriticalError.accept(error);
                 }
             }

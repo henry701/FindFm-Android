@@ -31,6 +31,7 @@ public class SharedRequestQueue
             Network network = new BasicNetwork(new HurlStack());
             // Create the Request Queue
             requestQueue = new RequestQueue(cache, network);
+            requestQueue.start();
         }
         return requestQueue;
     }
