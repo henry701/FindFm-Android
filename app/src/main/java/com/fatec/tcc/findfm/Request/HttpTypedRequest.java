@@ -5,12 +5,15 @@ import android.content.Context;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Volley.ErrorResponseException;
-import com.fatec.tcc.findfm.Infrastructure.Volley.JsonPOSTRequest;
+import com.fatec.tcc.findfm.Infrastructure.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Volley.SharedRequestQueue;
 
-//import java.util.function.Consumer;
+import java9.util.function.Consumer;
 
-public class HttpPostRequest<TRequest, TResponse, TErrorResponse> {/*
+public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
+
+    private final int method;
+
     private final Class<TRequest> requestClass;
     private final Class<TResponse> receiveClass;
     private final Class<TErrorResponse> errorResponseClass;
@@ -22,15 +25,17 @@ public class HttpPostRequest<TRequest, TResponse, TErrorResponse> {/*
     private String fullUrl;
     private TRequest requestObject;
 
-    private JsonPOSTRequest<TRequest, TResponse, TErrorResponse> request;
+    private JsonTypedRequest<TRequest, TResponse, TErrorResponse> request;
 
-    public HttpPostRequest(Class<TRequest> requestClass,
-                           Class<TResponse> receiveClass,
-                           Class<TErrorResponse> errorResponseClass,
-                           Consumer<TResponse> onSuccess,
-                           Consumer<TErrorResponse> onBusinessError,
-                           Consumer<Exception> onCriticalError)
+    public HttpTypedRequest(int method,
+                            Class<TRequest> requestClass,
+                            Class<TResponse> receiveClass,
+                            Class<TErrorResponse> errorResponseClass,
+                            Consumer<TResponse> onSuccess,
+                            Consumer<TErrorResponse> onBusinessError,
+                            Consumer<Exception> onCriticalError)
     {
+        this.method = method;
         this.requestClass = requestClass;
         this.receiveClass = receiveClass;
         this.errorResponseClass = errorResponseClass;
@@ -42,8 +47,9 @@ public class HttpPostRequest<TRequest, TResponse, TErrorResponse> {/*
     }
 
     private void initRequest() {
-        request = new JsonPOSTRequest<>
+        request = new JsonTypedRequest<>
         (
+            method,
             requestClass,
             receiveClass,
             errorResponseClass,
@@ -92,5 +98,5 @@ public class HttpPostRequest<TRequest, TResponse, TErrorResponse> {/*
 
     public void setRequestObject(TRequest requestObject) {
         this.requestObject = requestObject;
-    }*/
+    }
 }

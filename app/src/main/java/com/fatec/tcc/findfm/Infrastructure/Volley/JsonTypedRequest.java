@@ -10,21 +10,22 @@ import com.fatec.tcc.findfm.Utils.JsonUtils;
 
 import java.nio.charset.Charset;
 
-public class JsonPOSTRequest<TRequest, TResponse, TErrorResponse> extends JsonRequest<TResponse> {
+public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.android.volley.toolbox.JsonRequest<TResponse> {
 
     private final Class<TRequest> sendClass;
     private final Class<TResponse> receiveClass;
     private final Class<TErrorResponse> errorResponseClass;
 
-    public JsonPOSTRequest(Class<TRequest> sendClass,
-                           Class<TResponse> receiveClass,
-                           Class<TErrorResponse> errorResponseClass,
-                           String fullUrl,
-                           TRequest requestBody,
-                           Response.Listener<TResponse> listener,
-                           Response.ErrorListener errorListener)
+    public JsonTypedRequest(int method,
+                            Class<TRequest> sendClass,
+                            Class<TResponse> receiveClass,
+                            Class<TErrorResponse> errorResponseClass,
+                            String fullUrl,
+                            TRequest requestBody,
+                            Response.Listener<TResponse> listener,
+                            Response.ErrorListener errorListener)
     {
-        super(Method.GET, fullUrl, JsonUtils.GSON.toJson(requestBody), listener, errorListener);
+        super(method, fullUrl, JsonUtils.GSON.toJson(requestBody), listener, errorListener);
         this.sendClass = sendClass;
         this.receiveClass = receiveClass;
         this.errorResponseClass = errorResponseClass;
