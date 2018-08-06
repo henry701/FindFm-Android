@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
-import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Request.HttpRequest;
 import com.fatec.tcc.findfm.Request.ServerCallBack;
 import com.fatec.tcc.findfm.Utils.HttpMethod;

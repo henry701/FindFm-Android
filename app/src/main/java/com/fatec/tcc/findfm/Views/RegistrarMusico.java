@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,10 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
-import android.widget.Adapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.Controller.RegistrarController;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
-import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Request.ServerCallBack;
@@ -44,7 +38,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class RegistrarMusico extends AppCompatActivity {
 
