@@ -106,8 +106,10 @@ public class Registrar extends AppCompatActivity {
 
             switch (tipoConta.getText().toString()){
                 case "Banda":
+                    //Util.open_form_withParam(getApplicationContext(), RegistrarBanda.class, this.path, this.param);
                     break;
                 case "Contratante":
+                    //Util.open_form_withParam(getApplicationContext(), RegistrarContratante.class, this.path, this.param);
                     break;
                 case "Músico":
                     Util.open_form_withParam(getApplicationContext(), RegistrarMusico.class, this.path, this.param);

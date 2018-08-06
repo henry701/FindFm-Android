@@ -15,6 +15,7 @@ import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.R;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,17 +64,20 @@ public class AdapterInstrumentos extends RecyclerView.Adapter {
                 instrumentosUsuario.remove(instrumento);
             }
         });
-        //TODO: tratar java-util-concurrentmodificationexception
         view.cb_nivelHabilidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Set<Instrumento> toRemove = new HashSet<>();
+                Set<Instrumento> toAdd = new HashSet<>();
                 for(Instrumento inst : instrumentosUsuario){
                     if(inst.equals(instrumento)){
                         inst.setNivelHabilidade(NivelHabilidade.from(position + 1));
-                        instrumentosUsuario.remove(instrumento);
-                        instrumentosUsuario.add(inst);
+                        toRemove.add(instrumento);
+                        toAdd.add(inst);
                     }
                 }
+                instrumentosUsuario.removeAll(toRemove);
+                instrumentosUsuario.addAll(toAdd);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
