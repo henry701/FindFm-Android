@@ -3,13 +3,11 @@ package com.fatec.tcc.findfm.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
@@ -63,17 +61,20 @@ public class AdapterInstrumentos extends RecyclerView.Adapter {
                 instrumentosUsuario.remove(instrumento);
             }
         });
-        //TODO: tratar java-util-concurrentmodificationexception
         view.cb_nivelHabilidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Set<Instrumento> toRemove = new HashSet<>();
+                Set<Instrumento> toAdd = new HashSet<>();
                 for(Instrumento inst : instrumentosUsuario){
                     if(inst.equals(instrumento)){
                         inst.setNivelHabilidade(NivelHabilidade.from(position + 1));
-                        instrumentosUsuario.remove(instrumento);
-                        instrumentosUsuario.add(inst);
+                        toRemove.add(instrumento);
+                        toAdd.add(inst);
                     }
                 }
+                instrumentosUsuario.removeAll(toRemove);
+                instrumentosUsuario.addAll(toAdd);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }

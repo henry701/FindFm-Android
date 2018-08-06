@@ -1,7 +1,6 @@
 package com.fatec.tcc.findfm.Views;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,29 +9,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.fatec.tcc.findfm.Controller.LoginController;
-import com.fatec.tcc.findfm.Model.Business.Usuario;
-import com.fatec.tcc.findfm.Model.Http.Parsers.UsuarioParser;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
-import com.fatec.tcc.findfm.Model.Http.Response.LoginResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Request.HttpTypedRequest;
-import com.fatec.tcc.findfm.Request.ServerCallBack;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
-
-import org.json.JSONObject;
 
 public class Login extends AppCompatActivity {
 
     private HttpTypedRequest<LoginRequest, ResponseBody, ErrorResponse> loginRequest;
-    private LoginController loginController;
     private ProgressDialog dialog;
 
     @Override
@@ -44,7 +33,6 @@ public class Login extends AppCompatActivity {
 
     private void init() {
         initRequests();
-        this.loginController = new LoginController(getApplicationContext(), getResources());
         this.dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
@@ -65,7 +53,6 @@ public class Login extends AppCompatActivity {
                     // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                     SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                     editor.putBoolean("isLogado", true);
-                    // editor.putString("username", user.getUsuario());
                     // As chaves precisam ser persistidas
                     editor.apply();
                     dialog.dismiss();
@@ -93,14 +80,11 @@ public class Login extends AppCompatActivity {
                         (dialog, id) -> { }).create().show();
             }
         );
-        loginRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/info_gerais/banheiros"));
+        loginRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/login/logar"));
     }
 
     public void btnEntrar_Click(View v)
     {
-
-        this.dialog.show();
-
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
 
@@ -113,6 +97,7 @@ public class Login extends AppCompatActivity {
                 usuario.getText().toString(),
                 senha.getText().toString()
         );
+        this.dialog.show();
         loginRequest.setRequestObject(requestObject);
         loginRequest.execute(getApplicationContext());
 

@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Volley.ErrorResponseException;
 import com.fatec.tcc.findfm.Infrastructure.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Volley.SharedRequestQueue;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 
 import java9.util.function.Consumer;
 
@@ -43,11 +44,9 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
         this.onSuccess = onSuccess;
         this.onBusinessError = onBusinessError;
         this.onCriticalError = onCriticalError;
-
-        initRequest();
     }
 
-    private void initRequest() {
+    private void createRequest() {
         request = new JsonTypedRequest<>
         (
             method,
@@ -59,6 +58,8 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
             (TResponse response) ->
             {
                 Log.i("[LOG CHAMADAS TYPED]", "Success!");
+                Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos:");
+                Log.i("[LOG CHAMADAS TYPED]", JsonUtils.toJsonObject(response).toString());
                 onSuccess.accept(response);
             },
             (VolleyError error) ->
@@ -82,6 +83,7 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
 
     public void execute(Context context) {
         RequestQueue queue = SharedRequestQueue.getRequestQueue(context);
+        createRequest();
         queue.add(request);
     }
 

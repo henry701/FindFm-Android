@@ -18,7 +18,7 @@ public class HomePage extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("FindFM_param", MODE_PRIVATE);
         boolean isLogado = sharedPreferences.getBoolean("isLogado", false);
-        String usuario = sharedPreferences.getString("username","Visitante");
+        String usuario = sharedPreferences.getString("nomeUsuario","Visitante");
 
         if(isLogado) {
 
