@@ -105,6 +105,7 @@
     <string name="foto_perfil">Foto perfil</string>
     <string name="nome">Nome</string>
     <string name="nome_completo">Nome Completo</string>
+    <string name="nome_banda">Nome da Banda</string>
     <string name="nome_usuario">Nome de Usuário</string>
     <string name="senha">Senha</string>
     <string name="e_mail">E-mail</string>
@@ -112,9 +113,11 @@
     <string name="entrar">Entrar</string>
     <string name="title_activity_registrar__musico">Registrar_Musico</string>
     <string name="nascimento">Data de Nascimento</string>
+    <string name="data_formacao">Data de Formação</string>
     <string name="nivel_habilidade">Nível Habilidade</string>
     <string name="usuario_ou_senha_incorretos">Usuário e/ou Senha incorretos</string>
     <string name="escolha_instrumento">Selecione seus instrumentos e seu nível de habilidade:</string>
     <string name="suas_informacoes">Preencha suas informações</string>
+    <string name="banda_informacoes">Preencha as informações da Banda</string>
     <string name="telefone_contato">Telefone</string>
 </resources>

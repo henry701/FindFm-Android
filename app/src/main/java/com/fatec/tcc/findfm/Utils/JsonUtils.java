@@ -4,16 +4,20 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.DateFormat;
 
 /**
  * Classe para facilitar operações repetitivas referente à JSONs
  * **/
 public class JsonUtils {
 
-    public static final Gson GSON = new Gson();
+    public static final Gson GSON =  new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd").create();
 
     /**
      * Transforma um Object em JSONObject

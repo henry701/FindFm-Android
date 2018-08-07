@@ -14,6 +14,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
     private final Class<TRequest> sendClass;
     private final Class<TResponse> receiveClass;
     private final Class<TErrorResponse> errorResponseClass;
+    private String jsonRequestBody;
 
     public JsonTypedRequest(int method,
                             Class<TRequest> sendClass,
@@ -28,6 +29,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
         this.sendClass = sendClass;
         this.receiveClass = receiveClass;
         this.errorResponseClass = errorResponseClass;
+        this.jsonRequestBody = JsonUtils.GSON.toJson(requestBody);
     }
 
     @Override
@@ -46,5 +48,9 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
             VolleyError volleyError = new VolleyError("Response returned error statusCode!", errorResponseException);
             return Response.error(volleyError);
         }
+    }
+
+    public String getBodyAsJson(){
+        return this.jsonRequestBody;
     }
 }

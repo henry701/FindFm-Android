@@ -18,6 +18,7 @@ import com.fatec.tcc.findfm.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.google.gson.internal.LinkedTreeMap;
 
 public class Login extends AppCompatActivity {
 
@@ -53,6 +54,7 @@ public class Login extends AppCompatActivity {
                     // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                     SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                     editor.putBoolean("isLogado", true);
+                    editor.putString("nomeUsuario", ((LinkedTreeMap) response.getData()).get("nomeUsuario").toString());
                     // As chaves precisam ser persistidas
                     editor.apply();
                     dialog.dismiss();

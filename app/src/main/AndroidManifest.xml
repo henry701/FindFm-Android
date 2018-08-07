@@ -18,16 +18,27 @@
         android:roundIcon="@drawable/favicon2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".Views.Login" android:windowSoftInputMode="stateAlwaysHidden">
+        <activity
+            android:name=".Views.Login"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Views.HomePage" android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Views.Registrar" android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".Views.RegistrarMusico" android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity
+            android:name=".Views.HomePage"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Views.Registrar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Views.RegistrarMusico"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".RegistrarBanda"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>
