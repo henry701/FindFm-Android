@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Volley.ErrorResponseException;
 import com.fatec.tcc.findfm.Infrastructure.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Volley.SharedRequestQueue;
+import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
 import java9.util.function.Consumer;
@@ -84,6 +85,9 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
     public void execute(Context context) {
         RequestQueue queue = SharedRequestQueue.getRequestQueue(context);
         createRequest();
+        Log.i("[LOG CHAMADAS TYPED]", "Iniciando chamada!");
+        Log.i("[LOG CHAMADAS TYPED]", "MÉTODO: " + HttpMethod.from(request.getMethod()) + " URL da chamada: " + request.getUrl());
+        Log.i("[LOG CHAMADAS TYPED]", "Request BODY: " + request.getBodyAsJson());
         queue.add(request);
     }
 

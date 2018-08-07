@@ -2,7 +2,9 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,16 +20,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
+import com.android.volley.Request;
 import com.fatec.tcc.findfm.Adapters.AdapterInstrumentos;
-import com.fatec.tcc.findfm.Controller.RegistrarController;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Request.ServerCallBack;
+import com.fatec.tcc.findfm.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
-
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -47,8 +52,9 @@ public class RegistrarMusico extends AppCompatActivity {
     private Bundle param = new Bundle();
     private EditText txtNascimento;
     private RecyclerView rc;
-    private RegistrarController controller;
+    private HttpTypedRequest<Musico, ResponseBody, ErrorResponse> registrarRequest;
     private Date nascimento;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +65,7 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     private void init(){
-        this.controller = new RegistrarController(this, getResources());
+        initRequests();
         this.rc = findViewById(R.id.listaInstrumentos);
         this.imageView = findViewById(R.id.circularImageView);
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
@@ -67,6 +73,10 @@ public class RegistrarMusico extends AppCompatActivity {
         this.txtNascimento.setShowSoftInputOnFocus(false);
         this.txtNascimento.setInputType(InputType.TYPE_NULL);
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
         byte[] image = this.param.getByteArray("foto");
 
         if(image != null && image.length != 0) {
@@ -78,6 +88,48 @@ public class RegistrarMusico extends AppCompatActivity {
             this.btnRemoverImagem.setVisibility(View.INVISIBLE);
         }
     }
+
+    private void initRequests() {
+        registrarRequest = new HttpTypedRequest<>
+                (
+                        Request.Method.POST,
+                        Musico.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            this.dialog.hide();
+                            if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
+                                // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
+                                SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+                                editor.putBoolean("isLogado", true);
+                                editor.putString("tipoUsuario", "MUSICO");
+                                editor.putString("nomeUsuario", param.getString("nomeCompleto"));
+                                // As chaves precisam ser persistidas
+                                editor.apply();
+                                dialog.dismiss();
+                                Util.open_form__no_return(this, HomePage.class);
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            dialog.hide();
+                            // TODO: On Business Error login (senha errada por ex)
+                        },
+                        (Exception error) ->
+                        {
+                            dialog.hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/login/registrar"));
+    }
+
 
     private void updateList() {
         //TODO: server retornar uma lista mais completa
@@ -144,11 +196,6 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-        Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        this.param.putByteArray("foto", baos.toByteArray());
-
         TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
         TextView txtNascimento = findViewById(R.id.txtNascimento);
 
@@ -156,22 +203,34 @@ public class RegistrarMusico extends AppCompatActivity {
                 txtNascimento.getText().toString().isEmpty() )
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
-            this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
+            this.dialog.show();
+
+            Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
             AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
             List<Instrumento> instrumentos = new ArrayList<>();
             instrumentos.addAll(adapter.getInstrumentos());
 
-            this.controller.registrarMusico(this.param, instrumentos, this.nascimento, new ServerCallBack() {
-                @Override
-                public void onSucess(JSONObject result) {
+            this.param.putByteArray("foto", baos.toByteArray());
+            this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
 
-                }
+            Musico musico = new Musico(
+                    param.getString("nomeUsuario"),
+                    param.getString("senha"),
+                    param.getString("email"),
+                    param.getString("telefone"),
+                    param.getByteArray("foto"),
+                    false,
+                    false,
+                    param.getString("nomeCompleto"),
+                    nascimento,
+                    instrumentos
+            );
 
-                @Override
-                public void onError(VolleyError error) {
-
-                }
-            });
+            registrarRequest.setRequestObject(musico);
+            registrarRequest.execute(getApplicationContext());
         }
     }
 
