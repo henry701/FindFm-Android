@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,6 +59,7 @@ public class RegistrarBanda extends AppCompatActivity {
     private Date formacao;
     private ProgressDialog dialog;
     private Spinner cb_uf;
+    private String UF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,18 @@ public class RegistrarBanda extends AppCompatActivity {
 
         this.cb_uf.setAdapter(
                 new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
+
+        this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                UF = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         byte[] image = this.param.getByteArray("foto");
 
@@ -204,7 +218,7 @@ public class RegistrarBanda extends AppCompatActivity {
     }
 
     public void btnRemoverImagem_Click(View v){
-        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder, getTheme()));
+        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
     }
 
@@ -212,6 +226,7 @@ public class RegistrarBanda extends AppCompatActivity {
         TextView txtNomeBanda = findViewById(R.id.txtNomeBanda);
         TextView txtFormacao = findViewById(R.id.txtFormacao);
         TextView txtNumeroIntegrantes = findViewById(R.id.txtNumeroIntegrantes);
+        TextView txtCidade = findViewById(R.id.txtCidadeBanda);
 
         AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
         List<Instrumento> instrumentos = new ArrayList<>();
@@ -229,6 +244,7 @@ public class RegistrarBanda extends AppCompatActivity {
         if( txtNomeBanda.getText().toString().isEmpty()||
                 txtFormacao.getText().toString().isEmpty() ||
                 txtNumeroIntegrantes.getText().toString().isEmpty() ||
+                txtCidade.getText().toString().isEmpty() ||
                 instrumentos.isEmpty() || isQtdInstrumentoVazio)
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
@@ -240,6 +256,8 @@ public class RegistrarBanda extends AppCompatActivity {
 
             this.param.putByteArray("foto", baos.toByteArray());
             this.param.putString("nomeCompleto", txtNomeBanda.getText().toString());
+            this.param.putString("cidade", txtCidade.getText().toString());
+            this.param.putString("uf", UF);
             int numeroParticipantes = Integer.parseInt(txtNumeroIntegrantes.getText().toString());
 
             Banda banda = new Banda(
@@ -253,7 +271,9 @@ public class RegistrarBanda extends AppCompatActivity {
                     param.getString("nomeCompleto"),
                     formacao,
                     instrumentos,
-                    numeroParticipantes
+                    numeroParticipantes,
+                    param.getString("cidade"),
+                    param.getString("uf")
             );
 
             registrarRequest.setRequestObject(banda);

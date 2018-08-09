@@ -141,4 +141,19 @@ public class FormatadorTelefoneBR implements TextWatcher {
         text.append(formattedString.toString());
         return formattedString.toString();
     }
+
+    public static boolean validarTelefone(String tel) {
+        //VALEU @wiltonbsilva
+        String formato = "(^|\\()?\\s*(\\d{2})\\s*(\\s|\\))*([1-9]?\\d{4})(\\s|-)?(\\d{4})($|\\n)";
+
+        if((tel == null) || (tel.length()<14) || (!tel.matches(formato)))
+            return false;
+        else
+            return true;
+    }
+
+    public static boolean validarEmail(String email) {
+        String formato = "^((([!#$%&'*+\\-/=?^_`{|}~\\w])|([!#$%&'*+\\-/=?^_`{|}~\\w][!#$%&'*+\\-/=?^_`{|}~\\.\\w]{0,}[!#$%&'*+\\-/=?^_`{|}~\\w]))[@]\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)$";
+        return email.matches(formato);
+    }
 }

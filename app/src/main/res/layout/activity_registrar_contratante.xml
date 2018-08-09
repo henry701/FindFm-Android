@@ -133,7 +133,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtCapacidadeLocal">
 
                 <EditText
-                    android:id="@+id/txtCidade"
+                    android:id="@+id/txtCidadeContratante"
                     android:layout_width="172dp"
                     android:layout_height="54dp"
                     android:backgroundTint="@color/white"
@@ -191,8 +191,8 @@
                 android:drawableLeft="@drawable/ic_local"
                 android:ems="10"
                 android:hint="@string/simbolo_numero"
-                android:inputType="text"
-                android:maxLength="70"
+                android:inputType="number"
+                android:maxLength="10"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
                 app:layout_constraintEnd_toEndOf="parent"

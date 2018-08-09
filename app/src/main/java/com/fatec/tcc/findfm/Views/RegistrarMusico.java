@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,6 +59,7 @@ public class RegistrarMusico extends AppCompatActivity {
     private Date nascimento;
     private ProgressDialog dialog;
     private Spinner cb_uf;
+    private String UF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,17 @@ public class RegistrarMusico extends AppCompatActivity {
         this.cb_uf.setAdapter(
                 new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
 
+        this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                UF = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         byte[] image = this.param.getByteArray("foto");
 
         if(image != null && image.length != 0) {
@@ -190,7 +203,7 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnRemoverImagem_Click(View v){
-        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder, getTheme()));
+        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
     }
 
@@ -212,12 +225,15 @@ public class RegistrarMusico extends AppCompatActivity {
     public void btnRegistrar_Click(View v){
         TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
         TextView txtNascimento = findViewById(R.id.txtNascimento);
+        TextView txtCidade = findViewById(R.id.txtCidadeMusico);
+
         AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
         List<Instrumento> instrumentos = new ArrayList<>();
         instrumentos.addAll(adapter.getInstrumentos());
 
         if( txtNomeCompleto.getText().toString().isEmpty()||
                 txtNascimento.getText().toString().isEmpty() ||
+                txtCidade.getText().toString().isEmpty() ||
                 instrumentos.isEmpty())
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
@@ -227,10 +243,10 @@ public class RegistrarMusico extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-
-
             this.param.putByteArray("foto", baos.toByteArray());
             this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
+            this.param.putString("cidade", txtCidade.getText().toString());
+            this.param.putString("uf", UF);
 
             Musico musico = new Musico(
                     param.getString("nomeUsuario"),
@@ -242,7 +258,9 @@ public class RegistrarMusico extends AppCompatActivity {
                     false,
                     param.getString("nomeCompleto"),
                     nascimento,
-                    instrumentos
+                    instrumentos,
+                    param.getString("cidade"),
+                    param.getString("uf")
             );
 
             registrarRequest.setRequestObject(musico);

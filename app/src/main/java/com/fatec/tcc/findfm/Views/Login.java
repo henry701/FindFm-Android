@@ -16,6 +16,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FormatadorTelefoneBR;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 
@@ -96,8 +97,8 @@ public class Login extends AppCompatActivity {
     {
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
-
-        if(usuario.getText().toString().isEmpty() || senha.getText().toString().isEmpty()) {
+        boolean isEmailValido = FormatadorTelefoneBR.validarEmail(usuario.getText().toString());
+        if(usuario.getText().toString().isEmpty() || senha.getText().toString().isEmpty() || !isEmailValido) {
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }

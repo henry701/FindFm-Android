@@ -84,6 +84,8 @@ public class Registrar extends AppCompatActivity {
         RadioGroup tipoContaGrupo = findViewById(R.id.grupoTipoConta);
         RadioButton tipoConta;
         int selectedId = -1;
+        boolean isTelefonevalido = FormatadorTelefoneBR.validarTelefone(this.txtTelefone.getText().toString());
+        boolean isEmailValido = FormatadorTelefoneBR.validarEmail(txtEmail.getText().toString());
 
         if( tipoContaGrupo.getCheckedRadioButtonId() != -1 ) {
             selectedId = tipoContaGrupo.getCheckedRadioButtonId();
@@ -91,14 +93,14 @@ public class Registrar extends AppCompatActivity {
 
         if( txtNomeUsuario.getText().toString().isEmpty() || this.txtTelefone.getText().toString().isEmpty() ||
                 txtEmail.getText().toString().isEmpty() || txtSenha.getText().toString().isEmpty() ||
+                (!isTelefonevalido) || (!isEmailValido) ||
                 txtConfirmaSenha.getText().toString().isEmpty() || selectedId == -1 )
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else if ( !txtSenha.getText().toString().equals(txtConfirmaSenha.getText().toString())) {
             Toast.makeText(getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
         }
         else {
-            /*
-            //TODO: Deus isso é muito chato me ajuda
+
             String telefone;
             String[] telefoneBuild = this.txtTelefone.getText().toString().trim().split("\\(");
             telefone = telefoneBuild[1];
@@ -106,10 +108,10 @@ public class Registrar extends AppCompatActivity {
             telefone = telefoneBuild[0];
             telefoneBuild = telefoneBuild[1].trim().split("-");
             telefone += telefoneBuild[0] + telefoneBuild[1];
-            */
+
             tipoConta = findViewById(selectedId);
             this.param.putString("nomeUsuario", txtNomeUsuario.getText().toString());
-            this.param.putString("telefone", this.txtTelefone.getText().toString());
+            this.param.putString("telefone", telefone);
             this.param.putString("email", txtEmail.getText().toString());
             this.param.putString("senha", txtSenha.getText().toString());
             this.param.putByteArray("foto", baos.toByteArray());

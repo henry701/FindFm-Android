@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +50,7 @@ public class RegistrarContratante extends AppCompatActivity {
     private Date inauguracao;
     private ProgressDialog dialog;
     private Spinner cb_uf;
+    private String UF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,17 @@ public class RegistrarContratante extends AppCompatActivity {
         this.cb_uf.setAdapter(
                 new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
 
+        this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                UF = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         byte[] image = this.param.getByteArray("foto");
 
         if (image != null && image.length != 0) {
@@ -105,7 +118,7 @@ public class RegistrarContratante extends AppCompatActivity {
                                 // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                                 editor.putBoolean("isLogado", true);
-                                editor.putString("tipoUsuario", "BANDA");
+                                editor.putString("tipoUsuario", "CONTRATANTE");
                                 editor.putString("nomeUsuario", param.getString("nomeCompleto"));
                                 // As chaves precisam ser persistidas
                                 editor.apply();
@@ -171,7 +184,7 @@ public class RegistrarContratante extends AppCompatActivity {
     }
 
     public void btnRemoverImagem_Click(View v) {
-        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder, getTheme()));
+        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
     }
 
@@ -179,10 +192,15 @@ public class RegistrarContratante extends AppCompatActivity {
         TextView txtNomeEstabelecimento = findViewById(R.id.txtNomeEstabelecimento);
         TextView txtInauguracao = findViewById(R.id.txtInauguracao);
         TextView txtCapacidadeLocal = findViewById(R.id.txtCapacidadeLocal);
-
+        TextView txtCidade = findViewById(R.id.txtCidadeContratante);
+        TextView txtEndereco = findViewById(R.id.txtEndereco);
+        TextView txtNumero = findViewById(R.id.txtNumero);
 
         if (txtNomeEstabelecimento.getText().toString().isEmpty() ||
                 txtInauguracao.getText().toString().isEmpty() ||
+                txtCidade.getText().toString().isEmpty() ||
+                txtEndereco.getText().toString().isEmpty() ||
+                txtNumero.getText().toString().isEmpty() ||
                 txtCapacidadeLocal.getText().toString().isEmpty()             )
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
@@ -194,8 +212,9 @@ public class RegistrarContratante extends AppCompatActivity {
 
             this.param.putByteArray("foto", baos.toByteArray());
             this.param.putString("nomeCompleto", txtNomeEstabelecimento.getText().toString());
+            this.param.putString("cidade", txtCidade.getText().toString());
+            this.param.putString("uf", UF);
             int numeroParticipantes = Integer.parseInt(txtCapacidadeLocal.getText().toString());
-            //TODO: Colocar endereço
 
             Contratante contratante = new Contratante(
                     param.getString("nomeUsuario"),
@@ -207,7 +226,11 @@ public class RegistrarContratante extends AppCompatActivity {
                     false,
                     param.getString("nomeCompleto"),
                     inauguracao,
-                    numeroParticipantes
+                    numeroParticipantes,
+                    param.getString("cidade"),
+                    param.getString("uf"),
+                    txtEndereco.getText().toString(),
+                    Integer.parseInt(txtNumero.getText().toString())
             );
             
             registrarRequest.setRequestObject(contratante);
