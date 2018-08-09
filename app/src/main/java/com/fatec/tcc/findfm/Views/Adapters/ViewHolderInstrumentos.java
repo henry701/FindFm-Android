@@ -1,4 +1,4 @@
-package com.fatec.tcc.findfm.Adapters;
+package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

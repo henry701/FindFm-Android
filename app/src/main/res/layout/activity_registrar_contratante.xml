@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/from_bg"
     tools:context=".Views.RegistrarContratante">
-    
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,9 +67,6 @@
                 android:id="@+id/txtNomeEstabelecimento"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_estabelecimento"
@@ -88,6 +85,7 @@
                 android:id="@+id/txtInauguracao"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:clickable="true"
                 android:drawableLeft="@drawable/ic_calendar"
@@ -116,15 +114,97 @@
                 android:inputType="number"
                 android:maxLength="5"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/linearContratante"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtInauguracao" />
 
+            <LinearLayout
+                android:id="@+id/linearContratante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/txtEndereco"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtCapacidadeLocal">
+
+                <EditText
+                    android:id="@+id/txtCidade"
+                    android:layout_width="172dp"
+                    android:layout_height="54dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_local"
+                    android:ems="10"
+                    android:hint="@string/cidade"
+                    android:inputType="text"
+                    android:maxLength="70"
+                    android:textColor="@color/white"
+                    tools:layout_editor_absoluteX="48dp"
+                    tools:layout_editor_absoluteY="396dp" />
+
+                <Spinner
+                    android:id="@+id/cb_uf"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="109dp"
+                    android:layout_height="54dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_local"
+                    android:ems="10"
+                    android:entries="@array/lista_uf"
+                    android:hint="@string/uf"
+                    android:popupBackground="@color/lilasClaro"
+                    android:textColor="@color/white"
+                    tools:layout_editor_absoluteX="224dp"
+                    tools:layout_editor_absoluteY="394dp" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtEndereco"
+                android:layout_width="282dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/ic_local"
+                android:ems="10"
+                android:hint="@string/endereco"
+                android:inputType="text"
+                android:maxLength="70"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/txtNumero"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearContratante" />
+
+            <EditText
+                android:id="@+id/txtNumero"
+                android:layout_width="137dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/white"
+                android:drawableLeft="@drawable/ic_local"
+                android:ems="10"
+                android:hint="@string/simbolo_numero"
+                android:inputType="text"
+                android:maxLength="70"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtEndereco" />
+
             <Button
                 android:id="@+id/buttonRegistrar"
                 android:layout_width="88dp"
                 android:layout_height="32dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/btn_bg"
                 android:onClick="btnRegistrar_Click"
                 android:text="@string/registrar"
@@ -132,12 +212,11 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtCapacidadeLocal" />
+                app:layout_constraintTop_toBottomOf="@+id/txtNumero" />
 
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
-    
+
 </android.support.constraint.ConstraintLayout>

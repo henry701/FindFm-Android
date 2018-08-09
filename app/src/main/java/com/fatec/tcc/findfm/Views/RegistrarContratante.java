@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -46,6 +48,7 @@ public class RegistrarContratante extends AppCompatActivity {
     private HttpTypedRequest<Contratante, ResponseBody, ErrorResponse> registrarRequest;
     private Date inauguracao;
     private ProgressDialog dialog;
+    private Spinner cb_uf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +68,18 @@ public class RegistrarContratante extends AppCompatActivity {
         this.imageView = findViewById(R.id.circularImageView);
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
         this.txtInauguracao = findViewById(R.id.txtInauguracao);
+        this.cb_uf = findViewById(R.id.cb_uf);
+
         this.txtInauguracao.setShowSoftInputOnFocus(false);
         this.txtInauguracao.setInputType(InputType.TYPE_NULL);
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
-        this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
+        this.dialog = new ProgressDialog(this);dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
+
+        this.cb_uf.setAdapter(
+                new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
+
         byte[] image = this.param.getByteArray("foto");
 
         if (image != null && image.length != 0) {

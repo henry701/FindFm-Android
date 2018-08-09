@@ -1,13 +1,12 @@
-package com.fatec.tcc.findfm.Request;
+package com.fatec.tcc.findfm.Infrastructure.Request;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.fatec.tcc.findfm.Infrastructure.Volley.ErrorResponseException;
-import com.fatec.tcc.findfm.Infrastructure.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Volley.SharedRequestQueue;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.ErrorResponseException;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 

@@ -48,7 +48,6 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cb_nivelHabilidade"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/checkInstumento"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.47" />
@@ -57,12 +56,11 @@
             android:id="@+id/cb_nivelHabilidade"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:backgroundTint="@color/lilasClaro"
+            android:backgroundTint="@color/white"
             android:popupBackground="@color/lilasClaro"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/txtQuantidade"
             app:layout_constraintTop_toTopOf="parent" />
 

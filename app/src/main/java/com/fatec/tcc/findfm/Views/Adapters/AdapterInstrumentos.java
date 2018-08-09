@@ -1,4 +1,4 @@
-package com.fatec.tcc.findfm.Adapters;
+package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

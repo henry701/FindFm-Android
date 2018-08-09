@@ -14,14 +14,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.Model.Business.Banda;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
@@ -29,7 +31,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -55,6 +57,7 @@ public class RegistrarBanda extends AppCompatActivity {
     private HttpTypedRequest<Banda, ResponseBody, ErrorResponse> registrarRequest;
     private Date formacao;
     private ProgressDialog dialog;
+    private Spinner cb_uf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,8 @@ public class RegistrarBanda extends AppCompatActivity {
         this.imageView = findViewById(R.id.circularImageView);
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
         this.txtFormacao = findViewById(R.id.txtFormacao);
+        this.cb_uf = findViewById(R.id.cb_uf);
+
         this.txtFormacao.setShowSoftInputOnFocus(false);
         this.txtFormacao.setInputType(InputType.TYPE_NULL);
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
@@ -83,6 +88,10 @@ public class RegistrarBanda extends AppCompatActivity {
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
+
+        this.cb_uf.setAdapter(
+                new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
+
         byte[] image = this.param.getByteArray("foto");
 
         if(image != null && image.length != 0) {
