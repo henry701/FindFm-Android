@@ -2,21 +2,21 @@ package com.fatec.tcc.findfm.Model.Http.Request;
 
 public class LoginRequest {
 
-    private final String nomeUsuario;
-    private final String senha;
+    private final String email;
+    private final String password;
 
-    public LoginRequest(String nomeUsuario, String senha)
+    public LoginRequest(String email, String password)
     {
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
+        this.email = email;
+        this.password = password;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public String getEmail() {
+        return email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
 }

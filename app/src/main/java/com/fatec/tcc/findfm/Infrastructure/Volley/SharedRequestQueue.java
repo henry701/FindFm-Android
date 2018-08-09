@@ -21,7 +21,6 @@ public class SharedRequestQueue
     private static SharedRequestQueue mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private static Context mCtx;
 
     public static RequestQueue getRequestQueue(Context context) {
         if(requestQueue == null) {
@@ -37,9 +36,9 @@ public class SharedRequestQueue
     }
 
     //Copiado do https://developer.android.com/training/volley/requestqueue
-    private SharedRequestQueue(Context context) {
-        mCtx = context;
-        mRequestQueue = getRequestQueue();
+    private SharedRequestQueue(Context context)
+    {
+        mRequestQueue = getRequestQueue(context);
 
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
@@ -65,17 +64,8 @@ public class SharedRequestQueue
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
-        }
-        return mRequestQueue;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    public static <T> void addToRequestQueue(Context context, Request<T> req) {
+        getRequestQueue(context).add(req);
     }
 
     public ImageLoader getImageLoader() {

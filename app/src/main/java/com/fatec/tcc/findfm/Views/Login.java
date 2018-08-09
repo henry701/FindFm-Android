@@ -20,6 +20,8 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.google.gson.internal.LinkedTreeMap;
 
+import java.util.Map;
+
 public class Login extends AppCompatActivity {
 
     private HttpTypedRequest<LoginRequest, ResponseBody, ErrorResponse> loginRequest;
@@ -53,8 +55,8 @@ public class Login extends AppCompatActivity {
                 if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
                     // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                     SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                    editor.putBoolean("isLogado", true);
-                    editor.putString("nomeUsuario", ((LinkedTreeMap) response.getData()).get("nomeUsuario").toString());
+                    editor.putBoolean("isLoggedIn", true);
+                    editor.putString("username", ((Map) response.getData()).get("nomeUsuario").toString());
                     // As chaves precisam ser persistidas
                     editor.apply();
                     dialog.dismiss();
@@ -102,7 +104,6 @@ public class Login extends AppCompatActivity {
         this.dialog.show();
         loginRequest.setRequestObject(requestObject);
         loginRequest.execute(getApplicationContext());
-
     }
 
     public void lb_recuperarSenha_Click(View v){

@@ -83,12 +83,11 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
     }
 
     public void execute(Context context) {
-        RequestQueue queue = SharedRequestQueue.getRequestQueue(context);
         createRequest();
         Log.i("[LOG CHAMADAS TYPED]", "Iniciando chamada!");
         Log.i("[LOG CHAMADAS TYPED]", "MÉTODO: " + HttpMethod.from(request.getMethod()) + " URL da chamada: " + request.getUrl());
         Log.i("[LOG CHAMADAS TYPED]", "Request BODY: " + request.getBodyAsJson());
-        queue.add(request);
+        SharedRequestQueue.addToRequestQueue(context, request);
     }
 
     public String getFullUrl() {
