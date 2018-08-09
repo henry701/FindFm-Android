@@ -8,8 +8,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.Model.Business.Banda;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
-import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -44,22 +44,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class RegistrarMusico extends AppCompatActivity {
+public class RegistrarBanda extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
     private Bundle param = new Bundle();
-    private EditText txtNascimento;
+    private EditText txtFormacao;
     private RecyclerView rc;
-    private HttpTypedRequest<Musico, ResponseBody, ErrorResponse> registrarRequest;
-    private Date nascimento;
+    private HttpTypedRequest<Banda, ResponseBody, ErrorResponse> registrarRequest;
+    private Date formacao;
     private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrar_musico);
+        setContentView(R.layout.activity_registrar_banda);
         init();
         updateList();
     }
@@ -75,9 +75,9 @@ public class RegistrarMusico extends AppCompatActivity {
         this.rc = findViewById(R.id.listaInstrumentos);
         this.imageView = findViewById(R.id.circularImageView);
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
-        this.txtNascimento = findViewById(R.id.txtNascimento);
-        this.txtNascimento.setShowSoftInputOnFocus(false);
-        this.txtNascimento.setInputType(InputType.TYPE_NULL);
+        this.txtFormacao = findViewById(R.id.txtFormacao);
+        this.txtFormacao.setShowSoftInputOnFocus(false);
+        this.txtFormacao.setInputType(InputType.TYPE_NULL);
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
         this.dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
@@ -99,7 +99,7 @@ public class RegistrarMusico extends AppCompatActivity {
         registrarRequest = new HttpTypedRequest<>
                 (
                         Request.Method.POST,
-                        Musico.class,
+                        Banda.class,
                         ResponseBody.class,
                         ErrorResponse.class,
                         (ResponseBody response) ->
@@ -109,7 +109,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                 // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                                 editor.putBoolean("isLogado", true);
-                                editor.putString("tipoUsuario", "MUSICO");
+                                editor.putString("tipoUsuario", "BANDA");
                                 editor.putString("nomeUsuario", param.getString("nomeCompleto"));
                                 // As chaves precisam ser persistidas
                                 editor.apply();
@@ -149,12 +149,26 @@ public class RegistrarMusico extends AppCompatActivity {
                 new Instrumento("Trombone", NivelHabilidade.INICIANTE));
 
         RecyclerView view = findViewById(R.id.listaInstrumentos);
-        view.setAdapter( new AdapterInstrumentos(instrumentos, "MUSICO",this) );
+        view.setAdapter( new AdapterInstrumentos(instrumentos,"BANDA",this) );
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         view.setLayoutManager( layout );
-        TextView lb_quantidade = findViewById(R.id.lb_quantidade);
-        lb_quantidade.setVisibility(View.INVISIBLE);
+
+    }
+
+    public void txtFormacao_Click (View v) {
+        Util.hideSoftKeyboard(this);
+        Calendar myCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            this.formacao = myCalendar.getTime();
+            this.txtFormacao.setText(sdf.format(myCalendar.getTime()));
+        };
+        new DatePickerDialog(this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     public void btnFoto_Click(View v){
@@ -185,31 +199,28 @@ public class RegistrarMusico extends AppCompatActivity {
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
     }
 
-    public void txtNascimento_Click(View v){
-        Util.hideSoftKeyboard(this);
-        Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            this.nascimento = myCalendar.getTime();
-            this.txtNascimento.setText(sdf.format(myCalendar.getTime()));
-        };
-        new DatePickerDialog(this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
+    public void btnRegistrar_Click (View v) {
+        TextView txtNomeBanda = findViewById(R.id.txtNomeBanda);
+        TextView txtFormacao = findViewById(R.id.txtFormacao);
+        TextView txtNumeroIntegrantes = findViewById(R.id.txtNumeroIntegrantes);
 
-    public void btnRegistrar_Click(View v){
-        TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
-        TextView txtNascimento = findViewById(R.id.txtNascimento);
         AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
         List<Instrumento> instrumentos = new ArrayList<>();
         instrumentos.addAll(adapter.getInstrumentos());
+        boolean isQtdInstrumentoVazio = false;
 
-        if( txtNomeCompleto.getText().toString().isEmpty()||
-                txtNascimento.getText().toString().isEmpty() ||
-                instrumentos.isEmpty())
+        if(!instrumentos.isEmpty()){
+            for(Instrumento instrumento : instrumentos){
+                if(instrumento.getQuantidade() == 0 ){
+                    isQtdInstrumentoVazio = true;
+                }
+            }
+        }
+
+        if( txtNomeBanda.getText().toString().isEmpty()||
+                txtFormacao.getText().toString().isEmpty() ||
+                txtNumeroIntegrantes.getText().toString().isEmpty() ||
+                instrumentos.isEmpty() || isQtdInstrumentoVazio)
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
             this.dialog.show();
@@ -218,12 +229,11 @@ public class RegistrarMusico extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-
-
             this.param.putByteArray("foto", baos.toByteArray());
-            this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
+            this.param.putString("nomeCompleto", txtNomeBanda.getText().toString());
+            int numeroParticipantes = Integer.parseInt(txtNumeroIntegrantes.getText().toString());
 
-            Musico musico = new Musico(
+            Banda banda = new Banda(
                     param.getString("nomeUsuario"),
                     param.getString("senha"),
                     param.getString("email"),
@@ -232,13 +242,13 @@ public class RegistrarMusico extends AppCompatActivity {
                     false,
                     false,
                     param.getString("nomeCompleto"),
-                    nascimento,
-                    instrumentos
+                    formacao,
+                    instrumentos,
+                    numeroParticipantes
             );
 
-            registrarRequest.setRequestObject(musico);
+            registrarRequest.setRequestObject(banda);
             registrarRequest.execute(getApplicationContext());
         }
     }
-
 }

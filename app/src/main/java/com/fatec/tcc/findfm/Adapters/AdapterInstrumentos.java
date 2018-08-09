@@ -3,6 +3,8 @@ package com.fatec.tcc.findfm.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,14 @@ import java.util.List;
 import java.util.Set;
 
 public class AdapterInstrumentos extends RecyclerView.Adapter {
-
+    //TODO GRAVE: Bug: Quando seleciona a primeira opção do RecyclerView, o ultimo tbm é selecionado
     private Set<Instrumento> instrumentosUsuario;
     private List<Instrumento> instrumentos;
+    private String tipoTela;
     private Context context;
 
-    public AdapterInstrumentos(List<Instrumento> instrumentos, Context context) {
+    public AdapterInstrumentos(List<Instrumento> instrumentos, String tipoTela, Context context) {
+        this.tipoTela = tipoTela;
         this.instrumentos = instrumentos;
         this.context = context;
         this.instrumentosUsuario = new HashSet<>();
@@ -45,6 +49,15 @@ public class AdapterInstrumentos extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ViewHolderInstrumentos view = (ViewHolderInstrumentos) holder;
         Instrumento instrumento = instrumentos.get(position);
+
+        switch (tipoTela){
+            case "MUSICO":
+                view.txtQuantidade.setVisibility(View.INVISIBLE);
+                break;
+            case "BANDA":
+                view.txtQuantidade.setVisibility(View.VISIBLE);
+                break;
+        }
 
         view.checkInstrumento.setText(instrumento.getNome());
         view.cb_nivelHabilidade.setAdapter(
@@ -78,6 +91,28 @@ public class AdapterInstrumentos extends RecyclerView.Adapter {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
+        });
+        view.txtQuantidade.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!view.txtQuantidade.getText().toString().isEmpty()) {
+                    Integer qtd = Integer.parseInt(view.txtQuantidade.getText().toString());
+                    instrumentosUsuario.remove(instrumento);
+                    instrumento.setQuantidade(qtd);
+                    instrumentosUsuario.add(instrumento);
+                }
+            }
         });
     }
 

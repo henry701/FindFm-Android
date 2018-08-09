@@ -116,8 +116,16 @@
     <string name="data_formacao">Data de Formação</string>
     <string name="nivel_habilidade">Nível Habilidade</string>
     <string name="usuario_ou_senha_incorretos">Usuário e/ou Senha incorretos</string>
-    <string name="escolha_instrumento">Selecione seus instrumentos e seu nível de habilidade:</string>
+    <string name="escolha_instrumento">Selecione seus instrumentos e nível de habilidade:</string>
     <string name="suas_informacoes">Preencha suas informações</string>
     <string name="banda_informacoes">Preencha as informações da Banda</string>
     <string name="telefone_contato">Telefone</string>
+    <string name="numero_integrantes">Nº de Integrantes</string>
+    <string name="capacidade_local">Capacidade do local</string>
+    <string name="data_inauguracao">Data de Inauguração</string>
+    <string name="instrumentos">Instrumentos</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="simbolo_numero">Nº</string>
+    <string name="nome_do_estabelecimento">Nome do Estabelecimento</string>
+    <string name="estabelecimento_informacoes">Preencha as informações do Estabelecimento</string>
 </resources>

@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:siBorderColor="#ffffff"
+        app:siBorderColor="@color/white"
         app:siBorderWidth="3dp" />
 
     <android.support.constraint.Guideline
@@ -125,7 +125,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Josias"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="24sp"
         app:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +161,7 @@
         android:layout_marginTop="8dp"
         android:gravity="top|center"
         android:text="Josias Violinista incrivel"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
         android:fontFamily="sans-serif"
         android:text="TextView"
         android:textAlignment="center"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/fotoPerfil"

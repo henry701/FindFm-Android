@@ -34,6 +34,12 @@ public class Login extends AppCompatActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        this.dialog.dismiss();
+        super.onDestroy();
+    }
+
     private void init() {
         initRequests();
         this.dialog = new ProgressDialog(this);

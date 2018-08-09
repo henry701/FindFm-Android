@@ -97,6 +97,16 @@ public class Registrar extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
         }
         else {
+            /*
+            //TODO: Deus isso é muito chato me ajuda
+            String telefone;
+            String[] telefoneBuild = this.txtTelefone.getText().toString().trim().split("\\(");
+            telefone = telefoneBuild[1];
+            telefoneBuild = telefone.split("\\)");
+            telefone = telefoneBuild[0];
+            telefoneBuild = telefoneBuild[1].trim().split("-");
+            telefone += telefoneBuild[0] + telefoneBuild[1];
+            */
             tipoConta = findViewById(selectedId);
             this.param.putString("nomeUsuario", txtNomeUsuario.getText().toString());
             this.param.putString("telefone", this.txtTelefone.getText().toString());
@@ -106,10 +116,10 @@ public class Registrar extends AppCompatActivity {
 
             switch (tipoConta.getText().toString()){
                 case "Banda":
-                    //Util.open_form_withParam(getApplicationContext(), RegistrarBanda.class, this.path, this.param);
+                    Util.open_form_withParam(getApplicationContext(), RegistrarBanda.class, this.path, this.param);
                     break;
                 case "Contratante":
-                    //Util.open_form_withParam(getApplicationContext(), RegistrarContratante.class, this.path, this.param);
+                    Util.open_form_withParam(getApplicationContext(), RegistrarContratante.class, this.path, this.param);
                     break;
                 case "Músico":
                     Util.open_form_withParam(getApplicationContext(), RegistrarMusico.class, this.path, this.param);

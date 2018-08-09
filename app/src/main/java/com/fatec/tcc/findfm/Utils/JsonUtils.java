@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 
 /**
  * Classe para facilitar operações repetitivas referente à JSONs

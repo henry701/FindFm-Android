@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/from_bg"
-    tools:context=".Views.RegistrarBanda">
-
+    tools:context=".Views.RegistrarContratante">
+    
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +28,7 @@
                 android:contentDescription="@string/foto_perfil"
 
                 android:onClick="btnRemoverImagem_Click"
-                app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
+                app:layout_constraintBottom_toTopOf="@+id/txtNomeEstabelecimento"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/circularImageView"
@@ -54,9 +54,9 @@
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="17dp"
                 android:layout_marginTop="180dp"
-                android:text="@string/banda_informacoes"
+                android:text="@string/estabelecimento_informacoes"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -64,7 +64,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/txtNomeBanda"
+                android:id="@+id/txtNomeEstabelecimento"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -72,20 +72,20 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
-                android:drawableLeft="@drawable/ic_login"
+                android:drawableLeft="@drawable/ic_estabelecimento"
                 android:ems="10"
-                android:hint="@string/nome_banda"
+                android:hint="@string/nome_do_estabelecimento"
                 android:inputType="text"
                 android:maxLength="70"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/txtFormacao"
+                app:layout_constraintBottom_toTopOf="@+id/txtInauguracao"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <EditText
-                android:id="@+id/txtFormacao"
+                android:id="@+id/txtInauguracao"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
@@ -93,114 +93,38 @@
                 android:drawableLeft="@drawable/ic_calendar"
                 android:ems="10"
                 android:focusable="false"
-                android:hint="@string/data_formacao"
+                android:hint="@string/data_inauguracao"
                 android:maxLength="10"
-                android:onClick="txtFormacao_Click"
+                android:onClick="txtInauguracao_Click"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/txtNumeroIntegrantes"
+                app:layout_constraintBottom_toTopOf="@+id/txtCapacidadeLocal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNomeBanda" />
+                app:layout_constraintTop_toBottomOf="@+id/txtNomeEstabelecimento" />
 
             <EditText
-                android:id="@+id/txtNumeroIntegrantes"
+                android:id="@+id/txtCapacidadeLocal"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_pessoas"
                 android:ems="10"
-                android:hint="@string/numero_integrantes"
+                android:hint="@string/capacidade_local"
                 android:inputType="number"
                 android:maxLength="5"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtFormacao" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/escolha_instrumento"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNumeroIntegrantes" />
-
-            <TextView
-                android:id="@+id/lb_instrumento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/instrumentos"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/lb_quantidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/quantidade"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.854"
-                app:layout_constraintStart_toEndOf="@+id/lb_instrumento"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/lb_habilidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/nivel_habilidade"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/listaInstrumentos"
-                app:layout_constraintHorizontal_bias="0.294"
-                app:layout_constraintStart_toEndOf="@+id/listaInstrumentos"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listaInstrumentos"
-                android:layout_width="350dp"
-                android:layout_height="174dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/txtInauguracao" />
 
             <Button
                 android:id="@+id/buttonRegistrar"
                 android:layout_width="88dp"
                 android:layout_height="32dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/btn_bg"
                 android:onClick="btnRegistrar_Click"
                 android:text="@string/registrar"
@@ -209,12 +133,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/listaInstrumentos"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/listaInstrumentos" />
+                app:layout_constraintTop_toBottomOf="@+id/txtCapacidadeLocal" />
 
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
-
+    
 </android.support.constraint.ConstraintLayout>

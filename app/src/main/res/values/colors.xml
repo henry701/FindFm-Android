@@ -5,4 +5,5 @@
     <color name="colorAccent">#ff4081</color>
     <color name="lilasClaro">#AB00DA</color>
     <color name="lilasEscuro">#8f00bf</color>
+    <color name="white">#ffffff</color>
 </resources>

@@ -24,22 +24,27 @@
             android:layout_height="36dp"
             android:layout_marginStart="30dp"
             android:button="?android:attr/listChoiceIndicatorMultiple"
-            android:buttonTint="?attr/colorBackgroundFloating"
+            android:buttonTint="@color/white"
             android:text="Appalachian dulcimer"
             android:textColor="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintEnd_toStartOf="@+id/txtQuantidade"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.47" />
 
-        <TextView
-            android:id="@+id/lb_habilidade"
+        <EditText
+            android:id="@+id/txtQuantidade"
             android:layout_width="71dp"
             android:layout_height="36dp"
-            android:text="@string/nivel_habilidade"
-            android:textColor="#ffffff"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_login"
+            android:ems="10"
+            android:hint="@string/simbolo_numero"
+            android:inputType="number"
+            android:maxLength="4"
+            android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cb_nivelHabilidade"
@@ -54,11 +59,11 @@
             android:layout_height="25dp"
             android:backgroundTint="@color/lilasClaro"
             android:popupBackground="@color/lilasClaro"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/lb_habilidade"
+            app:layout_constraintStart_toEndOf="@+id/txtQuantidade"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
