@@ -172,7 +172,9 @@ public class RegistrarBanda extends AppCompatActivity {
                 new Instrumento("Trombone", NivelHabilidade.INICIANTE));
 
         RecyclerView view = findViewById(R.id.listaInstrumentos);
-        view.setAdapter( new AdapterInstrumentos(instrumentos,"BANDA",this) );
+        AdapterInstrumentos adapter = new AdapterInstrumentos();
+        adapter.setInstrumentos(instrumentos,"BANDA",this );
+        view.setAdapter( adapter);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         view.setLayoutManager( layout );
