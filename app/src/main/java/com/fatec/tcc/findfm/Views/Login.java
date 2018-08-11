@@ -77,7 +77,10 @@ public class Login extends AppCompatActivity {
             (ErrorResponse errorResponse) ->
             {
                 dialog.hide();
-                // TODO: On Business Error login (senha errada por ex)
+                AlertDialogUtils.newSimpleDialog__OneButton(this,
+                        "Ops!", R.drawable.ic_error,
+                        errorResponse.getMessage(),"OK",
+                        (dialog, id) -> { }).create().show();
             },
             (Exception error) ->
             {
@@ -90,7 +93,7 @@ public class Login extends AppCompatActivity {
                         (dialog, id) -> { }).create().show();
             }
         );
-        loginRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/login/logar"));
+        loginRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"login"));
     }
 
     public void btnEntrar_Click(View v)

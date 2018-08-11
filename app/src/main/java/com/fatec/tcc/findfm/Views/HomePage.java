@@ -15,17 +15,14 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         SharedPreferences sharedPreferences = getSharedPreferences("FindFM_param", MODE_PRIVATE);
         boolean isLogado = sharedPreferences.getBoolean("isLogado", false);
         String usuario = sharedPreferences.getString("nomeUsuario","Visitante");
 
         if(isLogado) {
-
             TextView lb_nomeUsuario = findViewById(R.id.lb_nomeUsuario);
             lb_nomeUsuario.setVisibility(View.VISIBLE);
             lb_nomeUsuario.setText("Bem-vindo: " + usuario);
-
         }
     }
 }

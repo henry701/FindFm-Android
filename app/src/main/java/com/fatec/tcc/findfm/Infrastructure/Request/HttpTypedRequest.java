@@ -3,12 +3,16 @@ package com.fatec.tcc.findfm.Infrastructure.Request;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.ErrorResponseException;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
+
+import java.io.UnsupportedEncodingException;
 
 import java9.util.function.Consumer;
 
@@ -58,9 +62,9 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
             (TResponse response) ->
             {
                 Log.i("[LOG CHAMADAS TYPED]", "Success!");
-                Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos:");
-                Log.i("[LOG CHAMADAS TYPED]", JsonUtils.toJsonObject(response).toString());
+                Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos: " + JsonUtils.toJsonObject(response).toString());
                 onSuccess.accept(response);
+                return;
             },
             (VolleyError error) ->
             {
@@ -71,12 +75,27 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
                     TErrorResponse errorResponse = (TErrorResponse) errorResponseException.getErrorResponse();
                     Log.w("[LOG CHAMADAS TYPED]", "Error Business");
                     onBusinessError.accept(errorResponse);
+                    return;
                 }
-                else
+                if(error.networkResponse != null)
                 {
-                    Log.e("[LOG CHAMADAS TYPED]", "Error Critical");
-                    onCriticalError.accept(error);
+                    String responseAsString;
+                    try {
+                        responseAsString = new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers, "utf-8"));
+                    }
+                    catch(Exception e)
+                    {
+                        onCriticalError.accept(new RuntimeException(e));
+                        return;
+                    }
+                    TErrorResponse receivedErrorObject = JsonUtils.GSON.fromJson(responseAsString, errorResponseClass);
+                    Log.w("[LOG CHAMADAS TYPED]", "Error Business Contrived");
+                    onBusinessError.accept(receivedErrorObject);
+                    return;
                 }
+                Log.e("[LOG CHAMADAS TYPED]", "Error Critical");
+                onCriticalError.accept(error);
+                return;
             }
         );
     }

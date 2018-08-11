@@ -142,6 +142,10 @@ public class RegistrarMusico extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
                         },
                         (Exception error) ->
                         {
@@ -154,7 +158,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"metro_api/login/registrar"));
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"register"));
     }
 
     private void updateList() {

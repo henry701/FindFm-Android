@@ -129,6 +129,10 @@ public class RegistrarContratante extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
                         },
                         (Exception error) ->
                         {
