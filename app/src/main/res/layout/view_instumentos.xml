@@ -27,33 +27,16 @@
             android:buttonTint="@color/white"
             android:checked="false"
             android:drawableEnd="@null"
+            android:theme="@style/temaCheck"
             android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
             android:drawableRight="@null"
             android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
             android:text="Appalachian dulcimer"
             android:textColor="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txtQuantidade"
+            app:layout_constraintEnd_toStartOf="@+id/cb_nivelHabilidade"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.47" />
-
-        <EditText
-            android:id="@+id/txtQuantidade"
-            android:layout_width="71dp"
-            android:layout_height="36dp"
-            android:backgroundTint="@color/white"
-            android:drawableLeft="@drawable/ic_login"
-            android:ems="10"
-            android:hint="@string/simbolo_numero"
-            android:inputType="number"
-            android:maxLength="4"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/cb_nivelHabilidade"
-            app:layout_constraintStart_toEndOf="@+id/checkInstumento"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.47" />
 
@@ -66,7 +49,7 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtQuantidade"
+            app:layout_constraintStart_toEndOf="@+id/checkInstumento"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>

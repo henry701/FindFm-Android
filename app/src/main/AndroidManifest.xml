@@ -17,7 +17,8 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/favicon2"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        android:name=".Controller.FindFM">
         <activity
             android:name=".Views.Login"
             android:windowSoftInputMode="stateAlwaysHidden">

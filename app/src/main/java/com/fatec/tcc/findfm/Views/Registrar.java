@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FormatadorTelefoneBR;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -30,6 +31,7 @@ public class Registrar extends AppCompatActivity {
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
     private String path = "com.fatec.tcc.findfm.Views.Registrar";
+    private Bundle globalParams = FindFM.getInstance().getParams();
     private Bundle param = new Bundle();
     private EditText txtTelefone;
 
@@ -37,7 +39,13 @@ public class Registrar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
-       init();
+        init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setFoto();
     }
 
     private void init(){
@@ -47,6 +55,9 @@ public class Registrar extends AppCompatActivity {
         this.txtTelefone = findViewById(R.id.txtTelefone);
         FormatadorTelefoneBR addLineNumberFormatter = new FormatadorTelefoneBR(new WeakReference<>(this.txtTelefone));
         this.txtTelefone.addTextChangedListener(addLineNumberFormatter);
+        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
+        this.globalParams.putByteArray("foto", null);
+        FindFM.getInstance().setParams(this.globalParams);
     }
 
     public void btnFoto_Click(View v){
@@ -64,7 +75,13 @@ public class Registrar extends AppCompatActivity {
             try {
                 this.imageView.setImageBitmap(BitmapFactory.decodeStream(getApplicationContext()
                         .getContentResolver().openInputStream(data.getData())));
-               this.btnRemoverImagem.setVisibility(View.VISIBLE);
+                this.btnRemoverImagem.setVisibility(View.VISIBLE);
+
+                Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                this.globalParams.putByteArray("foto", baos.toByteArray());
+                FindFM.getInstance().setParams(this.globalParams);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -73,16 +90,13 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-
-        Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         TextView txtNomeUsuario = findViewById(R.id.txtNomeUsuario);
         TextView txtEmail = findViewById(R.id.txtEmail);
         TextView txtSenha = findViewById(R.id.txtSenha);
         TextView txtConfirmaSenha = findViewById(R.id.txtConfirmaSenha);
         RadioGroup tipoContaGrupo = findViewById(R.id.grupoTipoConta);
         RadioButton tipoConta;
+
         int selectedId = -1;
         boolean isTelefonevalido = FormatadorTelefoneBR.validarTelefone(this.txtTelefone.getText().toString());
         boolean isEmailValido = FormatadorTelefoneBR.validarEmail(txtEmail.getText().toString());
@@ -91,30 +105,28 @@ public class Registrar extends AppCompatActivity {
             selectedId = tipoContaGrupo.getCheckedRadioButtonId();
         }
 
-        if( txtNomeUsuario.getText().toString().isEmpty() || this.txtTelefone.getText().toString().isEmpty() ||
+        if(!isTelefonevalido){
+            Toast.makeText(getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
+        }
+        else if (!isEmailValido) {
+            Toast.makeText(getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
+        }
+        else if( txtNomeUsuario.getText().toString().isEmpty() || this.txtTelefone.getText().toString().isEmpty() ||
                 txtEmail.getText().toString().isEmpty() || txtSenha.getText().toString().isEmpty() ||
-                (!isTelefonevalido) || (!isEmailValido) ||
                 txtConfirmaSenha.getText().toString().isEmpty() || selectedId == -1 )
+        {
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        }
         else if ( !txtSenha.getText().toString().equals(txtConfirmaSenha.getText().toString())) {
             Toast.makeText(getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
         }
         else {
-
-            String telefone;
-            String[] telefoneBuild = this.txtTelefone.getText().toString().trim().split("\\(");
-            telefone = telefoneBuild[1];
-            telefoneBuild = telefone.split("\\)");
-            telefone = telefoneBuild[0];
-            telefoneBuild = telefoneBuild[1].trim().split("-");
-            telefone += telefoneBuild[0] + telefoneBuild[1];
-
+            String telefone = this.tratarTelefone();
             tipoConta = findViewById(selectedId);
             this.param.putString("nomeUsuario", txtNomeUsuario.getText().toString());
             this.param.putString("telefone", telefone);
             this.param.putString("email", txtEmail.getText().toString());
             this.param.putString("senha", txtSenha.getText().toString());
-            this.param.putByteArray("foto", baos.toByteArray());
 
             switch (tipoConta.getText().toString()){
                 case "Banda":
@@ -131,8 +143,34 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnRemoverImagem_Click(View v){
-        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder, getTheme()));
+        this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
+        this.globalParams.putByteArray("foto", null);
+        FindFM.getInstance().setParams(this.globalParams);
+    }
+
+    private String tratarTelefone(){
+        String telefone;
+        String[] telefoneBuild = this.txtTelefone.getText().toString().trim().split("\\(");
+        telefone = telefoneBuild[1];
+        telefoneBuild = telefone.split("\\)");
+        telefone = telefoneBuild[0];
+        telefoneBuild = telefoneBuild[1].trim().split("-");
+        telefone += telefoneBuild[0] + telefoneBuild[1];
+        return telefone;
+    }
+
+    private void setFoto(){
+        byte[] image = this.globalParams.getByteArray("foto");
+
+        if(image != null && image.length != 0) {
+            this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            this.btnRemoverImagem.setVisibility(View.VISIBLE);
+        }
+        else{
+            this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
+            this.btnRemoverImagem.setVisibility(View.INVISIBLE);
+        }
     }
 
 }

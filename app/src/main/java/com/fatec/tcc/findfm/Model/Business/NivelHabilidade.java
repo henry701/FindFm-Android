@@ -1,9 +1,14 @@
 package com.fatec.tcc.findfm.Model.Business;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum NivelHabilidade {
-    
+
+    @SerializedName("1")
     INICIANTE(1, "Iniciante"),
+    @SerializedName("2")
     INTERMEDIARIO(2, "Intermediário"),
+    @SerializedName("3")
     AVANCADO(3, "Avançado");
 
     private int codigo;

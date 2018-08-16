@@ -6,4 +6,6 @@
     <color name="lilasClaro">#AB00DA</color>
     <color name="lilasEscuro">#8f00bf</color>
     <color name="white">#ffffff</color>
+    <color name="green">#0c8b0a</color>
+    <color name="red">#e90707</color>
 </resources>

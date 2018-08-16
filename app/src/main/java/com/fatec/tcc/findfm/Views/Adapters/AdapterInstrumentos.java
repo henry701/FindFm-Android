@@ -3,10 +3,7 @@ package com.fatec.tcc.findfm.Views.Adapters;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.android.volley.toolbox.StringRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,18 +26,15 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
 
     private List<Instrumento> instrumentos = new ArrayList<>();
     private Set<Instrumento> instrumentosUsuario = new HashSet<>();
-    private String tipoTela;
 
     SparseBooleanArray itemStateArray= new SparseBooleanArray();
-    HashMap<Integer, Integer> itemQtdArray= new HashMap<>();
     Context context;
 
     public AdapterInstrumentos() {
     }
 
-    public AdapterInstrumentos(List<Instrumento> instrumentos, String tipoTela, Context context){
+    public AdapterInstrumentos(List<Instrumento> instrumentos, Context context){
         this.instrumentos = instrumentos;
-        this.tipoTela = tipoTela;
         this.context = context;
     }
 
@@ -73,9 +64,8 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
         return instrumentos.size();
     }
 
-    public void setInstrumentos(List<Instrumento> instrumentos, String tipoTela, Context context){
+    public void setInstrumentos(List<Instrumento> instrumentos, Context context){
         this.instrumentos = instrumentos;
-        this.tipoTela = tipoTela;
         this.context = context;
         notifyDataSetChanged();
     }
@@ -85,13 +75,11 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
 
         CheckedTextView checkInstrumento;
         Spinner cb_nivelHabilidade;
-        EditText txtQuantidade;
 
         ViewHolder(View itemView) {
             super(itemView);
             checkInstrumento = itemView.findViewById( R.id.checkInstumento );
             cb_nivelHabilidade = itemView.findViewById( R.id.cb_nivelHabilidade );
-            txtQuantidade = itemView.findViewById(R.id.txtQuantidade);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,27 +112,12 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
             }
             checkInstrumento.setText(String.valueOf(instrumentos.get(position).getNome()));
 
-            if(itemQtdArray.get(position) == null)
-                txtQuantidade.setText("0");
-            else
-                txtQuantidade.setText(itemQtdArray.get(position).toString());
-
             Instrumento instrumento = instrumentos.get(position);
-
-            switch (tipoTela){
-                case "MUSICO":
-                    txtQuantidade.setVisibility(View.INVISIBLE);
-                    break;
-                case "BANDA":
-                    txtQuantidade.setVisibility(View.VISIBLE);
-                    break;
-            }
 
             checkInstrumento.setText(instrumento.getNome());
             cb_nivelHabilidade.setAdapter(
                     new ArrayAdapter<>(context, R.layout.simple_custom_list, NivelHabilidade.values()));
             cb_nivelHabilidade.setSelection(instrumento.getNivelHabilidade().getCodigo() -1);
-
 
             cb_nivelHabilidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -163,34 +136,6 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
                 }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) { }
-            });
-            txtQuantidade.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    int adapterPosition = getAdapterPosition();
-                    Instrumento instrumento = instrumentos.get(adapterPosition);
-
-                    if(!txtQuantidade.getText().toString().isEmpty()) {
-                        Integer qtd = Integer.parseInt(txtQuantidade.getText().toString());
-                        instrumentosUsuario.remove(instrumento);
-                        instrumento.setQuantidade(qtd);
-                        instrumentosUsuario.add(instrumento);
-                        itemQtdArray.put(adapterPosition, qtd);
-                    }
-                    else{
-                        instrumentosUsuario.remove(instrumento);
-                        instrumento.setQuantidade(0);
-                        instrumentosUsuario.add(instrumento);
-                        itemQtdArray.put(adapterPosition, 0);
-                    }
-                }
             });
 
         }

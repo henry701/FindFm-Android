@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -52,6 +53,7 @@ public class RegistrarMusico extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
+    private Bundle globalParams = FindFM.getInstance().getParams();
     private Bundle param = new Bundle();
     private EditText txtNascimento;
     private RecyclerView rc;
@@ -105,14 +107,14 @@ public class RegistrarMusico extends AppCompatActivity {
 
             }
         });
-        byte[] image = this.param.getByteArray("foto");
+        byte[] image = this.globalParams.getByteArray("foto");
 
         if(image != null && image.length != 0) {
             this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
-
             this.btnRemoverImagem.setVisibility(View.VISIBLE);
         }
         else{
+            this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
             this.btnRemoverImagem.setVisibility(View.INVISIBLE);
         }
     }
@@ -158,7 +160,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"register"));
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"register/musician"));
     }
 
     private void updateList() {
@@ -175,12 +177,10 @@ public class RegistrarMusico extends AppCompatActivity {
                 new Instrumento("Trombone", NivelHabilidade.INICIANTE));
 
         RecyclerView view = findViewById(R.id.listaInstrumentos);
-        view.setAdapter( new AdapterInstrumentos(instrumentos, "MUSICO",this) );
+        view.setAdapter( new AdapterInstrumentos(instrumentos,this) );
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         view.setLayoutManager( layout );
-        TextView lb_quantidade = findViewById(R.id.lb_quantidade);
-        lb_quantidade.setVisibility(View.INVISIBLE);
     }
 
     public void btnFoto_Click(View v){
@@ -200,6 +200,11 @@ public class RegistrarMusico extends AppCompatActivity {
                         .getContentResolver().openInputStream(data.getData())));
                 this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
+                Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                this.globalParams.putByteArray("foto", baos.toByteArray());
+                FindFM.getInstance().setParams(this.globalParams);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -209,6 +214,9 @@ public class RegistrarMusico extends AppCompatActivity {
     public void btnRemoverImagem_Click(View v){
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
+        this.globalParams.putByteArray("foto", null);
+        FindFM.getInstance().setParams(this.globalParams);
+
     }
 
     public void txtNascimento_Click(View v){
@@ -242,12 +250,6 @@ public class RegistrarMusico extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         else {
             this.dialog.show();
-
-            Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-            this.param.putByteArray("foto", baos.toByteArray());
             this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
             this.param.putString("cidade", txtCidade.getText().toString());
             this.param.putString("uf", UF);
@@ -257,7 +259,7 @@ public class RegistrarMusico extends AppCompatActivity {
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),
-                    param.getByteArray("foto"),
+                    globalParams.getByteArray("foto"),
                     false,
                     false,
                     param.getString("nomeCompleto"),

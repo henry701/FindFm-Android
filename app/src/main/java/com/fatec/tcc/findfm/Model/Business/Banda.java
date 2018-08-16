@@ -10,16 +10,16 @@ public class Banda extends Usuario {
     private Date formacao;
     private String cidade;
     private String uf;
-    private List<Instrumento> instrumentos;
+    private List<Musico> musicos;
 
     public Banda(){}
 
     public Banda(String nomeUsuario, String senha, String email, String telefone, byte[] foto, boolean confirmado, boolean premium,
-                  String nomeBanda, Date formacao, List<Instrumento> instrumentos, int numeroIntegrantes, String cidade, String uf) {
+                  String nomeBanda, Date formacao, List<Musico> musicos, int numeroIntegrantes, String cidade, String uf) {
         super(nomeUsuario, senha, email, telefone, foto, confirmado, premium);
         this.nomeBanda = nomeBanda;
         this.formacao = formacao;
-        this.instrumentos = instrumentos;
+        this.musicos = musicos;
         this.numeroIntegrantes = numeroIntegrantes;
         this.cidade = cidade;
         this.uf = uf;
@@ -33,12 +33,12 @@ public class Banda extends Usuario {
         this.nomeBanda = nomeBanda;
     }
 
-    public List<Instrumento> getInstrumentos() {
-        return instrumentos;
+    public List<Musico> getMusicos() {
+        return musicos;
     }
 
-    public void setInstrumentos(List<Instrumento> instrumentos) {
-        this.instrumentos = instrumentos;
+    public void setMusicos(List<Musico> musicos) {
+        this.musicos = musicos;
     }
 
     public Date getFormacao() {

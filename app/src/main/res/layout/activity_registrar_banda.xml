@@ -8,6 +8,7 @@
     tools:context=".Views.RegistrarBanda">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -55,9 +56,11 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="180dp"
                 android:text="@string/banda_informacoes"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +70,10 @@
                 android:id="@+id/txtNomeBanda"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_login"
                 android:ems="10"
@@ -86,6 +91,8 @@
                 android:id="@+id/txtFormacao"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:clickable="true"
                 android:drawableLeft="@drawable/ic_calendar"
@@ -104,6 +111,7 @@
                 android:id="@+id/linearBanda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/txtNumeroIntegrantes"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -146,8 +154,10 @@
                 android:id="@+id/txtNumeroIntegrantes"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="@color/white"
                 android:drawableLeft="@drawable/ic_pessoas"
                 android:ems="10"
@@ -155,89 +165,19 @@
                 android:inputType="number"
                 android:maxLength="5"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
+                app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearBanda" />
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="16dp"
-                android:text="@string/escolha_instrumento"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNumeroIntegrantes" />
-
-            <TextView
-                android:id="@+id/lb_instrumento"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/instrumentos"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.289"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:id="@+id/lb_quantidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/quantidade"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lb_instrumento"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/lb_habilidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/nivel_habilidade"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/listaInstrumentos"
-                app:layout_constraintHorizontal_bias="0.294"
-                app:layout_constraintStart_toEndOf="@+id/listaInstrumentos"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listaInstrumentos"
-                android:layout_width="350dp"
-                android:layout_height="174dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
             <Button
                 android:id="@+id/buttonRegistrar"
                 android:layout_width="88dp"
                 android:layout_height="32dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_bg"
                 android:onClick="btnRegistrar_Click"
                 android:text="@string/registrar"
@@ -245,13 +185,13 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/listaInstrumentos"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/listaInstrumentos" />
+                app:layout_constraintTop_toBottomOf="@+id/txtNumeroIntegrantes"
+                app:layout_constraintVertical_bias="1.0" />
 
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
+
 
 </android.support.constraint.ConstraintLayout>

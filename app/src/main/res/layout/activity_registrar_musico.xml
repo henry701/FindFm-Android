@@ -67,6 +67,7 @@
                 android:id="@+id/txtNomeCompleto"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -87,6 +88,7 @@
                 android:id="@+id/txtNascimento"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
                 android:clickable="true"
                 android:drawableLeft="@drawable/ic_calendar"
@@ -105,6 +107,7 @@
                 android:id="@+id/linearMusico"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/textView6"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -151,7 +154,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/escolha_instrumento"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/lb_quantidade"
+                app:layout_constraintBottom_toTopOf="@+id/lb_habilidade"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearMusico" />
@@ -167,26 +170,11 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
                 app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.289"
+                app:layout_constraintHorizontal_bias="0.293"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:id="@+id/lb_quantidade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/quantidade"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
-                app:layout_constraintEnd_toStartOf="@+id/lb_habilidade"
-                app:layout_constraintHorizontal_bias="0.567"
-                app:layout_constraintStart_toEndOf="@+id/lb_instrumento"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/lb_habilidade"
@@ -199,7 +187,7 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@+id/listaInstrumentos"
                 app:layout_constraintEnd_toStartOf="@+id/listaInstrumentos"
-                app:layout_constraintHorizontal_bias="0.294"
+                app:layout_constraintHorizontal_bias="0.297"
                 app:layout_constraintStart_toEndOf="@+id/listaInstrumentos"
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
                 app:layout_constraintVertical_bias="1.0" />
@@ -208,10 +196,11 @@
                 android:id="@+id/listaInstrumentos"
                 android:layout_width="350dp"
                 android:layout_height="174dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lb_quantidade" />
+                app:layout_constraintTop_toBottomOf="@+id/lb_habilidade" />
 
             <Button
                 android:id="@+id/buttonRegistrar"
@@ -220,7 +209,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_bg"
                 android:onClick="btnRegistrar_Click"
                 android:text="@string/registrar"
