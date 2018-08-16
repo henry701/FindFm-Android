@@ -98,6 +98,7 @@ public class Login extends AppCompatActivity {
 
     public void btnEntrar_Click(View v)
     {
+        Util.open_form(getApplicationContext(), Home_Page.class);
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
         boolean isEmailValido = FormatadorTelefoneBR.validarEmail(usuario.getText().toString());
