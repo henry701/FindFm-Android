@@ -9,7 +9,8 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_home__page"
+        android:id="@+id/app_bar_include"
+        layout="@layout/app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -20,6 +21,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/header_menu_lateral"
-        app:menu="@menu/activity_home_page_drawer" />
+        app:menu="@menu/activity_content_menu_lateral" />
 
 </android.support.v4.widget.DrawerLayout>

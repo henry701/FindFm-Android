@@ -2,6 +2,7 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,17 +10,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FormatadorTelefoneBR;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
@@ -66,6 +69,11 @@ public class Login extends AppCompatActivity {
                     // As chaves precisam ser persistidas
                     editor.apply();
                     dialog.dismiss();
+                    //Pegar imagem retornada do server
+                    Bitmap bitmap = (Bitmap) ((Map) response.getData()).get("foto");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
                     Util.open_form__no_return(this, HomePage.class );
                 } else if (ResponseCode.from(response.getResponseCode()).equals(ResponseCode.IncorrectPassword)){
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -98,7 +106,7 @@ public class Login extends AppCompatActivity {
 
     public void btnEntrar_Click(View v)
     {
-        Util.open_form(getApplicationContext(), Home_Page.class);
+        Util.open_form(getApplicationContext(), MenuLateral.class);
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
         boolean isEmailValido = FormatadorTelefoneBR.validarEmail(usuario.getText().toString());

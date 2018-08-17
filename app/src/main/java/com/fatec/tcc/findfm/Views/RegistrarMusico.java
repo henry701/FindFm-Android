@@ -53,7 +53,6 @@ public class RegistrarMusico extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
-    private Bundle globalParams = FindFM.getInstance().getParams();
     private Bundle param = new Bundle();
     private EditText txtNascimento;
     private RecyclerView rc;
@@ -107,7 +106,7 @@ public class RegistrarMusico extends AppCompatActivity {
 
             }
         });
-        byte[] image = this.globalParams.getByteArray("foto");
+        byte[] image = FindFM.getInstance().getParams().getByteArray("foto");
 
         if(image != null && image.length != 0) {
             this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
@@ -203,8 +202,7 @@ public class RegistrarMusico extends AppCompatActivity {
                 Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                this.globalParams.putByteArray("foto", baos.toByteArray());
-                FindFM.getInstance().setParams(this.globalParams);
+                FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -214,8 +212,7 @@ public class RegistrarMusico extends AppCompatActivity {
     public void btnRemoverImagem_Click(View v){
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        this.globalParams.putByteArray("foto", null);
-        FindFM.getInstance().setParams(this.globalParams);
+        FindFM.getInstance().getParams().putByteArray("foto", null);
 
     }
 
@@ -259,7 +256,7 @@ public class RegistrarMusico extends AppCompatActivity {
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),
-                    globalParams.getByteArray("foto"),
+                    FindFM.getInstance().getParams().getByteArray("foto"),
                     false,
                     false,
                     param.getString("nomeCompleto"),

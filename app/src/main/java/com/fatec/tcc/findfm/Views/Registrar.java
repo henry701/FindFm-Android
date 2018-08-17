@@ -31,7 +31,6 @@ public class Registrar extends AppCompatActivity {
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
     private String path = "com.fatec.tcc.findfm.Views.Registrar";
-    private Bundle globalParams = FindFM.getInstance().getParams();
     private Bundle param = new Bundle();
     private EditText txtTelefone;
 
@@ -56,8 +55,7 @@ public class Registrar extends AppCompatActivity {
         FormatadorTelefoneBR addLineNumberFormatter = new FormatadorTelefoneBR(new WeakReference<>(this.txtTelefone));
         this.txtTelefone.addTextChangedListener(addLineNumberFormatter);
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
-        this.globalParams.putByteArray("foto", null);
-        FindFM.getInstance().setParams(this.globalParams);
+        FindFM.getInstance().getParams().putByteArray("foto", null);
     }
 
     public void btnFoto_Click(View v){
@@ -80,8 +78,7 @@ public class Registrar extends AppCompatActivity {
                 Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                this.globalParams.putByteArray("foto", baos.toByteArray());
-                FindFM.getInstance().setParams(this.globalParams);
+                FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -90,7 +87,7 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-        TextView txtNomeUsuario = findViewById(R.id.txtNomeUsuario);
+        TextView txtNomeUsuario = findViewById(R.id.txtUsuarioHeader);
         TextView txtEmail = findViewById(R.id.txtEmail);
         TextView txtSenha = findViewById(R.id.txtSenha);
         TextView txtConfirmaSenha = findViewById(R.id.txtConfirmaSenha);
@@ -145,8 +142,7 @@ public class Registrar extends AppCompatActivity {
     public void btnRemoverImagem_Click(View v){
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        this.globalParams.putByteArray("foto", null);
-        FindFM.getInstance().setParams(this.globalParams);
+        FindFM.getInstance().getParams().putByteArray("foto", null);
     }
 
     private String tratarTelefone(){
@@ -161,7 +157,7 @@ public class Registrar extends AppCompatActivity {
     }
 
     private void setFoto(){
-        byte[] image = this.globalParams.getByteArray("foto");
+        byte[] image = FindFM.getInstance().getParams().getByteArray("foto");
 
         if(image != null && image.length != 0) {
             this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));

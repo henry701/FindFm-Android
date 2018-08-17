@@ -8,9 +8,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
@@ -25,15 +24,12 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.FindFM;
-import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Banda;
-import com.fatec.tcc.findfm.Model.Business.Instrumento;
-import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -41,11 +37,8 @@ import com.fatec.tcc.findfm.Utils.Util;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class RegistrarBanda extends AppCompatActivity {
@@ -53,7 +46,6 @@ public class RegistrarBanda extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
-    private Bundle globalParams = FindFM.getInstance().getParams();
     private Bundle param = new Bundle();
     private EditText txtFormacao;
     private RecyclerView rc;
@@ -106,7 +98,7 @@ public class RegistrarBanda extends AppCompatActivity {
             }
         });
 
-        byte[] image = this.globalParams.getByteArray("foto");
+        byte[] image = FindFM.getInstance().getParams().getByteArray("foto");
 
         if(image != null && image.length != 0) {
             this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
@@ -198,8 +190,7 @@ public class RegistrarBanda extends AppCompatActivity {
                 Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                this.globalParams.putByteArray("foto", baos.toByteArray());
-                FindFM.getInstance().setParams(this.globalParams);
+                FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -209,8 +200,7 @@ public class RegistrarBanda extends AppCompatActivity {
     public void btnRemoverImagem_Click(View v){
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        this.globalParams.putByteArray("foto", null);
-        FindFM.getInstance().setParams(this.globalParams);
+        FindFM.getInstance().getParams().putByteArray("foto", null);
     }
 
     public void btnRegistrar_Click (View v) {
@@ -238,7 +228,7 @@ public class RegistrarBanda extends AppCompatActivity {
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),
-                    globalParams.getByteArray("foto"),
+                    FindFM.getInstance().getParams().getByteArray("foto"),
                     false,
                     false,
                     param.getString("nomeCompleto"),

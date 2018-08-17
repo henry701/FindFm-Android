@@ -100,7 +100,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/btn_bg"
-                android:drawableRight="@drawable/ic_enter"
                 android:onClick="btnEntrar_Click"
                 android:text="@string/entrar"
                 android:textAllCaps="false"

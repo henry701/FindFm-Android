@@ -28,7 +28,7 @@
                 android:background="@drawable/ic_remover"
                 android:contentDescription="@string/foto_perfil"
                 android:onClick="btnRemoverImagem_Click"
-                app:layout_constraintBottom_toTopOf="@+id/txtNomeUsuario"
+                app:layout_constraintBottom_toTopOf="@+id/txtUsuarioHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/circularImageView"
@@ -64,7 +64,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/txtNomeUsuario"
+                android:id="@+id/txtUsuarioHeader"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -94,13 +94,13 @@
                 android:ems="10"
                 android:hint="@string/telefone_contato"
                 android:inputType="text|phone"
-                android:textColor="@color/white"
                 android:maxLength="15"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/txtEmail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNomeUsuario" />
+                app:layout_constraintTop_toBottomOf="@+id/txtUsuarioHeader" />
 
             <EditText
                 android:id="@+id/txtEmail"
@@ -112,8 +112,8 @@
                 android:ems="10"
                 android:hint="@string/e_mail"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/white"
                 android:maxLength="255"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/txtSenha"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -130,9 +130,9 @@
                 android:ems="10"
                 android:hint="@string/senha"
                 android:inputType="textPassword"
+                android:maxLength="20"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:maxLength="20"
                 app:layout_constraintBottom_toTopOf="@+id/txtConfirmaSenha"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -151,9 +151,9 @@
                 android:ems="10"
                 android:hint="@string/repita_a_senha"
                 android:inputType="textPassword"
+                android:maxLength="20"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:maxLength="20"
                 app:layout_constraintBottom_toTopOf="@+id/textView3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
