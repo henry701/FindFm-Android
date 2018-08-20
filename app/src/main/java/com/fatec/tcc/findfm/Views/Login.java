@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
-                    Util.open_form__no_return(this, HomePage.class );
+                    Util.open_form__no_return(this, TelaPrincipal.class );
                 } else if (ResponseCode.from(response.getResponseCode()).equals(ResponseCode.IncorrectPassword)){
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Atenção", R.drawable.ic_error,
@@ -106,7 +106,7 @@ public class Login extends AppCompatActivity {
 
     public void btnEntrar_Click(View v)
     {
-        Util.open_form(getApplicationContext(), MenuLateral.class);
+        Util.open_form(getApplicationContext(), TelaPrincipal.class);
         TextView usuario = findViewById(R.id.txtLogin);
         TextView senha = findViewById(R.id.txtSenha);
         boolean isEmailValido = FormatadorTelefoneBR.validarEmail(usuario.getText().toString());

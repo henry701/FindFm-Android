@@ -18,7 +18,7 @@ import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.Util;
 
-public class MenuLateral extends AppCompatActivity
+public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ProgressDialog dialog;
@@ -39,11 +39,22 @@ public class MenuLateral extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         header = navigationView.getHeaderView(0);
         fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+                .commit();
+
+
+
     }
 
     @Override
@@ -86,35 +97,36 @@ public class MenuLateral extends AppCompatActivity
         switch (id) {
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new HomePage())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                         .commit();
                 }
                 break;
             case R.id.meu_perfil:
                 if(tela.equals("")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new HomePage())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
                             .commit();
                 }
                 break;
             case R.id.meus_anuncios:
                 if(tela.equals("")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new HomePage())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusAnuncios_Fragment())
                             .commit();
                 }
                 break;
             case R.id.notificacoes:
                 if(tela.equals("")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new HomePage())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Notificacoes_Fragment())
                             .commit();
                 }
                 break;
             case R.id.configuracoes:
                 if(tela.equals("")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new HomePage())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Configuracoes_Fragment())
                             .commit();
                 }
                 break;
             case R.id.sair:
+                dialog.show();
                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                 editor.putBoolean("isLoggedIn", false);
                 editor.putString("username", null);
