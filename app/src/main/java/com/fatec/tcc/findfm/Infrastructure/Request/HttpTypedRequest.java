@@ -12,6 +12,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import java9.util.function.Consumer;
@@ -83,19 +84,26 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
                     try {
                         responseAsString = new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers, "utf-8"));
                     }
-                    catch(Exception e)
+                    catch(UnsupportedEncodingException e)
                     {
-                        onCriticalError.accept(new RuntimeException(e));
+                        Log.e("[LOG CHAMADAS TYPED]", "Unsupported Encoding", e);
+                        onCriticalError.accept(e);
                         return;
                     }
-                    TErrorResponse receivedErrorObject = JsonUtils.GSON.fromJson(responseAsString, errorResponseClass);
-                    Log.w("[LOG CHAMADAS TYPED]", "Error Business Contrived");
-                    onBusinessError.accept(receivedErrorObject);
+                    try {
+                        TErrorResponse receivedErrorObject = JsonUtils.GSON.fromJson(responseAsString, errorResponseClass);
+                        Log.w("[LOG CHAMADAS TYPED]", "Error Business Contrived MSG=" + responseAsString);
+                        onBusinessError.accept(receivedErrorObject);
+                    }
+                    catch(Exception e) {
+                        Exception err = new RuntimeException(e);
+                        Log.e("[LOG CHAMADAS TYPED]", "Error Critical MSG=" + responseAsString + " | EX=", err);
+                        onCriticalError.accept(err);
+                    }
                     return;
                 }
-                Log.e("[LOG CHAMADAS TYPED]", "Error Critical");
+                Log.e("[LOG CHAMADAS TYPED]", "Error Critical MSG=" + " | EX=", error);
                 onCriticalError.accept(error);
-                return;
             }
         );
     }
