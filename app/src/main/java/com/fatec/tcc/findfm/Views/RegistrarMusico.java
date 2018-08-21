@@ -128,7 +128,12 @@ public class RegistrarMusico extends AppCompatActivity {
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
-                            if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
+                            if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess))
+                            {
+                                AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                        "Sucesso!", R.drawable.ic_error,
+                                        response.getMessage(),"OK",
+                                        (dialog, id) -> { }).create().show();
                                 // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                                 editor.putBoolean("isLogado", true);
@@ -213,7 +218,6 @@ public class RegistrarMusico extends AppCompatActivity {
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
         FindFM.getInstance().getParams().putByteArray("foto", null);
-
     }
 
     public void txtNascimento_Click(View v){
@@ -265,7 +269,6 @@ public class RegistrarMusico extends AppCompatActivity {
                     param.getString("cidade"),
                     param.getString("uf")
             );
-
             registrarRequest.setRequestObject(musico);
             registrarRequest.execute(getApplicationContext());
         }

@@ -25,7 +25,6 @@ public class ResponseBody {
      * **/
     private Object data;
 
-
     public boolean isSuccess() {
         return success;
     }

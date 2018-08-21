@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,6 +31,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
         this.receiveClass = receiveClass;
         this.errorResponseClass = errorResponseClass;
         this.jsonRequestBody = JsonUtils.GSON.toJson(requestBody);
+        this.setRetryPolicy(new DefaultRetryPolicy(600000, 0, 1));
     }
 
     @Override

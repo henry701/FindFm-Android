@@ -21,6 +21,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FormatadorTelefoneBR;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
@@ -64,17 +65,18 @@ public class Login extends AppCompatActivity {
                 if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
                     // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                     SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+                    Map<String, Object> dataMap = ((Map<String, Object>) response.getData());
+                    editor.putString("tokenData", new Gson().toJson(dataMap.get("tokenData")));
                     editor.putBoolean("isLoggedIn", true);
-                    editor.putString("username", ((Map) response.getData()).get("nomeUsuario").toString());
                     // As chaves precisam ser persistidas
                     editor.apply();
                     dialog.dismiss();
                     //Pegar imagem retornada do server
-                    Bitmap bitmap = (Bitmap) ((Map) response.getData()).get("foto");
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
-                    Util.open_form__no_return(this, HomePage.class );
+                    //Bitmap bitmap = (Bitmap) ((Map) response.getData()).get("foto");
+                    //ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    //FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
+                    //Util.open_form__no_return(this, HomePage.class );
                 } else if (ResponseCode.from(response.getResponseCode()).equals(ResponseCode.IncorrectPassword)){
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Atenção", R.drawable.ic_error,
