@@ -130,7 +130,7 @@ public class RegistrarBanda extends AppCompatActivity {
                                 // As chaves precisam ser persistidas
                                 editor.apply();
                                 dialog.dismiss();
-                                Util.open_form__no_return(this, HomePage.class);
+                                Util.open_form__no_return(this, TelaPrincipal.class);
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -209,7 +209,14 @@ public class RegistrarBanda extends AppCompatActivity {
         TextView txtNumeroIntegrantes = findViewById(R.id.txtNumeroIntegrantes);
         TextView txtCidade = findViewById(R.id.txtCidadeBanda);
 
-        if( txtNomeBanda.getText().toString().isEmpty()||
+        if(txtNomeBanda.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtCidade.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        //TODO: VALIDAR OUTROS CAMPOS
+        else if( txtNomeBanda.getText().toString().isEmpty()||
                 txtFormacao.getText().toString().isEmpty() ||
                 txtNumeroIntegrantes.getText().toString().isEmpty() ||
                 txtCidade.getText().toString().isEmpty() )

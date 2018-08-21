@@ -142,7 +142,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                 // As chaves precisam ser persistidas
                                 editor.apply();
                                 dialog.dismiss();
-                                Util.open_form__no_return(this, HomePage.class);
+                                Util.open_form__no_return(this, TelaPrincipal.class);
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -236,6 +236,7 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
+        //TODO: VALIDAR CAMPOS
         TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
         TextView txtNascimento = findViewById(R.id.txtNascimento);
         TextView txtCidade = findViewById(R.id.txtCidadeMusico);

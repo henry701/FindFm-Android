@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Views.HomePage"
+            android:name=".Views.Home_Fragment"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Views.Registrar"
@@ -42,7 +42,7 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Views.RegistrarContratante" />
         <activity
-            android:name=".Views.MenuLateral"
+            android:name=".Views.TelaPrincipal"
             android:label="@string/title_activity_home__page"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

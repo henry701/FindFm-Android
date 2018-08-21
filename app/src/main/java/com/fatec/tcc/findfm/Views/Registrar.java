@@ -52,8 +52,10 @@ public class Registrar extends AppCompatActivity {
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
         this.txtTelefone = findViewById(R.id.txtTelefone);
+
         FormatadorTelefoneBR addLineNumberFormatter = new FormatadorTelefoneBR(new WeakReference<>(this.txtTelefone));
         this.txtTelefone.addTextChangedListener(addLineNumberFormatter);
+
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         FindFM.getInstance().getParams().putByteArray("foto", null);
     }
@@ -108,6 +110,15 @@ public class Registrar extends AppCompatActivity {
         else if (!isEmailValido) {
             Toast.makeText(getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
         }
+        else if(txtNomeUsuario.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Seu nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if (txtSenha.length() < 6){
+            Toast.makeText(getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtSenha.getText().toString().trim().isEmpty() || txtConfirmaSenha.getText().toString().trim().isEmpty() ){
+            Toast.makeText(getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
         else if( txtNomeUsuario.getText().toString().isEmpty() || this.txtTelefone.getText().toString().isEmpty() ||
                 txtEmail.getText().toString().isEmpty() || txtSenha.getText().toString().isEmpty() ||
                 txtConfirmaSenha.getText().toString().isEmpty() || selectedId == -1 )
@@ -120,6 +131,7 @@ public class Registrar extends AppCompatActivity {
         else {
             String telefone = this.tratarTelefone();
             tipoConta = findViewById(selectedId);
+
             this.param.putString("nomeUsuario", txtNomeUsuario.getText().toString());
             this.param.putString("telefone", telefone);
             this.param.putString("email", txtEmail.getText().toString());

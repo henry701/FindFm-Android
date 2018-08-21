@@ -17,7 +17,7 @@ import com.fatec.tcc.findfm.R;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HomePage extends Fragment {
+public class Home_Fragment extends Fragment {
 
     private ProgressDialog dialog;
     View homePage;

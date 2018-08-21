@@ -124,7 +124,7 @@ public class RegistrarContratante extends AppCompatActivity {
                                 // As chaves precisam ser persistidas
                                 editor.apply();
                                 dialog.dismiss();
-                                Util.open_form__no_return(this, HomePage.class);
+                                Util.open_form__no_return(this, TelaPrincipal.class);
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -205,7 +205,7 @@ public class RegistrarContratante extends AppCompatActivity {
         TextView txtCidade = findViewById(R.id.txtCidadeContratante);
         TextView txtEndereco = findViewById(R.id.txtEndereco);
         TextView txtNumero = findViewById(R.id.txtNumero);
-
+        //TODO: VALIDAR CAMPOS
         if (txtNomeEstabelecimento.getText().toString().isEmpty() ||
                 txtInauguracao.getText().toString().isEmpty() ||
                 txtCidade.getText().toString().isEmpty() ||
