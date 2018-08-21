@@ -22,6 +22,6 @@
 
     <include
         android:id="@+id/app_bar_include"
-        layout="@layout/content_home__page" />
+        layout="@layout/content_tela_principal" />
 
 </android.support.design.widget.CoordinatorLayout>

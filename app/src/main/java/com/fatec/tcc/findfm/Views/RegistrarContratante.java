@@ -205,14 +205,28 @@ public class RegistrarContratante extends AppCompatActivity {
         TextView txtCidade = findViewById(R.id.txtCidadeContratante);
         TextView txtEndereco = findViewById(R.id.txtEndereco);
         TextView txtNumero = findViewById(R.id.txtNumero);
-        //TODO: VALIDAR CAMPOS
-        if (txtNomeEstabelecimento.getText().toString().isEmpty() ||
-                txtInauguracao.getText().toString().isEmpty() ||
-                txtCidade.getText().toString().isEmpty() ||
-                txtEndereco.getText().toString().isEmpty() ||
-                txtNumero.getText().toString().isEmpty() ||
-                txtCapacidadeLocal.getText().toString().isEmpty()             )
-            Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+
+        if(txtNomeEstabelecimento.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( txtInauguracao.getText().toString().isEmpty() ) {
+            Toast.makeText(getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( inauguracao.after(new Date())) {
+            Toast.makeText(getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( txtNumero.getText().toString().isEmpty() ) {
+            Toast.makeText(getApplicationContext(), "Informe a capacidade do local!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtCidade.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtCidade.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O endereço não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtNumero.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Informe o número!", Toast.LENGTH_SHORT).show();
+        }
         else {
             this.dialog.show();
             this.param.putString("nomeCompleto", txtNomeEstabelecimento.getText().toString());

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.R;
@@ -25,7 +26,7 @@ public class Home_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        homePage = inflater.inflate(R.layout.activity_home, container, false);
+        homePage = inflater.inflate(R.layout.activity_home_fragment, container, false);
         return homePage;
     }
 
@@ -48,6 +49,7 @@ public class Home_Fragment extends Fragment {
         ImageView imagemUsuarioHeader = getActivity().findViewById(R.id.fotoPerfil);
         if(image != null && image.length != 0) {
             imagemUsuarioHeader.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            Toast.makeText(getActivity().getApplicationContext(), "Você pode adicionar uma foto acessando o menu Meu Perfil ;)", Toast.LENGTH_SHORT).show();
         }
         else {
             imagemUsuarioHeader.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getActivity().getTheme()));

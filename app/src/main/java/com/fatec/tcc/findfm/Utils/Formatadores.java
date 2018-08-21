@@ -5,13 +5,16 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Adapted to BR phone format from the class
  * UsPhoneNumberFormatter by Samik Bandyopadhyay:
  * http://stackoverflow.com/a/23659268/332839
  */
-public class FormatadorTelefoneBR implements TextWatcher {
+//Antigo FormatadorTelefoneBR
+public class Formatadores implements TextWatcher {
     final int MAX_LENGTH = 11;
 
     //This TextWatcher sub-class formats entered numbers as (41) 1234(5)?-6789
@@ -21,7 +24,7 @@ public class FormatadorTelefoneBR implements TextWatcher {
     private String mLastBeforeText;
     private WeakReference<EditText> mWeakEditText;
 
-    public FormatadorTelefoneBR(WeakReference<EditText> weakEditText) {
+    public Formatadores(WeakReference<EditText> weakEditText) {
         this.mWeakEditText = weakEditText;
     }
 
@@ -155,5 +158,11 @@ public class FormatadorTelefoneBR implements TextWatcher {
     public static boolean validarEmail(String email) {
         String formato = "^((([!#$%&'*+\\-/=?^_`{|}~\\w])|([!#$%&'*+\\-/=?^_`{|}~\\w][!#$%&'*+\\-/=?^_`{|}~\\.\\w]{0,}[!#$%&'*+\\-/=?^_`{|}~\\w]))[@]\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)$";
         return email.matches(formato);
+    }
+
+    public static Calendar converterData(Date data) {
+        Calendar cal = Calendar. getInstance();
+        cal.setTime(data);
+        return  cal;
     }
 }

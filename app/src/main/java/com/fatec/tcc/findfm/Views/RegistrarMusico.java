@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.FindFM;
-import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
@@ -33,10 +33,11 @@ import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -236,7 +237,6 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-        //TODO: VALIDAR CAMPOS
         TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
         TextView txtNascimento = findViewById(R.id.txtNascimento);
         TextView txtCidade = findViewById(R.id.txtCidadeMusico);
@@ -245,11 +245,24 @@ public class RegistrarMusico extends AppCompatActivity {
         List<Instrumento> instrumentos = new ArrayList<>();
         instrumentos.addAll(adapter.getInstrumentos());
 
-        if( txtNomeCompleto.getText().toString().isEmpty()||
-                txtNascimento.getText().toString().isEmpty() ||
-                txtCidade.getText().toString().isEmpty() ||
-                instrumentos.isEmpty())
-            Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        if(txtNomeCompleto.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Seu nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( txtNascimento.getText().toString().isEmpty() ) {
+            Toast.makeText(getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( nascimento.after(new Date())) {
+            Toast.makeText(getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( Formatadores.converterData(nascimento).get(Calendar.YEAR) + 18 > Calendar.getInstance().get(Calendar.YEAR)) {
+            Toast.makeText(getApplicationContext(), "O usuário não pode ser menor de 18 anos!", Toast.LENGTH_SHORT).show();
+        }
+        else if(txtCidade.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( instrumentos.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Selecione ao menos um instrumento!", Toast.LENGTH_SHORT).show();
+        }
         else {
             this.dialog.show();
             this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
@@ -273,6 +286,7 @@ public class RegistrarMusico extends AppCompatActivity {
             registrarRequest.setRequestObject(musico);
             registrarRequest.execute(getApplicationContext());
         }
+
     }
 
 }

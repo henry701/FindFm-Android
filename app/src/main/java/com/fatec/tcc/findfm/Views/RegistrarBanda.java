@@ -212,16 +212,17 @@ public class RegistrarBanda extends AppCompatActivity {
         if(txtNomeBanda.getText().toString().trim().isEmpty()){
             Toast.makeText(getApplicationContext(), "O nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
+        else if ( txtFormacao.getText().toString().isEmpty() ) {
+            Toast.makeText(getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( formacao.after(new Date()) ) {
+            Toast.makeText(getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
+        }
         else if(txtCidade.getText().toString().trim().isEmpty()){
             Toast.makeText(getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        //TODO: VALIDAR OUTROS CAMPOS
-        else if( txtNomeBanda.getText().toString().isEmpty()||
-                txtFormacao.getText().toString().isEmpty() ||
-                txtNumeroIntegrantes.getText().toString().isEmpty() ||
-                txtCidade.getText().toString().isEmpty() )
-        {
-            Toast.makeText(getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        else if(txtNumeroIntegrantes.getText().toString().trim().isEmpty()){
+            Toast.makeText(getApplicationContext(), "Informe o número de integrantes!", Toast.LENGTH_SHORT).show();
         }
         else {
             this.dialog.show();
