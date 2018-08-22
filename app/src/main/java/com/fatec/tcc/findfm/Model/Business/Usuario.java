@@ -2,13 +2,13 @@ package com.fatec.tcc.findfm.Model.Business;
 
 public class Usuario {
 
-    private String nomeUsuario;
-    private boolean confirmado;
-    private boolean premium;
-    private String telefone;
-    private String email;
-    private String senha;
-    private byte[] foto;
+    public String nomeUsuario;
+    public boolean confirmado;
+    public boolean premium;
+    public String telefone;
+    public String email;
+    public String senha;
+    public byte[] foto;
 
     public Usuario(){}
 

@@ -44,7 +44,8 @@
         <activity
             android:name=".Views.TelaPrincipal"
             android:label="@string/title_activity_home__page"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Views.Perfil_Fragment"></activity>
     </application>
 
 </manifest>

@@ -7,15 +7,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.fatec.tcc.findfm.Controller.Registrar.RegistrarViewModel"/>
+            type="com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel"/>
     </data>
-    
+
     <android.support.constraint.ConstraintLayout
+        android:background="@drawable/from_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/from_bg"
-        tools:context=".Views.Registrar"
-        tools:layout_editor_absoluteY="73dp">
+        tools:context=".Views.Perfil_Fragment">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -25,9 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:scrollbarThumbVertical="@android:color/white"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            android:scrollbarThumbVertical="@android:color/white">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -42,7 +39,6 @@
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
                     android:onClick="btnRemoverImagem_Click"
-                    app:layout_constraintBottom_toTopOf="@+id/txtUsuario"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/circularImageView"
@@ -57,7 +53,6 @@
                     android:focusable="true"
                     android:onClick="btnFoto_Click"
                     android:src="@drawable/capaplaceholder_photo"
-                    app:layout_constraintBottom_toTopOf="@+id/textView5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -65,21 +60,9 @@
                     app:siBorderColor="@color/white"
                     app:siBorderWidth="2dp" />
 
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginTop="180dp"
-                    android:text="@string/suas_informacoes"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <EditText
-                    android:text="@={viewModel.nomeUsuario}"
-                    android:id="@+id/txtUsuario"
+                    android:text="@={viewModel.usuario.nomeUsuario}"
+                    android:id="@+id/txtNomeUsuario"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -97,10 +80,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                    app:layout_constraintTop_toBottomOf="@+id/circularImageView" />
 
                 <EditText
-                    android:text="@={viewModel.telefone}"
+                    android:text="@={viewModel.usuario.telefone}"
                     android:id="@+id/txtTelefone"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -116,10 +99,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtUsuario" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtNomeUsuario" />
 
                 <EditText
-                    android:text="@={viewModel.email}"
+                    android:text="@={viewModel.usuario.email}"
                     android:id="@+id/txtEmail"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -131,130 +114,155 @@
                     android:inputType="textEmailAddress"
                     android:maxLength="255"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/txtSenha"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLocal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtTelefone" />
 
+                <LinearLayout
+                    android:id="@+id/linearLocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/txtEndereco"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+
+                    <EditText
+                        android:text="@={viewModel.cidade}"
+                        android:id="@+id/txtCidade"
+                        android:layout_width="172dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:hint="@string/cidade"
+                        android:inputType="text"
+                        android:maxLength="70"
+                        android:textColor="@color/white"
+                        tools:layout_editor_absoluteX="48dp"
+                        tools:layout_editor_absoluteY="396dp" />
+
+                    <Spinner
+                        android:id="@+id/cb_uf"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="109dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:entries="@array/lista_uf"
+                        android:hint="@string/uf"
+                        android:popupBackground="@color/lilasClaro"
+                        android:textColor="@color/white"
+                        tools:layout_editor_absoluteX="224dp"
+                        tools:layout_editor_absoluteY="394dp" />
+
+                </LinearLayout>
+
                 <EditText
-                    android:text="@={viewModel.senha}"
+                    android:text="@={viewModel.endereco}"
+                    android:id="@+id/txtEndereco"
+                    android:layout_width="282dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_local"
+                    android:ems="10"
+                    android:hint="@string/endereco"
+                    android:inputType="text"
+                    android:maxLength="70"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/txtNumero"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+
+                <EditText
+                    android:text="@={viewModel.numero}"
+                    android:id="@+id/txtNumero"
+                    android:layout_width="137dp"
+                    android:layout_height="54dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_local"
+                    android:ems="10"
+                    android:hint="@string/simbolo_numero"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/txtSenha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEndereco" />
+
+                <EditText
                     android:id="@+id/txtSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_password"
                     android:ems="10"
                     android:hint="@string/senha"
                     android:inputType="textPassword"
                     android:maxLength="20"
+                    android:text="@={viewModel.usuario.senha}"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtConfirmaSenha"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtNumero" />
 
                 <EditText
-                    android:text="@={viewModel.confirmaSenha}"
                     android:id="@+id/txtConfirmaSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_password"
                     android:ems="10"
                     android:hint="@string/repita_a_senha"
                     android:inputType="textPassword"
                     android:maxLength="20"
+                    android:text="@={viewModel.confirmaSenha}"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/textView3"
+                    app:layout_constraintBottom_toTopOf="@+id/frame_secao"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/escolha_tipo_conta"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/grupoTipoConta"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtConfirmaSenha"
-                    app:layout_constraintVertical_bias="0.168" />
-
-                <RadioGroup
-                    android:id="@+id/grupoTipoConta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
+                <FrameLayout
+                    android:id="@+id/frame_secao"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-                    <RadioButton
-                        android:id="@+id/rbBanda"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="?android:attr/listChoiceIndicatorSingle"
-                        android:buttonTint="@color/white"
-                        android:text="@string/banda"
-                        android:textColor="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/rbContratante"
-                        tools:layout_editor_absoluteY="400dp" />
-
-                    <RadioButton
-                        android:id="@+id/rbContratante"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="?android:attr/listChoiceIndicatorSingle"
-                        android:buttonTint="@color/white"
-                        android:text="@string/contratante"
-                        android:textColor="@android:color/background_light"
-                        app:layout_constraintEnd_toStartOf="@+id/rbBanda"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/rbMusico"
-                        tools:layout_editor_absoluteY="400dp" />
-
-                    <RadioButton
-                        android:id="@+id/rbMusico"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:button="?android:attr/listChoiceIndicatorSingle"
-                        android:buttonTint="@color/white"
-                        android:text="@string/musico"
-                        android:textColor="@android:color/background_light"
-                        app:layout_constraintEnd_toStartOf="@+id/rbContratante"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:layout_editor_absoluteY="400dp" />
-
-                </RadioGroup>
+                    app:layout_constraintTop_toBottomOf="@+id/txtConfirmaSenha"/>
 
                 <Button
                     android:id="@+id/buttonRegistrar"
                     android:layout_width="88dp"
                     android:layout_height="32dp"
                     android:layout_marginBottom="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="btnRegistrar_Click"
                     android:text="@string/registrar"
@@ -263,13 +271,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/grupoTipoConta" />
-
+                    app:layout_constraintTop_toBottomOf="@+id/frame_secao"
+                    app:layout_constraintVertical_bias="1.0" />
 
             </android.support.constraint.ConstraintLayout>
 
         </ScrollView>
 
     </android.support.constraint.ConstraintLayout>
-
 </layout>

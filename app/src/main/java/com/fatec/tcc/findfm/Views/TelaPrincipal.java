@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Views;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,8 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,7 +53,7 @@ public class TelaPrincipal extends AppCompatActivity
         header = navigationView.getHeaderView(0);
         fragmentManager = getFragmentManager();
 
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
                 .commit();
 
 
@@ -92,19 +95,26 @@ public class TelaPrincipal extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        //TODO: erros quando troca de fragment
         int id = item.getItemId();
         String tela = FindFM.getInstance().getParams().getString("tela", "");
         switch (id) {
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
+                    fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                         .commit();
                 }
                 break;
             case R.id.meu_perfil:
-                if(tela.equals("")) {
+                if(!tela.equals("MEU_PERFIL")) {
+                    fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
                             .commit();
+                    ActivityPerfilFragmentBinding bindingmeu_perfil;
+                    bindingmeu_perfil = DataBindingUtil.setContentView(this, R.layout.activity_perfil__fragment);
+                    bindingmeu_perfil.setViewModel(new PerfilViewModel(this));
+                    bindingmeu_perfil.executePendingBindings();
                 }
                 break;
             case R.id.meus_anuncios:
@@ -137,8 +147,8 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }
