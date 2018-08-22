@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 
 /**
@@ -37,7 +38,6 @@ public class JsonUtils {
      * **/
     @Nullable
     public static JSONObject toJsonObject(Object param) {
-
         try {
             return new JSONObject(GSON.toJson(param));
         } catch (JSONException e) {
@@ -45,6 +45,26 @@ public class JsonUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String createString(Object param)
+    {
+        try {
+            return toJsonObject(param).toString(0);
+        } catch (JSONException e) {
+            Log.e("[JSON UTILS]", "Error while creating string from object " + param.toString(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T jsonConvert(Object obj, Class<T> typeToken)
+    {
+        return jsonConvert((Map<String, Object>) obj, typeToken);
+    }
+
+    public static <T> T jsonConvert(Map<String, Object> obj, Class<T> typeToken)
+    {
+        return GSON.fromJson(GSON.toJson(obj), typeToken);
     }
 
     private static class NivelHabilidadeTypeDeserializer implements

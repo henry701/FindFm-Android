@@ -63,8 +63,15 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
             (TResponse response) ->
             {
                 Log.i("[LOG CHAMADAS TYPED]", "Success!");
-                Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos: " + JsonUtils.toJsonObject(response).toString());
-                onSuccess.accept(response);
+                Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos parsed: " + JsonUtils.createString(response));
+                try
+                {
+                    onSuccess.accept(response);
+                }
+                catch(Exception e)
+                {
+                    Log.e("[LOG CHAMADAS TYPED]", "Unhandled onSuccess exception", e);
+                }
                 return;
             },
             (VolleyError error) ->

@@ -17,7 +17,7 @@ public class SharedRequestQueue
     private static RequestQueue getRequestQueue(Context context) {
         if(requestQueue == null) {
             // Instantiate the cache
-            Cache cache = new DiskBasedCache(context.getCacheDir(), (1024 * 1024) * 5); // 5MB cap
+            Cache cache = new DiskBasedCache(context.getCacheDir(), (1024 * 1024) * 50); // 50MB capped cache
             // Set up the network to use HttpURLConnection as the HTTP client.
             Network network = new BasicNetwork(new HurlStack());
             // Create the Request Queue
@@ -26,7 +26,6 @@ public class SharedRequestQueue
         }
         return requestQueue;
     }
-
 
     public static <T> void addToRequestQueue(Context context, Request<T> req) {
         getRequestQueue(context).add(req);

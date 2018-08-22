@@ -1,14 +1,21 @@
 package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 
+import android.util.Log;
+
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
 import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.android.volley.toolbox.JsonRequest<TResponse> {
 
@@ -38,6 +45,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
     protected Response<TResponse> parseNetworkResponse(NetworkResponse networkResponse) {
         String responseCharset = HttpHeaderParser.parseCharset(networkResponse.headers,"UTF-8");
         String responseString = new String(networkResponse.data, Charset.forName(responseCharset));
+        Log.i("[LOG CHAMADAS TYPED]", "Dados recebidos: " + responseString);
         Cache.Entry cacheEntry = HttpHeaderParser.parseCacheHeaders(networkResponse);
 
         if(networkResponse.statusCode >= 200 && networkResponse.statusCode <= 299) {
@@ -50,6 +58,19 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
             VolleyError volleyError = new VolleyError("Response returned error statusCode!", errorResponseException);
             return Response.error(volleyError);
         }
+    }
+
+    @Override
+    public Map<String, String> getHeaders()
+    {
+        TokenData tokenData = FindFM.getTokenData();
+        if(tokenData == null)
+        {
+            return Collections.emptyMap();
+        }
+        Map<String, String> headers = new HashMap<>(1, 1.0f);
+        headers.put("Authorization", "Bearer " + tokenData.getToken());
+        return headers;
     }
 
     public String getBodyAsJson(){

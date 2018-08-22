@@ -27,10 +27,12 @@ import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
+import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 
 import java.io.ByteArrayOutputStream;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 public class RegistrarContratante extends AppCompatActivity {
 
@@ -115,12 +118,14 @@ public class RegistrarContratante extends AppCompatActivity {
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
-                            if (ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
+                            if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                                 editor.putBoolean("isLogado", true);
                                 editor.putString("tipoUsuario", "CONTRATANTE");
                                 editor.putString("nomeUsuario", param.getString("nomeCompleto"));
+                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
+                                FindFM.setTokenData(tokenData);
                                 // As chaves precisam ser persistidas
                                 editor.apply();
                                 dialog.dismiss();

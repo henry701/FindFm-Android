@@ -11,9 +11,9 @@ public class ResponseBody {
     private boolean success;
 
     /**
-     * Representa responseCode da enum ResponseCode
+     * Representa code da enum ResponseCode
      * **/
-    private int responseCode;
+    private int code;
 
     /**
      * Mensagem ao usuário
@@ -29,8 +29,8 @@ public class ResponseBody {
         return success;
     }
 
-    public int getResponseCode() {
-        return responseCode;
+    public int getCode() {
+        return code;
     }
 
     public String getMessage() {

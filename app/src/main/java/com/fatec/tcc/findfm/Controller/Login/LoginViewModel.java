@@ -7,18 +7,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
+import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Login;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.google.gson.Gson;
 
 import java.util.Map;
 
@@ -54,11 +56,11 @@ public class LoginViewModel {
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
-                            if(ResponseCode.from(response.getResponseCode()).equals(ResponseCode.GenericSuccess)) {
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
                                 SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                                Map<String, Object> dataMap = ((Map<String, Object>) response.getData());
-                                editor.putString("tokenData", new Gson().toJson(dataMap.get("tokenData")));
+                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
+                                FindFM.setTokenData(tokenData);
                                 editor.putBoolean("isLoggedIn", true);
                                 // As chaves precisam ser persistidas
                                 editor.apply();
@@ -69,7 +71,7 @@ public class LoginViewModel {
                                 //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                                 //FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
                                 Util.open_form__no_return(view, TelaPrincipal.class );
-                            } else if (ResponseCode.from(response.getResponseCode()).equals(ResponseCode.IncorrectPassword)){
+                            } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){
                                 AlertDialogUtils.newSimpleDialog__OneButton(view,
                                         "Atenção", R.drawable.ic_error,
                                         "Usuário e/ou Senha incorretos","OK",
@@ -106,7 +108,8 @@ public class LoginViewModel {
             Toast.makeText(v.getContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }
-        LoginRequest requestObject = new LoginRequest(usuario, senha );
+
+        LoginRequest requestObject = new LoginRequest(usuario, senha);
         this.dialog.show();
         loginRequest.setRequestObject(requestObject);
         loginRequest.execute(v.getContext());
