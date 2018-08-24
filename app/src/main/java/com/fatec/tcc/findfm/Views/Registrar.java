@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarViewModel;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.databinding.ActivityRegistrarBinding;
 
 import java.io.FileNotFoundException;
@@ -34,10 +35,7 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnFoto_Click(View v){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Escolha uma foto"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE);
     }
 
     @Override

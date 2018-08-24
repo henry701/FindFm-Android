@@ -156,6 +156,9 @@ public class Formatadores implements TextWatcher {
     }
 
     public static boolean validarEmail(String email) {
+        if(email == null){
+            return false;
+        }
         String formato = "^((([!#$%&'*+\\-/=?^_`{|}~\\w])|([!#$%&'*+\\-/=?^_`{|}~\\w][!#$%&'*+\\-/=?^_`{|}~\\.\\w]{0,}[!#$%&'*+\\-/=?^_`{|}~\\w]))[@]\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*)$";
         return email.matches(formato);
     }

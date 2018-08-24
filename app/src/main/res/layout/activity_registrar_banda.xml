@@ -1,202 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/from_bg"
-    tools:context=".Views.RegistrarBanda">
+<layout>
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <data>
+        <variable
+            name="viewModelBanda"
+            type="com.fatec.tcc.findfm.Controller.Registrar.RegistrarBandaViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollbarThumbVertical="@android:color/white"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:background="@drawable/from_bg"
+        tools:context=".Views.RegistrarBanda">
 
-        <android.support.constraint.ConstraintLayout
+        <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scrollbarThumbVertical="@android:color/white"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
 
-            <ImageButton
-                android:id="@+id/btnRemoverImagem"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/ic_remover"
-                android:contentDescription="@string/foto_perfil"
-
-                android:onClick="btnRemoverImagem_Click"
-                app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/circularImageView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.122" />
-
-            <com.github.siyamed.shapeimageview.CircularImageView
-                android:id="@+id/circularImageView"
-                android:layout_width="130dp"
-                android:layout_height="135dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="btnFoto_Click"
-                android:src="@drawable/capaplaceholder_photo"
-                app:layout_constraintBottom_toTopOf="@+id/textView5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:siBorderColor="@color/white"
-                app:siBorderWidth="2dp" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="180dp"
-                android:text="@string/banda_informacoes"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/txtNomeBanda"
-                android:layout_width="282dp"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/white"
-                android:drawableLeft="@drawable/ic_login"
-                android:ems="10"
-                android:hint="@string/nome_banda"
-                android:inputType="text"
-                android:maxLength="70"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/txtFormacao"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/txtFormacao"
-                android:layout_width="282dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/white"
-                android:clickable="true"
-                android:drawableLeft="@drawable/ic_calendar"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="@string/data_formacao"
-                android:maxLength="10"
-                android:onClick="txtFormacao_Click"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/linearBanda"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNomeBanda" />
+                <ImageButton
+                    android:id="@+id/btnRemoverImagem"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverImagem_Click"
+                    app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/circularImageView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.122" />
 
-            <LinearLayout
-                android:id="@+id/linearBanda"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/txtNumeroIntegrantes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtFormacao">
+                <com.github.siyamed.shapeimageview.CircularImageView
+                    android:id="@+id/circularImageView"
+                    android:layout_width="130dp"
+                    android:layout_height="135dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="btnFoto_Click"
+                    android:src="@drawable/capaplaceholder_photo"
+                    app:layout_constraintBottom_toTopOf="@+id/textView5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:siBorderColor="@color/white"
+                    app:siBorderWidth="2dp" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="180dp"
+                    android:text="@string/banda_informacoes"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/txtNomeBanda"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/txtCidadeBanda"
-                    android:layout_width="172dp"
-                    android:layout_height="54dp"
+                    android:id="@+id/txtNomeBanda"
+                    android:text="@={viewModelBanda.nomeBanda}"
+                    android:layout_width="282dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_local"
+                    android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
-                    android:hint="@string/cidade"
+                    android:hint="@string/nome_banda"
                     android:inputType="text"
                     android:maxLength="70"
                     android:textColor="@color/white"
-                    tools:layout_editor_absoluteX="48dp"
-                    tools:layout_editor_absoluteY="396dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/txtFormacao"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-                <Spinner
-                    android:id="@+id/cb_uf"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:layout_width="109dp"
-                    android:layout_height="54dp"
+                <EditText
+                    android:id="@+id/txtFormacao"
+                    android:text="@={viewModelBanda.formacao}"
+                    android:layout_width="282dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_local"
+                    android:clickable="true"
+                    android:drawableLeft="@drawable/ic_calendar"
                     android:ems="10"
-                    android:entries="@array/lista_uf"
-                    android:hint="@string/uf"
-                    android:popupBackground="@color/lilasClaro"
+                    android:focusable="false"
+                    android:hint="@string/data_formacao"
+                    android:maxLength="10"
+                    android:onClick="txtFormacao_Click"
                     android:textColor="@color/white"
-                    tools:layout_editor_absoluteX="224dp"
-                    tools:layout_editor_absoluteY="394dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/linearBanda"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtNomeBanda" />
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linearBanda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/txtNumeroIntegrantes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtFormacao">
 
-            <EditText
-                android:id="@+id/txtNumeroIntegrantes"
-                android:layout_width="282dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/white"
-                android:drawableLeft="@drawable/ic_pessoas"
-                android:ems="10"
-                android:hint="@string/numero_integrantes"
-                android:inputType="number"
-                android:maxLength="5"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearBanda" />
+                    <EditText
+                        android:id="@+id/txtCidadeBanda"
+                        android:text="@={viewModelBanda.cidade}"
+                        android:layout_width="172dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:hint="@string/cidade"
+                        android:inputType="text"
+                        android:maxLength="70"
+                        android:textColor="@color/white"
+                        tools:layout_editor_absoluteX="48dp"
+                        tools:layout_editor_absoluteY="396dp" />
+
+                    <Spinner
+                        android:id="@+id/cb_uf"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="109dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:entries="@array/lista_uf"
+                        android:hint="@string/uf"
+                        android:popupBackground="@color/lilasClaro"
+                        android:textColor="@color/white"
+                        tools:layout_editor_absoluteX="224dp"
+                        tools:layout_editor_absoluteY="394dp" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/txtNumeroIntegrantes"
+                    android:text="@={viewModelBanda.numeroIntegrantes}"
+                    android:layout_width="282dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_pessoas"
+                    android:ems="10"
+                    android:hint="@string/numero_integrantes"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearBanda" />
 
 
-            <Button
-                android:id="@+id/buttonRegistrar"
-                android:layout_width="88dp"
-                android:layout_height="32dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/btn_bg"
-                android:onClick="btnRegistrar_Click"
-                android:text="@string/registrar"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtNumeroIntegrantes"
-                app:layout_constraintVertical_bias="1.0" />
+                <Button
+                    android:id="@+id/buttonRegistrar"
+                    android:layout_width="88dp"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/btn_bg"
+                    android:onClick="btnRegistrar_Click"
+                    android:text="@string/registrar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtNumeroIntegrantes"
+                    app:layout_constraintVertical_bias="1.0" />
 
-        </android.support.constraint.ConstraintLayout>
+            </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+        </ScrollView>
 
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

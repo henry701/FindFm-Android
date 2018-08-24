@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout>
     <data>
         <variable
             name="viewModel"
@@ -11,6 +7,9 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/from_bg"
@@ -65,7 +64,7 @@
                     app:layout_constraintGuide_percent="0.35" />
 
                 <EditText
-                    android:text="@={viewModel.usuario}"
+                    android:text="@{viewModel.email}"
                     android:id="@+id/txtLogin"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -86,7 +85,7 @@
                     />
 
                 <EditText
-                    android:text="@={viewModel.senha}"
+                    android:text="@{viewModel.password}"
                     android:id="@+id/txtSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -175,46 +174,6 @@
                     app:layout_constraintVertical_bias="0.485"
                     android:focusable="true" />
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="20dp" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline15"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="20dp" />
-
-                <android.support.constraint.Barrier
-                    android:id="@+id/barrier2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="top" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline19"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="20dp" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline20"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="20dp" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline26"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_begin="20dp" />
 
             </android.support.constraint.ConstraintLayout>
 

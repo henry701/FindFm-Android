@@ -32,6 +32,7 @@ public class Login extends AppCompatActivity {
 
     public void btnEntrar_Click(View v) {
         binding.getViewModel().btnEntrar_Click(v);
+        //Temporario
         Util.open_form(v.getContext(), TelaPrincipal.class);
     }
 

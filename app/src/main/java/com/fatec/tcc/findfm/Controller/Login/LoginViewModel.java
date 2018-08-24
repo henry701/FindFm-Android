@@ -28,19 +28,20 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class LoginViewModel {
 
-    public ObservableField<String> usuario = new ObservableField<>();
-    public ObservableField<String> senha = new ObservableField<>();
     private HttpTypedRequest<LoginRequest, ResponseBody, ErrorResponse> loginRequest;
+    public ObservableField<String> email = new ObservableField<>();
+    public ObservableField<String> password = new ObservableField<>();
+
     private ProgressDialog dialog;
     private Login view;
 
     public LoginViewModel(Login view){
         this.view = view;
+        this.dialog = new ProgressDialog(view);
     }
 
     public void init() {
         initRequests();
-        this.dialog = new ProgressDialog(view);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
@@ -57,19 +58,21 @@ public class LoginViewModel {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
-                                SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
+
+                                SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                                 editor.putBoolean("isLoggedIn", true);
-                                // As chaves precisam ser persistidas
                                 editor.apply();
                                 dialog.dismiss();
+
                                 //Pegar imagem retornada do server
                                 //Bitmap bitmap = (Bitmap) ((Map) response.getData()).get("foto");
                                 //ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                                 //FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
+
                                 Util.open_form__no_return(view, TelaPrincipal.class );
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){
                                 AlertDialogUtils.newSimpleDialog__OneButton(view,
@@ -101,17 +104,16 @@ public class LoginViewModel {
     }
 
     public void btnEntrar_Click(View v) {
-        String usuario = this.usuario.get();
-        String senha = this.senha.get();
+        String usuario = this.email.get();
+        String senha = this.password.get();
 
         if(usuario == null || usuario.isEmpty() || senha == null || senha.isEmpty() ) {
             Toast.makeText(v.getContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        LoginRequest requestObject = new LoginRequest(usuario, senha);
         this.dialog.show();
-        loginRequest.setRequestObject(requestObject);
+        loginRequest.setRequestObject(new LoginRequest(usuario, senha));
         loginRequest.execute(v.getContext());
     }
 
