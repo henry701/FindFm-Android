@@ -99,7 +99,7 @@ public class RegistrarBanda extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click (View v) {
-        binding.getViewModelBanda().btnRegistrar_Click();
+        binding.getViewModelBanda().registrar();
     }
 
 }

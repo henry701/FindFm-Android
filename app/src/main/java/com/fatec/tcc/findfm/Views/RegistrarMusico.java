@@ -1,108 +1,63 @@
 package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.FindFM;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
-import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
-import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
-import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
-import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
-import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
-import com.fatec.tcc.findfm.Utils.Formatadores;
-import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.JsonUtils;
-import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.databinding.ActivityRegistrarMusicoBinding;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class RegistrarMusico extends AppCompatActivity {
 
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
-    private Bundle param = new Bundle();
-    private EditText txtNascimento;
-    private RecyclerView rc;
-    private HttpTypedRequest<Musico, ResponseBody, ErrorResponse> registrarRequest;
-    private Date nascimento;
-    private ProgressDialog dialog;
-    private Spinner cb_uf;
-    private String UF;
+
+    private ActivityRegistrarMusicoBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrar_musico);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_registrar_musico);
+        binding.setMusico(new RegistrarMusicoViewModel(this));
+        binding.getMusico().init();
         init();
         updateList();
     }
 
-    @Override
-    protected void onDestroy() {
-        this.dialog.dismiss();
-        super.onDestroy();
-    }
-
-    private void init(){
-        initRequests();
-        this.rc = findViewById(R.id.listaInstrumentos);
+    private void init() {
         this.imageView = findViewById(R.id.circularImageView);
         this.btnRemoverImagem = findViewById(R.id.btnRemoverImagem);
-        this.txtNascimento = findViewById(R.id.txtNascimento);
-        this.cb_uf = findViewById(R.id.cb_uf);
-
-        this.txtNascimento.setShowSoftInputOnFocus(false);
-        this.txtNascimento.setInputType(InputType.TYPE_NULL);
-        this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
-        this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
-
-        this.cb_uf.setAdapter(
+        Spinner cb_uf = findViewById(R.id.cb_uf);
+        cb_uf.setAdapter(
                 new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
 
-        this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                UF = parent.getItemAtPosition(position).toString();
+                binding.getMusico().setUF(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -110,67 +65,12 @@ public class RegistrarMusico extends AppCompatActivity {
 
             }
         });
-        byte[] image = FindFM.getInstance().getParams().getByteArray("foto");
-
-        if(image != null && image.length != 0) {
-            this.imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
-            this.btnRemoverImagem.setVisibility(View.VISIBLE);
-        }
-        else{
-            this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
-            this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        }
     }
 
-    private void initRequests() {
-        registrarRequest = new HttpTypedRequest<>
-                (
-                        Request.Method.POST,
-                        Musico.class,
-                        ResponseBody.class,
-                        ErrorResponse.class,
-                        (ResponseBody response) ->
-                        {
-                            this.dialog.hide();
-                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess))
-                            {
-                                AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                        "Sucesso!", R.drawable.ic_enter,
-                                        response.getMessage(),"OK",
-                                        (dialog, id) -> { }).create().show();
-                                // Compartilhado com toda a aplicação, acessado pela Key abaixo \/
-                                SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                                editor.putBoolean("isLogado", true);
-                                editor.putString("tipoUsuario", "MUSICO");
-                                editor.putString("nomeUsuario", param.getString("nomeCompleto"));
-                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(tokenData);
-                                // As chaves precisam ser persistidas
-                                editor.apply();
-                                dialog.dismiss();
-                                Util.open_form__no_return(this, TelaPrincipal.class);
-                            }
-                        },
-                        (ErrorResponse errorResponse) ->
-                        {
-                            dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
-                        },
-                        (Exception error) ->
-                        {
-                            dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
-                        }
-                );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"register/musician"));
+    @Override
+    protected void onDestroy() {
+        binding.getMusico().dismissDialog();
+        super.onDestroy();
     }
 
     private void updateList() {
@@ -194,10 +94,7 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnFoto_Click(View v){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Escolha uma foto"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE);
     }
 
     @Override
@@ -210,10 +107,7 @@ public class RegistrarMusico extends AppCompatActivity {
                         .getContentResolver().openInputStream(data.getData())));
                 this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
-                Bitmap bitmap = ((BitmapDrawable) this.imageView.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
+                ImagemUtils.setImagemToImageView(this.imageView, this,  this.btnRemoverImagem);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -227,71 +121,11 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void txtNascimento_Click(View v){
-        Util.hideSoftKeyboard(this);
-        Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            this.nascimento = myCalendar.getTime();
-            this.txtNascimento.setText(sdf.format(myCalendar.getTime()));
-        };
-        new DatePickerDialog(this, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+       binding.getMusico().txtNascimento_Click();
     }
 
     public void btnRegistrar_Click(View v){
-        TextView txtNomeCompleto = findViewById(R.id.txtNomeCompleto);
-        TextView txtNascimento = findViewById(R.id.txtNascimento);
-        TextView txtCidade = findViewById(R.id.txtCidadeMusico);
-
-        AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
-        List<Instrumento> instrumentos = new ArrayList<>();
-        instrumentos.addAll(adapter.getInstrumentos());
-
-        if(txtNomeCompleto.getText().toString().trim().isEmpty()){
-            Toast.makeText(getApplicationContext(), "Seu nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( txtNascimento.getText().toString().isEmpty() ) {
-            Toast.makeText(getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( nascimento.after(new Date())) {
-            Toast.makeText(getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( Formatadores.converterData(nascimento).get(Calendar.YEAR) + 18 > Calendar.getInstance().get(Calendar.YEAR)) {
-            Toast.makeText(getApplicationContext(), "O usuário não pode ser menor de 18 anos!", Toast.LENGTH_SHORT).show();
-        }
-        else if(txtCidade.getText().toString().trim().isEmpty()){
-            Toast.makeText(getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( instrumentos.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Selecione ao menos um instrumento!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            this.dialog.show();
-            this.param.putString("nomeCompleto", txtNomeCompleto.getText().toString());
-            this.param.putString("cidade", txtCidade.getText().toString());
-            this.param.putString("uf", UF);
-
-            Musico musico = new Musico(
-                    param.getString("nomeUsuario"),
-                    param.getString("senha"),
-                    param.getString("email"),
-                    param.getString("telefone"),
-                    FindFM.getInstance().getParams().getByteArray("foto"),
-                    false,
-                    false,
-                    param.getString("nomeCompleto"),
-                    nascimento,
-                    instrumentos,
-                    param.getString("cidade"),
-                    param.getString("uf")
-            );
-            registrarRequest.setRequestObject(musico);
-            registrarRequest.execute(getApplicationContext());
-        }
-
+        binding.getMusico().registrar();
     }
 
 }

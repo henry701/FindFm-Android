@@ -65,7 +65,7 @@ public class RegistrarViewModel {
         ImagemUtils.setImagemToParams(this.imageView);
     }
 
-    public void btn_Registrar_Click() {
+    public void registrar() {
 
         RadioGroup tipoContaGrupo = view.findViewById(R.id.grupoTipoConta);
         RadioButton tipoConta;

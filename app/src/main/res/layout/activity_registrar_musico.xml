@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <variable
+            name="musico"
+            type="com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel"/>
+    </data>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -70,6 +78,7 @@
 
             <EditText
                 android:id="@+id/txtNomeCompleto"
+                android:text="@={musico.nomeCompleto}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -91,6 +100,7 @@
 
             <EditText
                 android:id="@+id/txtNascimento"
+                android:text="@={musico.nascimento}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -122,6 +132,7 @@
 
                 <EditText
                     android:id="@+id/txtCidadeMusico"
+                    android:text="@={musico.cidade}"
                     android:layout_width="172dp"
                     android:layout_height="54dp"
                     android:backgroundTint="@color/white"
@@ -234,3 +245,5 @@
 
 
 </android.support.constraint.ConstraintLayout>
+
+</layout>

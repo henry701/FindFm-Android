@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <variable
+            name="contratante"
+            type="com.fatec.tcc.findfm.Controller.Registrar.RegistrarContratanteViewModel" />
+    </data>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -72,6 +80,7 @@
 
             <EditText
                 android:id="@+id/txtNomeEstabelecimento"
+                android:text="@={contratante.nomeEstabelecimento}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -91,6 +100,7 @@
 
             <EditText
                 android:id="@+id/txtInauguracao"
+                android:text="@={contratante.inauguracao}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -111,6 +121,7 @@
 
             <EditText
                 android:id="@+id/txtCapacidadeLocal"
+                android:text="@={contratante.capacidade}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -145,6 +156,7 @@
 
                 <EditText
                     android:id="@+id/txtCidadeContratante"
+                    android:text="@={contratante.cidade}"
                     android:layout_width="172dp"
                     android:layout_height="54dp"
                     android:backgroundTint="@color/white"
@@ -176,6 +188,7 @@
 
             <EditText
                 android:id="@+id/txtEndereco"
+                android:text="@={contratante.endereco}"
                 android:layout_width="282dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -196,6 +209,7 @@
 
             <EditText
                 android:id="@+id/txtNumero"
+                android:text="@={contratante.numeroEndereco}"
                 android:layout_width="137dp"
                 android:layout_height="54dp"
                 android:layout_marginTop="8dp"
@@ -233,3 +247,5 @@
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>
+
+</layout>

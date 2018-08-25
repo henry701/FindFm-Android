@@ -52,7 +52,7 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-        binding.getViewModel().btn_Registrar_Click();
+        binding.getViewModel().registrar();
     }
 
     public void btnRemoverImagem_Click(View v){
