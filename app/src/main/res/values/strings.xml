@@ -169,4 +169,5 @@
     <string name="meu_perfil">Meu Perfil</string>
     <string name="meus_anuncios">Meus Anúncios</string>
     <string name="notificacoes">Notificações</string>
+    <string name="title_activity_perfil_fragment">Perfil_fragment</string>
 </resources>

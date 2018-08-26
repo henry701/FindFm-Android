@@ -44,4 +44,15 @@ public class ImagemUtils {
         }
     }
 
+    public static void setImagemHeader(AppCompatActivity v){
+        byte[] image = FindFM.getInstance().getParams().getByteArray("foto");
+        ImageView imagemUsuarioHeader = v.findViewById(R.id.imageViewHeader);
+        if(image != null && image.length != 0) {
+            imagemUsuarioHeader.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+        }
+        else {
+            imagemUsuarioHeader.setImageDrawable(v.getResources().getDrawable(R.drawable.capaplaceholder_photo, v.getTheme()));
+        }
+    }
+
 }

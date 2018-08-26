@@ -55,9 +55,6 @@ public class TelaPrincipal extends AppCompatActivity
 
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
                 .commit();
-
-
-
     }
 
     @Override
@@ -118,19 +115,19 @@ public class TelaPrincipal extends AppCompatActivity
                 }
                 break;
             case R.id.meus_anuncios:
-                if(tela.equals("")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusAnuncios_Fragment())
+                if(!tela.equals("MEUS_ANUNCIOS")) {
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusAnuncios_Fragment(this))
                             .commit();
                 }
                 break;
             case R.id.notificacoes:
-                if(tela.equals("")) {
+                if(!tela.equals("NOTIFICACOES")) {
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Notificacoes_Fragment())
                             .commit();
                 }
                 break;
             case R.id.configuracoes:
-                if(tela.equals("")) {
+                if(!tela.equals("CONFIGURACOES")) {
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Configuracoes_Fragment())
                             .commit();
                 }
@@ -140,15 +137,11 @@ public class TelaPrincipal extends AppCompatActivity
                 SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
                 editor.putBoolean("isLoggedIn", false);
                 editor.putString("username", null);
-                // As chaves precisam ser persistidas
                 editor.apply();
                 dialog.dismiss();
                 Util.open_form__no_return(this, Login.class);
                 break;
         }
-
-        //DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }

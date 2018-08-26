@@ -27,8 +27,8 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
     private List<Instrumento> instrumentos = new ArrayList<>();
     private Set<Instrumento> instrumentosUsuario = new HashSet<>();
 
-    SparseBooleanArray itemStateArray= new SparseBooleanArray();
-    Context context;
+    private SparseBooleanArray itemStateArray= new SparseBooleanArray();
+    private Context context;
 
     public AdapterInstrumentos() {
     }

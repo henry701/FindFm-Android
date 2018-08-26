@@ -115,7 +115,7 @@ public class RegistrarBandaViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"metro_api/login/registrar"));
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"register/band"));
     }
 
     public void registrar () {

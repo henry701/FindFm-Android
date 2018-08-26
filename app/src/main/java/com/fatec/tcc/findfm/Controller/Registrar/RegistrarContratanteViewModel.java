@@ -117,7 +117,7 @@ public class RegistrarContratanteViewModel {
                                     }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "metro_api/login/registrar"));
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "register/contratante"));
     }
 
     public void dismissDialog(){
