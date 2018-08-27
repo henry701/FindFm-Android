@@ -2,9 +2,8 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,10 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fatec.tcc.findfm.Controller.FindFM;
-import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.Util;
-import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +50,7 @@ public class TelaPrincipal extends AppCompatActivity
         header = navigationView.getHeaderView(0);
         fragmentManager = getFragmentManager();
 
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                 .commit();
     }
 
@@ -63,39 +60,36 @@ public class TelaPrincipal extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            String tela = FindFM.getInstance().getParams().getString("tela", "");
+            if(tela.equals("HOME"))
+                super.onBackPressed();
+            else {
+                fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+                        .commit();
+            }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        //TODO: erros quando troca de fragment
-        int id = item.getItemId();
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         String tela = FindFM.getInstance().getParams().getString("tela", "");
-        switch (id) {
+
+        switch (item.getItemId()) {
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
@@ -105,13 +99,8 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
             case R.id.meu_perfil:
                 if(!tela.equals("MEU_PERFIL")) {
-                    fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this))
                             .commit();
-                    ActivityPerfilFragmentBinding bindingmeu_perfil;
-                    bindingmeu_perfil = DataBindingUtil.setContentView(this, R.layout.activity_perfil__fragment);
-                    bindingmeu_perfil.setViewModel(new PerfilViewModel(this));
-                    bindingmeu_perfil.executePendingBindings();
                 }
                 break;
             case R.id.meus_anuncios:
@@ -134,14 +123,15 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
             case R.id.sair:
                 dialog.show();
-                SharedPreferences.Editor editor = getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                editor.putBoolean("isLoggedIn", false);
-                editor.putString("username", null);
-                editor.apply();
+                FindFM.logoutUsuario(this);
                 dialog.dismiss();
                 Util.open_form__no_return(this, Login.class);
                 break;
         }
+        item.setChecked(true);
+        DrawerLayout drawerLayout = this.findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawers();
+
         return true;
     }
 }

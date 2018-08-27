@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.Controller.Login.LoginViewModel;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -22,6 +24,10 @@ public class Login extends AppCompatActivity {
         binding.setViewModel(new LoginViewModel(this));
         binding.executePendingBindings();
         binding.getViewModel().init();
+
+        if(FindFM.isLogado(this)) {
+            Util.open_form(getApplicationContext(), TelaPrincipal.class);
+        }
     }
 
     @Override
@@ -33,6 +39,7 @@ public class Login extends AppCompatActivity {
     public void btnEntrar_Click(View v) {
         binding.getViewModel().btnEntrar_Click(v);
         //Temporario
+        FindFM.logarUsuario(this, TiposUsuario.MUSICO, "Robervaldo");
         Util.open_form(v.getContext(), TelaPrincipal.class);
     }
 

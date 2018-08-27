@@ -3,7 +3,6 @@ package com.fatec.tcc.findfm.Views;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +21,6 @@ import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class MeusAnuncios_Fragment extends Fragment {
 
@@ -51,13 +48,10 @@ public class MeusAnuncios_Fragment extends Fragment {
         FindFM.getInstance().getParams().putString("tela", "MEUS_ANUNCIOS");
         super.onActivityCreated(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("FindFM_param", MODE_PRIVATE);
-        boolean isLogado = sharedPreferences.getBoolean("isLogado", false);
-        String usuario = sharedPreferences.getString("username","Visitante");
         ImagemUtils.setImagemHeader(activity);
-        if(isLogado) {
+        if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
-            lb_nomeUsuario.setText(usuario);
+            lb_nomeUsuario.setText(FindFM.getUserName(getActivity()));
         }
 
         updateList();

@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Controller.Registrar;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,6 +14,7 @@ import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
@@ -33,8 +33,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class RegistrarContratanteViewModel {
 
@@ -87,12 +85,7 @@ public class RegistrarContratanteViewModel {
                             if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
-
-                                SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                                editor.putBoolean("isLogado", true);
-                                editor.putString("tipoUsuario", "CONTRATANTE");
-                                editor.putString("nomeUsuario", param.getString("nomeCompleto"));
-                                editor.apply();
+                                FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto"));
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class);
                             }

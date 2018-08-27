@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +14,6 @@ import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.R;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Home_Fragment extends Fragment {
 
@@ -34,13 +31,10 @@ public class Home_Fragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         FindFM.getInstance().getParams().putString("tela", "HOME");
         super.onActivityCreated(savedInstanceState);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("FindFM_param", MODE_PRIVATE);
-        boolean isLogado = sharedPreferences.getBoolean("isLogado", false);
-        String usuario = sharedPreferences.getString("username","Visitante");
         setFoto();
-        if(isLogado) {
+        if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
-            lb_nomeUsuario.setText(usuario);
+            lb_nomeUsuario.setText(FindFM.getUserName(getActivity()));
         }
     }
 

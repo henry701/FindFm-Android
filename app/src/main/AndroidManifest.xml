@@ -45,11 +45,11 @@
             android:name=".Views.TelaPrincipal"
             android:label="@string/title_activity_home__page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Views.Perfil_Fragment" />
         <activity
-            android:name=".Views.Perfil_fragment"
+            android:name=".Views.Perfil_Fragment"
             android:label="@string/title_activity_perfil_fragment"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

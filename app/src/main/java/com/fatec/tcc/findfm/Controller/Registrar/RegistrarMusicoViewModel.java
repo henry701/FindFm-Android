@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Controller.Registrar;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +14,7 @@ import com.fatec.tcc.findfm.Controller.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
@@ -36,8 +36,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class RegistrarMusicoViewModel {
 
@@ -84,12 +82,7 @@ public class RegistrarMusicoViewModel {
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
-
-                                SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
-                                editor.putBoolean("isLogado", true);
-                                editor.putString("tipoUsuario", "MUSICO");
-                                editor.putString("nomeUsuario", param.getString("nomeCompleto"));
-                                editor.apply();
+                                FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto"));
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class);
                             }
