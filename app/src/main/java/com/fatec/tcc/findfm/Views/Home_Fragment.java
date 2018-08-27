@@ -34,7 +34,7 @@ public class Home_Fragment extends Fragment {
         setFoto();
         if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
-            lb_nomeUsuario.setText(FindFM.getUserName(getActivity()));
+            lb_nomeUsuario.setText(FindFM.getNomeUsuario(getActivity()));
         }
     }
 

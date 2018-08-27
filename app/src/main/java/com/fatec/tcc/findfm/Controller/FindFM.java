@@ -48,8 +48,8 @@ public class FindFM extends Application {
         return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getBoolean("isLogado", false);
     }
 
-    public static String getUserName(Activity view){
-        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("username","Visitante");
+    public static String getNomeUsuario(Activity view){
+        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("nomeUsuario","Visitante");
     }
 
     public static void logarUsuario(Activity view, TiposUsuario tipoUsuario, String nomeUsuario){

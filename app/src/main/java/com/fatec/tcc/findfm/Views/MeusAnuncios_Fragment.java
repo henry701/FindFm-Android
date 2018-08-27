@@ -51,7 +51,7 @@ public class MeusAnuncios_Fragment extends Fragment {
         ImagemUtils.setImagemHeader(activity);
         if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
-            lb_nomeUsuario.setText(FindFM.getUserName(getActivity()));
+            lb_nomeUsuario.setText(FindFM.getNomeUsuario(getActivity()));
         }
 
         updateList();
