@@ -4,7 +4,7 @@
     <data>
         <variable
             name="anuncio"
-            type="com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios"/>
+            type="com.fatec.tcc.findfm.Model.Business.Anuncio"/>
     </data>
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
 
             <TextView
                 android:id="@+id/lb_titulo_anuncio"
+                android:text="@={anuncio.titulo}"
                 android:layout_width="204dp"
                 android:layout_height="31dp"
                 android:layout_marginBottom="1dp"
@@ -43,6 +44,7 @@
 
             <TextView
                 android:id="@+id/lb_cidade"
+                android:text="@={anuncio.cidade}"
                 android:layout_width="159dp"
                 android:layout_height="31dp"
                 android:layout_marginEnd="7dp"
@@ -58,6 +60,7 @@
 
             <TextView
                 android:id="@+id/lb_descricao"
+                android:text="@={anuncio.descricao}"
                 android:layout_width="370dp"
                 android:layout_height="47dp"
                 android:layout_marginBottom="7dp"

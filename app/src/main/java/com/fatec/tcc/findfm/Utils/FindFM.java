@@ -1,9 +1,10 @@
-package com.fatec.tcc.findfm.Controller;
+package com.fatec.tcc.findfm.Utils;
 
 import android.app.Activity;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
 
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
@@ -21,20 +22,22 @@ public class FindFM extends Application {
         singleInstance = this;
     }
 
-    public Bundle getParams() {
+    private Bundle getParams() {
         if (params == null) {
             params = new Bundle();
         }
         return params;
     }
-    public static FindFM getInstance()
+
+    private static FindFM getInstance()
     {
         return singleInstance;
     }
 
-    public void setParams(Bundle bundle){
-        this.params = bundle;
-    }
+//--------------------------------------------------------------------------------------------------
+    /**
+     * Token Data
+     * */
 
     public static TokenData getTokenData() {
         return tokenData;
@@ -44,12 +47,13 @@ public class FindFM extends Application {
         FindFM.tokenData = tokenData;
     }
 
+//--------------------------------------------------------------------------------------------------
+    /**
+     * Login / Logout
+     * */
+
     public static boolean isLogado(Activity view){
         return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getBoolean("isLogado", false);
-    }
-
-    public static String getNomeUsuario(Activity view){
-        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("nomeUsuario","Visitante");
     }
 
     public static void logarUsuario(Activity view, TiposUsuario tipoUsuario, String nomeUsuario){
@@ -67,4 +71,37 @@ public class FindFM extends Application {
         editor.putString("nomeUsuario", null);
         editor.apply();
     }
+//--------------------------------------------------------------------------------------------------
+    /**
+    * Referente ao usuário: Imagem Perfil / Nome do Usuário
+    * */
+    public static byte[] getImagemPerfilBytes(){
+        String image64 = FindFM.getInstance().getParams().getString("foto", "");
+        return Base64.decode(image64, Base64.DEFAULT);
+    }
+
+    public static void setImagemPerfilParams(String foto_base64){
+        FindFM.getInstance().getParams().putString("foto", foto_base64);
+    }
+
+    public static String getImagemPerfilBase64(){
+        return FindFM.getInstance().getParams().getString("foto", "");
+    }
+
+    public static String getNomeUsuario(Activity view){
+        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("nomeUsuario","Visitante");
+    }
+
+//--------------------------------------------------------------------------------------------------
+    /**
+    * Tela atual
+    * */
+    public static String getTelaAtual(){
+        return FindFM.getInstance().getParams().getString("tela", "");
+    }
+
+    public static void setTelaAtual(String telaAtual){
+        FindFM.getInstance().getParams().putString("tela", telaAtual);
+    }
+//--------------------------------------------------------------------------------------------------
 }

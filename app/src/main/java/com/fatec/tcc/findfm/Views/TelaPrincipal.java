@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.Util;
 
@@ -60,8 +60,7 @@ public class TelaPrincipal extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            String tela = FindFM.getInstance().getParams().getString("tela", "");
-            if(tela.equals("HOME"))
+            if(FindFM.getTelaAtual().equals("HOME"))
                 super.onBackPressed();
             else {
                 fragmentManager = getFragmentManager();
@@ -87,13 +86,13 @@ public class TelaPrincipal extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        String tela = FindFM.getInstance().getParams().getString("tela", "");
+        String tela = FindFM.getTelaAtual();
 
         switch (item.getItemId()) {
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
                         .commit();
                 }
                 break;
@@ -111,13 +110,13 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
             case R.id.notificacoes:
                 if(!tela.equals("NOTIFICACOES")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Notificacoes_Fragment())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Notificacoes_Fragment(this))
                             .commit();
                 }
                 break;
             case R.id.configuracoes:
                 if(!tela.equals("CONFIGURACOES")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Configuracoes_Fragment())
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Configuracoes_Fragment(this))
                             .commit();
                 }
                 break;

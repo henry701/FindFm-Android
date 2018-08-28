@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
@@ -42,7 +42,7 @@ public class Perfil_Fragment extends Fragment {
         binding.setViewModel(new PerfilViewModel());
         binding.executePendingBindings();
         //binding.getViewModel().init();
-        FindFM.getInstance().getParams().putString("tela", "MEU_PERFIL");
+        FindFM.setTelaAtual("MEU_PERFIL");
         /*
         this.cb_uf = getActivity().findViewById(R.id.cb_uf);
         this.cb_uf.setAdapter(
@@ -65,7 +65,7 @@ public class Perfil_Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        FindFM.getInstance().getParams().putString("tela", "MEU_PERFIL");
+        FindFM.setTelaAtual("MEU_PERFIL");
         super.onActivityCreated(savedInstanceState);
 
         if(FindFM.isLogado(getActivity())) {

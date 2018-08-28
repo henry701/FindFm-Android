@@ -8,7 +8,7 @@ public class Usuario {
     public String telefone;
     public String email;
     public String senha;
-    public byte[] foto;
+    public String foto;
 
     public Usuario(){}
 
@@ -32,7 +32,7 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeUsuario, String senha, String email, String telefone, byte[] foto, boolean confirmado, boolean premium){
+    public Usuario(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium){
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
         this.email = email;
@@ -67,11 +67,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 

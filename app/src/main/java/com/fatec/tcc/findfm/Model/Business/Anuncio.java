@@ -2,9 +2,9 @@ package com.fatec.tcc.findfm.Model.Business;
 
 public class Anuncio {
 
-    private String titulo;
-    private String descricao;
-    private String cidade;
+    public String titulo;
+    public String descricao;
+    public String cidade;
 
     public Anuncio(){}
 

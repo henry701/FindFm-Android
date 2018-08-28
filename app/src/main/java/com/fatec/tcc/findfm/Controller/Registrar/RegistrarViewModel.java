@@ -12,7 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
@@ -54,7 +54,7 @@ public class RegistrarViewModel {
         txtTelefone.addTextChangedListener(addLineNumberFormatter);
 
         this.imageView.setImageDrawable(view.getResources().getDrawable(R.drawable.capaplaceholder_photo, view.getTheme()));
-        FindFM.getInstance().getParams().putByteArray("foto", null);
+        FindFM.setImagemPerfilParams(null);
     }
 
     public void pickImage(Intent data) throws FileNotFoundException {
@@ -144,7 +144,7 @@ public class RegistrarViewModel {
     public void removerImagem() {
         this.imageView.setImageDrawable(view.getResources().getDrawable(R.drawable.capaplaceholder_photo, view.getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        FindFM.getInstance().getParams().putByteArray("foto", null);
+        FindFM.setImagemPerfilParams(null);
     }
 
     public void setFoto(){

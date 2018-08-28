@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
@@ -64,10 +64,6 @@ public class LoginViewModel {
                                 dialog.dismiss();
 
                                 //Pegar imagem retornada do server
-                                //Bitmap bitmap = (Bitmap) ((Map) response.getData()).get("foto");
-                                //ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                //bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                //FindFM.getInstance().getParams().putByteArray("foto", baos.toByteArray());
 
                                 Util.open_form__no_return(view, TelaPrincipal.class );
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){

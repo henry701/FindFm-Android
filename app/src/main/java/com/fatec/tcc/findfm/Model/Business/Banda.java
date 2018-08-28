@@ -14,7 +14,7 @@ public class Banda extends Usuario {
 
     public Banda(){}
 
-    public Banda(String nomeUsuario, String senha, String email, String telefone, byte[] foto, boolean confirmado, boolean premium,
+    public Banda(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                   String nomeBanda, Date formacao, List<Musico> musicos, int numeroIntegrantes, String cidade, String uf) {
         super(nomeUsuario, senha, email, telefone, foto, confirmado, premium);
         this.nomeBanda = nomeBanda;

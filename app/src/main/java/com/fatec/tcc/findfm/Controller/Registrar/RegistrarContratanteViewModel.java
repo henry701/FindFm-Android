@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -85,7 +85,7 @@ public class RegistrarContratanteViewModel {
                             if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
-                                FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto"));
+                                FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto", ""));
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class);
                             }
@@ -165,7 +165,7 @@ public class RegistrarContratanteViewModel {
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),
-                    FindFM.getInstance().getParams().getByteArray("foto"),
+                    FindFM.getImagemPerfilBase64(),
                     false,
                     false,
                     param.getString("nomeCompleto"),

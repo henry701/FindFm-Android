@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.fatec.tcc.findfm.Controller.FindFM;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
@@ -117,7 +117,7 @@ public class RegistrarMusico extends AppCompatActivity {
     public void btnRemoverImagem_Click(View v){
         this.imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         this.btnRemoverImagem.setVisibility(View.INVISIBLE);
-        FindFM.getInstance().getParams().putByteArray("foto", null);
+        FindFM.setImagemPerfilParams(null);
     }
 
     public void txtNascimento_Click(View v){

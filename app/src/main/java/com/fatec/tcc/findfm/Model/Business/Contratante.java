@@ -14,7 +14,7 @@ public class Contratante extends Usuario {
 
     public Contratante(){}
 
-    public Contratante(String nomeUsuario, String senha, String email, String telefone, byte[] foto, boolean confirmado, boolean premium,
+    public Contratante(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                  String nomeEstabelecimento, Date inauguracao, int capacidadeLocal, String cidade, String uf, String endereco, int numero) {
         super(nomeUsuario, senha, email, telefone, foto, confirmado, premium);
         this.nomeEstabelecimento = nomeEstabelecimento;
