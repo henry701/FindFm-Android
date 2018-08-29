@@ -39,7 +39,7 @@ public class Login extends AppCompatActivity {
     public void btnEntrar_Click(View v) {
         binding.getViewModel().btnEntrar_Click(v);
         //Temporario
-        FindFM.logarUsuario(this, TiposUsuario.MUSICO, "Robervaldo");
+        FindFM.logarUsuario(this, TiposUsuario.MUSICO, "Maior nome de um cara que vc vera na vida, só para testar a tela mesmo");
         Util.open_form(v.getContext(), TelaPrincipal.class);
     }
 

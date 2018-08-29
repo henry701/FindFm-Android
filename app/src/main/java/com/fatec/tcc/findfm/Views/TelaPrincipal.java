@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
@@ -39,12 +41,6 @@ public class TelaPrincipal extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.dialog = new ProgressDialog(this);
-        this.dialog.setMessage("Carregando...");
-        this.dialog.setCancelable(false);
-
-        this.radioController = new RadioController(this);
-        this.radioController.addObserver(this);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -52,13 +48,26 @@ public class TelaPrincipal extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        View header =  navigationView.getHeaderView(0);
+        TextView textView = header.findViewById(R.id.txtUsuarioHeader);
         radioMenu = navigationView.getMenu().findItem(R.id.playRadio);
-        fragmentManager = getFragmentManager();
 
+        navigationView.setNavigationItemSelectedListener(this);
+        textView.setText(FindFM.getNomeUsuario(this));
+
+        init();
+    }
+
+    private void init(){
+        this.dialog = new ProgressDialog(this);
+        this.dialog.setMessage("Carregando...");
+        this.dialog.setCancelable(false);
+
+        this.radioController = new RadioController(this);
+        this.radioController.addObserver(this);
+        fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                 .commit();
-
     }
 
     @Override

@@ -67,7 +67,10 @@ public class MeusAnuncios_Fragment extends Fragment {
                 new Anuncio("Procuro bandas para tocarem no meu quiosque na praia",
                         "Toque aqui cara, pago bem", "São Vicente"),
                 new Anuncio("Procuro guitarrista que toque bateria com os pés",
-                        "Tocamos heavy metal japones em lingua árabe", "São Longe de muito longe")
+                        "Tocamos heavy metal japones em lingua árabe", "São Longe de muito longe"),
+                new Anuncio("Maior Titulo dos titulos muito grande meu Deus que titulo!!!",
+                        "Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler",
+                        "Maior nome de cidade que vc vera na vida meu amigo")
         );
     }
 

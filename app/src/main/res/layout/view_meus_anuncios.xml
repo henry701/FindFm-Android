@@ -1,79 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="anuncio"
             type="com.fatec.tcc.findfm.Model.Business.Anuncio"/>
     </data>
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/lilasClaro">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="99dp"
+            android:layout_height="match_parent"
             android:background="@drawable/retangular_bg"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/lb_titulo_anuncio"
-                android:text="@={anuncio.titulo}"
-                android:layout_width="204dp"
-                android:layout_height="31dp"
-                android:layout_marginBottom="1dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="7dp"
-                android:hint="abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstuvwxyz12345"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/lb_descricao"
-                app:layout_constraintEnd_toStartOf="@+id/lb_cidade"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/lb_cidade"
-                android:text="@={anuncio.cidade}"
-                android:layout_width="159dp"
-                android:layout_height="31dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginTop="7dp"
-                android:hint="abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstu"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/lb_descricao"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/lb_titulo_anuncio"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/lb_descricao"
-                android:text="@={anuncio.descricao}"
-                android:layout_width="370dp"
-                android:layout_height="47dp"
-                android:layout_marginBottom="7dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginStart="7dp"
-                android:hint="abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstuvwxyz12345abcdefghijklmnoqrstuvwxyz12345"
-                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lb_titulo_anuncio" />
+                app:layout_constraintTop_toTopOf="parent">
 
-        </android.support.constraint.ConstraintLayout>
+                <TextView
+                    android:id="@+id/lb_titulo_anuncio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
+                    android:text="@={anuncio.titulo}"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="7dp"
+                    tools:layout_editor_absoluteY="8dp" />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/lb_cidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Maior nome de cidade que vc vera na vida meu amigo"
+                    android:text="@={anuncio.cidade}"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    tools:layout_editor_absoluteX="7dp"
+                    tools:layout_editor_absoluteY="197dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <TextView
+                    android:id="@+id/lb_descricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
+                    android:text="@={anuncio.descricao}"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:layout_editor_absoluteX="7dp"
+                    tools:layout_editor_absoluteY="260dp" />
+            </LinearLayout>
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
