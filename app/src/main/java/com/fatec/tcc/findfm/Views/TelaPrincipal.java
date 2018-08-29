@@ -12,19 +12,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
-import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
 
+import java.util.Observable;
+import java.util.Observer;
+
 public class TelaPrincipal extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Observer{
 
     private ProgressDialog dialog;
-    private NavigationView navigationView = null;
-    private View header = null;
     private FragmentManager fragmentManager;
+    private MenuItem radioMenu;
+    private boolean tocandoRadio = false;
+    private RadioController radioController;
+    private boolean radioIniciando = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,25 +39,26 @@ public class TelaPrincipal extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.dialog = new ProgressDialog(this);
+        this.dialog.setMessage("Carregando...");
+        this.dialog.setCancelable(false);
+
+        this.radioController = new RadioController(this);
+        this.radioController.addObserver(this);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
-
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        header = navigationView.getHeaderView(0);
+        radioMenu = navigationView.getMenu().findItem(R.id.playRadio);
         fragmentManager = getFragmentManager();
 
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                 .commit();
+
     }
 
     @Override
@@ -60,9 +67,10 @@ public class TelaPrincipal extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if(FindFM.getTelaAtual().equals("HOME"))
+            if(FindFM.getTelaAtual().equals("HOME")) {
+                dialog.dismiss();
                 super.onBackPressed();
-            else {
+            } else {
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
                         .commit();
@@ -93,7 +101,7 @@ public class TelaPrincipal extends AppCompatActivity
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
-                        .commit();
+                            .commit();
                 }
                 break;
             case R.id.meu_perfil:
@@ -120,6 +128,28 @@ public class TelaPrincipal extends AppCompatActivity
                             .commit();
                 }
                 break;
+            case R.id.playRadio:
+                if( !this.radioController.isPreparado() ){
+                    Toast.makeText(this, "Carregando rádio...", Toast.LENGTH_LONG).show();
+                    if(!radioIniciando) {
+                        this.radioController.iniciar();
+                        item.setTitle(R.string.radio_carregando);
+                        radioIniciando = true;
+                    }
+                }
+                else if(!this.tocandoRadio){
+                    item.setTitle(R.string.radio_pausar);
+                    item.setIcon(R.drawable.ic_pause);
+                    this.tocandoRadio = true;
+                    this.radioController.play();
+                }
+                else{
+                    item.setTitle(R.string.radio_tocar);
+                    item.setIcon(R.drawable.ic_play);
+                    this.tocandoRadio = false;
+                    this.radioController.play();
+                }
+                break;
             case R.id.sair:
                 dialog.show();
                 FindFM.logoutUsuario(this);
@@ -132,5 +162,41 @@ public class TelaPrincipal extends AppCompatActivity
         drawerLayout.closeDrawers();
 
         return true;
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(tocandoRadio){
+            radioController.play();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(tocandoRadio){
+            radioController.play();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dialog.dismiss();
+        radioController.dismiss();
+        super.onDestroy();
+    }
+
+    @Override
+    public void update(Observable radioController, Object arg) {
+        if(radioController instanceof RadioController){
+            runOnUiThread(() -> {
+                final Toast toast = Toast.makeText(getApplicationContext(), "Rádio carregada!", Toast.LENGTH_SHORT);
+                toast.show();
+                radioMenu.setTitle(R.string.radio_tocar);
+            });
+        }
     }
 }

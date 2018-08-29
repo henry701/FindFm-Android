@@ -20,6 +20,10 @@
             android:id="@+id/notificacoes"
             android:icon="@drawable/ic_avisos"
             android:title="@string/notificacoes" />
+        <item
+            android:id="@+id/playRadio"
+            android:icon="@drawable/ic_play"
+            android:title="@string/radio_iniciar" />
     </group>
 
     <item android:title="@string/configuracoes" >

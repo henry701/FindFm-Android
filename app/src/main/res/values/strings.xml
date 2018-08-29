@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">FindFM</string>
     <string name="base_url">http://192.168.0.6:8080</string>
+    <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -170,4 +171,8 @@
     <string name="meus_anuncios">Meus Anúncios</string>
     <string name="notificacoes">Notificações</string>
     <string name="title_activity_perfil_fragment">Perfil_fragment</string>
+    <string name="radio_iniciar">Iniciar Rádio</string>
+    <string name="radio_carregando">Carregando Rádio</string>
+    <string name="radio_tocar">Tocar Rádio</string>
+    <string name="radio_pausar">Pausar Rádio</string>
 </resources>
