@@ -77,8 +77,9 @@ public class RegistrarMusico extends AppCompatActivity {
         //TODO: server retornar uma lista mais completa
         List<Instrumento> instrumentos = Arrays.asList(
                 new Instrumento("Guitarra", NivelHabilidade.INICIANTE),
-                new Instrumento("Bateria", NivelHabilidade.INICIANTE),
+                new Instrumento("Violão", NivelHabilidade.INICIANTE),
                 new Instrumento("Baixo", NivelHabilidade.INICIANTE),
+                new Instrumento("Bateria", NivelHabilidade.INICIANTE),
                 new Instrumento("Vocal", NivelHabilidade.INICIANTE),
                 new Instrumento("Saxofone", NivelHabilidade.INICIANTE),
                 new Instrumento("Flauta", NivelHabilidade.INICIANTE),
@@ -107,7 +108,7 @@ public class RegistrarMusico extends AppCompatActivity {
                         .getContentResolver().openInputStream(data.getData())));
                 this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
-                ImagemUtils.setImagemToImageView(this.imageView, this,  this.btnRemoverImagem);
+                ImagemUtils.setImagemToParams(this.imageView);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

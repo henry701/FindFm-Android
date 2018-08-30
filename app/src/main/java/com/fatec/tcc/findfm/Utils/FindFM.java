@@ -64,11 +64,18 @@ public class FindFM extends Application {
         editor.apply();
     }
 
+    public static void setFotoPref(Activity view, String fotoBase64){
+        SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+        editor.putString("foto", fotoBase64);
+        editor.apply();
+    }
+
     public static void logoutUsuario(Activity view){
         SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
         editor.putBoolean("isLogado", false);
         editor.putString("tipoUsuario", TiposUsuario.INDEFINIDO.getTexto());
         editor.putString("nomeUsuario", null);
+        editor.putString("foto", null);
         editor.apply();
     }
 //--------------------------------------------------------------------------------------------------
@@ -90,6 +97,22 @@ public class FindFM extends Application {
 
     public static String getNomeUsuario(Activity view){
         return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("nomeUsuario","Visitante");
+    }
+
+    public static String getFotoPrefBase64(Activity view){
+        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("foto","");
+    }
+
+    public static byte[] getFotoPrefBytes(Activity view){
+        String image64 = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("foto","");
+        return Base64.decode(image64, Base64.DEFAULT);
+    }
+
+    public static TiposUsuario getTipoUsuario(Activity view){
+        return TiposUsuario.fromTexto(
+                    view.getSharedPreferences("FindFM_param", MODE_PRIVATE)
+                            .getString("tipoUsuario","Indefinido")
+                );
     }
 
 //--------------------------------------------------------------------------------------------------

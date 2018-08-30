@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -30,7 +29,7 @@ public class JsonUtils {
     public static final Gson GSON =  new GsonBuilder()
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeDeserializer())
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeSerializer())
-            .setDateFormat("yyyy-MM-dd").create();
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:s").create();
 
     /**
      * Transforma um Object em JSONObject
@@ -89,5 +88,26 @@ public class JsonUtils {
             return new JsonPrimitive(src.getCodigo());
         }
     }
+
+    /*
+    String input = "2018-08-30T17:43:14.0689106-03:00";
+    SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:s" );
+
+    //this is zero time so we need to add that TZ indicator for
+    if ( input.endsWith( "Z" ) ) {
+        input = input.substring( 0, input.length() - 1) + "GMT-00:00";
+    } else {
+        int inset = 6;
+
+        String s0 = input.substring( 0, input.length() - inset );
+        String s1 = input.substring( input.length() - inset, input.length() );
+
+        input = s0 + "GMT" + s1;
+    }
+
+    return df.parse( input );
+
+     */
+
 
 }

@@ -13,12 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 
 import java.util.Observable;
@@ -51,6 +53,9 @@ public class TelaPrincipal extends AppCompatActivity
         View header =  navigationView.getHeaderView(0);
         TextView textView = header.findViewById(R.id.txtUsuarioHeader);
         radioMenu = navigationView.getMenu().findItem(R.id.playRadio);
+
+        ImageView imageView = header.findViewById(R.id.imageViewHeader);
+        ImagemUtils.setImagemToImageView(imageView, this);
 
         navigationView.setNavigationItemSelectedListener(this);
         textView.setText(FindFM.getNomeUsuario(this));

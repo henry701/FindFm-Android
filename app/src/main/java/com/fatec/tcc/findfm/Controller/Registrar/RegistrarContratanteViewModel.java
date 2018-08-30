@@ -86,6 +86,7 @@ public class RegistrarContratanteViewModel {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto", ""));
+                                FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class);
                             }

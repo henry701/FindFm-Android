@@ -69,7 +69,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
             return Collections.emptyMap();
         }
         Map<String, String> headers = new HashMap<>(1, 1.0f);
-        headers.put("Authorization", "Bearer " + tokenData.getToken());
+        headers.put("Authorization", "Bearer " + tokenData.getAccessToken());
         return headers;
     }
 

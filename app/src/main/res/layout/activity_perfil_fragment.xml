@@ -7,7 +7,10 @@
     <data>
         <variable
             name="viewModel"
-            type="com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel"/>
+            type="com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel" />
+        <variable
+            name="usuario"
+            type="com.fatec.tcc.findfm.Model.Business.Usuario" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -51,7 +54,7 @@
                     android:layout_height="135dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="btnFoto_Click"
+                    android:onClick="@{viewModel::btnFotoPerfil_Click}"
                     android:src="@drawable/capaplaceholder_photo"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +64,7 @@
                     app:siBorderWidth="2dp" />
 
                 <EditText
-                    android:text="@={viewModel.usuario.nomeUsuario}"
+                    android:text="@={usuario.nomeUsuario}"
                     android:id="@+id/txtNomeUsuario"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -83,7 +86,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/circularImageView" />
 
                 <EditText
-                    android:text="@={viewModel.usuario.telefone}"
+                    android:text="@={usuario.telefone}"
                     android:id="@+id/txtTelefone"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -102,7 +105,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtNomeUsuario" />
 
                 <EditText
-                    android:text="@={viewModel.usuario.email}"
+                    android:text="@={usuario.email}"
                     android:id="@+id/txtEmail"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -217,7 +220,7 @@
                     android:hint="@string/senha"
                     android:inputType="textPassword"
                     android:maxLength="20"
-                    android:text="@={viewModel.usuario.senha}"
+                    android:text="@={usuario.senha}"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtConfirmaSenha"
@@ -264,7 +267,7 @@
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/btn_bg"
-                    android:onClick="btnRegistrar_Click"
+                    android:onClick="@{viewModel::btnRegistrar_Click}"
                     android:text="@string/registrar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
@@ -14,8 +13,10 @@ import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
+import com.fatec.tcc.findfm.Model.Http.Response.User;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -58,13 +59,13 @@ public class LoginViewModel {
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
 
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
+                                User usuario = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("user"), User.class);
+
                                 FindFM.setTokenData(tokenData);
-                                //TODO: FindFM.logarUsuario()
-                                FindFM.logarUsuario(view, TiposUsuario.MUSICO, "Robervaldo");
+                                FindFM.logarUsuario(view, TiposUsuario.fromKind(usuario.getKind()), usuario.getFullName());
+                                FindFM.setFotoPref(view, usuario.getAvatar());
+                                FindFM.setImagemPerfilParams(usuario.getAvatar());
                                 dialog.dismiss();
-
-                                //Pegar imagem retornada do server
-
                                 Util.open_form__no_return(view, TelaPrincipal.class );
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){
                                 AlertDialogUtils.newSimpleDialog__OneButton(view,

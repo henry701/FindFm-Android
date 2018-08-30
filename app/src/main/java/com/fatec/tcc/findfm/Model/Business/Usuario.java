@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Model.Business;
 public class Usuario {
 
     public String nomeUsuario;
+    private String nomeCompleto;
     public boolean confirmado;
     public boolean premium;
     public String telefone;
@@ -25,6 +26,7 @@ public class Usuario {
     /**
      * Completo
      * @param nomeUsuario
+     * @param nomeCompleto
      * @param senha
      * @param email
      * @param telefone
@@ -32,8 +34,9 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium){
+    public Usuario(String nomeUsuario, String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium){
         this.nomeUsuario = nomeUsuario;
+        this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.email = email;
         this.telefone = telefone;
@@ -49,6 +52,14 @@ public class Usuario {
 
     public void setUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
+    }
+
+    public String getNomeCompleto() {
+        return nomeCompleto;
+    }
+
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getSenha() {

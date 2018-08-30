@@ -5,8 +5,8 @@ import java.util.Date;
 public class TokenData {
 
     private Date created;
-    private Date expiryDate;
-    private String token;
+    private Date expiration;
+    private String accessToken;
 
     public Date getCreated() {
         return created;
@@ -16,20 +16,20 @@ public class TokenData {
         this.created = created;
     }
 
-    public Date getExpiryDate() {
-        return expiryDate;
+    public Date getExpiration() {
+        return expiration;
     }
 
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setExpiration(Date expiration) {
+        this.expiration = expiration;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
 }

@@ -64,7 +64,7 @@
                     app:layout_constraintGuide_percent="0.35" />
 
                 <EditText
-                    android:text="@{viewModel.email}"
+                    android:text="@={viewModel.email}"
                     android:id="@+id/txtLogin"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
-                    android:hint="@string/usuario"
+                    android:hint="@string/e_mail"
                     android:inputType="text"
                     android:textColor="@color/white"
                     android:maxLength="255"
@@ -85,7 +85,7 @@
                     />
 
                 <EditText
-                    android:text="@{viewModel.password}"
+                    android:text="@={viewModel.password}"
                     android:id="@+id/txtSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"

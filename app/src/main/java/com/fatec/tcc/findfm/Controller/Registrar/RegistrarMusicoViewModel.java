@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -23,6 +25,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
@@ -52,11 +55,16 @@ public class RegistrarMusicoViewModel {
     private String UF;
     private Date nascimentoDate;
 
+    private ImageView imageView;
+    private ImageButton btnRemoverImagem;
+
     public RegistrarMusicoViewModel(RegistrarMusico view){
         this.view = view;
     }
 
     public void init(){
+        this.imageView = view.findViewById(R.id.circularImageView);
+        this.btnRemoverImagem = view.findViewById(R.id.btnRemoverImagem);
         initRequests();
         this.rc = view.findViewById(R.id.listaInstrumentos);
         EditText txtNascimento = view.findViewById(R.id.txtNascimento);
@@ -67,6 +75,8 @@ public class RegistrarMusicoViewModel {
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
+
+        ImagemUtils.setImagemToImageView(imageView, view, btnRemoverImagem);
     }
 
     private void initRequests() {
@@ -83,6 +93,7 @@ public class RegistrarMusicoViewModel {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto", ""));
+                                FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class);
                             }

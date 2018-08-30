@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Banda extends Usuario {
 
-    private String nomeBanda;
     private int numeroIntegrantes;
     private Date formacao;
     private String cidade;
@@ -16,21 +15,12 @@ public class Banda extends Usuario {
 
     public Banda(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                   String nomeBanda, Date formacao, List<Musico> musicos, int numeroIntegrantes, String cidade, String uf) {
-        super(nomeUsuario, senha, email, telefone, foto, confirmado, premium);
-        this.nomeBanda = nomeBanda;
+        super(nomeUsuario, nomeBanda, senha, email, telefone, foto, confirmado, premium);
         this.formacao = formacao;
         this.musicos = musicos;
         this.numeroIntegrantes = numeroIntegrantes;
         this.cidade = cidade;
         this.uf = uf;
-    }
-
-    public String getNomeBanda() {
-        return nomeBanda;
-    }
-
-    public void setNomeBanda(String nomeBanda) {
-        this.nomeBanda = nomeBanda;
     }
 
     public List<Musico> getMusicos() {

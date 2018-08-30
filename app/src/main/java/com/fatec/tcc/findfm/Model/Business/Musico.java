@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Musico extends Usuario {
 
-    private String nomeCompleto;
     private Date nascimento;
     private String cidade;
     private String uf;
@@ -15,20 +14,11 @@ public class Musico extends Usuario {
 
     public Musico(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                   String nomeCompleto, Date nascimento, List<Instrumento> instrumentos, String cidade, String uf) {
-        super(nomeUsuario, senha, email, telefone, foto, confirmado, premium);
-        this.nomeCompleto = nomeCompleto;
+        super(nomeUsuario,nomeCompleto, senha, email, telefone, foto, confirmado, premium);
         this.nascimento = nascimento;
         this.instrumentos = instrumentos;
         this.cidade = cidade;
         this.uf = uf;
-    }
-
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
-
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
     }
 
     public List<Instrumento> getInstrumentos() {

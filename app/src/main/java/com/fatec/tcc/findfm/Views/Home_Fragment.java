@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.FindFM;
 
 public class Home_Fragment extends Fragment {
 
     private ProgressDialog dialog;
-    private AppCompatActivity activity;
+    private TelaPrincipal activity;
     private View view;
 
     public Home_Fragment(){}
 
     @SuppressLint("ValidFragment")
-    public Home_Fragment(AppCompatActivity activity){
+    public Home_Fragment(TelaPrincipal activity){
         this.activity = activity;
     }
 
@@ -50,7 +49,7 @@ public class Home_Fragment extends Fragment {
     }
 
     private void setFoto(){
-        byte[] image = FindFM.getImagemPerfilBytes();
+        byte[] image = FindFM.getFotoPrefBytes(getActivity());
         ImageView imagemUsuarioHeader = getActivity().findViewById(R.id.fotoPerfil);
         if(image != null && image.length != 0) {
             imagemUsuarioHeader.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
