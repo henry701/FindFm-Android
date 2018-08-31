@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.fatec.tcc.findfm.Model.Business.Banda;
+import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -28,6 +32,7 @@ public class PerfilViewModel {
     public ObservableField<String> numero = new ObservableField<>();
     public ObservableField<String> confirmaSenha = new ObservableField<>();
 
+    private String UF;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
 
@@ -59,38 +64,8 @@ public class PerfilViewModel {
 
     public void registrar(Usuario usuario) {
 
-        int selectedId = -1;
-        boolean isTelefonevalido = Formatadores.validarTelefone(usuario.getTelefone());
-        boolean isEmailValido = Formatadores.validarEmail(usuario.getEmail());
-
-        if(usuario == null) {
-            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }
-        else if (usuario.getUsuario() == null || usuario.getEmail() == null || usuario.getSenha() == null || this.confirmaSenha.get() == null){
-            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }
-        else if(usuario.getUsuario().trim().isEmpty()){
-            Toast.makeText(view.getApplicationContext(), "Seu nome de usuário não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if(!isTelefonevalido){
-            Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
-        }
-        else if (!isEmailValido) {
-            Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
-        }
-        else if (usuario.getSenha().length() < 6){
-            Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
-        }
-        else if(usuario.getSenha().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty() ){
-            Toast.makeText(view.getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( !usuario.getSenha().equals(this.confirmaSenha.get())) {
-            Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
-        }
-        else if( selectedId == -1 )
-        {
-            Toast.makeText(view.getApplicationContext(), "Selecione um tipo de conta!", Toast.LENGTH_SHORT).show();
-        }
+        if( !this.validarCampos(usuario))
+            return;
         else {
             usuario.setTelefone(this.tratarTelefone(usuario.getTelefone()));
 
@@ -132,5 +107,63 @@ public class PerfilViewModel {
 
     public void setFoto(){
         ImagemUtils.setImagemToImageView(this.imageView, view, btnRemoverImagem);
+    }
+
+    private boolean validarCampos(Usuario usuario){
+        if(usuario == null) {
+            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        }
+        else if (usuario.getUsuario() == null || usuario.getEmail() == null || usuario.getSenha() == null ||
+                this.confirmaSenha.get() == null || usuario.getTelefone() == null || this.UF == null){
+            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        }
+        else if(usuario.getUsuario().trim().isEmpty()){
+            Toast.makeText(view.getApplicationContext(), "Seu nome de usuário não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if(!Formatadores.validarTelefone(usuario.getTelefone())){
+            Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
+        }
+        else if (!Formatadores.validarEmail(usuario.getEmail())) {
+            Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
+        }
+        else if (usuario.getSenha().length() < 6){
+            Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
+        }
+        else if(usuario.getSenha().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty() ){
+            Toast.makeText(view.getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+        }
+        else if ( !usuario.getSenha().equals(this.confirmaSenha.get())) {
+            Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
+        }
+        else if (usuario.getTipoUsuario().equals(TiposUsuario.BANDA) ){
+            return validarCampos_Banda((Banda) usuario);
+        }
+        else if (usuario.getTipoUsuario().equals(TiposUsuario.CONTRATANTE) ){
+            return validarCampos_Contratante((Contratante) usuario);
+        }
+        else if (usuario.getTipoUsuario().equals(TiposUsuario.MUSICO) ){
+            return validarCampos_Musico((Musico) usuario);
+        }
+        else{
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean validarCampos_Banda(Banda contratante){
+        return true;
+    }
+
+    private boolean validarCampos_Contratante(Contratante contratante){
+        return true;
+    }
+
+    private boolean validarCampos_Musico(Musico contratante){
+        return true;
+    }
+
+    public void setUF(String UF) {
+        this.UF = UF;
     }
 }

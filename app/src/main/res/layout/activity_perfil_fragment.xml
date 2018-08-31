@@ -134,7 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/txtEndereco"
+                    app:layout_constraintBottom_toTopOf="@+id/linearEndereco"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -172,48 +172,61 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:text="@={viewModel.endereco}"
-                    android:id="@+id/txtEndereco"
-                    android:layout_width="282dp"
+                <LinearLayout
+                    android:id="@+id/linearEndereco"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_local"
-                    android:ems="10"
-                    android:hint="@string/endereco"
-                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
-                    android:inputType="text"
-                    android:maxLength="70"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/txtNumero"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
-
-                <EditText
-                    android:text="@={viewModel.numero}"
-                    android:id="@+id/txtNumero"
-                    android:layout_width="137dp"
-                    android:layout_height="54dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/white"
-                    android:drawableLeft="@drawable/ic_local"
-                    android:ems="10"
-                    android:hint="@string/simbolo_numero"
-                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:textColor="@color/white"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toTopOf="@+id/txtSenha"
+                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtEndereco" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+
+                    <EditText
+                        android:text="@={viewModel.endereco}"
+                        android:id="@+id/txtEndereco"
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:hint="@string/endereco"
+                        android:inputType="text"
+                        android:maxLength="70"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toTopOf="@+id/txtNumero"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+
+                    <EditText
+                        android:text="@={viewModel.numero}"
+                        android:id="@+id/txtNumero"
+                        android:layout_width="137dp"
+                        android:layout_height="54dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:hint="@string/simbolo_numero"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toTopOf="@+id/txtSenha"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtEndereco" />
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/txtSenha"
@@ -234,7 +247,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtNumero" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearEndereco" />
 
                 <EditText
                     android:id="@+id/txtConfirmaSenha"

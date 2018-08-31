@@ -76,7 +76,7 @@ public class Perfil_Fragment extends Fragment {
         this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                UF = parent.getItemAtPosition(position).toString();
+                binding.getViewModel().setUF(parent.getItemAtPosition(position).toString());
             }
 
             @Override

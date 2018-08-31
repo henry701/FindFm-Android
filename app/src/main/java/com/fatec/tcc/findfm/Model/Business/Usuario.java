@@ -2,14 +2,15 @@ package com.fatec.tcc.findfm.Model.Business;
 
 public class Usuario {
 
-    public String nomeUsuario;
+    private String nomeUsuario;
     private String nomeCompleto;
-    public boolean confirmado;
-    public boolean premium;
+    private boolean confirmado;
+    private boolean premium;
     public String telefone;
     public String email;
     public String senha;
     public String foto;
+    private TiposUsuario tipoUsuario;
 
     public Usuario(){}
 
@@ -19,7 +20,7 @@ public class Usuario {
      * @param senha
      */
     public Usuario(String nomeUsuario, String senha){
-        this.nomeUsuario = nomeUsuario;
+        this.setNomeUsuario(nomeUsuario);
         this.senha = senha;
     }
 
@@ -34,8 +35,8 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeUsuario, String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium){
-        this.nomeUsuario = nomeUsuario;
+    public Usuario(String nomeUsuario, String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
+        this.setNomeUsuario(nomeUsuario);
         this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.email = email;
@@ -43,15 +44,16 @@ public class Usuario {
         this.foto = foto;
         this.confirmado = confirmado;
         this.premium = premium;
+        this.tipoUsuario = tipoUsuario;
 
     }
 
     public String getUsuario() {
-        return nomeUsuario;
+        return getNomeUsuario();
     }
 
     public void setUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+        this.setNomeUsuario(nomeUsuario);
     }
 
     public String getNomeCompleto() {
@@ -108,5 +110,21 @@ public class Usuario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public TiposUsuario getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TiposUsuario tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 }
