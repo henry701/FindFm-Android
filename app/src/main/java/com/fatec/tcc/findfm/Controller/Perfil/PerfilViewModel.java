@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -16,11 +14,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
-import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Perfil_Fragment;
-import com.fatec.tcc.findfm.Views.RegistrarBanda;
-import com.fatec.tcc.findfm.Views.RegistrarContratante;
-import com.fatec.tcc.findfm.Views.RegistrarMusico;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 
 import java.io.FileNotFoundException;
@@ -65,17 +59,14 @@ public class PerfilViewModel {
 
     public void registrar(Usuario usuario) {
 
-        RadioGroup tipoContaGrupo = view.findViewById(R.id.grupoTipoConta);
-        RadioButton tipoConta;
-
         int selectedId = -1;
         boolean isTelefonevalido = Formatadores.validarTelefone(usuario.getTelefone());
         boolean isEmailValido = Formatadores.validarEmail(usuario.getEmail());
 
-        if( tipoContaGrupo.getCheckedRadioButtonId() != -1 ) {
-            selectedId = tipoContaGrupo.getCheckedRadioButtonId();
+        if(usuario == null) {
+            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
-        if (usuario.getUsuario() == null || usuario.getEmail() == null || usuario.getSenha() == null || this.confirmaSenha.get() == null){
+        else if (usuario.getUsuario() == null || usuario.getEmail() == null || usuario.getSenha() == null || this.confirmaSenha.get() == null){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
         else if(usuario.getUsuario().trim().isEmpty()){
@@ -102,26 +93,12 @@ public class PerfilViewModel {
         }
         else {
             usuario.setTelefone(this.tratarTelefone(usuario.getTelefone()));
-            tipoConta = view.findViewById(selectedId);
 
             this.param.putString("nomeUsuario", usuario.getUsuario());
             this.param.putString("telefone",    usuario.getTelefone());
             this.param.putString("email",       usuario.getEmail());
             this.param.putString("senha",       usuario.getSenha());
 
-            String path = "com.fatec.tcc.findfm.Views.Registrar";
-
-            switch (tipoConta.getText().toString()){
-                case "Banda":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarBanda.class, path, this.param);
-                    break;
-                case "Contratante":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarContratante.class, path, this.param);
-                    break;
-                case "Músico":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarMusico.class, path, this.param);
-                    break;
-            }
         }
     }
 

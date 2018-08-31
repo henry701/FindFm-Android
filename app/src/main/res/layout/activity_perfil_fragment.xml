@@ -5,12 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.fatec.tcc.findfm.Model.Business.TiposUsuario"/>
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel" />
         <variable
             name="usuario"
             type="com.fatec.tcc.findfm.Model.Business.Usuario" />
+        <variable
+            name="tipoUsuario"
+            type="TiposUsuario" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -64,8 +69,8 @@
                     app:siBorderWidth="2dp" />
 
                 <EditText
-                    android:text="@={usuario.nomeUsuario}"
-                    android:id="@+id/txtNomeUsuario"
+                    android:text="@={usuario.nomeCompleto}"
+                    android:id="@+id/txtNomeCompleto"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -75,9 +80,9 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
-                    android:hint="@string/nome_usuario"
+                    android:hint="@string/nome"
                     android:inputType="text"
-                    android:maxLength="20"
+                    android:maxLength="70"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtTelefone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +107,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtNomeUsuario" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtNomeCompleto" />
 
                 <EditText
                     android:text="@={usuario.email}"
@@ -180,6 +185,7 @@
                     android:drawableLeft="@drawable/ic_local"
                     android:ems="10"
                     android:hint="@string/endereco"
+                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
                     android:inputType="text"
                     android:maxLength="70"
                     android:textColor="@color/white"
@@ -199,6 +205,7 @@
                     android:drawableLeft="@drawable/ic_local"
                     android:ems="10"
                     android:hint="@string/simbolo_numero"
+                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
                     android:inputType="number"
                     android:maxLength="10"
                     android:textColor="@color/white"
@@ -268,7 +275,7 @@
                     android:layout_marginTop="30dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="@{viewModel::btnRegistrar_Click}"
-                    android:text="@string/registrar"
+                    android:text="@string/salvar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"

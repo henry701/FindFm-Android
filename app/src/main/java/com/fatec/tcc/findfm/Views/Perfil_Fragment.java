@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -92,7 +91,10 @@ public class Perfil_Fragment extends Fragment {
         binding.getViewModel().init();
 
         //Switch do tipo de perfil para incluir resto da tela
-
+        if(tipoUsuario.equals(TiposUsuario.MUSICO)){
+            EditText endereco = binding.getRoot().findViewById(R.id.txtEndereco);
+            endereco.setVisibility(View.INVISIBLE);
+        }
         return binding.getRoot();
     }
 
