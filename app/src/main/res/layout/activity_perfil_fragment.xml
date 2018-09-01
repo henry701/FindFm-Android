@@ -6,6 +6,7 @@
 
     <data>
         <import type="com.fatec.tcc.findfm.Model.Business.TiposUsuario"/>
+        <import type="com.fatec.tcc.findfm.Utils.Formatadores"/>
         <import type="android.view.View" />
         <variable
             name="viewModel"
@@ -14,8 +15,14 @@
             name="usuario"
             type="com.fatec.tcc.findfm.Model.Business.Usuario" />
         <variable
-            name="tipoUsuario"
-            type="TiposUsuario" />
+            name="banda"
+            type="com.fatec.tcc.findfm.Model.Business.Banda" />
+        <variable
+            name="contratante"
+            type="com.fatec.tcc.findfm.Model.Business.Contratante" />
+        <variable
+            name="musico"
+            type="com.fatec.tcc.findfm.Model.Business.Musico" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -43,156 +50,282 @@
                     android:id="@+id/btnRemoverImagem"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
                     android:onClick="btnRemoverImagem_Click"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.131"
                     app:layout_constraintStart_toEndOf="@+id/circularImageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.147" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/circularImageView"
                     android:layout_width="130dp"
                     android:layout_height="135dp"
+                    android:layout_marginTop="16dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="@{viewModel::btnFotoPerfil_Click}"
                     android:src="@drawable/capaplaceholder_photo"
+                    app:layout_constraintBottom_toTopOf="@+id/txtNomeCompleto"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.54"
                     app:siBorderColor="@color/white"
                     app:siBorderWidth="2dp" />
 
                 <EditText
-                    android:text="@={usuario.nomeCompleto}"
                     android:id="@+id/txtNomeCompleto"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginTop="16dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
                     android:hint="@string/nome"
                     android:inputType="text"
                     android:maxLength="70"
+                    android:text="@={usuario.nomeCompleto}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtTelefone"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/txtTelefone"
                     app:layout_constraintTop_toBottomOf="@+id/circularImageView" />
 
                 <EditText
-                    android:text="@={usuario.telefone}"
                     android:id="@+id/txtTelefone"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_phone"
                     android:ems="10"
                     android:hint="@string/telefone_contato"
                     android:inputType="text|phone"
                     android:maxLength="15"
+                    android:text="@={usuario.telefone}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtEmail"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtNomeCompleto" />
 
                 <EditText
-                    android:text="@={usuario.email}"
                     android:id="@+id/txtEmail"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_email"
                     android:ems="10"
                     android:hint="@string/e_mail"
                     android:inputType="textEmailAddress"
                     android:maxLength="255"
+                    android:text="@={usuario.email}"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLocal"
+                    app:layout_constraintBottom_toTopOf="@+id/linearBanda"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtTelefone" />
 
                 <LinearLayout
-                    android:id="@+id/linearLocal"
+                    android:id="@+id/linearBanda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/linearEndereco"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtEmail">
-
-                    <EditText
-                        android:text="@={viewModel.cidade}"
-                        android:id="@+id/txtCidade"
-                        android:layout_width="172dp"
-                        android:layout_height="54dp"
-                        android:backgroundTint="@color/white"
-                        android:drawableLeft="@drawable/ic_local"
-                        android:ems="10"
-                        android:hint="@string/cidade"
-                        android:inputType="text"
-                        android:maxLength="70"
-                        android:textColor="@color/white"
-                        tools:layout_editor_absoluteX="48dp"
-                        tools:layout_editor_absoluteY="396dp" />
-
-                    <Spinner
-                        android:id="@+id/cb_uf"
-                        style="@style/Widget.AppCompat.Spinner.Underlined"
-                        android:layout_width="109dp"
-                        android:layout_height="54dp"
-                        android:backgroundTint="@color/white"
-                        android:drawableLeft="@drawable/ic_local"
-                        android:ems="10"
-                        android:entries="@array/lista_uf"
-                        android:hint="@string/uf"
-                        android:popupBackground="@color/lilasClaro"
-                        android:textColor="@color/white"
-                        tools:layout_editor_absoluteX="224dp"
-                        tools:layout_editor_absoluteY="394dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearEndereco"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toTopOf="@+id/txtSenha"
-                    android:visibility="@{tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{usuario.tipoUsuario.equals(TiposUsuario.BANDA) ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintBottom_toTopOf="@+id/linearContratante"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtEmail">
 
                     <EditText
-                        android:text="@={viewModel.endereco}"
-                        android:id="@+id/txtEndereco"
+                        android:id="@+id/txtFormacao"
                         android:layout_width="282dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/white"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="@string/data_formacao"
+                        android:maxLength="10"
+                        android:onClick="@{viewModel::txtFormacaoClick}"
+                        android:text="@={viewModel.formacao}"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <EditText
+                            android:layout_width="172dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:hint="@string/cidade"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:text="@={banda.cidade}"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="48dp"
+                            tools:layout_editor_absoluteY="396dp" />
+
+                        <Spinner
+                            android:id="@+id/cb_uf_banda"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="109dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:entries="@array/lista_uf"
+                            android:hint="@string/uf"
+                            android:popupBackground="@color/lilasClaro"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="224dp"
+                            tools:layout_editor_absoluteY="394dp" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_pessoas"
+                        android:ems="10"
+                        android:hint="@string/numero_integrantes"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:text="@={Formatadores.toString(banda.numeroIntegrantes)}"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linearContratante"
+                    android:layout_width="284dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="@{usuario.tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintBottom_toTopOf="@+id/linearMusico"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearBanda">
+
+                    <EditText
+                        android:id="@+id/txtInauguracao"
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="@color/white"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="@string/data_inauguracao"
+                        android:maxLength="10"
+                        android:onClick="@{viewModel::txtInauguracao_Click}"
+                        android:text="@={viewModel.inauguracao}"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toTopOf="@+id/txtCapacidadeLocal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtNomeEstabelecimento" />
+
+                    <EditText
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_pessoas"
+                        android:ems="10"
+                        android:hint="@string/capacidade_local"
+                        android:inputType="number"
+                        android:maxLength="5"
+                        android:text="@={Formatadores.toString(contratante.capacidadeLocal)}"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <EditText
+                            android:layout_width="172dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:hint="@string/cidade"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:text="@={contratante.cidade}"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="48dp"
+                            tools:layout_editor_absoluteY="396dp" />
+
+                        <Spinner
+                            android:id="@+id/cb_uf_contratante"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="109dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:entries="@array/lista_uf"
+                            android:hint="@string/uf"
+                            android:popupBackground="@color/lilasClaro"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="224dp"
+                            tools:layout_editor_absoluteY="394dp" />
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
                         android:backgroundTint="@color/white"
                         android:drawableLeft="@drawable/ic_local"
@@ -200,19 +333,15 @@
                         android:hint="@string/endereco"
                         android:inputType="text"
                         android:maxLength="70"
+                        android:text="@={contratante.endereco}"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toTopOf="@+id/txtNumero"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <EditText
-                        android:text="@={viewModel.numero}"
-                        android:id="@+id/txtNumero"
                         android:layout_width="137dp"
                         android:layout_height="54dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginStart="80dp"
+                        android:layout_marginStart="70dp"
                         android:layout_marginTop="8dp"
                         android:backgroundTint="@color/white"
                         android:drawableLeft="@drawable/ic_local"
@@ -220,12 +349,106 @@
                         android:hint="@string/simbolo_numero"
                         android:inputType="number"
                         android:maxLength="10"
+                        android:text="@={Formatadores.toString(contratante.numero)}"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toTopOf="@+id/txtSenha"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtEndereco" />
+                        app:layout_constraintStart_toStartOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearMusico"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="17dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/txtSenha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearContratante">
+
+                    <EditText
+                        android:id="@+id/txtNascimento"
+                        android:layout_width="282dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="32dp"
+                        android:backgroundTint="@color/white"
+                        android:clickable="true"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:hint="@string/nascimento"
+                        android:maxLength="10"
+                        android:onClick="@{viewModel::txtNascimento_Click}"
+                        android:text="@={viewModel.nascimento}"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="32dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <EditText
+                            android:layout_width="172dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:hint="@string/cidade"
+                            android:inputType="text"
+                            android:maxLength="50"
+                            android:text="@={musico.cidade}"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="48dp"
+                            tools:layout_editor_absoluteY="396dp" />
+
+                        <Spinner
+                            android:id="@+id/cb_uf_musico"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            android:layout_width="109dp"
+                            android:layout_height="54dp"
+                            android:backgroundTint="@color/white"
+                            android:drawableLeft="@drawable/ic_local"
+                            android:ems="10"
+                            android:entries="@array/lista_uf"
+                            android:hint="@string/uf"
+                            android:popupBackground="@color/lilasClaro"
+                            android:textColor="@color/white"
+                            tools:layout_editor_absoluteX="224dp"
+                            tools:layout_editor_absoluteY="394dp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/escolha_instrumento"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/listaInstrumentos"
+                        android:layout_width="350dp"
+                        android:layout_height="174dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
                 </LinearLayout>
 
                 <EditText
@@ -233,6 +456,8 @@
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
                     android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_password"
@@ -245,17 +470,15 @@
                     android:textColorHint="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtConfirmaSenha"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearEndereco" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearMusico" />
 
                 <EditText
                     android:id="@+id/txtConfirmaSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="51dp"
+                    android:layout_marginStart="51dp"
                     android:layout_marginTop="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_password"
@@ -266,25 +489,17 @@
                     android:text="@={viewModel.confirmaSenha}"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/frame_secao"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
-
-                <FrameLayout
-                    android:id="@+id/frame_secao"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toTopOf="@+id/buttonRegistrar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtConfirmaSenha"/>
 
                 <Button
                     android:id="@+id/buttonRegistrar"
                     android:layout_width="88dp"
                     android:layout_height="32dp"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="148dp"
+                    android:layout_marginStart="148dp"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="@{viewModel::btnRegistrar_Click}"
@@ -294,8 +509,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/frame_secao"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtConfirmaSenha" />
 
             </android.support.constraint.ConstraintLayout>
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
-import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Business.Banda;
+import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -36,11 +40,10 @@ public class Perfil_Fragment extends Fragment {
     public ActivityPerfilFragmentBinding binding;
 
     private Usuario usuario;
-    private TiposUsuario tipoUsuario;
+    private Banda banda;
+    private Contratante contratante;
+    private Musico musico;
 
-    private ProgressDialog dialog;
-    private Spinner cb_uf;
-    private String UF;
     private TelaPrincipal activity;
 
     public Perfil_Fragment(){}
@@ -51,7 +54,11 @@ public class Perfil_Fragment extends Fragment {
         this.usuario = new Usuario();
         this.getUsuario().setNomeCompleto(FindFM.getNomeUsuario(activity));
         this.getUsuario().setFoto(FindFM.getFotoPrefBase64(activity));
-        this.tipoUsuario = FindFM.getTipoUsuario(activity);
+        this.getUsuario().setTipoUsuario(FindFM.getTipoUsuario(activity));
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     @Nullable
@@ -69,11 +76,9 @@ public class Perfil_Fragment extends Fragment {
         Formatadores addLineNumberFormatter = new Formatadores(new WeakReference<>(txtTelefone));
         txtTelefone.addTextChangedListener(addLineNumberFormatter);
 
-        this.cb_uf = binding.getRoot().findViewById(R.id.cb_uf);
-        this.cb_uf.setAdapter(
-                new ArrayAdapter<>(activity, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf));
 
-        this.cb_uf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 binding.getViewModel().setUF(parent.getItemAtPosition(position).toString());
@@ -83,23 +88,49 @@ public class Perfil_Fragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        };
 
-        binding.setViewModel(new PerfilViewModel(activity, this, imageView, btnRemoverImagem));
+        Spinner cb_uf_banda = binding.getRoot().findViewById(R.id.cb_uf_banda);
+        cb_uf_banda.setAdapter(spinnerAdapter);
+        cb_uf_banda.setOnItemSelectedListener(onItemSelectedListener);
+
+        Spinner cb_uf_contratante = binding.getRoot().findViewById(R.id.cb_uf_contratante);
+        cb_uf_contratante.setAdapter(spinnerAdapter);
+        cb_uf_contratante.setOnItemSelectedListener(onItemSelectedListener);
+
+        Spinner cb_uf_musico = binding.getRoot().findViewById(R.id.cb_uf_musico);
+        cb_uf_musico.setAdapter(spinnerAdapter);
+        cb_uf_musico.setOnItemSelectedListener(onItemSelectedListener);
+
+        RecyclerView rc = binding.getRoot().findViewById(R.id.listaInstrumentos);
+
+        binding.setViewModel(new PerfilViewModel(activity, this, imageView, btnRemoverImagem, activity.getDialog(), rc));
         binding.setUsuario(this.usuario);
+
+        switch (getUsuario().getTipoUsuario()){
+            case BANDA:
+                binding.setBanda(this.banda);
+                break;
+            case CONTRATANTE:
+                binding.setContratante(this.contratante);
+                break;
+            case MUSICO:
+                binding.setMusico(this.musico);
+                binding.getViewModel().updateList();
+                break;
+        }
+
         binding.executePendingBindings();
         binding.getViewModel().init();
-
-        //Switch do tipo de perfil para incluir resto da tela
-        if(tipoUsuario.equals(TiposUsuario.MUSICO)){
-            EditText endereco = binding.getRoot().findViewById(R.id.txtEndereco);
-            endereco.setVisibility(View.INVISIBLE);
-        }
         return binding.getRoot();
     }
 
     public void btnFotoPerfil_Click(View v){
         startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE);
+    }
+
+    public void btnRemoverImagem_Click(View v){
+        binding.getViewModel().removerImagem();
     }
 
     @Override
@@ -116,18 +147,16 @@ public class Perfil_Fragment extends Fragment {
     }
 
     public void btnRegistrar_Click(View v){
-        binding.getViewModel().registrar(this.usuario);
-    }
-
-    public void btnRemoverImagem_Click(View v){
-        binding.getViewModel().removerImagem();
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public TiposUsuario getTipoUsuario() {
-        return tipoUsuario;
+        switch (getUsuario().getTipoUsuario()){
+            case BANDA:
+                binding.getViewModel().registrar(this.banda);
+                break;
+            case CONTRATANTE:
+                binding.getViewModel().registrar(this.contratante);
+                break;
+            case MUSICO:
+                binding.getViewModel().registrar(this.musico);
+                break;
+        }
     }
 }

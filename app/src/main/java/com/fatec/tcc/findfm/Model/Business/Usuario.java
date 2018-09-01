@@ -6,10 +6,10 @@ public class Usuario {
     private String nomeCompleto;
     private boolean confirmado;
     private boolean premium;
-    public String telefone;
-    public String email;
-    public String senha;
-    public String foto;
+    private String telefone;
+    private String email;
+    private String senha;
+    private String foto;
     private TiposUsuario tipoUsuario;
 
     public Usuario(){}

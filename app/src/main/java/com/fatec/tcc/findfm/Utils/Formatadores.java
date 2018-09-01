@@ -1,5 +1,6 @@
 package com.fatec.tcc.findfm.Utils;
 
+import android.databinding.InverseMethod;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
@@ -167,5 +168,13 @@ public class Formatadores implements TextWatcher {
         Calendar cal = Calendar. getInstance();
         cal.setTime(data);
         return  cal;
+    }
+
+    @InverseMethod("toInt")
+    public static String toString(int value) {
+        return "" + value;
+    }
+    public static int toInt(String value) {
+        return Integer.parseInt(value);
     }
 }

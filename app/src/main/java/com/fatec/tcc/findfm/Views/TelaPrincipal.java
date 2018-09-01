@@ -213,4 +213,8 @@ public class TelaPrincipal extends AppCompatActivity
             });
         }
     }
+
+    public ProgressDialog getDialog() {
+        return dialog;
+    }
 }
