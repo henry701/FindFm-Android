@@ -3,7 +3,6 @@ package com.fatec.tcc.findfm.Views;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -20,19 +19,31 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Banda;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
+import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
+import java.util.Map;
 
 public class Perfil_Fragment extends Fragment {
 
@@ -65,6 +76,8 @@ public class Perfil_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         FindFM.setTelaAtual("MEU_PERFIL");
+
+        getUser();
 
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_perfil_fragment, container, false);
 
@@ -158,5 +171,46 @@ public class Perfil_Fragment extends Fragment {
                 binding.getViewModel().registrar(this.musico);
                 break;
         }
+    }
+
+    private void getUser() {
+        HttpTypedRequest<Banda, ResponseBody, ErrorResponse> registrarRequest = new HttpTypedRequest<>
+                (
+                        Request.Method.GET,
+                        Banda.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            activity.getDialog().hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
+                                FindFM.setTokenData(tokenData);
+                                FindFM.logarUsuario(activity, TiposUsuario.BANDA, "nomeCompleto");
+                                FindFM.setFotoPref(activity, FindFM.getImagemPerfilBase64());
+                                Util.open_form__no_return(activity, TelaPrincipal.class);
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            activity.getDialog().hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (Exception error) ->
+                        {
+                            activity.getDialog().hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"account/me"));
+        registrarRequest.execute(activity.getApplicationContext());
     }
 }

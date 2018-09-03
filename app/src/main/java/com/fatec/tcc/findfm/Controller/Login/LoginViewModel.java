@@ -63,8 +63,9 @@ public class LoginViewModel {
 
                                 FindFM.setTokenData(tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.fromKind(usuario.getKind()), usuario.getFullName());
-                                FindFM.setFotoPref(view, usuario.getAvatar());
-                                FindFM.setImagemPerfilParams(usuario.getAvatar());
+                                //TODO: apartir do ID, bater no endpoint e pegar a imagem em binario
+                                //FindFM.setFotoPref(view, usuario.getAvatar());
+                                //FindFM.setImagemPerfilParams(usuario.getAvatar());
                                 dialog.dismiss();
                                 Util.open_form__no_return(view, TelaPrincipal.class );
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){

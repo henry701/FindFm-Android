@@ -42,7 +42,6 @@ import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -379,23 +378,51 @@ public class PerfilViewModel {
     }
 
     public void updateList() {
-        //TODO: server retornar uma lista mais completa
-        List<Instrumento> instrumentos = Arrays.asList(
-                new Instrumento("Guitarra", NivelHabilidade.INICIANTE),
-                new Instrumento("Violão", NivelHabilidade.INICIANTE),
-                new Instrumento("Baixo", NivelHabilidade.INICIANTE),
-                new Instrumento("Bateria", NivelHabilidade.INICIANTE),
-                new Instrumento("Vocal", NivelHabilidade.INICIANTE),
-                new Instrumento("Saxofone", NivelHabilidade.INICIANTE),
-                new Instrumento("Flauta", NivelHabilidade.INICIANTE),
-                new Instrumento("Piano", NivelHabilidade.INICIANTE),
-                new Instrumento("Percussão", NivelHabilidade.INICIANTE),
-                new Instrumento("Trombone", NivelHabilidade.INICIANTE));
+        //TODO: validar se der ruim
+        HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
+                (
+                        Request.Method.GET,
+                        Instrumento.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            this.dialog.hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                List<Instrumento> instrumentos = new ArrayList<>();
+                                for(String instrumento : (ArrayList<String>) response.getData()) {
+                                    instrumentos.add(
+                                            new Instrumento(instrumento, NivelHabilidade.INICIANTE)
+                                    );
+                                }
 
-
-        rc.setAdapter( new AdapterInstrumentos(instrumentos, view) );
-        RecyclerView.LayoutManager layout = new LinearLayoutManager(view,
-                LinearLayoutManager.VERTICAL, false);
-        rc.setLayoutManager( layout );
+                                rc.setAdapter( new AdapterInstrumentos(instrumentos, view) );
+                                RecyclerView.LayoutManager layout = new LinearLayoutManager(view,
+                                        LinearLayoutManager.VERTICAL, false);
+                                rc.setLayoutManager( layout );
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            dialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(view,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (Exception error) ->
+                        {
+                            dialog.hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(view,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+        instrumentoRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"instruments"));
+        dialog.show();
+        instrumentoRequest.execute(view);
     }
 }

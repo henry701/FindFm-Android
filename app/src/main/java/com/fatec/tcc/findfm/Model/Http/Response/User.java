@@ -4,7 +4,7 @@ public class User {
 
     private String kind;
     private String fullName;
-    private String avatar;
+    private Avatar avatar;
 
     public String getKind() {
         return kind;
@@ -25,11 +25,54 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getAvatar() {
+    public Avatar getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
+
+
+    private class Avatar {
+        private String _id;
+        private MediaMetadata mediaMetadata;
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
+
+        public MediaMetadata getMediaMetadata() {
+            return mediaMetadata;
+        }
+
+        public void setMediaMetadata(MediaMetadata mediaMetadata) {
+            this.mediaMetadata = mediaMetadata;
+        }
+
+        private class MediaMetadata{
+            private int mediaType;
+            private String contentType;
+
+            public int getMediaType() {
+                return mediaType;
+            }
+
+            public void setMediaType(int mediaType) {
+                this.mediaType = mediaType;
+            }
+
+            public String getContentType() {
+                return contentType;
+            }
+
+            public void setContentType(String contentType) {
+                this.contentType = contentType;
+            }
+        }
     }
 }

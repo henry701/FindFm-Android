@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
@@ -15,17 +16,24 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.fatec.tcc.findfm.Utils.FindFM;
+import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.databinding.ActivityRegistrarMusicoBinding;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrarMusico extends AppCompatActivity {
@@ -33,6 +41,8 @@ public class RegistrarMusico extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
+
+    private ProgressDialog dialog;
 
     private ActivityRegistrarMusicoBinding binding;
 
@@ -65,33 +75,72 @@ public class RegistrarMusico extends AppCompatActivity {
 
             }
         });
+
+        this.dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
     }
 
     @Override
     protected void onDestroy() {
+        this.dialog.dismiss();
         binding.getMusico().dismissDialog();
         super.onDestroy();
     }
 
     private void updateList() {
-        //TODO: server retornar uma lista mais completa
-        List<Instrumento> instrumentos = Arrays.asList(
-                new Instrumento("Guitarra", NivelHabilidade.INICIANTE),
-                new Instrumento("Violão", NivelHabilidade.INICIANTE),
-                new Instrumento("Baixo", NivelHabilidade.INICIANTE),
-                new Instrumento("Bateria", NivelHabilidade.INICIANTE),
-                new Instrumento("Vocal", NivelHabilidade.INICIANTE),
-                new Instrumento("Saxofone", NivelHabilidade.INICIANTE),
-                new Instrumento("Flauta", NivelHabilidade.INICIANTE),
-                new Instrumento("Piano", NivelHabilidade.INICIANTE),
-                new Instrumento("Percussão", NivelHabilidade.INICIANTE),
-                new Instrumento("Trombone", NivelHabilidade.INICIANTE));
+        RecyclerView rc = findViewById(R.id.listaInstrumentos);
 
-        RecyclerView view = findViewById(R.id.listaInstrumentos);
-        view.setAdapter( new AdapterInstrumentos(instrumentos,this) );
-        RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
-        view.setLayoutManager( layout );
+        //TODO: validar se der ruim
+        //TODO: colocar dialog enquanto carrega a tela toda
+        HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
+                (
+                        Request.Method.GET,
+                        Instrumento.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            this.dialog.hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                List<Instrumento> instrumentos = new ArrayList<>();
+                                for(String instrumento : (ArrayList<String>) response.getData()) {
+                                    instrumentos.add(
+                                            new Instrumento(instrumento, NivelHabilidade.INICIANTE)
+                                    );
+                                }
+
+                                rc.setAdapter( new AdapterInstrumentos(instrumentos, this) );
+                                RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
+                                        LinearLayoutManager.VERTICAL, false);
+                                rc.setLayoutManager( layout );
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            dialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (Exception error) ->
+                        {
+                            dialog.hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+        instrumentoRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"instruments"));
+        dialog.show();
+        instrumentoRequest.execute(this);
+
+
     }
 
     public void btnFoto_Click(View v){
