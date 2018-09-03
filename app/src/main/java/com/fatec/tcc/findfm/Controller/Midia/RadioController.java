@@ -4,7 +4,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.fatec.tcc.findfm.R;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -20,6 +23,11 @@ public class RadioController extends Observable{
         this.context = context;
         this.mediaPlayer = new MediaPlayer();
         this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        this.mediaPlayer.setOnErrorListener((MediaPlayer mp, int what, int extra) -> {
+            Log.d("[RADIO CONTROLLER]", "mediaPlayer onError what=" + what + ",extra=" + extra);
+            // TODO: Handle encoding error case by reconnecting to Radio
+            return false;
+        });
         preparado = false;
         iniciado = false;
     }
@@ -29,8 +37,7 @@ public class RadioController extends Observable{
     }
 
     public void iniciar(){
-        String stream = "http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus";
-        new PlayTask().execute(stream);
+        new PlayTask().execute(this.context.getString(R.string.radio_url));
     }
 
     public void play(){
@@ -50,7 +57,6 @@ public class RadioController extends Observable{
     }
 
     private class PlayTask extends AsyncTask<String, Void, Boolean> {
-
         @Override
         protected Boolean doInBackground(String... strings) {
             try {
@@ -59,11 +65,10 @@ public class RadioController extends Observable{
                 preparado = true;
                 setChanged();
                 notifyObservers();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(context, "Erro ao executar rádio!", Toast.LENGTH_SHORT ).show();
             }
-
             return preparado;
         }
     }
