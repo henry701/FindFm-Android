@@ -51,7 +51,8 @@
             android:name=".Views.Perfil_Fragment"
             android:label="@string/title_activity_perfil_fragment"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".Views.RecuperarSenha"></activity>
     </application>
 
 </manifest>

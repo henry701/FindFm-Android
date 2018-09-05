@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.fatec.tcc.findfm.Controller.Login.LoginViewModel;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityLoginBinding;
@@ -52,11 +51,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void lb_recuperarSenha_Click(View v){
-        AlertDialogUtils.newSimpleDialog__OneButton(this,
-                "Calma cara", R.drawable.ic_error,
-                "Recuperar senha - tela em construção",
-                "OK",
-                (dialog, id) -> { }).create().show();
+        Util.open_form(getApplicationContext(), RecuperarSenha.class);
     }
 
     public void lb_registrar_Click(View v){

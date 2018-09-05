@@ -183,4 +183,6 @@
     <string name="radio_carregando">Carregando Rádio</string>
     <string name="radio_tocar">Tocar Rádio</string>
     <string name="radio_pausar">Pausar Rádio</string>
+    <string name="instrucao_recuperar_senha">Insira seu e-mail e iremos entrar em contato com você</string>
+    <string name="enviar">Enviar</string>
 </resources>
