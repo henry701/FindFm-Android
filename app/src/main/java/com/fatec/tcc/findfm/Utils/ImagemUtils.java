@@ -1,5 +1,7 @@
 package com.fatec.tcc.findfm.Utils;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +12,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Views.TelaPrincipal;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
@@ -64,4 +72,45 @@ public class ImagemUtils {
             imagemUsuarioHeader.setImageDrawable(v.getResources().getDrawable(R.drawable.capaplaceholder_photo, v.getTheme()));
         }
     }
+
+    public static void getImagemFromEndPoint(String id_imagem, Context view, ProgressDialog progressDialog){
+        HttpTypedRequest<ResponseBody, ResponseBody, ErrorResponse> imagemRequest= new HttpTypedRequest<>
+                (
+                        Request.Method.GET,
+                        ResponseBody.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            progressDialog.hide();
+                            if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+
+                                progressDialog.dismiss();
+                                Util.open_form__no_return(view, TelaPrincipal.class);
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            progressDialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(view,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (Exception error) ->
+                        {
+                            progressDialog.hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(view,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                    (dialog, id) -> {
+                                    }).create().show();
+                        }
+                );
+        imagemRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "resource/" + id_imagem));
+        imagemRequest.execute(view);
+    }
+
 }

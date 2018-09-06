@@ -39,9 +39,6 @@
         <activity
             android:name=".Views.RegistrarMusico"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name=".Views.RegistrarBanda"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Views.RegistrarContratante" />
         <activity
             android:name=".Views.TelaPrincipal"

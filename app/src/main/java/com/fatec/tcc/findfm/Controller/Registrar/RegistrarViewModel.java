@@ -12,13 +12,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Registrar;
-import com.fatec.tcc.findfm.Views.RegistrarBanda;
 import com.fatec.tcc.findfm.Views.RegistrarContratante;
 import com.fatec.tcc.findfm.Views.RegistrarMusico;
 
@@ -33,7 +32,6 @@ public class RegistrarViewModel {
     public ObservableField<String> email = new ObservableField<>();
     public ObservableField<String> senha = new ObservableField<>();
     public ObservableField<String> confirmaSenha = new ObservableField<>();
-    //public ObservableField<Integer> tipoConta = new ObservableField<>();
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
 
@@ -114,9 +112,6 @@ public class RegistrarViewModel {
             String path = "com.fatec.tcc.findfm.Views.Registrar";
 
             switch (tipoConta.getText().toString()){
-                case "Banda":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarBanda.class, path, this.param);
-                    break;
                 case "Contratante":
                     Util.open_form_withParam(view.getApplicationContext(), RegistrarContratante.class, path, this.param);
                     break;

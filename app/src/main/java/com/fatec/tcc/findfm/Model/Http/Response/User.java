@@ -33,8 +33,7 @@ public class User {
         this.avatar = avatar;
     }
 
-
-    private class Avatar {
+    public class Avatar {
         private String _id;
         private MediaMetadata mediaMetadata;
 
@@ -54,7 +53,8 @@ public class User {
             this.mediaMetadata = mediaMetadata;
         }
 
-        private class MediaMetadata{
+        public class MediaMetadata{
+
             private int mediaType;
             private String contentType;
 

@@ -18,6 +18,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Login;
@@ -64,6 +65,11 @@ public class LoginViewModel {
                                 FindFM.setTokenData(tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.fromKind(usuario.getKind()), usuario.getFullName());
                                 //TODO: apartir do ID, bater no endpoint e pegar a imagem em binario
+
+                                if(usuario.getAvatar() != null) {
+                                    ImagemUtils.getImagemFromEndPoint(
+                                            usuario.getAvatar().get_id(), view, dialog);
+                                }
                                 //FindFM.setFotoPref(view, usuario.getAvatar());
                                 //FindFM.setImagemPerfilParams(usuario.getAvatar());
                                 dialog.dismiss();
