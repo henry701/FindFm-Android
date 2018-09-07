@@ -155,13 +155,13 @@ public class TelaPrincipal extends AppCompatActivity
                     item.setTitle(R.string.radio_pausar);
                     item.setIcon(R.drawable.ic_pause);
                     this.tocandoRadio = true;
-                    this.radioController.play();
+                    this.radioController.toggle();
                 }
                 else{
                     item.setTitle(R.string.radio_tocar);
                     item.setIcon(R.drawable.ic_play);
                     this.tocandoRadio = false;
-                    this.radioController.play();
+                    this.radioController.toggle();
                 }
                 break;
             case R.id.sair:
@@ -178,13 +178,12 @@ public class TelaPrincipal extends AppCompatActivity
         return true;
     }
 
-
-
+    /*
     @Override
     protected void onPause() {
         super.onPause();
         if(tocandoRadio){
-            radioController.play();
+            radioController.toggle();
         }
     }
 
@@ -192,9 +191,10 @@ public class TelaPrincipal extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         if(tocandoRadio){
-            radioController.play();
+            radioController.toggle();
         }
     }
+    */
 
     @Override
     protected void onDestroy() {

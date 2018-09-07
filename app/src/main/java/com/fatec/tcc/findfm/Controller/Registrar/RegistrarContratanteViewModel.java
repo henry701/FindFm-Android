@@ -111,7 +111,7 @@ public class RegistrarContratanteViewModel {
                                     }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "register/contratante"));
+        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "register/contractor"));
     }
 
     public void dismissDialog(){
