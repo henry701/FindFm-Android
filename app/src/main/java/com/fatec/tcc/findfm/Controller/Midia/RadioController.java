@@ -25,22 +25,12 @@ public class RadioController extends Observable{
         this.context = context;
         this.mediaPlayer = new MediaPlayer();
         this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        preparado = false;
-        iniciado = false;
         this.mediaPlayer.setOnErrorListener((MediaPlayer mp, int what, int extra) -> {
             Log.d("[RADIO CONTROLLER]", "mediaPlayer onError what=" + what + ",extra=" + extra);
-            // TODO: Handle encoding error case by reconnecting to Radio
             return false;
         });
         this.mediaPlayer.setOnCompletionListener((MediaPlayer mp) -> {
             Log.d("[RADIO CONTROLLER]", "mediaPlayer onCompletion");
-            mediaPlayer.release();
-            this.mediaPlayer = new MediaPlayer();
-            this.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            preparado = false;
-            iniciado = false;
-            iniciar();
-            toggle();
         });
     }
 
@@ -48,36 +38,53 @@ public class RadioController extends Observable{
         return preparado;
     }
 
-    public void iniciar(){
-        new PlayTask().execute(this.context.getString(R.string.radio_url));
+    public void prepare(){
+        if(!preparado) {
+            new PlayTask().execute(this.context.getString(R.string.radio_url));
+        }
     }
 
     public void toggle()
     {
-        // TODO: Esperar async
-        while(!preparado)
-        {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
-        }
-        // /TODO
         if(iniciado) {
-            iniciado = false;
-            mediaPlayer.pause();
+            pause();
         } else {
-            iniciado = true;
-            mediaPlayer.start();
+            play();
         }
     }
 
-    public void dismiss(){
-        if(preparado){
+    public void play()
+    {
+        if(iniciado)
+        {
+            return;
+        }
+        iniciado = true;
+        mediaPlayer.start();
+    }
+
+    public void pause()
+    {
+        if(!iniciado)
+        {
+            return;
+        }
+        iniciado = false;
+        mediaPlayer.pause();
+    }
+
+    public void dismiss()
+    {
+        if(preparado)
+        {
             mediaPlayer.release();
         }
+    }
+
+    public void rePrepare()
+    {
+        dismiss();
+        prepare();
     }
 
     private class PlayTask extends AsyncTask<String, Void, Boolean> {

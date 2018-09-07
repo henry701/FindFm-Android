@@ -146,7 +146,7 @@ public class TelaPrincipal extends AppCompatActivity
                 if( !this.radioController.isPreparado() ){
                     Toast.makeText(this, "Carregando rádio...", Toast.LENGTH_LONG).show();
                     if(!radioIniciando) {
-                        this.radioController.iniciar();
+                        this.radioController.prepare();
                         item.setTitle(R.string.radio_carregando);
                         radioIniciando = true;
                     }
@@ -155,13 +155,13 @@ public class TelaPrincipal extends AppCompatActivity
                     item.setTitle(R.string.radio_pausar);
                     item.setIcon(R.drawable.ic_pause);
                     this.tocandoRadio = true;
-                    this.radioController.toggle();
+                    this.radioController.play();
                 }
                 else{
                     item.setTitle(R.string.radio_tocar);
                     item.setIcon(R.drawable.ic_play);
                     this.tocandoRadio = false;
-                    this.radioController.toggle();
+                    this.radioController.pause();
                 }
                 break;
             case R.id.sair:
