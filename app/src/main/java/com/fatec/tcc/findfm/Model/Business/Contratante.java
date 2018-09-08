@@ -13,6 +13,18 @@ public class Contratante extends Usuario {
 
     public Contratante(){}
 
+    public Contratante(Usuario usuario){
+        super(  usuario.getNomeUsuario(),
+                usuario.getNomeCompleto(),
+                usuario.getSenha(),
+                usuario.getEmail(),
+                usuario.getTelefone(),
+                usuario.getFoto(),
+                usuario.isConfirmado(),
+                usuario.isPremium(),
+                TiposUsuario.CONTRATANTE);
+    }
+
     public Contratante(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                  String nomeEstabelecimento, Date inauguracao, int capacidadeLocal, String cidade, String uf, String endereco, int numero) {
         super(nomeUsuario, nomeEstabelecimento, senha, email, telefone, foto, confirmado, premium, TiposUsuario.CONTRATANTE);

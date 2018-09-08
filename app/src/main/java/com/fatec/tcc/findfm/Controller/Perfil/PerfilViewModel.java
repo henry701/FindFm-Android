@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
-import com.fatec.tcc.findfm.Model.Business.Banda;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -55,8 +54,6 @@ public class PerfilViewModel {
 
     public ObservableField<String> nascimento = new ObservableField<>();
     private Date nascimentoDate;
-    public ObservableField<String> formacao = new ObservableField<>();
-    private Date formacaoDate;
     public ObservableField<String> inauguracao = new ObservableField<>();
     private Date inauguracaoDate;
 
@@ -82,9 +79,7 @@ public class PerfilViewModel {
 
     public void init(){
         ImagemUtils.setImagemToImageView(imageView, view, btnRemoverImagem);
-
         this.imageView.setImageDrawable(view.getResources().getDrawable(R.drawable.capaplaceholder_photo, view.getTheme()));
-        FindFM.setImagemPerfilParams(null);
     }
 
     public void pickImage(Intent data) throws FileNotFoundException {
@@ -93,21 +88,6 @@ public class PerfilViewModel {
         this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
         ImagemUtils.setImagemToParams(this.imageView);
-    }
-
-    public void registrar(Banda banda) {
-
-        if( !this.validarCampos(banda))
-            return;
-        else {
-            banda.setTelefone(this.tratarTelefone(banda.getTelefone()));
-
-            this.param.putString("nomeUsuario", banda.getUsuario());
-            this.param.putString("telefone",    banda.getTelefone());
-            this.param.putString("email",       banda.getEmail());
-            this.param.putString("senha",       banda.getSenha());
-
-        }
     }
 
     public void registrar(Contratante contratante) {
@@ -198,9 +178,6 @@ public class PerfilViewModel {
         else if ( !usuario.getSenha().equals(this.confirmaSenha.get())) {
             Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
         }
-        else if (usuario instanceof Banda ){
-            return validarCampos_Banda((Banda) usuario);
-        }
         else if (usuario instanceof Contratante ){
             return validarCampos_Contratante((Contratante) usuario);
         }
@@ -214,27 +191,6 @@ public class PerfilViewModel {
         return false;
     }
 
-    private boolean validarCampos_Banda(Banda banda){
-        if( banda.getNomeCompleto() == null || this.formacao.get() == null || banda.getNumeroIntegrantes() == 0 || banda.getCidade() == null){
-            Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }
-        else if(banda.getNomeCompleto().trim().isEmpty()){
-            Toast.makeText(view.getApplicationContext(), "O nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( this.formacao.get().isEmpty() ) {
-            Toast.makeText(view.getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( formacaoDate.after(new Date()) ) {
-            Toast.makeText(view.getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
-        }
-        else if( banda.getCidade().trim().isEmpty()){
-            Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            return true;
-        }
-        return false;
-    }
 
     private boolean validarCampos_Contratante(Contratante contratante){
         if ( contratante.getNomeCompleto() == null || this.inauguracao.get() == null || contratante.getCapacidadeLocal() == 0 ||
@@ -294,7 +250,7 @@ public class PerfilViewModel {
 
     private void initRequests() {
         registrarRequest = new HttpTypedRequest<>
-                (
+                (       view,
                         Request.Method.POST,
                         AtualizarUsuarioRequest.class,
                         ResponseBody.class,
@@ -304,7 +260,7 @@ public class PerfilViewModel {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(tokenData);
+                                FindFM.setTokenData(view, tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto", ""));
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
 
@@ -347,21 +303,6 @@ public class PerfilViewModel {
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void txtFormacaoClick(View v) {
-        Util.hideSoftKeyboard(view);
-        Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
-            myCalendar.set(Calendar.YEAR, year);
-            myCalendar.set(Calendar.MONTH, monthOfYear);
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            this.formacaoDate = myCalendar.getTime();
-            this.formacao.set(sdf.format(myCalendar.getTime()));
-        };
-        new DatePickerDialog(view, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
     public void txtInauguracao_Click(View v) {
         Util.hideSoftKeyboard(view);
         Calendar myCalendar = Calendar.getInstance();
@@ -380,7 +321,7 @@ public class PerfilViewModel {
     public void updateList() {
         //TODO: validar se der ruim
         HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
-                (
+                (       view,
                         Request.Method.GET,
                         Instrumento.class,
                         ResponseBody.class,

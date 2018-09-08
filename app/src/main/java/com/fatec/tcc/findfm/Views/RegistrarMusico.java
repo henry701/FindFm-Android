@@ -95,7 +95,7 @@ public class RegistrarMusico extends AppCompatActivity {
         //TODO: validar se der ruim
         //TODO: colocar dialog enquanto carrega a tela toda
         HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
-                (
+                (       this,
                         Request.Method.GET,
                         Instrumento.class,
                         ResponseBody.class,

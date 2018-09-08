@@ -178,7 +178,6 @@ public class TelaPrincipal extends AppCompatActivity
         return true;
     }
 
-    /*
     @Override
     protected void onPause() {
         super.onPause();
@@ -194,7 +193,6 @@ public class TelaPrincipal extends AppCompatActivity
             radioController.toggle();
         }
     }
-    */
 
     @Override
     protected void onDestroy() {

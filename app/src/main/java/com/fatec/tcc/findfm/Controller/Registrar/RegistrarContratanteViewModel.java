@@ -74,7 +74,7 @@ public class RegistrarContratanteViewModel {
 
     private void initRequests() {
         registrarRequest = new HttpTypedRequest<>
-                (
+                (       view,
                         Request.Method.POST,
                         Contratante.class,
                         ResponseBody.class,
@@ -84,7 +84,7 @@ public class RegistrarContratanteViewModel {
                             this.dialog.hide();
                             if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(tokenData);
+                                FindFM.setTokenData(view, tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto", ""));
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();

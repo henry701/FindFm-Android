@@ -1,5 +1,6 @@
 package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.android.volley.Cache;
@@ -8,8 +9,8 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
 import java.nio.charset.Charset;
@@ -23,8 +24,10 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
     private final Class<TResponse> receiveClass;
     private final Class<TErrorResponse> errorResponseClass;
     private String jsonRequestBody;
+    private final Activity view;
 
-    public JsonTypedRequest(int method,
+    public JsonTypedRequest(Activity view,
+                            int method,
                             Class<TRequest> sendClass,
                             Class<TResponse> receiveClass,
                             Class<TErrorResponse> errorResponseClass,
@@ -38,6 +41,7 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
         this.receiveClass = receiveClass;
         this.errorResponseClass = errorResponseClass;
         this.jsonRequestBody = JsonUtils.GSON.toJson(requestBody);
+        this.view = view;
         this.setRetryPolicy(new DefaultRetryPolicy(600000, 0, 1));
     }
 
@@ -63,7 +67,14 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
     @Override
     public Map<String, String> getHeaders()
     {
-        TokenData tokenData = FindFM.getTokenData();
+        TokenData tokenData = null;
+
+        try {
+            tokenData = FindFM.getTokenData(view);
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+
         if(tokenData == null)
         {
             return Collections.emptyMap();

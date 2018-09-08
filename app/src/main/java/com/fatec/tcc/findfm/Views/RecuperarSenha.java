@@ -48,7 +48,7 @@ public class RecuperarSenha extends AppCompatActivity {
 
     private void initRequests() {
         recuperarRequest = new HttpTypedRequest<>
-                (
+                (       this,
                         Request.Method.POST,
                         RecuperarSenhaRequest.class,
                         ResponseBody.class,

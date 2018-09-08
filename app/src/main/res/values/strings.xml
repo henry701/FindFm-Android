@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">FindFM</string>
     <!--
-    <string name="base_url">http://10.0.2.2:8080</string>
-    <string name="radio_url">http://10.0.2.2:8081</string>
-    -->
     <string name="base_url">http://192.168.43.253:8080</string>
     <string name="radio_url">http://192.168.43.253:8081</string>
+    -->
+    <string name="base_url">http://10.0.2.2:8080</string>
+    <string name="radio_url">http://10.0.2.2:8081</string>
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->

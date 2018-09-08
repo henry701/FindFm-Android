@@ -81,7 +81,7 @@ public class RegistrarMusicoViewModel {
 
     private void initRequests() {
         registrarRequest = new HttpTypedRequest<>
-                (
+                (       view,
                         Request.Method.POST,
                         Musico.class,
                         ResponseBody.class,
@@ -91,7 +91,7 @@ public class RegistrarMusicoViewModel {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(tokenData);
+                                FindFM.setTokenData(view, tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto", ""));
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();

@@ -9,6 +9,8 @@ import android.util.Base64;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 
+import java.util.Date;
+
 public class FindFM extends Application {
 
     private Bundle params;
@@ -39,11 +41,21 @@ public class FindFM extends Application {
      * Token Data
      * */
 
-    public static TokenData getTokenData() {
+    public static TokenData getTokenData(Activity view) throws ClassCastException {
+        SharedPreferences pref = view.getSharedPreferences("FindFM_param", MODE_PRIVATE);
+        TokenData tokenData = new TokenData();
+        tokenData.setAccessToken(pref.getString("tokenData", ""));
+        tokenData.setCreated( new Date( pref.getLong("tokenDateCre", 0) ) );
+        tokenData.setExpiration( new Date( pref.getLong("tokenDateExp", 0) ) );
         return tokenData;
     }
 
-    public static void setTokenData(TokenData tokenData) {
+    public static void setTokenData(Activity view, TokenData tokenData) {
+        SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+        editor.putString("tokenData", tokenData.getAccessToken());
+        editor.putLong("tokenDateExp", tokenData.getExpiration().getTime());
+        editor.putLong("tokenDateCre", tokenData.getCreated().getTime());
+        editor.apply();
         FindFM.tokenData = tokenData;
     }
 

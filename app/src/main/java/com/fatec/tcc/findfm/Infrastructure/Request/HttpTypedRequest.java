@@ -1,9 +1,9 @@
 package com.fatec.tcc.findfm.Infrastructure.Request;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.ErrorResponseException;
@@ -12,7 +12,6 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import java9.util.function.Consumer;
@@ -32,9 +31,11 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
     private String fullUrl;
     private TRequest requestObject;
 
+    private final Activity view;
+
     private JsonTypedRequest<TRequest, TResponse, TErrorResponse> request;
 
-    public HttpTypedRequest(int method,
+    public HttpTypedRequest(Activity view, int method,
                             Class<TRequest> requestClass,
                             Class<TResponse> receiveClass,
                             Class<TErrorResponse> errorResponseClass,
@@ -49,11 +50,13 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
         this.onSuccess = onSuccess;
         this.onBusinessError = onBusinessError;
         this.onCriticalError = onCriticalError;
+        this.view = view;
     }
 
     private void createRequest() {
         request = new JsonTypedRequest<>
         (
+            view,
             method,
             requestClass,
             receiveClass,

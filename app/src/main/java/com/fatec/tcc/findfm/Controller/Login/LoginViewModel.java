@@ -2,11 +2,14 @@ package com.fatec.tcc.findfm.Controller.Login;
 
 import android.app.ProgressDialog;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -50,31 +53,47 @@ public class LoginViewModel {
     private void initRequests() {
         loginRequest = new HttpTypedRequest<>
                 (
+                        view,
                         Request.Method.POST,
                         LoginRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
                         (ResponseBody response) ->
                         {
-                            this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
 
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 User usuario = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("user"), User.class);
 
-                                FindFM.setTokenData(tokenData);
+                                FindFM.setTokenData(view, tokenData);
                                 FindFM.logarUsuario(view, TiposUsuario.fromKind(usuario.getKind()), usuario.getFullName());
-                                //TODO: apartir do ID, bater no endpoint e pegar a imagem em binario
 
                                 if(usuario.getAvatar() != null) {
-                                    ImagemUtils.getImagemFromEndPoint(
-                                            usuario.getAvatar().get_id(), view, dialog);
+                                    ImageRequest imagemRequest = new ImageRequest(view, usuario.getAvatar().get_id(), 0, 0, ImageView.ScaleType.CENTER_CROP,
+                                            (Bitmap bitmap) -> {
+                                                dialog.hide();
+                                                ImagemUtils.setImagemToParams(bitmap);
+                                                ImagemUtils.setImagemToPref(view, bitmap);
+                                                dialog.dismiss();
+                                                Util.open_form__no_return(view, TelaPrincipal.class );
+                                            },
+                                            error -> {
+                                                dialog.hide();
+                                                AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
+                                                        (dialog, id) -> {
+                                                        }).create().show();
+                                                dialog.dismiss();
+                                                Util.open_form__no_return(view, TelaPrincipal.class );
+                                            }
+                                    );
+                                    imagemRequest.execute();
                                 }
-                                //FindFM.setFotoPref(view, usuario.getAvatar());
-                                //FindFM.setImagemPerfilParams(usuario.getAvatar());
-                                dialog.dismiss();
-                                Util.open_form__no_return(view, TelaPrincipal.class );
+                                else{
+                                    dialog.dismiss();
+                                    Util.open_form__no_return(view, TelaPrincipal.class );
+                                }
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){
+                                dialog.hide();
                                 AlertDialogUtils.newSimpleDialog__OneButton(view,
                                         "Atenção", R.drawable.ic_error,
                                         "Usuário e/ou Senha incorretos","OK",

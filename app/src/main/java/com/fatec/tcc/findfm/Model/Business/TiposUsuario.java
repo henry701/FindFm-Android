@@ -3,7 +3,6 @@ package com.fatec.tcc.findfm.Model.Business;
 public enum TiposUsuario {
 
     INDEFINIDO(0, "Indefinido", "Unknown"),
-    BANDA(1, "Banda", "Band"),
     CONTRATANTE(2, "Contratante", "Contractor"),
     MUSICO(3, "Musico", "Musician");
 

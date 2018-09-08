@@ -22,7 +22,6 @@ import android.widget.SpinnerAdapter;
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
-import com.fatec.tcc.findfm.Model.Business.Banda;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -30,7 +29,7 @@ import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
-import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
+import com.fatec.tcc.findfm.Model.Http.Response.User;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -38,7 +37,6 @@ import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
-import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 import java.io.FileNotFoundException;
@@ -51,7 +49,6 @@ public class Perfil_Fragment extends Fragment {
     public ActivityPerfilFragmentBinding binding;
 
     private Usuario usuario;
-    private Banda banda;
     private Contratante contratante;
     private Musico musico;
 
@@ -63,9 +60,7 @@ public class Perfil_Fragment extends Fragment {
     public Perfil_Fragment(TelaPrincipal activity){
         this.activity = activity;
         this.usuario = new Usuario();
-        this.getUsuario().setNomeCompleto(FindFM.getNomeUsuario(activity));
-        this.getUsuario().setFoto(FindFM.getFotoPrefBase64(activity));
-        this.getUsuario().setTipoUsuario(FindFM.getTipoUsuario(activity));
+        getUser();
     }
 
     public Usuario getUsuario() {
@@ -76,9 +71,6 @@ public class Perfil_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         FindFM.setTelaAtual("MEU_PERFIL");
-
-        getUser();
-
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_perfil_fragment, container, false);
 
         ImageView imageView = binding.getRoot().findViewById(R.id.circularImageView);
@@ -103,10 +95,6 @@ public class Perfil_Fragment extends Fragment {
             }
         };
 
-        Spinner cb_uf_banda = binding.getRoot().findViewById(R.id.cb_uf_banda);
-        cb_uf_banda.setAdapter(spinnerAdapter);
-        cb_uf_banda.setOnItemSelectedListener(onItemSelectedListener);
-
         Spinner cb_uf_contratante = binding.getRoot().findViewById(R.id.cb_uf_contratante);
         cb_uf_contratante.setAdapter(spinnerAdapter);
         cb_uf_contratante.setOnItemSelectedListener(onItemSelectedListener);
@@ -118,23 +106,6 @@ public class Perfil_Fragment extends Fragment {
         RecyclerView rc = binding.getRoot().findViewById(R.id.listaInstrumentos);
 
         binding.setViewModel(new PerfilViewModel(activity, this, imageView, btnRemoverImagem, activity.getDialog(), rc));
-        binding.setUsuario(this.usuario);
-
-        switch (getUsuario().getTipoUsuario()){
-            case BANDA:
-                binding.setBanda(this.banda);
-                break;
-            case CONTRATANTE:
-                binding.setContratante(this.contratante);
-                break;
-            case MUSICO:
-                binding.setMusico(this.musico);
-                binding.getViewModel().updateList();
-                break;
-        }
-
-        binding.executePendingBindings();
-        binding.getViewModel().init();
         return binding.getRoot();
     }
 
@@ -161,9 +132,6 @@ public class Perfil_Fragment extends Fragment {
 
     public void btnRegistrar_Click(View v){
         switch (getUsuario().getTipoUsuario()){
-            case BANDA:
-                binding.getViewModel().registrar(this.banda);
-                break;
             case CONTRATANTE:
                 binding.getViewModel().registrar(this.contratante);
                 break;
@@ -174,21 +142,37 @@ public class Perfil_Fragment extends Fragment {
     }
 
     private void getUser() {
-        HttpTypedRequest<Banda, ResponseBody, ErrorResponse> registrarRequest = new HttpTypedRequest<>
-                (
+        HttpTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new HttpTypedRequest<>
+                (       activity,
                         Request.Method.GET,
-                        Banda.class,
+                        Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
                         (ResponseBody response) ->
                         {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(tokenData);
-                                FindFM.logarUsuario(activity, TiposUsuario.BANDA, "nomeCompleto");
-                                FindFM.setFotoPref(activity, FindFM.getImagemPerfilBase64());
-                                Util.open_form__no_return(activity, TelaPrincipal.class);
+                                User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
+                                this.usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
+                                this.usuario.setNomeCompleto(user.getFullName());
+                                this.usuario.setEmail(user.getEmail());
+                                this.usuario.setTelefone(user.getTelefone().getStateCode() + user.getTelefone().getNumber());
+                                this.usuario.setFoto(FindFM.getFotoPrefBase64(activity));
+
+                                binding.setUsuario(this.usuario);
+
+                                switch (getUsuario().getTipoUsuario()){
+                                    case CONTRATANTE:
+                                        binding.setContratante(new Contratante(usuario));
+                                        break;
+                                    case MUSICO:
+                                        binding.setMusico(new Musico(usuario));
+                                        binding.getViewModel().updateList();
+                                        break;
+                                }
+
+                                binding.executePendingBindings();
+                                binding.getViewModel().init();
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -212,5 +196,6 @@ public class Perfil_Fragment extends Fragment {
                 );
         registrarRequest.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"account/me"));
         registrarRequest.execute(activity.getApplicationContext());
+        activity.getDialog().show();
     }
 }
