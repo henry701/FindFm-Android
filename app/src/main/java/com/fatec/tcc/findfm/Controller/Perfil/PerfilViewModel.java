@@ -78,8 +78,8 @@ public class PerfilViewModel {
     }
 
     public void init(){
-        ImagemUtils.setImagemToImageView(imageView, view, btnRemoverImagem);
-        this.imageView.setImageDrawable(view.getResources().getDrawable(R.drawable.capaplaceholder_photo, view.getTheme()));
+        ImagemUtils.setImagemToImageView_FromPref(imageView, view, btnRemoverImagem);
+        initRequests();
     }
 
     public void pickImage(Intent data) throws FileNotFoundException {
@@ -146,10 +146,6 @@ public class PerfilViewModel {
 
     public void btnRegistrar_Click(View v){
         fragment.btnRegistrar_Click(v);
-    }
-
-    public void setFoto(){
-        ImagemUtils.setImagemToImageView(this.imageView, view, btnRemoverImagem);
     }
 
     private boolean validarCampos(Usuario usuario){
@@ -318,7 +314,7 @@ public class PerfilViewModel {
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void updateList() {
+    public void updateList(List<Instrumento> instrumentosUsuario) {
         //TODO: validar se der ruim
         HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
                 (       view,
@@ -337,7 +333,7 @@ public class PerfilViewModel {
                                     );
                                 }
 
-                                rc.setAdapter( new AdapterInstrumentos(instrumentos, view) );
+                                rc.setAdapter( new AdapterInstrumentos(instrumentos, view).setInstrumentosUsuario(instrumentosUsuario) );
                                 RecyclerView.LayoutManager layout = new LinearLayoutManager(view,
                                         LinearLayoutManager.VERTICAL, false);
                                 rc.setLayoutManager( layout );
@@ -365,5 +361,21 @@ public class PerfilViewModel {
         instrumentoRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"instruments"));
         dialog.show();
         instrumentoRequest.execute(view);
+    }
+
+    public void setNascimento(String nascimento) {
+        this.nascimento.set(nascimento);
+    }
+
+    public void setNascimentoDate(Date nascimentoDate) {
+        this.nascimentoDate = nascimentoDate;
+    }
+
+    public void setInauguracao(String inauguracao) {
+        this.inauguracao.set(inauguracao);
+    }
+
+    public void setInauguracaoDate(Date inauguracaoDate) {
+        this.inauguracaoDate = inauguracaoDate;
     }
 }

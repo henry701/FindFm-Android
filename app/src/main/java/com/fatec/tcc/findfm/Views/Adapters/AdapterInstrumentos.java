@@ -81,22 +81,19 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
             checkInstrumento = itemView.findViewById( R.id.checkInstumento );
             cb_nivelHabilidade = itemView.findViewById( R.id.cb_nivelHabilidade );
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int adapterPosition = getAdapterPosition();
-                    Instrumento instrumento = instrumentos.get(adapterPosition);
+            itemView.setOnClickListener(v -> {
+                int adapterPosition = getAdapterPosition();
+                Instrumento instrumento = instrumentos.get(adapterPosition);
 
-                    if (!itemStateArray.get(adapterPosition, false)) {
-                        checkInstrumento.setChecked(true);
-                        itemStateArray.put(adapterPosition, true);
-                        instrumentosUsuario.add(instrumento);
-                    }
-                    else {
-                        checkInstrumento.setChecked(false);
-                        itemStateArray.put(adapterPosition, false);
-                        instrumentosUsuario.remove(instrumento);
-                    }
+                if (!itemStateArray.get(adapterPosition, false)) {
+                    checkInstrumento.setChecked(true);
+                    itemStateArray.put(adapterPosition, true);
+                    instrumentosUsuario.add(instrumento);
+                }
+                else {
+                    checkInstrumento.setChecked(false);
+                    itemStateArray.put(adapterPosition, false);
+                    instrumentosUsuario.remove(instrumento);
                 }
             });
         }
@@ -115,9 +112,18 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
             Instrumento instrumento = instrumentos.get(position);
 
             checkInstrumento.setText(instrumento.getNome());
+
             cb_nivelHabilidade.setAdapter(
                     new ArrayAdapter<>(context, R.layout.simple_custom_list, NivelHabilidade.values()));
+
             cb_nivelHabilidade.setSelection(instrumento.getNivelHabilidade().getCodigo() -1);
+
+            for (Instrumento inst : instrumentosUsuario) {
+                if (inst.getNome().equals(instrumento.getNome())) {
+                    checkInstrumento.setChecked(true);
+                    cb_nivelHabilidade.setSelection(inst.getNivelHabilidade().getCodigo() -1);
+                }
+            }
 
             cb_nivelHabilidade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -139,5 +145,12 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
             });
 
         }
+    }
+
+    public AdapterInstrumentos setInstrumentosUsuario(List<Instrumento> instrumentosUsuario) {
+        Set<Instrumento> instrumentosSet = new HashSet<>();
+        instrumentosSet.addAll(instrumentosUsuario);
+        this.instrumentosUsuario = instrumentosSet;
+        return this;
     }
 }

@@ -23,7 +23,10 @@ import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Estados;
+import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -41,6 +44,10 @@ import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 public class Perfil_Fragment extends Fragment {
@@ -51,6 +58,9 @@ public class Perfil_Fragment extends Fragment {
     private Usuario usuario;
     private Contratante contratante;
     private Musico musico;
+
+    private Spinner cb_uf_musico;
+    private Spinner cb_uf_contratante;
 
     private TelaPrincipal activity;
 
@@ -95,12 +105,13 @@ public class Perfil_Fragment extends Fragment {
             }
         };
 
-        Spinner cb_uf_contratante = binding.getRoot().findViewById(R.id.cb_uf_contratante);
+        cb_uf_contratante = binding.getRoot().findViewById(R.id.cb_uf_contratante);
         cb_uf_contratante.setAdapter(spinnerAdapter);
         cb_uf_contratante.setOnItemSelectedListener(onItemSelectedListener);
 
-        Spinner cb_uf_musico = binding.getRoot().findViewById(R.id.cb_uf_musico);
+        cb_uf_musico = binding.getRoot().findViewById(R.id.cb_uf_musico);
         cb_uf_musico.setAdapter(spinnerAdapter);
+
         cb_uf_musico.setOnItemSelectedListener(onItemSelectedListener);
 
         RecyclerView rc = binding.getRoot().findViewById(R.id.listaInstrumentos);
@@ -163,11 +174,26 @@ public class Perfil_Fragment extends Fragment {
 
                                 switch (getUsuario().getTipoUsuario()){
                                     case CONTRATANTE:
+                                        Contratante contratante = new Contratante(usuario);
+                                        contratante.setInauguracao(new Date());
+                                        contratante.setCidade("Diadema");
                                         binding.setContratante(new Contratante(usuario));
+                                        binding.getViewModel().setInauguracao(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(contratante.getInauguracao()));
+                                        binding.getViewModel().setInauguracaoDate(musico.getNascimento());
                                         break;
                                     case MUSICO:
-                                        binding.setMusico(new Musico(usuario));
-                                        binding.getViewModel().updateList();
+                                        Musico musico = new Musico(usuario);
+                                        musico.setNascimento(new Date());
+                                        musico.setCidade("Diadema");
+                                        musico.setUf(
+                                                Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
+                                        );
+                                        musico.setInstrumentos(Arrays.asList(new Instrumento("Violão", NivelHabilidade.AVANCADO)));
+                                        cb_uf_musico.setSelection(Estados.fromSigla(musico.getUf()).getIndex());
+                                        binding.setMusico(musico);
+                                        binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));
+                                        binding.getViewModel().setNascimentoDate(musico.getNascimento());
+                                        binding.getViewModel().updateList(musico.getInstrumentos());
                                         break;
                                 }
 
