@@ -212,7 +212,9 @@ public class PerfilViewModel {
     private boolean validarCampos_Musico(Musico musico){
         AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
         List<Instrumento> instrumentos = new ArrayList<>();
-        instrumentos.addAll(adapter.getInstrumentos());
+
+        if(adapter != null)
+            instrumentos.addAll(adapter.getInstrumentos());
 
         if( musico.getNomeCompleto() == null || this.nascimento.get() == null || musico.getCidade() == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show();
@@ -232,7 +234,7 @@ public class PerfilViewModel {
         else if( musico.getCidade().trim().isEmpty()){
             Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        else if ( instrumentos.isEmpty()) {
+        else if ( instrumentos.isEmpty() && adapter != null ) {
             Toast.makeText(view.getApplicationContext(), "Selecione ao menos um instrumento!", Toast.LENGTH_SHORT).show();
         }
         else {
