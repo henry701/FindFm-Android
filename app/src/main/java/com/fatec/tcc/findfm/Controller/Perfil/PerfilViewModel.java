@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -315,7 +316,6 @@ public class PerfilViewModel {
     }
 
     public void updateList(List<Instrumento> instrumentosUsuario) {
-        //TODO: validar se der ruim
         HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
                 (       view,
                         Request.Method.GET,
@@ -351,6 +351,16 @@ public class PerfilViewModel {
                         {
                             dialog.hide();
                             error.printStackTrace();
+
+                            TextView lb_selecione_titulo = view.findViewById(R.id.lb_selecione_titulo);
+                            TextView lb_instrumento = view.findViewById(R.id.lb_instrumento);
+                            TextView lb_habilidade = view.findViewById(R.id.lb_habilidade);
+
+                            lb_selecione_titulo.setVisibility(View.GONE);
+                            lb_instrumento.setVisibility(View.GONE);
+                            lb_habilidade.setVisibility(View.GONE);
+                            rc.setVisibility(View.GONE);
+
                             AlertDialogUtils.newSimpleDialog__OneButton(view,
                                     "Ops!", R.drawable.ic_error,
                                     "Ocorreu um erro ao tentar conectar com nossos servidores." +

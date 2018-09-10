@@ -244,7 +244,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="btnRegistrar_Click"
-                    android:text="@string/registrar"
+                    android:text="@string/continuar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"

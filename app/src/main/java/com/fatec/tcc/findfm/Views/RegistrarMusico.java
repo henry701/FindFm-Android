@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
@@ -91,9 +92,6 @@ public class RegistrarMusico extends AppCompatActivity {
 
     private void updateList() {
         RecyclerView rc = findViewById(R.id.listaInstrumentos);
-
-        //TODO: validar se der ruim
-        //TODO: colocar dialog enquanto carrega a tela toda
         HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
                 (       this,
                         Request.Method.GET,
@@ -129,6 +127,10 @@ public class RegistrarMusico extends AppCompatActivity {
                         {
                             dialog.hide();
                             error.printStackTrace();
+                            TextView lb_selecione_titulo = findViewById(R.id.lb_selecione_titulo);
+                            lb_selecione_titulo.setVisibility(View.GONE);
+                            rc.setVisibility(View.GONE);
+
                             AlertDialogUtils.newSimpleDialog__OneButton(this,
                                     "Ops!", R.drawable.ic_error,
                                     "Ocorreu um erro ao tentar conectar com nossos servidores." +

@@ -4,8 +4,18 @@
     <string name="base_url">http://192.168.43.253:8080</string>
     <string name="radio_url">http://192.168.43.253:8081</string>
     -->
+
+    <!--
     <string name="base_url">http://192.168.3.100:8080</string>
     <string name="radio_url">http://192.168.3.100:8081</string>
+    -->
+
+    <string name="base_url">http://172.23.172.142:8080</string>
+    <string name="radio_url">http://172.23.172.142:8081</string>
+    <!--
+        <string name="base_url">http://10.0.2.2:8080</string>
+        <string name="radio_url">http://10.0.2.2:8081</string>
+       -->
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->
@@ -185,4 +195,5 @@
     <string name="radio_pausar">Pausar Rádio</string>
     <string name="instrucao_recuperar_senha">Insira seu e-mail e iremos entrar em contato com você</string>
     <string name="enviar">Enviar</string>
+    <string name="continuar">Continuar</string>
 </resources>

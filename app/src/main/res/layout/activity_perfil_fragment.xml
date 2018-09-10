@@ -339,7 +339,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/lb_selecione_titulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"

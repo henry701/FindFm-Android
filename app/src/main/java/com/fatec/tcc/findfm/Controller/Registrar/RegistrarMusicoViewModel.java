@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -23,7 +22,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
-import com.fatec.tcc.findfm.Utils.Formatadores;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
@@ -123,7 +122,9 @@ public class RegistrarMusicoViewModel {
     public void registrar(){
         AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
         List<Instrumento> instrumentos = new ArrayList<>();
-        instrumentos.addAll(adapter.getInstrumentos());
+
+        if(adapter != null)
+            instrumentos.addAll(adapter.getInstrumentos());
 
         if(this.nomeCompleto.get() == null || this.nascimento.get() == null || this.cidade.get() == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show();
@@ -137,13 +138,10 @@ public class RegistrarMusicoViewModel {
         else if ( nascimentoDate.after(new Date())) {
             Toast.makeText(view.getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
         }
-        else if ( Formatadores.converterData(nascimentoDate).get(Calendar.YEAR) + 18 > Calendar.getInstance().get(Calendar.YEAR)) {
-            Toast.makeText(view.getApplicationContext(), "O usuário não pode ser menor de 18 anos!", Toast.LENGTH_SHORT).show();
-        }
         else if(this.cidade.get().trim().isEmpty()){
             Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        else if ( instrumentos.isEmpty()) {
+        else if ( instrumentos.isEmpty() && adapter != null ) {
             Toast.makeText(view.getApplicationContext(), "Selecione ao menos um instrumento!", Toast.LENGTH_SHORT).show();
         }
         else {
