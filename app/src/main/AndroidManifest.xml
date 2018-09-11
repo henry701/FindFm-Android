@@ -49,7 +49,11 @@
             android:label="@string/title_activity_perfil_fragment"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Views.RecuperarSenha"></activity>
+        <activity android:name=".Views.RecuperarSenha" />
+        <activity
+            android:name=".Views.CriarPost"
+            android:label="@string/title_activity_criar_post"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

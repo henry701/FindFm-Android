@@ -13,9 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Model.Business.Anuncio;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityMeusAnunciosFragmentBinding;
 
@@ -25,7 +27,7 @@ import java.util.List;
 public class MeusAnuncios_Fragment extends Fragment {
 
     private ProgressDialog dialog;
-    private AppCompatActivity activity;
+    private TelaPrincipal activity;
     private View view;
 
 
@@ -33,7 +35,7 @@ public class MeusAnuncios_Fragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public MeusAnuncios_Fragment(AppCompatActivity activity){
+    public MeusAnuncios_Fragment(TelaPrincipal activity){
         this.activity = activity;
     }
 
@@ -44,7 +46,7 @@ public class MeusAnuncios_Fragment extends Fragment {
 
         ActivityMeusAnunciosFragmentBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.activity_meus_anuncios_fragment, container, false);
-
+        binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
         binding.listaAnuncios.setLayoutManager(new LinearLayoutManager(activity));
         binding.listaAnuncios.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
@@ -74,6 +76,8 @@ public class MeusAnuncios_Fragment extends Fragment {
         );
     }
 
-
+    public void addButton(View view){
+        Util.open_form(activity, CriarPost.class);
+    }
 
 }

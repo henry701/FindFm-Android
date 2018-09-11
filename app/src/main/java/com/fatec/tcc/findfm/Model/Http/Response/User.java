@@ -1,5 +1,12 @@
 package com.fatec.tcc.findfm.Model.Http.Response;
 
+import com.fatec.tcc.findfm.Model.Business.Instrumento;
+import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
+import com.google.gson.internal.LinkedTreeMap;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 public class User {
 
     private String kind;
@@ -8,6 +15,31 @@ public class User {
     private Avatar avatar;
     private Telefone telefone;
     private Endereco endereco;
+    private Date date;
+    private LinkedTreeMap<String, Double> habilidades;
+
+    public ArrayList<Instrumento> getIntrumentos() {
+        ArrayList<Instrumento> instrumentos = new ArrayList<>();
+
+        for(String key : habilidades.keySet()){
+            instrumentos.add(
+                    new Instrumento(key.toUpperCase().charAt(0)+ key.substring(1,key.length()),
+                            NivelHabilidade.from( habilidades.get(key).intValue() )));
+        }
+        return instrumentos;
+    }
+
+    public void setHabilidades(LinkedTreeMap<String, Double> habilidades) {
+        this.habilidades = habilidades;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public String getKind() {
         return kind;

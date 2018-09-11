@@ -24,9 +24,7 @@ import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
-import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
-import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -45,7 +43,6 @@ import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -183,12 +180,12 @@ public class Perfil_Fragment extends Fragment {
                                         break;
                                     case MUSICO:
                                         Musico musico = new Musico(usuario);
-                                        musico.setNascimento(new Date());
-                                        musico.setCidade("Diadema");
+                                        musico.setNascimento(user.getDate());
+                                        musico.setCidade(user.getEndereco().getCidade());
                                         musico.setUf(
                                                 Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
                                         );
-                                        musico.setInstrumentos(Arrays.asList(new Instrumento("Violão", NivelHabilidade.AVANCADO)));
+                                        musico.setInstrumentos(user.getIntrumentos());
                                         cb_uf_musico.setSelection(Estados.fromSigla(musico.getUf()).getIndex());
                                         binding.setMusico(musico);
                                         binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));

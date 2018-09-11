@@ -71,7 +71,7 @@ public class TelaPrincipal extends AppCompatActivity
         this.radioController = new RadioController(this);
         this.radioController.addObserver(this);
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
                 .commit();
     }
 
@@ -83,10 +83,11 @@ public class TelaPrincipal extends AppCompatActivity
         } else {
             if(FindFM.getTelaAtual().equals("HOME")) {
                 dialog.dismiss();
-                super.onBackPressed();
+                finishAffinity();
+                System.exit(0);
             } else {
                 fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment())
+                fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
                         .commit();
             }
         }

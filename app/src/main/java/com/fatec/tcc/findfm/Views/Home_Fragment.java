@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Views;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,13 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
 
 public class Home_Fragment extends Fragment {
 
     private ProgressDialog dialog;
     private TelaPrincipal activity;
+    private ActivityHomeFragmentBinding binding;
     private View view;
 
     public Home_Fragment(){}
@@ -29,12 +33,12 @@ public class Home_Fragment extends Fragment {
         this.activity = activity;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_home_fragment, container, false);
-        return view;
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_home_fragment, container, false);
+        binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
+        return binding.getRoot();
     }
 
     @Override

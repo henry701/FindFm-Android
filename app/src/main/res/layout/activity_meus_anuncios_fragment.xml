@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="postViewModel"
+            type="com.fatec.tcc.findfm.Controller.Posts.PostViewModel"/>
+    </data>
     <android.support.design.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
+            android:onClick="@{postViewModel::addButton}"
             android:backgroundTint="@color/colorPrimaryDark"
             app:srcCompat="@drawable/ic_adicionar" />
 
