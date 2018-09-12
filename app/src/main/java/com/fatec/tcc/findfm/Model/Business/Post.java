@@ -1,5 +1,7 @@
 package com.fatec.tcc.findfm.Model.Business;
 
+import java.util.List;
+
 public class Post {
 
     private String titulo;
@@ -8,6 +10,7 @@ public class Post {
     private String[] fotos;
     //TODO: ver se video transforma pra base64
     private String video;
+    private List<Comentario> comentarios;
 
     public Post(){}
 
@@ -53,6 +56,15 @@ public class Post {
 
     public Post setVideo(String video) {
         this.video = video;
+        return this;
+    }
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public Post setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
         return this;
     }
 }

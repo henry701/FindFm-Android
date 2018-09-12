@@ -34,26 +34,60 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <ImageButton
+                    android:id="@+id/info_tipo"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/ic_info"
+                    android:onClick="infoClick"
+                    app:layout_constraintBottom_toBottomOf="@+id/cb_tipo_post"
+                    app:layout_constraintEnd_toEndOf="@+id/txtDesc"
+                    app:layout_constraintStart_toEndOf="@+id/cb_tipo_post"
+                    app:layout_constraintTop_toTopOf="@+id/cb_tipo_post" />
+
                 <TextView
-                    android:id="@+id/lb_instrucao"
+                    android:id="@+id/textView6"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="36dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/as_informacoes"
+                    android:layout_height="22dp"
+                    android:layout_marginBottom="161dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/tipo_de_publicacao"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/cb_tipo_post"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/txtDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+
+                <Spinner
+                    android:id="@+id/cb_tipo_post"
+                    style="@style/Widget.AppCompat.Spinner.Underlined"
+                    android:layout_width="160dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:entries="@array/tipo_post"
+                    android:hint="@string/uf"
+                    android:popupBackground="@color/lilasClaro"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLocal"
+                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="@+id/textView6" />
+
 
                 <EditText
                     android:id="@+id/txtTitulo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="342dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="28dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="21dp"
+                    android:layout_marginStart="21dp"
+                    android:layout_marginTop="16dp"
                     android:backgroundTint="@color/white"
                     android:ems="10"
                     android:hint="@string/titulo"
@@ -61,20 +95,21 @@
                     android:maxLength="60"
                     android:text="@={post.titulo}"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/linearLocal"
-                    app:layout_constraintEnd_toEndOf="@+id/lb_instrucao"
-                    app:layout_constraintStart_toStartOf="@+id/lb_instrucao"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_instrucao" />
+                    app:layout_constraintBottom_toTopOf="@+id/txtDesc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/linearLocal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="29dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="@+id/txtTitulo"
-                    app:layout_constraintStart_toStartOf="@+id/txtTitulo"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo">
+                    app:layout_constraintEnd_toEndOf="@+id/txtDesc"
+                    app:layout_constraintStart_toStartOf="@+id/txtDesc"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDesc">
 
                     <EditText
                         android:id="@+id/txtCidade"
@@ -106,19 +141,20 @@
 
                 <EditText
                     android:id="@+id/txtDesc"
-                    android:layout_width="357dp"
+                    android:layout_width="342dp"
                     android:layout_height="132dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp"
                     android:backgroundTint="@color/white"
                     android:ems="10"
-                    android:hint="@string/descricao"
+                    android:hint="@string/sua_publicacao"
                     android:inputType="textMultiLine"
                     android:maxLength="150"
                     android:text="@={post.descricao}"
                     android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLocal"
-                    app:layout_constraintStart_toStartOf="@+id/linearLocal"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+                    app:layout_constraintBottom_toTopOf="@+id/linearLocal"
+                    app:layout_constraintEnd_toEndOf="@+id/txtTitulo"
+                    app:layout_constraintStart_toStartOf="@+id/txtTitulo"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
                 <Button
                     android:id="@+id/buttonRegistrar"
@@ -126,7 +162,7 @@
                     android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="102dp"
+                    android:layout_marginTop="105dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="btnRegistrar_Click"
                     android:text="@string/registrar"
@@ -135,8 +171,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtDesc" />
-
+                    app:layout_constraintTop_toBottomOf="@+id/cb_tipo_post" />
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>

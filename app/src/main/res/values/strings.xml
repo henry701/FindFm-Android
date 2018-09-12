@@ -10,8 +10,8 @@
     <string name="radio_url">http://192.168.3.100:8081</string>
     -->
     <!--
-    <string name="base_url">http://172.23.172.142:8080</string>
-    <string name="radio_url">http://172.23.172.142:8081</string>
+    <string name="base_url">http://172.23.175.126:8083</string>
+    <string name="radio_url">http://172.23.175.126:8084</string>
      -->
     <string name="base_url">http://10.0.2.2:8083</string>
     <string name="radio_url">http://10.0.2.2:8084</string>
@@ -139,7 +139,7 @@
     <string name="suas_informacoes">Preencha suas informações</string>
     <string name="as_informacoes">Preencha as informações</string>
     <string name="banda_informacoes">Preencha as informações da Banda</string>
-    <string name="telefone_contato">Telefone</string>
+    <string name="telefone_contato">Telefone para contato</string>
     <string name="numero_integrantes">Nº de Integrantes</string>
     <string name="capacidade_local">Capacidade do local</string>
     <string name="data_inauguracao">Data de Inauguração</string>
@@ -151,6 +151,11 @@
     <string name="endereco">Endereço</string>
     <string name="cidade">Cidade</string>
     <string name="uf">UF</string>
+    <string-array name="tipo_post">
+        <item>Nenhum</item>
+        <item>Anúncio</item>
+        <item>Publicação</item>
+    </string-array>
     <string-array name="lista_uf">
         <item>AC</item>
         <item>AL</item>
@@ -198,6 +203,7 @@
     <string name="enviar">Enviar</string>
     <string name="continuar">Continuar</string>
     <string name="title_activity_criar_post">Criar Publicação</string>
-    <string name="titulo">Título</string>
-    <string name="descricao">Descrição</string>
+    <string name="titulo">Adicione um título</string>
+    <string name="sua_publicacao">Escreva sua publicação</string>
+    <string name="tipo_de_publicacao">Tipo de publicação</string>
 </resources>
