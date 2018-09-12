@@ -1,11 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Views.CriarPost"
-    tools:showIn="@layout/activity_criar_post">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="post"
+            type="com.fatec.tcc.findfm.Model.Business.Post" />
+    </data>
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/from_bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".Views.CriarPost"
+        tools:showIn="@layout/activity_criar_post">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbarThumbVertical="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/lb_instrucao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="36dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/as_informacoes"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/txtTitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="28dp"
+                    android:layout_marginTop="36dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:hint="@string/titulo"
+                    android:inputType="textPersonName"
+                    android:maxLength="60"
+                    android:text="@={post.titulo}"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLocal"
+                    app:layout_constraintEnd_toEndOf="@+id/lb_instrucao"
+                    app:layout_constraintStart_toStartOf="@+id/lb_instrucao"
+                    app:layout_constraintTop_toBottomOf="@+id/lb_instrucao" />
+
+                <LinearLayout
+                    android:id="@+id/linearLocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="29dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@+id/txtTitulo"
+                    app:layout_constraintStart_toStartOf="@+id/txtTitulo"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo">
+
+                    <EditText
+                        android:id="@+id/txtCidade"
+                        android:layout_width="172dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:hint="@string/cidade"
+                        android:inputType="text"
+                        android:maxLength="50"
+                        android:text="@={post.cidade}"
+                        android:textColor="@color/white" />
+
+                    <Spinner
+                        android:id="@+id/cb_uf"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_width="109dp"
+                        android:layout_height="54dp"
+                        android:backgroundTint="@color/white"
+                        android:drawableLeft="@drawable/ic_local"
+                        android:ems="10"
+                        android:entries="@array/lista_uf"
+                        android:hint="@string/uf"
+                        android:popupBackground="@color/lilasClaro"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/txtDesc"
+                    android:layout_width="357dp"
+                    android:layout_height="132dp"
+                    android:layout_marginTop="24dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:hint="@string/descricao"
+                    android:inputType="textMultiLine"
+                    android:maxLength="150"
+                    android:text="@={post.descricao}"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@+id/linearLocal"
+                    app:layout_constraintStart_toStartOf="@+id/linearLocal"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
+
+                <Button
+                    android:id="@+id/buttonRegistrar"
+                    android:layout_width="88dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="102dp"
+                    android:background="@drawable/btn_bg"
+                    android:onClick="btnRegistrar_Click"
+                    android:text="@string/registrar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDesc" />
+
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

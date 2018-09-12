@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="anuncio"
-            type="com.fatec.tcc.findfm.Model.Business.Anuncio"/>
+            name="post"
+            type="com.fatec.tcc.findfm.Model.Business.Post"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
-                    android:text="@={anuncio.titulo}"
+                    android:text="@={post.titulo}"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Maior nome de cidade que vc vera na vida meu amigo"
-                    android:text="@={anuncio.cidade}"
+                    android:text="@={post.cidade}"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="italic"
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
-                    android:text="@={anuncio.descricao}"
+                    android:text="@={post.descricao}"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     tools:layout_editor_absoluteX="7dp"

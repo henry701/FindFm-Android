@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
-import com.fatec.tcc.findfm.Model.Business.Anuncio;
+import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -42,7 +41,7 @@ public class MeusAnuncios_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        List<Anuncio> anuncios = getAnuncios();
+        List<Post> posts = getAnuncios();
 
         ActivityMeusAnunciosFragmentBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.activity_meus_anuncios_fragment, container, false);
@@ -51,7 +50,7 @@ public class MeusAnuncios_Fragment extends Fragment {
         binding.listaAnuncios.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
-        binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(anuncios, activity));
+        binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(posts, activity));
 
         return binding.getRoot();
     }
@@ -62,17 +61,24 @@ public class MeusAnuncios_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    private List<Anuncio> getAnuncios(){
+    private List<Post> getAnuncios(){
         return Arrays.asList(
-                new Anuncio("Ser humano procura banda de pagode para tocar heavy metal",
-                        "Cansei de tocar pagode, quero metal, é nois", "São Paulo"),
-                new Anuncio("Procuro bandas para tocarem no meu quiosque na praia",
-                        "Toque aqui cara, pago bem", "São Vicente"),
-                new Anuncio("Procuro guitarrista que toque bateria com os pés",
-                        "Tocamos heavy metal japones em lingua árabe", "São Longe de muito longe"),
-                new Anuncio("Maior Titulo dos titulos muito grande meu Deus que titulo!!!",
-                        "Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler",
-                        "Maior nome de cidade que vc vera na vida meu amigo")
+                new Post()
+                        .setTitulo("Ser humano procura banda de pagode para tocar heavy metal")
+                        .setCidade("São Paulo")
+                        .setDescricao("Cansei de tocar pagode, quero metal, é nois"),
+                new Post()
+                        .setTitulo("Procuro bandas para tocarem no meu quiosque na praia")
+                        .setCidade("São Vicente")
+                        .setDescricao("Toque aqui cara, pago bem"),
+                new Post()
+                        .setTitulo("Procuro guitarrista que toque bateria com os pés")
+                        .setCidade("São Longe de muito longe")
+                        .setDescricao("Tocamos heavy metal japones em lingua árabe"),
+                new Post()
+                        .setTitulo("Maior Titulo dos titulos muito grande meu Deus que titulo!!!")
+                        .setCidade("Maior nome de cidade que vc vera na vida meu amigo")
+                        .setDescricao("Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler")
         );
     }
 

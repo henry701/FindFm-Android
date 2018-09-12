@@ -137,6 +137,7 @@
     <string name="usuario_ou_senha_incorretos">Usuário e/ou Senha incorretos</string>
     <string name="escolha_instrumento">Selecione seus instrumentos e nível de habilidade:</string>
     <string name="suas_informacoes">Preencha suas informações</string>
+    <string name="as_informacoes">Preencha as informações</string>
     <string name="banda_informacoes">Preencha as informações da Banda</string>
     <string name="telefone_contato">Telefone</string>
     <string name="numero_integrantes">Nº de Integrantes</string>
@@ -197,4 +198,6 @@
     <string name="enviar">Enviar</string>
     <string name="continuar">Continuar</string>
     <string name="title_activity_criar_post">Criar Publicação</string>
+    <string name="titulo">Título</string>
+    <string name="descricao">Descrição</string>
 </resources>

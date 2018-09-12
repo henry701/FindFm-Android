@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.fatec.tcc.findfm.Model.Business.Anuncio;
+import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.databinding.ViewMeusAnunciosBinding;
 
@@ -15,19 +15,19 @@ import java.util.List;
 
 public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncios.ViewHolder> {
 
-    private List<Anuncio> anuncios = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
     private Context context;
 
     public AdapterMeusAnuncios() {
     }
 
-    public AdapterMeusAnuncios(List<Anuncio> anuncios, Context context){
-        this.anuncios = anuncios;
+    public AdapterMeusAnuncios(List<Post> posts, Context context){
+        this.posts = posts;
         this.context = context;
     }
 
-    public List<Anuncio> getAnuncios(){
-        return new ArrayList<>(this.anuncios);
+    public List<Post> getPosts(){
+        return new ArrayList<>(this.posts);
     }
 
     @Override
@@ -43,20 +43,20 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
 
     @Override
     public void onBindViewHolder(AdapterMeusAnuncios.ViewHolder holder, int position) {
-        Anuncio anuncio = anuncios.get(position);
-        holder.bindingVH.setAnuncio(anuncio);
+        Post post = posts.get(position);
+        holder.bindingVH.setPost(post);
     }
 
     @Override
     public int getItemCount() {
-        if (anuncios == null) {
+        if (posts == null) {
             return 0;
         }
-        return anuncios.size();
+        return posts.size();
     }
 
-    public void setAnuncios(List<Anuncio> anuncios, Context context){
-        this.anuncios = anuncios;
+    public void setAnuncios(List<Post> posts, Context context){
+        this.posts = posts;
         this.context = context;
         notifyDataSetChanged();
     }
