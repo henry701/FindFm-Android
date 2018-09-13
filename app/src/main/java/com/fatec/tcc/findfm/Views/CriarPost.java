@@ -32,7 +32,7 @@ public class CriarPost extends AppCompatActivity {
                 .setAction("Action", null).show());
 
         ImageButton info = findViewById(R.id.info_tipo);
-        info.setOnClickListener(view -> Toast.makeText(this, "Selecione tipo de publicação: Anúncio de trabalho ou Publicação comum", Toast.LENGTH_SHORT ).show());
+        info.setOnClickListener(view -> Toast.makeText(this, "Selecione uma opção: Anúncios tem maior visibilidade, escreva-os bem. Publicações são sobre suas novidades", Toast.LENGTH_SHORT ).show());
 
         Spinner cb_uf = findViewById(R.id.cb_uf);
         cb_uf.setAdapter( new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
