@@ -57,7 +57,7 @@ public class RecuperarSenha extends AppCompatActivity {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                //TODO: sei la oq fazer
+                                // TODO: Mostra uma text falando pro cara olhar o email
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -79,7 +79,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        recuperarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"forgetpwd"));
+        recuperarRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"passwordRecovery"));
     }
 
     public void buttonEnviar_Click(View view){
