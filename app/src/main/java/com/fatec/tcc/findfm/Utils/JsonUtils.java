@@ -29,7 +29,7 @@ public class JsonUtils {
     public static final Gson GSON =  new GsonBuilder()
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeDeserializer())
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeSerializer())
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:s").create();
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
     /**
      * Transforma um Object em JSONObject

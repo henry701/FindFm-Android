@@ -9,10 +9,10 @@
     <string name="base_url">http://192.168.3.100:8080</string>
     <string name="radio_url">http://192.168.3.100:8081</string>
     -->
+
+    <string name="base_url">http://172.23.191.146:8080</string>
+    <string name="radio_url">http://172.23.191.146:8081</string>
     <!--
-    <string name="base_url">http://172.23.175.126:8083</string>
-    <string name="radio_url">http://172.23.175.126:8084</string>
-    -->
     <string name="base_url">http://10.0.2.2:8080</string>
     <string name="radio_url">http://10.0.2.2:8081</string>
     -->

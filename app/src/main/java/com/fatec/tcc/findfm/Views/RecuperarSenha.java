@@ -76,6 +76,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                 lb_instrucao.setText(R.string.instrucao_recuperar_senha_codigo);
                                 email.setVisibility(View.INVISIBLE);
                                 codigo.setVisibility(View.VISIBLE);
+                                primeiraRequest = false;
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -149,12 +150,7 @@ public class RecuperarSenha extends AppCompatActivity {
 
             this.dialog.show();
             requestRenovar1.setRequestObject(new RecuperarSenhaRequest().setEmail(email.getText().toString()));
-            //requestRenovar1.execute(this);
-            primeiraRequest = false;
-            this.dialog.hide();
-            lb_instrucao.setText(R.string.instrucao_recuperar_senha_codigo);
-            email.setVisibility(View.INVISIBLE);
-            codigo.setVisibility(View.VISIBLE);
+            requestRenovar1.execute(this);
         }
         else {
             if (codigo == null || codigo.getText().toString().isEmpty() ) {
@@ -164,15 +160,7 @@ public class RecuperarSenha extends AppCompatActivity {
             this.dialog.show();
             requestRenovar2.setRequestObject(null);
             requestRenovar2.setFullUrl(HttpUtils.buildUrl(getResources(),codigo.getText().toString()));
-            //requestRenovar2.execute(this);
-            this.dialog.hide();
-            lb_instrucao.setText(R.string.nova_senha);
-            codigo.setVisibility(View.INVISIBLE);
-            EditText novaSenha = findViewById(R.id.txtNovaSenha);
-            novaSenha.setVisibility(View.VISIBLE);
-            //TODO: um jeito que de pra copiar e nao editar o texto
-            novaSenha.setEnabled(false);
-            novaSenha.setText("Nova senha");
+            requestRenovar2.execute(this);
         }
     }
 
