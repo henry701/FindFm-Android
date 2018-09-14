@@ -58,6 +58,8 @@ public class RecuperarSenha extends AppCompatActivity {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 // TODO: Mostra uma text falando pro cara olhar o email
+                                // TODO: Mostra popup pedindo pro cara botar o código, e ai faz uma request GET q nem ta la no server
+                                // TODO: Mostra a senha nova pro cara (ou melhor ainda, mostra a senha e logga o cara automático tbm)
                             }
                         },
                         (ErrorResponse errorResponse) ->
