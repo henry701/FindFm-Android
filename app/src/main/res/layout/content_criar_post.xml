@@ -34,51 +34,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/info_tipo"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/ic_info"
-                    android:onClick="infoClick"
-                    app:layout_constraintBottom_toBottomOf="@+id/cb_tipo_post"
-                    app:layout_constraintEnd_toEndOf="@+id/txtDesc"
-                    app:layout_constraintStart_toEndOf="@+id/cb_tipo_post"
-                    app:layout_constraintTop_toTopOf="@+id/cb_tipo_post" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="22dp"
-                    android:layout_marginBottom="161dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/tipo_de_publicacao"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/cb_tipo_post"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/txtDesc"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
-
-                <Spinner
-                    android:id="@+id/cb_tipo_post"
-                    style="@style/Widget.AppCompat.Spinner.Underlined"
-                    android:layout_width="160dp"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/white"
-                    android:ems="10"
-                    android:entries="@array/tipo_post"
-                    android:hint="@string/uf"
-                    android:popupBackground="@color/lilasClaro"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    app:layout_constraintEnd_toEndOf="@+id/linearLocal"
-                    app:layout_constraintStart_toEndOf="@+id/textView6"
-                    app:layout_constraintTop_toTopOf="@+id/textView6" />
-
 
                 <EditText
                     android:id="@+id/txtTitulo"
@@ -162,7 +117,7 @@
                     android:layout_height="32dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="105dp"
+                    android:layout_marginTop="215dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="btnRegistrar_Click"
                     android:text="@string/registrar"
@@ -171,7 +126,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cb_tipo_post" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLocal" />
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
