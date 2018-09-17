@@ -1,18 +1,46 @@
 package com.fatec.tcc.findfm.Views;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.NoConnectionError;
+import com.android.volley.TimeoutError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
+import com.fatec.tcc.findfm.Infrastructure.Request.VolleyMultipartRequest;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpMethod;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.ImagemUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class CriarPost extends AppCompatActivity {
+
+    private static final int PICK_IMAGE = 1;
+    private ImageView fotoPublicacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +51,21 @@ public class CriarPost extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        fotoPublicacao = findViewById(R.id.fotoPublicacao);
+        fotoPublicacao.setVisibility(View.GONE);
+
+        //Somente contratante pode colocar titulo para o anuncio
+        EditText txtTitulo = findViewById(R.id.txtTitulo);
+        if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
+            txtTitulo.setVisibility(View.GONE);
+        }
+
         FloatingActionButton fab = findViewById(R.id.fab_foto);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Selecionar foto", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
 
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> Snackbar.make(view, "Selecionar video", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
-
-        Spinner cb_uf = findViewById(R.id.cb_uf);
-        cb_uf.setAdapter( new ArrayAdapter<>(this, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf)));
 
     }
 
@@ -46,5 +79,118 @@ public class CriarPost extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_post, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_salvar:
+                //TODO: salvar post
+                Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
+                //uploadFiles();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            try {
+                this.fotoPublicacao.setImageBitmap(BitmapFactory.decodeStream(getApplicationContext()
+                        .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
+                this.fotoPublicacao.setVisibility(View.VISIBLE);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private void uploadFiles() {
+        // loading or check internet connection or something...
+        // ... then upload
+        String url = HttpUtils.buildUrl(getResources(),"upload");
+        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(HttpMethod.PUT.getCodigo(), url, response -> {
+            String resultResponse = new String(response.data);
+            try {
+                JSONObject result = new JSONObject(resultResponse);
+                String status = result.getString("status");
+                String message = result.getString("message");
+
+                if (status.equals(ResponseCode.GenericSuccess)) {
+                    // tell everybody you have succed upload image and post strings
+                    Log.i("Messsage", message);
+                } else {
+                    Log.i("Unexpected", message);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }, error -> {
+            NetworkResponse networkResponse = error.networkResponse;
+            String errorMessage = "Unknown error";
+            if (networkResponse == null) {
+                if (error.getClass().equals(TimeoutError.class)) {
+                    errorMessage = "Request timeout";
+                } else if (error.getClass().equals(NoConnectionError.class)) {
+                    errorMessage = "Failed to connect server";
+                }
+            } else {
+                String result = new String(networkResponse.data);
+                try {
+                    JSONObject response = new JSONObject(result);
+                    String status = response.getString("status");
+                    String message = response.getString("message");
+
+                    Log.e("Error Status", status);
+                    Log.e("Error Message", message);
+
+                    if (networkResponse.statusCode == 404) {
+                        errorMessage = "Resource not found";
+                    } else if (networkResponse.statusCode == 401) {
+                        errorMessage = message+" Please login again";
+                    } else if (networkResponse.statusCode == 400) {
+                        errorMessage = message+ " Check your inputs";
+                    } else if (networkResponse.statusCode == 500) {
+                        errorMessage = message+" Something is getting wrong";
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.i("Error", errorMessage);
+            error.printStackTrace();
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("api_token", "gh659gjhvdyudo973823tt9gvjf7i6ric75r76");
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params.put("cover", new DataPart("file_cover.jpg", ImagemUtils.getFileDataFromDrawable(getBaseContext(), fotoPublicacao.getDrawable()), "image/jpeg"));
+
+                return params;
+            }
+        };
+
+        SharedRequestQueue.addToRequestQueue(this, multipartRequest);
+    }
+
 
 }

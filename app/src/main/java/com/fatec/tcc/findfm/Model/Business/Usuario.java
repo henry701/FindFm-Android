@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Model.Business;
 
 public class Usuario {
 
-    private String nomeUsuario;
     private String nomeCompleto;
     private boolean confirmado;
     private boolean premium;
@@ -16,17 +15,16 @@ public class Usuario {
 
     /**
      * Para logar
-     * @param nomeUsuario
+     * @param nomeCompleto
      * @param senha
      */
-    public Usuario(String nomeUsuario, String senha){
-        this.setNomeUsuario(nomeUsuario);
+    public Usuario(String nomeCompleto, String senha){
+        this.setNomeCompleto(nomeCompleto);
         this.senha = senha;
     }
 
     /**
      * Completo
-     * @param nomeUsuario
      * @param nomeCompleto
      * @param senha
      * @param email
@@ -35,8 +33,7 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeUsuario, String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
-        this.setNomeUsuario(nomeUsuario);
+    public Usuario(String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
         this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.email = email;
@@ -46,14 +43,6 @@ public class Usuario {
         this.premium = premium;
         this.tipoUsuario = tipoUsuario;
 
-    }
-
-    public String getUsuario() {
-        return getNomeUsuario();
-    }
-
-    public void setUsuario(String nomeUsuario) {
-        this.setNomeUsuario(nomeUsuario);
     }
 
     public String getNomeCompleto() {
@@ -120,11 +109,4 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
-
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
 }

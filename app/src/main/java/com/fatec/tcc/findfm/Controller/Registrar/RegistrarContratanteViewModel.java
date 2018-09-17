@@ -162,7 +162,6 @@ public class RegistrarContratanteViewModel {
             int capacidade = Integer.parseInt(this.capacidade.get());
 
             Contratante contratante = new Contratante(
-                    param.getString("nomeUsuario"),
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),

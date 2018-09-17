@@ -176,7 +176,7 @@ public class Perfil_Fragment extends Fragment {
                                         contratante.setCidade("Diadema");
                                         binding.setContratante(new Contratante(usuario));
                                         binding.getViewModel().setInauguracao(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(contratante.getInauguracao()));
-                                        binding.getViewModel().setInauguracaoDate(musico.getNascimento());
+                                        binding.getViewModel().setInauguracaoDate(contratante.getInauguracao());
                                         break;
                                     case MUSICO:
                                         Musico musico = new Musico(usuario);

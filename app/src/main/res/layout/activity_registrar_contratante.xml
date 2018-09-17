@@ -198,7 +198,7 @@
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_local"
                     android:ems="10"
-                    android:hint="@string/endereco"
+                    android:hint="@string/logradouro"
                     android:inputType="text"
                     android:maxLength="70"
                     android:textColor="@color/white"

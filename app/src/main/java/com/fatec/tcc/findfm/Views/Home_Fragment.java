@@ -46,6 +46,7 @@ public class Home_Fragment extends Fragment {
         FindFM.setTelaAtual("HOME");
         super.onActivityCreated(savedInstanceState);
         setFoto();
+        //TODO: account/me
         if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
             lb_nomeUsuario.setText(FindFM.getNomeUsuario(getActivity()));

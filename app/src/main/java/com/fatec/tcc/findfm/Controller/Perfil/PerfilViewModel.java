@@ -98,7 +98,6 @@ public class PerfilViewModel {
         else {
             contratante.setTelefone(this.tratarTelefone(contratante.getTelefone()));
 
-            this.param.putString("nomeUsuario", contratante.getUsuario());
             this.param.putString("telefone",    contratante.getTelefone());
             this.param.putString("email",       contratante.getEmail());
             this.param.putString("senha",       contratante.getSenha());
@@ -113,7 +112,6 @@ public class PerfilViewModel {
         else {
             musico.setTelefone(this.tratarTelefone(musico.getTelefone()));
 
-            this.param.putString("nomeUsuario", musico.getUsuario());
             this.param.putString("telefone",    musico.getTelefone());
             this.param.putString("email",       musico.getEmail());
             this.param.putString("senha",       musico.getSenha());
@@ -153,12 +151,9 @@ public class PerfilViewModel {
         if(usuario == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
-        else if (usuario.getUsuario() == null || usuario.getEmail() == null || usuario.getSenha() == null ||
+        else if ( usuario.getEmail() == null || usuario.getSenha() == null ||
                 this.confirmaSenha.get() == null || usuario.getTelefone() == null || this.UF == null){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }
-        else if(usuario.getUsuario().trim().isEmpty()){
-            Toast.makeText(view.getApplicationContext(), "Seu nome de usuário não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
         else if(!Formatadores.validarTelefone(usuario.getTelefone())){
             Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();

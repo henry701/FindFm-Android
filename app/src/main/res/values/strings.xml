@@ -8,19 +8,20 @@
     <!--
     <string name="base_url">http://192.168.3.100:8080</string>
     <string name="radio_url">http://192.168.3.100:8081</string>
-    -->
+
 
     <string name="base_url">http://172.23.191.146:8080</string>
     <string name="radio_url">http://172.23.191.146:8081</string>
-    <!--
-    <string name="base_url">http://10.0.2.2:8080</string>
-    <string name="radio_url">http://10.0.2.2:8081</string>
+    -->
+
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
     -->
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->
     <string name="title_activity_registrar">FindFM - Registrar</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configurações</string>
     <string name="registro">Não possui cadastro? <b><u>Registre-se aqui</u>!</b></string>
     <string name="perderSenha">Esqueceu sua senha? <b><u>Recupere aqui</u>!</b></string>
     <string name="escolha_sua_foto">Escolha sua foto:</string>
@@ -60,6 +61,7 @@
     <string name="nome_do_estabelecimento">Nome do Estabelecimento</string>
     <string name="estabelecimento_informacoes">Preencha as informações do Estabelecimento</string>
     <string name="endereco">Endereço</string>
+    <string name="logradouro">Logradouro</string>
     <string name="cidade">Cidade</string>
     <string name="uf">UF</string>
     <string-array name="lista_uf">
@@ -110,6 +112,7 @@
     <string name="continuar">Continuar</string>
     <string name="title_activity_criar_post">Criar Publicação</string>
     <string name="titulo">Adicione um título</string>
+    <string name="publicar">Publicar</string>
     <string name="sua_publicacao">Escreva sua publicação</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>

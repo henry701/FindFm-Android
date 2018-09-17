@@ -27,7 +27,6 @@ import java.util.Objects;
 
 public class RegistrarViewModel {
 
-    public ObservableField<String> nomeUsuario = new ObservableField<>();
     public ObservableField<String> telefone = new ObservableField<>();
     public ObservableField<String> email = new ObservableField<>();
     public ObservableField<String> senha = new ObservableField<>();
@@ -75,11 +74,8 @@ public class RegistrarViewModel {
         if( tipoContaGrupo.getCheckedRadioButtonId() != -1 ) {
             selectedId = tipoContaGrupo.getCheckedRadioButtonId();
         }
-        if (this.nomeUsuario.get() == null || this.email.get() == null || this.senha.get() == null || this.confirmaSenha.get() == null){
+        if ( this.email.get() == null || this.senha.get() == null || this.confirmaSenha.get() == null){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }
-        else if(this.nomeUsuario.get().trim().isEmpty()){
-            Toast.makeText(view.getApplicationContext(), "Seu nome de usuário não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
         else if(!isTelefonevalido){
             Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
@@ -104,7 +100,6 @@ public class RegistrarViewModel {
             this.telefone.set(this.tratarTelefone());
             tipoConta = view.findViewById(selectedId);
 
-            this.param.putString("nomeUsuario", this.nomeUsuario.get());
             this.param.putString("telefone",    this.telefone.get());
             this.param.putString("email",       this.email.get());
             this.param.putString("senha",       this.senha.get());

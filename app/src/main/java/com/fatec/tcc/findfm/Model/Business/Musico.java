@@ -13,8 +13,7 @@ public class Musico extends Usuario {
     public Musico(){}
 
     public Musico(Usuario usuario){
-        super(  usuario.getNomeUsuario(),
-                usuario.getNomeCompleto(),
+        super(  usuario.getNomeCompleto(),
                 usuario.getSenha(),
                 usuario.getEmail(),
                 usuario.getTelefone(),
@@ -24,9 +23,9 @@ public class Musico extends Usuario {
                 TiposUsuario.MUSICO);
     }
 
-    public Musico(String nomeUsuario, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
+    public Musico(String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
                   String nomeCompleto, Date nascimento, List<Instrumento> instrumentos, String cidade, String uf) {
-        super(nomeUsuario,nomeCompleto, senha, email, telefone, foto, confirmado, premium, TiposUsuario.MUSICO);
+        super(nomeCompleto, senha, email, telefone, foto, confirmado, premium, TiposUsuario.MUSICO);
         this.nascimento = nascimento;
         this.instrumentos = instrumentos;
         this.cidade = cidade;

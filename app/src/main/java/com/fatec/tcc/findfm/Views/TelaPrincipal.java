@@ -58,6 +58,7 @@ public class TelaPrincipal extends AppCompatActivity
         ImagemUtils.setImagemToImageView(imageView, this);
 
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
         textView.setText(FindFM.getNomeUsuario(this));
 
         init();

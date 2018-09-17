@@ -151,7 +151,6 @@ public class RegistrarMusicoViewModel {
             this.param.putString("uf", UF);
 
             Musico musico = new Musico(
-                    param.getString("nomeUsuario"),
                     param.getString("senha"),
                     param.getString("email"),
                     param.getString("telefone"),
