@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,7 +21,9 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_criar_post" />
+    <include
+        android:id="@+id/incluirContent"
+        layout="@layout/content_criar_post" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_foto"
@@ -41,3 +44,4 @@
         app:srcCompat="@drawable/ic_video" />
 
 </android.support.design.widget.CoordinatorLayout>
+</layout>

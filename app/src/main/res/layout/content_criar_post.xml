@@ -67,7 +67,7 @@
                     android:gravity="top"
                     android:hint="@string/sua_publicacao"
                     android:inputType="textMultiLine"
-                    android:maxLength="150"
+                    android:maxLength="300"
                     android:text="@={post.descricao}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"

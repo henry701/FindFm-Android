@@ -1,7 +1,9 @@
 package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,15 +21,22 @@ import android.widget.Toast;
 import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.TimeoutError;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Infrastructure.Request.VolleyMultipartRequest;
+import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,17 +48,21 @@ import java.util.Objects;
 
 public class CriarPost extends AppCompatActivity {
 
+    private ActivityCriarPostBinding binding;
     private static final int PICK_IMAGE = 1;
     private ImageView fotoPublicacao;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_criar_post);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_post);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        binding.incluirContent.setPost(new Post());
+        binding.executePendingBindings();
 
         fotoPublicacao = findViewById(R.id.fotoPublicacao);
         fotoPublicacao.setVisibility(View.GONE);
@@ -66,6 +79,10 @@ public class CriarPost extends AppCompatActivity {
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> Snackbar.make(view, "Selecionar video", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
 
     }
 
@@ -92,6 +109,7 @@ public class CriarPost extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_salvar:
                 //TODO: salvar post
+                initRequest(binding.incluirContent.getPost());
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
                 //uploadFiles();
                 return true;
@@ -193,4 +211,51 @@ public class CriarPost extends AppCompatActivity {
     }
 
 
+    private void initRequest(Post post){
+        HttpTypedRequest<PostRequest, ResponseBody, ErrorResponse> postRequest = new HttpTypedRequest<>(
+                this,
+                HttpMethod.POST.getCodigo(),
+                PostRequest.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                (ResponseBody response) -> {
+                    this.dialog.hide();
+                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+
+                    }
+                },
+                (ErrorResponse error) -> {
+                    dialog.hide();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            error.getMessage(),"OK",
+                            (dialog, id) -> { }).create().show();
+                },
+                (Exception error) -> {
+                    dialog.hide();
+                    error.printStackTrace();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                            (dialog, id) -> { }).create().show();
+                }
+        );
+
+        PostRequest param = new PostRequest();
+        param.setTitulo(post.getTitulo())
+             .setDescricao(post.getDescricao());
+
+        postRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"post/create"));
+        postRequest.setRequestObject(param);
+        dialog.show();
+        postRequest.execute(this);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        dialog.dismiss();
+        super.onDestroy();
+    }
 }
