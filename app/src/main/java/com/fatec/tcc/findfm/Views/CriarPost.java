@@ -52,6 +52,7 @@ public class CriarPost extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
     private ImageView fotoPublicacao;
     private ProgressDialog dialog;
+    private Bundle param = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,18 @@ public class CriarPost extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        binding.incluirContent.setPost(new Post());
+
+        this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios");
+
+        if(!this.param.isEmpty()){
+            Post post = new Post();
+            post.setTitulo(this.param.getString("titulo", ""))
+                    .setDescricao(this.param.getString("descricao", ""));
+            binding.incluirContent.setPost(post);
+        } else {
+            binding.incluirContent.setPost(new Post());
+        }
+
         binding.executePendingBindings();
 
         fotoPublicacao = findViewById(R.id.fotoPublicacao);
@@ -79,6 +91,8 @@ public class CriarPost extends AppCompatActivity {
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> Snackbar.make(view, "Selecionar video", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+
+
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
@@ -257,5 +271,9 @@ public class CriarPost extends AppCompatActivity {
     protected void onDestroy() {
         dialog.dismiss();
         super.onDestroy();
+    }
+
+    public void setPost(Post param){
+        binding.incluirContent.setPost(param);
     }
 }

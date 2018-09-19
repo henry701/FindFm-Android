@@ -7,12 +7,16 @@
         <variable
             name="post"
             type="com.fatec.tcc.findfm.Model.Business.Post"/>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lilasClaro">
+        android:background="@color/lilasClaro"
+        android:onClick="@{clickListener::onClick}">
 
         <LinearLayout
             android:layout_width="match_parent"
