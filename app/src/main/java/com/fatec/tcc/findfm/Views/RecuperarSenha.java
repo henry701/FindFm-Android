@@ -1,6 +1,9 @@
 package com.fatec.tcc.findfm.Views;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -70,9 +73,6 @@ public class RecuperarSenha extends AppCompatActivity {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                // TODO: Mostra uma text falando pro cara olhar o email
-                                // TODO: Mostra popup pedindo pro cara botar o código, e ai faz uma request GET q nem ta la no server
-                                // TODO: Mostra a senha nova pro cara (ou melhor ainda, mostra a senha e logga o cara automático tbm)
                                 lb_instrucao.setText(R.string.instrucao_recuperar_senha_codigo);
                                 email.setVisibility(View.INVISIBLE);
                                 codigo.setVisibility(View.VISIBLE);
@@ -112,12 +112,20 @@ public class RecuperarSenha extends AppCompatActivity {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                String senha = (String) response.getData();
+
                                 this.dialog.dismiss();
                                 lb_instrucao.setText(R.string.nova_senha);
                                 codigo.setVisibility(View.INVISIBLE);
+
                                 EditText novaSenha = findViewById(R.id.txtNovaSenha);
                                 novaSenha.setVisibility(View.VISIBLE);
-                                novaSenha.setText("Nova senha");
+                                novaSenha.setText(senha);
+
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Senha", senha);
+                                clipboard.setPrimaryClip(clip);
+                                Toast.makeText(this, "Senha copiada", Toast.LENGTH_LONG).show();
                             }
                         },
                         (ErrorResponse errorResponse) ->

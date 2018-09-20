@@ -39,7 +39,6 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
-
                     android:onClick="btnRemoverImagem_Click"
                     app:layout_constraintBottom_toTopOf="@+id/txtNomeCompleto"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -21,10 +21,12 @@ public class User {
     public ArrayList<Instrumento> getIntrumentos() {
         ArrayList<Instrumento> instrumentos = new ArrayList<>();
 
-        for(String key : habilidades.keySet()){
-            instrumentos.add(
-                    new Instrumento(key.toUpperCase().charAt(0)+ key.substring(1,key.length()),
-                            NivelHabilidade.from( habilidades.get(key).intValue() )));
+        if(habilidades != null) {
+            for (String key : habilidades.keySet()) {
+                instrumentos.add(
+                        new Instrumento(key.toUpperCase().charAt(0) + key.substring(1, key.length()),
+                                NivelHabilidade.from(habilidades.get(key).intValue())));
+            }
         }
         return instrumentos;
     }

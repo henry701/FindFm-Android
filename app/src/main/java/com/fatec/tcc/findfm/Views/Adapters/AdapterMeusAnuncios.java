@@ -54,6 +54,8 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
             Bundle param = new Bundle();
             param.putString("titulo", post.getTitulo());
             param.putString("descricao", post.getDescricao());
+            param.putString("autor", post.getAutor().getNomeCompleto());
+            param.putString("data", post.getData());
             Util.open_form_withParam(context, CriarPost.class, path, param);
         });
     }

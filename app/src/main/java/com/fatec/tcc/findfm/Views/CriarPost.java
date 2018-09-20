@@ -26,6 +26,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Infrastructure.Request.VolleyMultipartRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -42,7 +43,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,11 +70,28 @@ public class CriarPost extends AppCompatActivity {
 
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios");
 
-        if(!this.param.isEmpty()){
-            Post post = new Post();
-            post.setTitulo(this.param.getString("titulo", ""))
-                    .setDescricao(this.param.getString("descricao", ""));
-            binding.incluirContent.setPost(post);
+        if( this.param != null ) {
+            if( !this.param.isEmpty() ) {
+
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss", Locale.ENGLISH);
+                Date date = new Date();
+
+                String dateInString = param.getString("data", "");
+
+                try {
+                    date = formatter.parse(dateInString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Post post = new Post()
+                        .setTitulo(this.param.getString("titulo", ""))
+                        .setDescricao(this.param.getString("descricao", ""))
+                        .setAutor(new Usuario().setNomeCompleto(param.getString("autor", "")))
+                        .setData(date);
+
+                binding.incluirContent.setPost(post);
+            }
         } else {
             binding.incluirContent.setPost(new Post());
         }

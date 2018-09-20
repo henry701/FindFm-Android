@@ -49,8 +49,9 @@ public class Usuario {
         return nomeCompleto;
     }
 
-    public void setNomeCompleto(String nomeCompleto) {
+    public Usuario setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
+        return this;
     }
 
     public String getSenha() {

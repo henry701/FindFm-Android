@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Model.Business.Post;
+import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -21,6 +22,7 @@ import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityMeusAnunciosFragmentBinding;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MeusAnuncios_Fragment extends Fragment {
@@ -66,19 +68,27 @@ public class MeusAnuncios_Fragment extends Fragment {
                 new Post()
                         .setTitulo("Ser humano procura banda de pagode para tocar heavy metal")
                         .setCidade("São Paulo")
-                        .setDescricao("Cansei de tocar pagode, quero metal, é nois"),
+                        .setDescricao("Cansei de tocar pagode, quero metal, é nois")
+                        .setData(new Date())
+                        .setAutor(new Usuario().setNomeCompleto("Robson Robervaldo")),
                 new Post()
                         .setTitulo("Procuro bandas para tocarem no meu quiosque na praia")
                         .setCidade("São Vicente")
-                        .setDescricao("Toque aqui cara, pago bem"),
+                        .setDescricao("Toque aqui cara, pago bem")
+                        .setData(new Date())
+                        .setAutor(new Usuario().setNomeCompleto("Robervaldo Gerson")),
                 new Post()
                         .setTitulo("Procuro guitarrista que toque bateria com os pés")
                         .setCidade("São Longe de muito longe")
-                        .setDescricao("Tocamos heavy metal japones em lingua árabe"),
+                        .setDescricao("Tocamos heavy metal japones em lingua árabe")
+                        .setData(new Date())
+                        .setAutor(new Usuario().setNomeCompleto("Robson Robson Robervaldo")),
                 new Post()
                         .setTitulo("Maior Titulo dos titulos muito grande meu Deus que titulo!!!")
                         .setCidade("Maior nome de cidade que vc vera na vida meu amigo")
                         .setDescricao("Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler")
+                        .setData(new Date())
+                        .setAutor(new Usuario().setNomeCompleto("Robervaldo Robervaldo Robervaldo"))
         );
     }
 
