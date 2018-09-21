@@ -13,6 +13,7 @@ public class Post {
     private String cidade;
     private String[] fotos;
     //TODO: ver se video transforma pra base64
+    //Pelo amor de deus nao, o porra
     private String video;
     private Date data;
     private List<Comentario> comentarios;
