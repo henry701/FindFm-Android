@@ -60,6 +60,7 @@ public class LoginViewModel {
                         ErrorResponse.class,
                         (ResponseBody response) ->
                         {
+                            dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
 
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
@@ -71,18 +72,16 @@ public class LoginViewModel {
                                 if(usuario.getAvatar() != null) {
                                     ImageRequest imagemRequest = new ImageRequest(view, usuario.getAvatar().get_id(), 0, 0, ImageView.ScaleType.CENTER_CROP,
                                             (Bitmap bitmap) -> {
-                                                dialog.hide();
+                                                dialog.dismiss();
                                                 ImagemUtils.setImagemToParams(bitmap);
                                                 ImagemUtils.setImagemToPref(view, bitmap);
-                                                dialog.dismiss();
                                                 Util.open_form__no_return(view, TelaPrincipal.class );
                                             },
                                             error -> {
-                                                dialog.hide();
+                                                dialog.dismiss();
                                                 AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
                                                         (dialog, id) -> {
                                                         }).create().show();
-                                                dialog.dismiss();
                                                 Util.open_form__no_return(view, TelaPrincipal.class );
                                             }
                                     );

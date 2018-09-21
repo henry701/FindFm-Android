@@ -30,6 +30,8 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
 
     private String fullUrl;
     private TRequest requestObject;
+    private boolean resourceUpload = false;
+    private String contentType;
 
     private final Activity view;
 
@@ -116,6 +118,11 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
                 onCriticalError.accept(error);
             }
         );
+
+        if(isResourceUpload()){
+            request.setResourceUpload(true);
+            request.setContentType(contentType);
+        }
     }
 
     public void execute(Context context) {
@@ -140,5 +147,21 @@ public class HttpTypedRequest<TRequest, TResponse, TErrorResponse> {
 
     public void setRequestObject(TRequest requestObject) {
         this.requestObject = requestObject;
+    }
+
+    public boolean isResourceUpload() {
+        return resourceUpload;
+    }
+
+    public void setResourceUpload(boolean resourceUpload) {
+        this.resourceUpload = resourceUpload;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

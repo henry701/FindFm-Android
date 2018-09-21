@@ -4,8 +4,6 @@ public class PostRequest {
 
     private String titulo;
     private String descricao;
-    // TODO: Criatura, imagem ou video vai ser uma id do mesmo jeito, o server se vira
-    // private String mediaId;
     private String imagemId;
     private String videoId;
 

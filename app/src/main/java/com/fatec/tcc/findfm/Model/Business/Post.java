@@ -11,10 +11,8 @@ public class Post {
     private String titulo;
     private String descricao;
     private String cidade;
-    private String[] fotos;
-    //TODO: ver se video transforma pra base64
-    //Pelo amor de deus nao, o porra
-    private String video;
+    private String idFoto;
+    private String idVideo;
     private Date data;
     private List<Comentario> comentarios;
 
@@ -47,24 +45,6 @@ public class Post {
         return this;
     }
 
-    public String[] getFotos() {
-        return fotos;
-    }
-
-    public Post setFotos(String[] fotos) {
-        this.fotos = fotos;
-        return this;
-    }
-
-    public String getVideo() {
-        return video;
-    }
-
-    public Post setVideo(String video) {
-        this.video = video;
-        return this;
-    }
-
     public List<Comentario> getComentarios() {
         return comentarios;
     }
@@ -94,6 +74,24 @@ public class Post {
 
     public Post setData(Date data) {
         this.data = data;
+        return this;
+    }
+
+    public String getIdFoto() {
+        return idFoto;
+    }
+
+    public Post setIdFoto(String idFoto) {
+        this.idFoto = idFoto;
+        return this;
+    }
+
+    public String getIdVideo() {
+        return idVideo;
+    }
+
+    public Post setIdVideo(String idVideo) {
+        this.idVideo = idVideo;
         return this;
     }
 }

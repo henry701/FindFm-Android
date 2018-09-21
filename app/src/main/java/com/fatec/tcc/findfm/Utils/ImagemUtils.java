@@ -29,6 +29,13 @@ public class ImagemUtils {
         return intent;
     }
 
+    public static Intent pickVideoIntent(){
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        return intent;
+    }
+
     public static void setImagemToParams(ImageView imagemView){
         Bitmap bitmap = ((BitmapDrawable) imagemView.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

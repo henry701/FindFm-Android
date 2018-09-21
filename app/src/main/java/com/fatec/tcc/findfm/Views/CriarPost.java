@@ -5,25 +5,22 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
-import com.android.volley.TimeoutError;
 import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
-import com.fatec.tcc.findfm.Infrastructure.Request.VolleyMultipartRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -39,25 +36,35 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
-public class CriarPost extends AppCompatActivity {
+public class CriarPost extends AppCompatActivity implements Observer{
 
     private ActivityCriarPostBinding binding;
     private static final int PICK_IMAGE = 1;
+    private static final int PICK_VIDEO = 2;
     private ImageView fotoPublicacao;
+    private VideoView videoView;
     private ProgressDialog dialog;
     private Bundle param = new Bundle();
+
+    private boolean fotoUpload;
+    private String fotoBytesId;
+    private byte[] fotoBytes;
+    private String fotoBytes_ContentType;
+
+    private boolean videoUpload;
+    private String videoBytesId;
+    private byte[] videoBytes;
+    private String videoBytes_ContentType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +109,9 @@ public class CriarPost extends AppCompatActivity {
         fotoPublicacao = findViewById(R.id.fotoPublicacao);
         fotoPublicacao.setVisibility(View.GONE);
 
+        videoView = findViewById(R.id.videoView);
+        videoView.setVisibility(View.GONE);
+
         //Somente contratante pode colocar titulo para o anuncio
         EditText txtTitulo = findViewById(R.id.txtTitulo);
         if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
@@ -112,9 +122,7 @@ public class CriarPost extends AppCompatActivity {
         fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
 
         FloatingActionButton video = findViewById(R.id.fab_video);
-        video.setOnClickListener(view -> Snackbar.make(view, "Selecionar video", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
-
+        video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
@@ -145,10 +153,22 @@ public class CriarPost extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.action_salvar:
-                //TODO: salvar post
-                initRequest(binding.incluirContent.getPost());
+                UploadResourceService resourceService = new UploadResourceService(this);
+                //this.dialog.show();
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
-                //uploadFiles();
+                if(fotoBytes != null) {
+                    fotoUpload = true;
+                    resourceService.uploadFiles(fotoBytes, fotoBytes_ContentType, true);
+                }
+                if(videoBytes != null) {
+                    videoUpload = true;
+                    resourceService.uploadFiles(videoBytes, videoBytes_ContentType, false);
+                }
+
+                if(!fotoUpload && !videoUpload){
+                    initRequest(binding.incluirContent.getPost());
+                }
+
                 return true;
         }
 
@@ -164,87 +184,49 @@ public class CriarPost extends AppCompatActivity {
                 this.fotoPublicacao.setImageBitmap(BitmapFactory.decodeStream(getApplicationContext()
                         .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
                 this.fotoPublicacao.setVisibility(View.VISIBLE);
-            } catch (FileNotFoundException e) {
+
+                Uri u = data.getData();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                InputStream fis = getContentResolver().openInputStream(u);
+
+                byte[] buf = new byte[1024];
+                int n;
+                while (-1 != (n = fis.read(buf)))
+                    baos.write(buf, 0, n);
+
+                this.fotoBytes = baos.toByteArray();
+                //TODO: arrumar
+                this.fotoBytes_ContentType = "image/jpg";
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-
-    private void uploadFiles() {
-        // loading or check internet connection or something...
-        // ... then upload
-        String url = HttpUtils.buildUrl(getResources(),"upload");
-        VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(HttpMethod.PUT.getCodigo(), url, response -> {
-            String resultResponse = new String(response.data);
+        if (requestCode == PICK_VIDEO && resultCode == Activity.RESULT_OK && data != null) {
             try {
-                JSONObject result = new JSONObject(resultResponse);
-                String status = result.getString("status");
-                String message = result.getString("message");
+                Uri u = data.getData();
+                MediaController m = new MediaController(this);
 
-                if (status.equals(ResponseCode.GenericSuccess)) {
-                    // tell everybody you have succed upload image and post strings
-                    Log.i("Messsage", message);
-                } else {
-                    Log.i("Unexpected", message);
-                }
-            } catch (JSONException e) {
+                videoView.setMediaController(m);
+                videoView.setVisibility(View.VISIBLE);
+                videoView.setVideoURI(u);
+                videoView.setVisibility(View.VISIBLE);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                InputStream fis = getContentResolver().openInputStream(u);
+
+                byte[] buf = new byte[1024];
+                int n;
+                while (-1 != (n = fis.read(buf)))
+                    baos.write(buf, 0, n);
+
+                this.videoBytes = baos.toByteArray();
+                //TODO: arrumar
+                this.videoBytes_ContentType = "video/mp4";
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, error -> {
-            NetworkResponse networkResponse = error.networkResponse;
-            String errorMessage = "Unknown error";
-            if (networkResponse == null) {
-                if (error.getClass().equals(TimeoutError.class)) {
-                    errorMessage = "Request timeout";
-                } else if (error.getClass().equals(NoConnectionError.class)) {
-                    errorMessage = "Failed to connect server";
-                }
-            } else {
-                String result = new String(networkResponse.data);
-                try {
-                    JSONObject response = new JSONObject(result);
-                    String status = response.getString("status");
-                    String message = response.getString("message");
-
-                    Log.e("Error Status", status);
-                    Log.e("Error Message", message);
-
-                    if (networkResponse.statusCode == 404) {
-                        errorMessage = "Resource not found";
-                    } else if (networkResponse.statusCode == 401) {
-                        errorMessage = message+" Please login again";
-                    } else if (networkResponse.statusCode == 400) {
-                        errorMessage = message+ " Check your inputs";
-                    } else if (networkResponse.statusCode == 500) {
-                        errorMessage = message+" Something is getting wrong";
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            Log.i("Error", errorMessage);
-            error.printStackTrace();
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("api_token", "gh659gjhvdyudo973823tt9gvjf7i6ric75r76");
-                return params;
-            }
-
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                // file name could found file base or direct access from real path
-                // for now just get bitmap data from ImageView
-                params.put("cover", new DataPart("file_cover.jpg", ImagemUtils.getFileDataFromDrawable(getBaseContext(), fotoPublicacao.getDrawable()), "image/jpeg"));
-
-                return params;
-            }
-        };
-
-        SharedRequestQueue.addToRequestQueue(this, multipartRequest);
+        }
     }
 
 
@@ -258,7 +240,10 @@ public class CriarPost extends AppCompatActivity {
                 (ResponseBody response) -> {
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-
+                        AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                "ebaa!", R.drawable.ic_error,
+                                "Cadastrado com sucesso","OK",
+                                (dialog, id) -> { }).create().show();
                     }
                 },
                 (ErrorResponse error) -> {
@@ -298,5 +283,64 @@ public class CriarPost extends AppCompatActivity {
 
     public void setPost(Post param){
         binding.incluirContent.setPost(param);
+    }
+
+    @Override
+    public void update(Observable upload, Object arg) {
+        //TODO: fazer tentar novamente
+        if(upload instanceof UploadResourceService){
+            runOnUiThread(() -> {
+                if(arg instanceof ErrorResponse){
+                    ErrorResponse error = (ErrorResponse) arg;
+                    //dialog.hide();
+
+                    String result = (String) arg;
+                    if(result.equals("foto"))
+                        fotoUpload = false;
+                    else
+                        videoUpload = false;
+
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            error.getMessage(),"OK",
+                            (dialog, id) -> { }).create().show();
+                } else if (arg instanceof Exception){
+                    Exception error = (Exception) arg;
+                    //dialog.hide();
+
+                    String result = (String) arg;
+                    if(result.equals("foto"))
+                        fotoUpload = false;
+                    else
+                        videoUpload = false;
+
+                    error.printStackTrace();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                            (dialog, id) -> { }).create().show();
+                }
+                else if (arg instanceof String) {
+                    String result = (String) arg;
+                    String[] resultados = result.split(",");
+
+                    if(resultados[0].equals("foto")){
+                        fotoUpload = false;
+                        fotoBytesId = resultados[1];
+                        binding.incluirContent.getPost().setIdFoto(fotoBytesId);
+                    }
+                    else if(resultados[0].equals("video")){
+                        videoUpload = false;
+                        videoBytesId = resultados[1];
+                        binding.incluirContent.getPost().setIdVideo(videoBytesId);
+                    }
+
+                    if(!videoUpload && !fotoUpload){
+                        initRequest(binding.incluirContent.getPost());
+                    }
+                }
+            });
+        }
     }
 }

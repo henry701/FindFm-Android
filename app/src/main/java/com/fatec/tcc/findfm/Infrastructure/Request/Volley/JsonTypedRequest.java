@@ -25,6 +25,8 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
     private final Class<TErrorResponse> errorResponseClass;
     private String jsonRequestBody;
     private final Activity view;
+    private boolean resourceUpload = false;
+    private String contentType;
 
     public JsonTypedRequest(Activity view,
                             int method,
@@ -81,10 +83,30 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
         }
         Map<String, String> headers = new HashMap<>(1, 1.0f);
         headers.put("Authorization", "Bearer " + tokenData.getAccessToken());
+
+        if(isResourceUpload()) {
+            headers.put("Content-Type", getContentType());
+        }
         return headers;
     }
 
     public String getBodyAsJson(){
         return this.jsonRequestBody;
+    }
+
+    public boolean isResourceUpload() {
+        return resourceUpload;
+    }
+
+    public void setResourceUpload(boolean resourceUpload) {
+        this.resourceUpload = resourceUpload;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 }

@@ -82,7 +82,6 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
         ViewHolder(ViewMeusAnunciosBinding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
-            //TODO: Abrir tela do anuncio ao clicar
         }
     }
 }
