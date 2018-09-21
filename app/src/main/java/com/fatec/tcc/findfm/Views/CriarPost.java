@@ -69,7 +69,7 @@ public class CriarPost extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios");
-
+        ImageView imageView = findViewById(R.id.circularImageView);
         if( this.param != null ) {
             if( !this.param.isEmpty() ) {
 
@@ -93,7 +93,8 @@ public class CriarPost extends AppCompatActivity {
                 binding.incluirContent.setPost(post);
             }
         } else {
-            binding.incluirContent.setPost(new Post());
+            ImagemUtils.setImagemToImageView(imageView, this);
+            binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
         }
 
         binding.executePendingBindings();

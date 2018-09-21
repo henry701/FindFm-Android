@@ -85,6 +85,16 @@ public class ImagemUtils {
         }
     }
 
+    public static void setImagemToImageView_FromPref(ImageView imageView, AppCompatActivity view){
+        byte[] image = FindFM.getFotoPrefBytes(view);
+        if(image != null && image.length != 0) {
+            imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+        }
+        else{
+            imageView.setImageDrawable(view.getResources().getDrawable(R.drawable.capaplaceholder_photo, view.getTheme()));
+        }
+    }
+
     public static void setImagemHeader(AppCompatActivity v){
         byte[] image = FindFM.getImagemPerfilBytes();
         ImageView imagemUsuarioHeader = v.findViewById(R.id.imageViewHeader);
