@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -154,7 +155,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
         switch (item.getItemId()){
             case R.id.action_salvar:
                 UploadResourceService resourceService = new UploadResourceService(this);
-                //this.dialog.show();
+                resourceService.addObserver(this);
+                this.dialog.show();
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
                 if(fotoBytes != null) {
                     fotoUpload = true;
@@ -181,23 +183,15 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             try {
-                this.fotoPublicacao.setImageBitmap(BitmapFactory.decodeStream(getApplicationContext()
-                        .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
+                Bitmap bitmap = BitmapFactory.decodeStream(getApplicationContext()
+                        .getContentResolver().openInputStream(Objects.requireNonNull(data.getData())));
+                this.fotoPublicacao.setImageBitmap(bitmap);
                 this.fotoPublicacao.setVisibility(View.VISIBLE);
 
-                Uri u = data.getData();
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                InputStream fis = getContentResolver().openInputStream(u);
-
-                byte[] buf = new byte[1024];
-                int n;
-                while (-1 != (n = fis.read(buf)))
-                    baos.write(buf, 0, n);
-
-                this.fotoBytes = baos.toByteArray();
-                //TODO: arrumar
-                this.fotoBytes_ContentType = "image/jpg";
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                this.fotoBytes = stream.toByteArray();
+                this.fotoBytes_ContentType = "image/jpeg";
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -222,7 +216,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                 this.videoBytes = baos.toByteArray();
                 //TODO: arrumar
-                this.videoBytes_ContentType = "video/mp4";
+                this.videoBytes_ContentType = "video/mpeg";
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -241,9 +235,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                "ebaa!", R.drawable.ic_error,
-                                "Cadastrado com sucesso","OK",
-                                (dialog, id) -> { }).create().show();
+                                "Sucesso!", R.drawable.ic_error,
+                                "Post cadastrado com sucesso","OK",
+                                (dialog, id) -> {
+                                                dialog.dismiss();
+                                                super.onBackPressed(); }).create().show();
+
                     }
                 },
                 (ErrorResponse error) -> {
@@ -266,7 +263,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         PostRequest param = new PostRequest();
         param.setTitulo(post.getTitulo())
-             .setDescricao(post.getDescricao());
+             .setDescricao(post.getDescricao())
+             .setImagemId(post.getIdFoto())
+             .setVideoId(post.getIdVideo());
 
         postRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"post/create"));
         postRequest.setRequestObject(param);
@@ -292,7 +291,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             runOnUiThread(() -> {
                 if(arg instanceof ErrorResponse){
                     ErrorResponse error = (ErrorResponse) arg;
-                    //dialog.hide();
+                    dialog.hide();
 
                     String result = (String) arg;
                     if(result.equals("foto"))
@@ -306,7 +305,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             (dialog, id) -> { }).create().show();
                 } else if (arg instanceof Exception){
                     Exception error = (Exception) arg;
-                    //dialog.hide();
+                    dialog.hide();
 
                     String result = (String) arg;
                     if(result.equals("foto"))
@@ -324,6 +323,18 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 else if (arg instanceof String) {
                     String result = (String) arg;
                     String[] resultados = result.split(",");
+
+                    //Por algum motivo as vezes não retorna o id, isso é só pra nao dar exception
+
+                    if(resultados.length == 1){
+                        dialog.hide();
+                        AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                "Ops!", R.drawable.ic_error,
+                                "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                        "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                (dialog, id) -> { }).create().show();
+                        return;
+                    }
 
                     if(resultados[0].equals("foto")){
                         fotoUpload = false;

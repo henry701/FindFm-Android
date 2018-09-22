@@ -84,10 +84,14 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends com.a
         Map<String, String> headers = new HashMap<>(1, 1.0f);
         headers.put("Authorization", "Bearer " + tokenData.getAccessToken());
 
-        if(isResourceUpload()) {
-            headers.put("Content-Type", getContentType());
-        }
         return headers;
+    }
+
+    @Override
+    public String getBodyContentType() {
+        if(isResourceUpload())
+            return getContentType();
+        return String.format("application/json; charset=%s", PROTOCOL_CHARSET);
     }
 
     public String getBodyAsJson(){
