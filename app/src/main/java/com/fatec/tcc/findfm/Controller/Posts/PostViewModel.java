@@ -2,6 +2,7 @@ package com.fatec.tcc.findfm.Controller.Posts;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.view.View;
 
 import com.fatec.tcc.findfm.Utils.Util;
@@ -21,7 +22,10 @@ public class PostViewModel {
     }
 
     public void addButton(View view){
-        Util.open_form(this.view, CriarPost.class);
+        String path = "CriarPost";
+        Bundle param = new Bundle();
+        param.putString("telaMode", "criando");
+        Util.open_form_withParam(this.view, CriarPost.class, path, param);
     }
 
 

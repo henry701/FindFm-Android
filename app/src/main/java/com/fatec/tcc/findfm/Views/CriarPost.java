@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
@@ -55,7 +56,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private ImageView fotoPublicacao;
     private VideoView videoView;
     private ProgressDialog dialog;
-    private Bundle param = new Bundle();
+
+    private String telaMode = "criando";
 
     private boolean fotoUpload;
     private String fotoBytesId;
@@ -66,6 +68,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private String videoBytesId;
     private byte[] videoBytes;
     private String videoBytes_ContentType;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,29 +79,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        this.param = getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios");
+        Bundle param = getIntent().getBundleExtra("CriarPost");
         ImageView imageView = findViewById(R.id.circularImageView);
-        if( this.param != null ) {
-            if( !this.param.isEmpty() ) {
-
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss", Locale.ENGLISH);
-                Date date = new Date();
-
-                String dateInString = param.getString("data", "");
-
-                try {
-                    date = formatter.parse(dateInString);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                Post post = new Post()
-                        .setTitulo(this.param.getString("titulo", ""))
-                        .setDescricao(this.param.getString("descricao", ""))
-                        .setAutor(new Usuario().setNomeCompleto(param.getString("autor", "")))
-                        .setData(date);
-
-                binding.incluirContent.setPost(post);
+        if( param != null ) {
+            if( !param.isEmpty() ) {
+                telaMode = param.getString("telaMode");
             }
         } else {
             ImagemUtils.setImagemToImageView(imageView, this);
@@ -132,6 +117,52 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     }
 
+    private void checkTelaMode(){
+        if(telaMode.equals("visualizar") || telaMode.equals("editavel")){
+            Post post = (Post) FindFM.getMap().get("post");
+            binding.incluirContent.setPost(post);
+            //TODO: pegar id do recurso e fazer get, nossa que trabalho
+            binding.incluirContent.txtTitulo.setEnabled(false);
+            binding.incluirContent.txtDesc.setEnabled(false);
+
+            binding.fabFoto.setVisibility(View.INVISIBLE);
+            binding.fabVideo.setVisibility(View.INVISIBLE);
+
+            binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
+            binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
+
+        } else if (telaMode.equals("editando") || telaMode.equals("criando")){
+            if(optionsMenu != null) {
+                optionsMenu.getItem(0).setVisible(false);
+                optionsMenu.getItem(1).setVisible(true);
+            }
+            binding.incluirContent.txtTitulo.setEnabled(true);
+            binding.incluirContent.txtDesc.setEnabled(true);
+
+            if(fotoBytes == null) {
+                binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
+                binding.fabFoto.setVisibility(View.VISIBLE);
+            } else {
+                binding.incluirContent.btnRemoverImagem.setVisibility(View.VISIBLE);
+                binding.fabFoto.setVisibility(View.GONE);
+            }
+
+            if(videoBytes == null) {
+                binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
+                binding.fabVideo.setVisibility(View.VISIBLE);
+            } else {
+                binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
+                binding.fabVideo.setVisibility(View.GONE);
+            }
+        }
+
+        if(telaMode.equals("editavel") && optionsMenu != null){
+            optionsMenu.getItem(0).setVisible(true);
+            optionsMenu.getItem(1).setVisible(false);
+        }
+
+    }
+
     public void btnRegistrar_Click(View v) {
         EditText txtTitulo = findViewById(R.id.txtTitulo);
         txtTitulo.setVisibility(View.GONE);
@@ -146,6 +177,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_post, menu);
+        this.optionsMenu = menu;
+        checkTelaMode();
         return true;
     }
 
@@ -170,7 +203,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 if(!fotoUpload && !videoUpload){
                     initRequest(binding.incluirContent.getPost());
                 }
-
+            case R.id.action_edit:
+                optionsMenu.getItem(0).setVisible(false);
+                optionsMenu.getItem(1).setVisible(true);
+                telaMode = "editando";
+                checkTelaMode();
                 return true;
         }
 
@@ -223,6 +260,23 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
     }
 
+    public void btnRemoverImagem_Click(View v){
+        fotoUpload = false;
+        fotoBytesId = null;
+        fotoBytes = null;
+        fotoBytes_ContentType = null;
+        fotoPublicacao.setVisibility(View.INVISIBLE);
+        checkTelaMode();
+    }
+
+    public void btnRemoverVideo_Click(View v){
+        videoUpload = false;
+        videoBytesId = null;
+        videoBytes = null;
+        videoBytes_ContentType = null;
+        videoView.setVisibility(View.INVISIBLE);
+        checkTelaMode();
+    }
 
     private void initRequest(Post post){
         HttpTypedRequest<PostRequest, ResponseBody, ErrorResponse> postRequest = new HttpTypedRequest<>(

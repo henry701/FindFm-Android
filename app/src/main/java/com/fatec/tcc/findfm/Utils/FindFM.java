@@ -10,10 +10,12 @@ import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class FindFM extends Application {
 
     private Bundle params;
+    private HashMap<String, Object> map;
     private static FindFM singleInstance = null;
 
     private static TokenData tokenData;
@@ -29,6 +31,13 @@ public class FindFM extends Application {
             params = new Bundle();
         }
         return params;
+    }
+
+    private HashMap<String, Object> getMapp(){
+        if(map == null){
+            map = new HashMap<>();
+        }
+        return map;
     }
 
     private static FindFM getInstance()
@@ -139,4 +148,9 @@ public class FindFM extends Application {
         FindFM.getInstance().getParams().putString("tela", telaAtual);
     }
 //--------------------------------------------------------------------------------------------------
+
+    public static HashMap<String, Object> getMap(){
+        return FindFM.getInstance().getMapp();
+    }
+
 }

@@ -5,11 +5,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.databinding.ViewMeusAnunciosBinding;
@@ -49,13 +49,11 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
     public void onBindViewHolder(AdapterMeusAnuncios.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bindingVH.setPost(post);
-        holder.bindingVH.setClickListener((View.OnClickListener) v -> {
-            String path = "com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios";
+        holder.bindingVH.setClickListener(v -> {
+            String path = "CriarPost";
             Bundle param = new Bundle();
-            param.putString("titulo", post.getTitulo());
-            param.putString("descricao", post.getDescricao());
-            param.putString("autor", post.getAutor().getNomeCompleto());
-            param.putString("data", post.getData());
+            FindFM.getMap().put("post", post);
+            param.putString("telaMode", "editavel");
             Util.open_form_withParam(context, CriarPost.class, path, param);
         });
     }

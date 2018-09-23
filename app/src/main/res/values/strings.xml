@@ -110,9 +110,10 @@
     <string name="instrucao_recuperar_senha">Insira seu e-mail e iremos entrar em contato com você</string>
     <string name="enviar">Enviar</string>
     <string name="continuar">Continuar</string>
-    <string name="title_activity_criar_post">Criar Publicação</string>
+    <string name="title_activity_criar_post">Publicação</string>
     <string name="titulo">Adicione um título</string>
     <string name="publicar">Publicar</string>
+    <string name="editar">Editar</string>
     <string name="sua_publicacao">Escreva sua publicação</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
