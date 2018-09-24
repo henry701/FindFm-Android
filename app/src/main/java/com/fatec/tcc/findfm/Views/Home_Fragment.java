@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
+import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
@@ -25,6 +26,7 @@ public class Home_Fragment extends Fragment {
     private TelaPrincipal activity;
     private ActivityHomeFragmentBinding binding;
     private View view;
+    private Usuario usuario;
 
     public Home_Fragment(){}
 
@@ -46,7 +48,6 @@ public class Home_Fragment extends Fragment {
         FindFM.setTelaAtual("HOME");
         super.onActivityCreated(savedInstanceState);
         setFoto();
-        //TODO: account/me
         if(FindFM.isLogado(getActivity())) {
             TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
             lb_nomeUsuario.setText(FindFM.getNomeUsuario(getActivity()));
@@ -64,4 +65,6 @@ public class Home_Fragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), "Você pode adicionar uma foto acessando o menu Meu Perfil ;)", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

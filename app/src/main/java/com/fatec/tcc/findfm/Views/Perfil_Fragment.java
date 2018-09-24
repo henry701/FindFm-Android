@@ -43,7 +43,6 @@ import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,6 +50,8 @@ public class Perfil_Fragment extends Fragment {
 
     private static final int PICK_IMAGE = 1;
     public ActivityPerfilFragmentBinding binding;
+
+    //TODO FORTE: atualizar o objeto na FindFM quando atualizar o carinha
 
     private Usuario usuario;
     private Contratante contratante;
@@ -172,8 +173,11 @@ public class Perfil_Fragment extends Fragment {
                                 switch (getUsuario().getTipoUsuario()){
                                     case CONTRATANTE:
                                         Contratante contratante = new Contratante(usuario);
-                                        contratante.setInauguracao(new Date());
-                                        contratante.setCidade("Diadema");
+                                        contratante.setInauguracao(user.getDate());
+                                        contratante.setCidade(user.getEndereco().getCidade());
+                                        contratante.setUf(
+                                                Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
+                                        );
                                         binding.setContratante(new Contratante(usuario));
                                         binding.getViewModel().setInauguracao(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(contratante.getInauguracao()));
                                         binding.getViewModel().setInauguracaoDate(contratante.getInauguracao());

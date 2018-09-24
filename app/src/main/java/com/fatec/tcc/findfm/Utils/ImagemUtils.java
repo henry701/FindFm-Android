@@ -113,17 +113,15 @@ public class ImagemUtils {
         }
     }
 
-    public static Bitmap getImagemFromEndPoint(Context context, String id_imagem, ProgressDialog progressDialog) {
+    public static Bitmap getImagemFromEndPoint(Context context, String id_imagem) {
         final Bitmap[] retorno = new Bitmap[1];
 
-        progressDialog.show();
         ImageRequest imagemRequest = new ImageRequest(context, id_imagem, 0, 0, ImageView.ScaleType.CENTER_CROP,
                 response -> {
-                    progressDialog.hide();
                     retorno[0] = response;
+
                 },
                 error -> {
-                    progressDialog.hide();
                     AlertDialogUtils.newSimpleDialog__OneButton(context, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
                             (dialog, id) -> {
                             }).create().show();
@@ -134,10 +132,38 @@ public class ImagemUtils {
         return retorno[0];
     }
 
-    public static byte[] getFileDataFromDrawable(Context context, Drawable drawable) {
+    public static Bitmap getImagemFromEndPoint(Context context, String id_imagem, ProgressDialog pdialog) {
+        pdialog.show();
+        final Bitmap[] retorno = new Bitmap[1];
+
+        ImageRequest imagemRequest = new ImageRequest(context, id_imagem, 0, 0, ImageView.ScaleType.CENTER_CROP,
+                response -> {
+                    retorno[0] = response;
+                    pdialog.hide();
+
+                },
+                error -> {
+                    pdialog.hide();
+                    AlertDialogUtils.newSimpleDialog__OneButton(context, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
+                            (dialog, id) -> {
+                            }).create().show();
+                }
+        );
+        imagemRequest.execute();
+
+        return retorno[0];
+    }
+
+    public static byte[] getFileDataFromDrawable(Drawable drawable) {
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public static byte[] getByteArrayFromBitmap(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
 

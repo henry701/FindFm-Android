@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
@@ -40,10 +39,6 @@ import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -111,7 +106,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
+        dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
@@ -155,6 +150,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 binding.fabVideo.setVisibility(View.GONE);
             }
         }
+
+        if(telaMode.equals("criando")){
+            binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
+            ImagemUtils.setImagemToImageView(binding.incluirContent.circularImageView, this);
+        }
+
 
         if(telaMode.equals("editavel") && optionsMenu != null){
             optionsMenu.getItem(0).setVisible(true);

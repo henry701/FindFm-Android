@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class User {
 
+    private String id;
     private String kind;
     private String fullName;
     private String email;
@@ -92,6 +93,14 @@ public class User {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public class Avatar {

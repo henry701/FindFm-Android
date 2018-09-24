@@ -96,4 +96,7 @@ public class MeusAnuncios_Fragment extends Fragment {
         Util.open_form(activity, CriarPost.class);
     }
 
+
+
+
 }

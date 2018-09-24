@@ -78,7 +78,7 @@ public class RegistrarMusico extends AppCompatActivity {
         });
 
         this.dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
+        dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
     }

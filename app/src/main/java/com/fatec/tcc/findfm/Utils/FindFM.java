@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 
+import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 
 import java.util.Date;
@@ -17,13 +20,39 @@ public class FindFM extends Application {
     private Bundle params;
     private HashMap<String, Object> map;
     private static FindFM singleInstance = null;
-
+    private static Usuario usuario;
+    private static Musico musico;
+    private static Contratante contratante;
     private static TokenData tokenData;
+
+    public static void setUsuario(Usuario usuario) {
+        FindFM.usuario = usuario;
+    }
+
+    public static void setMusico(Musico musico) {
+        FindFM.musico = musico;
+    }
+
+    public static void setContratante(Contratante contratante) {
+        FindFM.contratante = contratante;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         singleInstance = this;
+    }
+
+    public static Usuario getUsuario(){
+        return FindFM.getInstance().usuario;
+    }
+
+    public static Musico getMusico(){
+        return FindFM.getInstance().musico;
+    }
+
+    public static Contratante getContratante(){
+        return FindFM.getInstance().contratante;
     }
 
     private Bundle getParams() {
@@ -101,8 +130,8 @@ public class FindFM extends Application {
     }
 //--------------------------------------------------------------------------------------------------
     /**
-    * Referente ao usuário: Imagem Perfil / Nome do Usuário
-    * */
+     * Referente ao usuário: Imagem Perfil / Nome do Usuário
+     * */
     public static byte[] getImagemPerfilBytes(){
         String image64 = FindFM.getInstance().getParams().getString("foto", "");
         return Base64.decode(image64, Base64.DEFAULT);
@@ -131,15 +160,15 @@ public class FindFM extends Application {
 
     public static TiposUsuario getTipoUsuario(Activity view){
         return TiposUsuario.fromTexto(
-                    view.getSharedPreferences("FindFM_param", MODE_PRIVATE)
-                            .getString("tipoUsuario","Indefinido")
-                );
+                view.getSharedPreferences("FindFM_param", MODE_PRIVATE)
+                        .getString("tipoUsuario","Indefinido")
+        );
     }
 
 //--------------------------------------------------------------------------------------------------
     /**
-    * Tela atual
-    * */
+     * Tela atual
+     * */
     public static String getTelaAtual(){
         return FindFM.getInstance().getParams().getString("tela", "");
     }

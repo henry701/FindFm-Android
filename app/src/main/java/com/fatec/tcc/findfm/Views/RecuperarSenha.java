@@ -55,7 +55,7 @@ public class RecuperarSenha extends AppCompatActivity {
         codigo = findViewById(R.id.txtCodigo);
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
+        dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
         requestRenovar1();

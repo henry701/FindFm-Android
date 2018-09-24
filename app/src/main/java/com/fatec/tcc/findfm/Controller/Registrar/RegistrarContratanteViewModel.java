@@ -65,7 +65,7 @@ public class RegistrarContratanteViewModel {
         txtInauguracao.setShowSoftInputOnFocus(false);
         txtInauguracao.setInputType(InputType.TYPE_NULL);
         this.param = view.getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
-        this.dialog = new ProgressDialog(view);dialog.setMessage("Carregando...");
+        this.dialog = new ProgressDialog(view);dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 

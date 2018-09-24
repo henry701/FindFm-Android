@@ -71,7 +71,7 @@ public class RegistrarMusicoViewModel {
         txtNascimento.setInputType(InputType.TYPE_NULL);
         this.param = view.getIntent().getBundleExtra("com.fatec.tcc.findfm.Views.Registrar");
         this.dialog = new ProgressDialog(view);
-        dialog.setMessage("Carregando...");
+        dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 

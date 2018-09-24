@@ -2,12 +2,14 @@ package com.fatec.tcc.findfm.Model.Business;
 
 public class Usuario {
 
+    private String id;
     private String nomeCompleto;
     private boolean confirmado;
     private boolean premium;
     private String telefone;
     private String email;
     private String senha;
+    private String fotoID;
     private String foto;
     private TiposUsuario tipoUsuario;
 
@@ -110,4 +112,19 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFotoID() {
+        return fotoID;
+    }
+
+    public void setFotoID(String fotoID) {
+        this.fotoID = fotoID;
+    }
 }
