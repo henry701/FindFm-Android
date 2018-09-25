@@ -2,6 +2,7 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -35,6 +37,7 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
 import java.io.ByteArrayOutputStream;
@@ -106,7 +109,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Aguarde...");
+        dialog.setMessage("Publicando, aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
@@ -185,9 +188,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        Util.hideSoftKeyboard(this);
         switch (item.getItemId()){
             case R.id.action_salvar:
+                if(binding.incluirContent.txtDesc.getText().toString().isEmpty() ){
+                    Toast.makeText(this, "Escreva algo em sua publicação...", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 UploadResourceService resourceService = new UploadResourceService(this);
                 resourceService.addObserver(this);
                 this.dialog.show();
@@ -230,6 +237,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 this.fotoBytes = stream.toByteArray();
                 this.fotoBytes_ContentType = "image/jpeg";
+                checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -238,6 +246,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
             try {
                 Uri u = data.getData();
                 MediaController m = new MediaController(this);
+
+                ContentResolver contentResolver = getContentResolver();
+                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
                 videoView.setMediaController(m);
                 videoView.setVisibility(View.VISIBLE);
@@ -253,8 +264,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     baos.write(buf, 0, n);
 
                 this.videoBytes = baos.toByteArray();
-                //TODO: arrumar
-                this.videoBytes_ContentType = "video/mpeg";
+                this.videoBytes_ContentType = "video/" + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(u));
+                checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -266,7 +277,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         fotoBytesId = null;
         fotoBytes = null;
         fotoBytes_ContentType = null;
-        fotoPublicacao.setVisibility(View.INVISIBLE);
+        fotoPublicacao.setVisibility(View.GONE);
         checkTelaMode();
     }
 
@@ -275,7 +286,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         videoBytesId = null;
         videoBytes = null;
         videoBytes_ContentType = null;
-        videoView.setVisibility(View.INVISIBLE);
+        videoView.setVisibility(View.GONE);
         checkTelaMode();
     }
 
