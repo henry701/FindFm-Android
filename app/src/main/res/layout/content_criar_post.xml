@@ -6,6 +6,9 @@
         <variable
             name="post"
             type="com.fatec.tcc.findfm.Model.Business.Post" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -14,7 +17,9 @@
         android:background="@drawable/from_bg"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".Views.CriarPost"
-        tools:showIn="@layout/activity_criar_post">
+        tools:showIn="@layout/activity_criar_post"
+        android:clickable="@{ clickListener != null ? true : false}"
+        android:onClick="@{clickListener::onClick}">
 
         <ScrollView
             android:id="@+id/scrollView2"
