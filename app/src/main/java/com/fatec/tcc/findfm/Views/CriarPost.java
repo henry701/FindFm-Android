@@ -113,12 +113,17 @@ public class CriarPost extends AppCompatActivity implements Observer{
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
+        if(telaMode.equals("criando")){
+            binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
+            ImagemUtils.setImagemToImageView(binding.incluirContent.circularImageView, this);
+        } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
+            Post post = (Post) FindFM.getMap().get("post");
+            binding.incluirContent.setPost(post);
+        }
     }
 
     private void checkTelaMode(){
         if(telaMode.equals("visualizar") || telaMode.equals("editavel")){
-            Post post = (Post) FindFM.getMap().get("post");
-            binding.incluirContent.setPost(post);
             //TODO: pegar id do recurso e fazer get, nossa que trabalho
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
@@ -153,12 +158,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 binding.fabVideo.setVisibility(View.GONE);
             }
         }
-
-        if(telaMode.equals("criando")){
-            binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
-            ImagemUtils.setImagemToImageView(binding.incluirContent.circularImageView, this);
-        }
-
 
         if(telaMode.equals("editavel") && optionsMenu != null){
             optionsMenu.getItem(0).setVisible(true);
@@ -251,7 +250,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
 
                 videoView.setMediaController(m);
-                videoView.setVisibility(View.VISIBLE);
                 videoView.setVideoURI(u);
                 videoView.setVisibility(View.VISIBLE);
 
@@ -265,6 +263,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                 this.videoBytes = baos.toByteArray();
                 this.videoBytes_ContentType = "video/" + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(u));
+                //this.videoBytes_ContentType = "video/mpeg";
                 checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();

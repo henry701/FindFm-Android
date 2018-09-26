@@ -12,18 +12,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.Request;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
+import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityMeusAnunciosFragmentBinding;
 
-import java.util.Arrays;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MeusAnuncios_Fragment extends Fragment {
 
@@ -31,6 +40,8 @@ public class MeusAnuncios_Fragment extends Fragment {
     private TelaPrincipal activity;
     private View view;
 
+    private ActivityMeusAnunciosFragmentBinding binding;
+    private List<Post> postList;
 
     public MeusAnuncios_Fragment(){
     }
@@ -43,16 +54,21 @@ public class MeusAnuncios_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        List<Post> posts = getAnuncios();
+        postList = new ArrayList<>();
+        getPost();
 
-        ActivityMeusAnunciosFragmentBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.activity_meus_anuncios_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_anuncios_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
         binding.listaAnuncios.setLayoutManager(new LinearLayoutManager(activity));
         binding.listaAnuncios.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
-        binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(posts, activity));
+
+
+        dialog = new ProgressDialog(activity);
+        dialog.setMessage("Aguarde...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
 
         return binding.getRoot();
     }
@@ -63,40 +79,53 @@ public class MeusAnuncios_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    private List<Post> getAnuncios(){
-        return Arrays.asList(
-                new Post()
-                        .setTitulo("Ser humano procura banda de pagode para tocar heavy metal")
-                        .setCidade("São Paulo")
-                        .setDescricao("Cansei de tocar pagode, quero metal, é nois")
-                        .setData(new Date())
-                        .setAutor(new Usuario().setNomeCompleto("Robson Robervaldo")),
-                new Post()
-                        .setTitulo("Procuro bandas para tocarem no meu quiosque na praia")
-                        .setCidade("São Vicente")
-                        .setDescricao("Toque aqui cara, pago bem")
-                        .setData(new Date())
-                        .setAutor(new Usuario().setNomeCompleto("Robervaldo Gerson")),
-                new Post()
-                        .setTitulo("Procuro guitarrista que toque bateria com os pés")
-                        .setCidade("São Longe de muito longe")
-                        .setDescricao("Tocamos heavy metal japones em lingua árabe")
-                        .setData(new Date())
-                        .setAutor(new Usuario().setNomeCompleto("Robson Robson Robervaldo")),
-                new Post()
-                        .setTitulo("Maior Titulo dos titulos muito grande meu Deus que titulo!!!")
-                        .setCidade("Maior nome de cidade que vc vera na vida meu amigo")
-                        .setDescricao("Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler")
-                        .setData(new Date())
-                        .setAutor(new Usuario().setNomeCompleto("Robervaldo Robervaldo Robervaldo"))
-        );
-    }
-
     public void addButton(View view){
         Util.open_form(activity, CriarPost.class);
     }
 
-
+    private void getPost( ) {
+        HttpTypedRequest<Usuario, ResponseBody, ErrorResponse> getPost = new HttpTypedRequest<>
+                (       activity,
+                        Request.Method.GET,
+                        Usuario.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        (ResponseBody response) ->
+                        {
+                            activity.getDialog().hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                for(Map<String,Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
+                                    PostResponse postResponse = JsonUtils.jsonConvert(retorno, PostResponse.class);
+                                    postList.add(new Post(postResponse));
+                                }
+                                binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            activity.getDialog().hide();
+                            binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (Exception error) ->
+                        {
+                            activity.getDialog().hide();
+                            binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+        getPost.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"post/author/" + FindFM.getUsuario().getId()));
+        getPost.execute(activity.getApplicationContext());
+        activity.getDialog().show();
+    }
 
 
 }
