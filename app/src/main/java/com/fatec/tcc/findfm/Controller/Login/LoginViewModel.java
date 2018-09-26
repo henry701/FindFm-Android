@@ -8,8 +8,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -51,13 +54,15 @@ public class LoginViewModel {
     }
 
     private void initRequests() {
-        loginRequest = new HttpTypedRequest<>
+        loginRequest = new JsonTypedRequest<>
                 (
                         view,
                         Request.Method.POST,
                         LoginRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(view.getResources(),"login"),
+                        null,
                         (ResponseBody response) ->
                         {
                             dialog.hide();
@@ -107,7 +112,7 @@ public class LoginViewModel {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -118,7 +123,6 @@ public class LoginViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        loginRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"login"));
     }
 
     public void btnEntrar_Click(View v) {
@@ -131,8 +135,8 @@ public class LoginViewModel {
         }
 
         this.dialog.show();
-        loginRequest.setRequestObject(new LoginRequest(usuario, senha));
-        loginRequest.execute(v.getContext());
+        loginRequest.setRequest(new LoginRequest(usuario, senha));
+        SharedRequestQueue.addToRequestQueue(v.getContext(), loginRequest);
     }
 
     public void dismissDialog(){

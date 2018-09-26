@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -73,12 +75,14 @@ public class RegistrarContratanteViewModel {
     }
 
     private void initRequests() {
-        registrarRequest = new HttpTypedRequest<>
+        registrarRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.POST,
                         Contratante.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(view.getResources(), "register", "contractor"),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -99,7 +103,7 @@ public class RegistrarContratanteViewModel {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -111,7 +115,6 @@ public class RegistrarContratanteViewModel {
                                     }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(), "register/contractor"));
     }
 
     public void dismissDialog(){
@@ -176,9 +179,8 @@ public class RegistrarContratanteViewModel {
                     this.endereco.get(),
                     Integer.parseInt(this.numeroEndereco.get())
             );
-
-            registrarRequest.setRequestObject(contratante);
-            registrarRequest.execute(view.getApplicationContext());
+            registrarRequest.setRequest(contratante);
+            SharedRequestQueue.addToRequestQueue(view.getApplicationContext(), registrarRequest);
         }
     }
 }

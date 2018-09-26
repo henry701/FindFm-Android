@@ -2,6 +2,10 @@ package com.fatec.tcc.findfm.Infrastructure.Request;
 
 import android.app.Activity;
 
+import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.BinaryTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Http.Request.UploadResourceRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -20,12 +24,13 @@ public class UploadResourceService extends Observable{
     }
 
     public void uploadFiles(byte[] dados, String contentType, boolean isFoto) {
-        HttpTypedRequest<UploadResourceRequest, ResponseBody, ErrorResponse> uploadResource = new HttpTypedRequest<>(
+        BinaryTypedRequest<ResponseBody, ErrorResponse> uploadResource = new BinaryTypedRequest<>(
                 activity,
                 HttpMethod.PUT.getCodigo(),
-                UploadResourceRequest.class,
                 ResponseBody.class,
                 ErrorResponse.class,
+                HttpUtils.buildUrl(activity.getResources(),"upload"),
+                dados,
                 (ResponseBody response) -> {
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         String retorno = isFoto ? "foto," : "video,";
@@ -39,21 +44,14 @@ public class UploadResourceService extends Observable{
                     setChanged();
                     notifyObservers(retorno);
                 },
-                (Exception error) -> {
+                (VolleyError error) -> {
                     String retorno = isFoto ? "foto" : "video";
                     setChanged();
                     notifyObservers(retorno);
-                }
+                },
+                contentType
         );
-
-        UploadResourceRequest param = new UploadResourceRequest();
-        param.setDados(dados);
-
-        uploadResource.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"upload"));
-        uploadResource.setRequestObject(param);
-        uploadResource.setResourceUpload(true);
-        uploadResource.setContentType(contentType);
-        uploadResource.execute(activity);
+        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), uploadResource);
     }
 
 }

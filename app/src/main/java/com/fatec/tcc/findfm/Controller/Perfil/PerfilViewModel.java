@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -243,12 +245,14 @@ public class PerfilViewModel {
     }
 
     private void initRequests() {
-        registrarRequest = new HttpTypedRequest<>
+        registrarRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.POST,
                         AtualizarUsuarioRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(view.getResources(),"register", "musician"),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -268,7 +272,7 @@ public class PerfilViewModel {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -279,7 +283,6 @@ public class PerfilViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"register/musician"));
     }
 
     public void txtNascimento_Click(View v){
@@ -313,12 +316,14 @@ public class PerfilViewModel {
     }
 
     public void updateList(List<Instrumento> instrumentosUsuario) {
-        HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
+        JsonTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.GET,
                         Instrumento.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(view.getResources(),"instruments"),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -344,7 +349,7 @@ public class PerfilViewModel {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -365,9 +370,8 @@ public class PerfilViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        instrumentoRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"instruments"));
         dialog.show();
-        instrumentoRequest.execute(view);
+        SharedRequestQueue.addToRequestQueue(view, instrumentoRequest);
     }
 
     public void setNascimento(String nascimento) {
