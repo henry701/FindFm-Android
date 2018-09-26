@@ -4,13 +4,14 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.fatec.tcc.findfm"
-        // Sdk versions on Android Manifest XML
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 26
+        targetSdkVersion 26
     }
     dataBinding {
-        enabled = true
+        enabled true
     }
     buildTypes {
         release {
@@ -22,7 +23,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildToolsVersion '27.0.3'
 }
 
 dependencies {
