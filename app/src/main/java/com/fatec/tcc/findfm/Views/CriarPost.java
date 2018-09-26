@@ -22,8 +22,11 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -290,12 +293,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     private void initRequest(Post post){
-        HttpTypedRequest<PostRequest, ResponseBody, ErrorResponse> postRequest = new HttpTypedRequest<>(
+        JsonTypedRequest<PostRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
                 this,
                 HttpMethod.POST.getCodigo(),
                 PostRequest.class,
                 ResponseBody.class,
                 ErrorResponse.class,
+                HttpUtils.buildUrl(getResources(),"post/create"),
+                null,
                 (ResponseBody response) -> {
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
@@ -315,7 +320,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             error.getMessage(),"OK",
                             (dialog, id) -> { }).create().show();
                 },
-                (Exception error) -> {
+                (VolleyError error) -> {
                     dialog.hide();
                     error.printStackTrace();
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -331,12 +336,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
              .setDescricao(post.getDescricao())
              .setImagemId(post.getIdFoto())
              .setVideoId(post.getIdVideo());
-
-        postRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"post/create"));
-        postRequest.setRequestObject(param);
+        postRequest.setRequest(param);
         dialog.show();
-        postRequest.execute(this);
-
+        SharedRequestQueue.addToRequestQueue(this, postRequest);
     }
 
     @Override

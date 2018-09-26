@@ -12,7 +12,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -43,7 +45,7 @@ public class RegistrarMusicoViewModel {
 
     private RegistrarMusico view;
     private RecyclerView rc;
-    private HttpTypedRequest<Musico, ResponseBody, ErrorResponse> registrarRequest;
+    private JsonTypedRequest<Musico, ResponseBody, ErrorResponse> registrarRequest;
     private ProgressDialog dialog;
     private Bundle param = new Bundle();
 
@@ -79,12 +81,14 @@ public class RegistrarMusicoViewModel {
     }
 
     private void initRequests() {
-        registrarRequest = new HttpTypedRequest<>
+        registrarRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.POST,
                         Musico.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        (HttpUtils.buildUrl(view.getResources(),"register", "musician")),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -105,7 +109,7 @@ public class RegistrarMusicoViewModel {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -116,7 +120,6 @@ public class RegistrarMusicoViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(view.getResources(),"register/musician"));
     }
 
     public void registrar(){
@@ -163,8 +166,8 @@ public class RegistrarMusicoViewModel {
                     param.getString("cidade"),
                     param.getString("uf")
             );
-            registrarRequest.setRequestObject(musico);
-            registrarRequest.execute(view.getApplicationContext());
+            registrarRequest.setRequest(musico);
+            SharedRequestQueue.addToRequestQueue(view.getApplicationContext(), registrarRequest);
         }
     }
 

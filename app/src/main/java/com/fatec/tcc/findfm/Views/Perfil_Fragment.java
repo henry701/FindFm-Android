@@ -20,8 +20,10 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -151,12 +153,14 @@ public class Perfil_Fragment extends Fragment {
     }
 
     private void getUser() {
-        HttpTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new HttpTypedRequest<>
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(activity.getResources(),"account", "me"),
+                        null,
                         (ResponseBody response) ->
                         {
                             activity.getDialog().hide();
@@ -210,7 +214,7 @@ public class Perfil_Fragment extends Fragment {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             activity.getDialog().hide();
                             error.printStackTrace();
@@ -221,8 +225,7 @@ public class Perfil_Fragment extends Fragment {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"account/me"));
-        registrarRequest.execute(activity.getApplicationContext());
+        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), registrarRequest);
         activity.getDialog().show();
     }
 }

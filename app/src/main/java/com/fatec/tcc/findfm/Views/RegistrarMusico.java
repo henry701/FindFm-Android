@@ -18,8 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -92,12 +94,14 @@ public class RegistrarMusico extends AppCompatActivity {
 
     private void updateList() {
         RecyclerView rc = findViewById(R.id.listaInstrumentos);
-        HttpTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new HttpTypedRequest<>
+        JsonTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new JsonTypedRequest<>
                 (       this,
                         Request.Method.GET,
                         Instrumento.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(),"instruments"),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -123,7 +127,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -138,11 +142,8 @@ public class RegistrarMusico extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        instrumentoRequest.setFullUrl(HttpUtils.buildUrl(getResources(),"instruments"));
         dialog.show();
-        instrumentoRequest.execute(this);
-
-
+        SharedRequestQueue.addToRequestQueue(this, instrumentoRequest);
     }
 
     public void btnFoto_Click(View v){

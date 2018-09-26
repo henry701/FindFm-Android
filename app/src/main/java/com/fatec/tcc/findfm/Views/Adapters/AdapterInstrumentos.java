@@ -31,6 +31,7 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
     private Context context;
 
     public AdapterInstrumentos() {
+
     }
 
     public AdapterInstrumentos(List<Instrumento> instrumentos, Context context){

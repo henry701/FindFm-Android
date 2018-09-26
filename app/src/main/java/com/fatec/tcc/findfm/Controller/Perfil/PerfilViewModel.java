@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -58,7 +58,7 @@ public class PerfilViewModel {
     public ObservableField<String> inauguracao = new ObservableField<>();
     private Date inauguracaoDate;
 
-    private HttpTypedRequest<AtualizarUsuarioRequest, ResponseBody, ErrorResponse> registrarRequest;
+    private JsonTypedRequest<AtualizarUsuarioRequest, ResponseBody, ErrorResponse> registrarRequest;
     private String UF;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;

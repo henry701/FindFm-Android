@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Utils.FindFM;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -45,7 +45,7 @@ public class RegistrarContratanteViewModel {
     public ObservableField<String> endereco = new ObservableField<>();
     public ObservableField<String> numeroEndereco = new ObservableField<>();
 
-    private HttpTypedRequest<Contratante, ResponseBody, ErrorResponse> registrarRequest;
+    private JsonTypedRequest<Contratante, ResponseBody, ErrorResponse> registrarRequest;
     private ProgressDialog dialog;
     private Bundle param = new Bundle();
 

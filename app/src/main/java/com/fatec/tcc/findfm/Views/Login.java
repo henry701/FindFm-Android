@@ -12,9 +12,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Login.LoginViewModel;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -88,12 +90,14 @@ public class Login extends AppCompatActivity {
     }
 
     private void getUser(Activity activity) {
-        HttpTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new HttpTypedRequest<>
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(activity.getResources(),"account", "me"),
+                        null,
                         (ResponseBody response) ->
                         {
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
@@ -144,7 +148,7 @@ public class Login extends AppCompatActivity {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.dismiss();
                             error.printStackTrace();
@@ -155,8 +159,7 @@ public class Login extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        registrarRequest.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"account/me"));
-        registrarRequest.execute(activity.getApplicationContext());
+        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), registrarRequest);
         this.dialog.show();
     }
 

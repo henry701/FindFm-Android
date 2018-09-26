@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 public class LoginViewModel {
 
-    private HttpTypedRequest<LoginRequest, ResponseBody, ErrorResponse> loginRequest;
+    private JsonTypedRequest<LoginRequest, ResponseBody, ErrorResponse> loginRequest;
     public ObservableField<String> email = new ObservableField<>();
     public ObservableField<String> password = new ObservableField<>();
 

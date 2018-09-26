@@ -38,7 +38,6 @@ public class UploadResourceService extends Observable{
                     String retorno = isFoto ? "foto" : "video";
                     setChanged();
                     notifyObservers(retorno);
-
                 },
                 (Exception error) -> {
                     String retorno = isFoto ? "foto" : "video";

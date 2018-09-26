@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Http.Request.RecuperarSenhaRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -27,8 +29,9 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 
 public class RecuperarSenha extends AppCompatActivity {
 
-    private HttpTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar1;
-    private HttpTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar2;
+    private JsonTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar1;
+    private JsonTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar2;
+
     private ProgressDialog dialog;
 
     private TextView lb_instrucao;
@@ -59,16 +62,17 @@ public class RecuperarSenha extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
         requestRenovar1();
-        requestRenovar2();
     }
 
     private void requestRenovar1() {
-        requestRenovar1 = new HttpTypedRequest<>
+        requestRenovar1 = new JsonTypedRequest<>
                 (       this,
                         Request.Method.POST,
                         RecuperarSenhaRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(),"passwordRecovery"),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -87,7 +91,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -98,16 +102,17 @@ public class RecuperarSenha extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        requestRenovar1.setFullUrl(HttpUtils.buildUrl(getResources(),"passwordRecovery"));
     }
 
-    private void requestRenovar2() {
-        requestRenovar2 = new HttpTypedRequest<>
+    private void requestRenovar2(String cod) {
+        requestRenovar2 = new JsonTypedRequest<>
                 (       this,
-                        Request.Method.POST,
+                        Request.Method.GET,
                         RecuperarSenhaRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(),"passwordRecovery", cod),
+                        null,
                         (ResponseBody response) ->
                         {
                             this.dialog.hide();
@@ -136,7 +141,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             dialog.hide();
                             error.printStackTrace();
@@ -157,8 +162,8 @@ public class RecuperarSenha extends AppCompatActivity {
             }
 
             this.dialog.show();
-            requestRenovar1.setRequestObject(new RecuperarSenhaRequest().setEmail(email.getText().toString()));
-            requestRenovar1.execute(this);
+            requestRenovar1.setRequest(new RecuperarSenhaRequest().setEmail(email.getText().toString()));
+            SharedRequestQueue.addToRequestQueue(this, requestRenovar1);
         }
         else {
             if (codigo == null || codigo.getText().toString().isEmpty() ) {
@@ -166,9 +171,8 @@ public class RecuperarSenha extends AppCompatActivity {
                 return;
             }
             this.dialog.show();
-            requestRenovar2.setRequestObject(null);
-            requestRenovar2.setFullUrl(HttpUtils.buildUrl(getResources(),codigo.getText().toString()));
-            requestRenovar2.execute(this);
+            requestRenovar2(codigo.getText().toString());
+            SharedRequestQueue.addToRequestQueue(this, requestRenovar2);
         }
     }
 

@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
-import com.fatec.tcc.findfm.Infrastructure.Request.HttpTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -84,12 +86,14 @@ public class MeusAnuncios_Fragment extends Fragment {
     }
 
     private void getPost( ) {
-        HttpTypedRequest<Usuario, ResponseBody, ErrorResponse> getPost = new HttpTypedRequest<>
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> getPost = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
+                        HttpUtils.buildUrl(activity.getResources(),"post/author/" + FindFM.getUsuario().getId()),
+                        null,
                         (ResponseBody response) ->
                         {
                             activity.getDialog().hide();
@@ -110,7 +114,7 @@ public class MeusAnuncios_Fragment extends Fragment {
                                     errorResponse.getMessage(),"OK",
                                     (dialog, id) -> { }).create().show();
                         },
-                        (Exception error) ->
+                        (VolleyError error) ->
                         {
                             activity.getDialog().hide();
                             binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
@@ -122,8 +126,7 @@ public class MeusAnuncios_Fragment extends Fragment {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        getPost.setFullUrl(HttpUtils.buildUrl(activity.getResources(),"post/author/" + FindFM.getUsuario().getId()));
-        getPost.execute(activity.getApplicationContext());
+        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), getPost);
         activity.getDialog().show();
     }
 
