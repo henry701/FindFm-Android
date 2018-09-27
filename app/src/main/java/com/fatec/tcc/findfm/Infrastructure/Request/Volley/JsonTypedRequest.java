@@ -3,10 +3,8 @@ package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 import android.app.Activity;
 import android.util.Log;
 
-import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 
@@ -56,14 +54,15 @@ public class JsonTypedRequest<TRequest, TResponse, TErrorResponse> extends Abstr
     {
         String responseCharset = HttpHeaderParser.parseCharset(networkResponse.headers,"UTF-8");
         String responseString = new String(networkResponse.data, Charset.forName(responseCharset));
-        // Log.i("CHAMADAS TYPED JSON", "Dados recebidos (ERROR): " + responseString);
+        Log.i("CHAMADAS TYPED JSON", "Dados recebidos (ERROR): " + responseString);
         TErrorResponse receivedObject = JsonUtils.GSON.fromJson(responseString, super.getErrorResponseClass());
         return receivedObject;
     }
 
     public void setRequest(TRequest requestObject)
     {
-        super.setRequestBody(JsonUtils.GSON.toJson(super.getRequestBody()).getBytes(StandardCharsets.UTF_8));
+        Log.d("CHAMADAS TYPED JSON", "Dados sendo enviados: " + JsonUtils.GSON.toJson(requestObject));
+        super.setRequestBody(JsonUtils.GSON.toJson(requestObject).getBytes(StandardCharsets.UTF_8));
     }
 
     public Class<TRequest> getRequestClass() {
