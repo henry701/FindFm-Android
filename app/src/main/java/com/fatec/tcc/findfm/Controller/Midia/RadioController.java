@@ -4,13 +4,11 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.R;
 
-import java.io.IOException;
 import java.util.Observable;
 
 public class RadioController extends Observable{

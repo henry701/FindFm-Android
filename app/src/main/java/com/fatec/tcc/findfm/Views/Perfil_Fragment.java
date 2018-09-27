@@ -80,6 +80,7 @@ public class Perfil_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        activity.getSupportActionBar().setTitle("Meu Perfil");
         FindFM.setTelaAtual("MEU_PERFIL");
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_perfil_fragment, container, false);
 

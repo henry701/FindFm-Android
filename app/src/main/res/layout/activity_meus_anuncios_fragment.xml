@@ -29,5 +29,16 @@
             android:backgroundTint="@color/colorPrimaryDark"
             app:srcCompat="@drawable/ic_adicionar" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nao_ha_publicacoes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
     </android.support.design.widget.CoordinatorLayout>
 </layout>

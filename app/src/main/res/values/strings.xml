@@ -119,4 +119,5 @@
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
     <string name="codigo_de_recuperacao">Código de recuperação</string>
     <string name="nova_senha">Sua nova senha, não se esqueça de altera-lá</string>
+    <string name="nao_ha_publicacoes">Não há publicações para serem mostradas</string>
 </resources>

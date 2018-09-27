@@ -56,9 +56,7 @@ public class MeusAnuncios_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        postList = new ArrayList<>();
-        getPost();
-
+        activity.getSupportActionBar().setTitle("Minhas Publicações");
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_anuncios_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
         binding.listaAnuncios.setLayoutManager(new LinearLayoutManager(activity));
@@ -66,13 +64,18 @@ public class MeusAnuncios_Fragment extends Fragment {
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
 
-
         dialog = new ProgressDialog(activity);
         dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPost();
     }
 
     @Override
@@ -98,11 +101,17 @@ public class MeusAnuncios_Fragment extends Fragment {
                         {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                for(Map<String,Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
-                                    PostResponse postResponse = JsonUtils.jsonConvert(retorno, PostResponse.class);
-                                    postList.add(new Post(postResponse));
+                                if(((ArrayList) response.getData()).size() != 0) {
+                                    for (Map<String, Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
+                                        PostResponse postResponse = JsonUtils.jsonConvert(retorno, PostResponse.class);
+                                        postList.add(new Post(postResponse));
+                                    }
+                                    binding.textView4.setVisibility(View.GONE);
+                                    binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                                } else
+                                {
+                                    binding.textView4.setVisibility(View.VISIBLE);
                                 }
-                                binding.listaAnuncios.setAdapter(new AdapterMeusAnuncios(postList, activity));
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -126,6 +135,8 @@ public class MeusAnuncios_Fragment extends Fragment {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
+        postList = new ArrayList<>();
+
         SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), getPost);
         activity.getDialog().show();
     }

@@ -23,7 +23,6 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
@@ -122,6 +121,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             binding.incluirContent.setPost(post);
+            //TODO: colocar midias
         }
     }
 
@@ -266,7 +266,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                 this.videoBytes = baos.toByteArray();
                 this.videoBytes_ContentType = "video/" + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(u));
-                //this.videoBytes_ContentType = "video/mpeg";
                 checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -14,7 +14,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -23,12 +22,13 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Login;
 import com.fatec.tcc.findfm.Views.RegistrarContratante;
-import com.fatec.tcc.findfm.Views.TelaPrincipal;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -92,7 +92,7 @@ public class RegistrarContratanteViewModel {
                                 FindFM.logarUsuario(view, TiposUsuario.CONTRATANTE, param.getString("nomeCompleto", ""));
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();
-                                Util.open_form__no_return(view, TelaPrincipal.class);
+                                Util.open_form__no_return(view, Login.class);
                             }
                         },
                         (ErrorResponse errorResponse) ->

@@ -4,9 +4,7 @@ import android.app.Activity;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.BinaryTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
-import com.fatec.tcc.findfm.Model.Http.Request.UploadResourceRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;

@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
@@ -80,14 +79,14 @@ public class LoginViewModel {
                                                 dialog.dismiss();
                                                 ImagemUtils.setImagemToParams(bitmap);
                                                 ImagemUtils.setImagemToPref(view, bitmap);
-                                                Util.open_form__no_return(view, TelaPrincipal.class );
+                                                Util.open_form__no_return(view, Login.class );
                                             },
                                             error -> {
                                                 dialog.dismiss();
                                                 AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
                                                         (dialog, id) -> {
                                                         }).create().show();
-                                                Util.open_form__no_return(view, TelaPrincipal.class );
+                                                Util.open_form__no_return(view, Login.class );
                                             }
                                     );
                                     imagemRequest.execute();

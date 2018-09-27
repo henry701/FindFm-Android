@@ -30,8 +30,8 @@ import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
+import com.fatec.tcc.findfm.Views.Login;
 import com.fatec.tcc.findfm.Views.RegistrarMusico;
-import com.fatec.tcc.findfm.Views.TelaPrincipal;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class RegistrarMusicoViewModel {
                                 FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto", ""));
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
                                 dialog.dismiss();
-                                Util.open_form__no_return(view, TelaPrincipal.class);
+                                Util.open_form__no_return(view, Login.class);
                             }
                         },
                         (ErrorResponse errorResponse) ->
