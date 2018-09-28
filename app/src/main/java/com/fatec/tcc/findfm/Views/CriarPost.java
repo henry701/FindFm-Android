@@ -42,6 +42,7 @@ import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Objects;
@@ -61,7 +62,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     private boolean fotoUpload;
     private String fotoBytesId;
-    private byte[] fotoBytes;
     private String fotoBytes_ContentType;
 
     private boolean videoUpload;
@@ -88,7 +88,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 telaMode = param.getString("telaMode");
             }
         } else {
-            ImagemUtils.setImagemToImageView(imageView, this);
+            ImagemUtils.setImagemPerfilToImageView(imageView, this);
             binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
         }
 
@@ -119,12 +119,25 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         if(telaMode.equals("criando")){
             binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
-            ImagemUtils.setImagemToImageView(binding.incluirContent.circularImageView, this);
+            ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             binding.incluirContent.setPost(post);
             //TODO: colocar midias
+
+            if(post.getFotoBytes() != null) {
+                InputStream input = new ByteArrayInputStream(post.getFotoBytes());
+                Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
+                binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+                this.fotoBytes_ContentType = "image/jpeg";
+            }
         }
+
+        if (telaMode.equals("editavel")){
+            ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
+        }
+
     }
 
     private void checkTelaMode(){
@@ -147,7 +160,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
 
-            if(fotoBytes == null) {
+            if(binding.incluirContent.getPost().getFotoBytes() == null) {
                 binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
                 binding.fabFoto.setVisibility(View.VISIBLE);
             } else {
@@ -203,9 +216,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 resourceService.addObserver(this);
                 this.dialog.show();
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
-                if(fotoBytes != null) {
+                if(binding.incluirContent.getPost().getFotoBytes() != null) {
                     fotoUpload = true;
-                    resourceService.uploadFiles(fotoBytes, fotoBytes_ContentType, true);
+                    resourceService.uploadFiles(binding.incluirContent.getPost().getFotoBytes(), fotoBytes_ContentType, true);
                 }
                 if(videoBytes != null) {
                     videoUpload = true;
@@ -239,7 +252,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                this.fotoBytes = stream.toByteArray();
+                binding.incluirContent.getPost().setFotoBytes(stream.toByteArray());
                 this.fotoBytes_ContentType = "image/jpeg";
                 checkTelaMode();
             } catch (Exception e) {
@@ -278,7 +291,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     public void btnRemoverImagem_Click(View v){
         fotoUpload = false;
         fotoBytesId = null;
-        fotoBytes = null;
+        binding.incluirContent.getPost().setFotoBytes(null);
         fotoBytes_ContentType = null;
         fotoPublicacao.setVisibility(View.GONE);
         checkTelaMode();

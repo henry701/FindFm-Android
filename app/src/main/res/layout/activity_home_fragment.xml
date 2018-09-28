@@ -31,41 +31,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_margin="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/btn_bg_round"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guideline5"
-                    app:layout_constraintTop_toTopOf="@+id/guideline6" />
-
-                <ImageButton
-                    android:id="@+id/imageButton2"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_margin="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/btn_bg_round"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="@+id/guideline6"
-                    android:contentDescription="@string/foto_perfil" />
-
                 <com.santalu.diagonalimageview.DiagonalImageView
                     android:id="@+id/fotoCapa"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="95dp"
                     android:adjustViewBounds="true"
                     android:background="@android:color/transparent"
                     android:scaleType="centerCrop"
@@ -74,138 +43,42 @@
                     app:di_direction="left"
                     app:di_overlap="40dp"
                     app:di_position="bottom"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"
                     app:srcCompat="@drawable/capaplaceholder" />
 
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/fotoPerfil"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="82dp"
+                    android:layout_height="84dp"
+                    android:layout_marginStart="10dp"
                     android:adjustViewBounds="false"
                     android:scaleType="matrix"
                     android:src="@drawable/profile_pic_placeholder"
-                    app:layout_constraintBottom_toTopOf="@+id/textView"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                    app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="@+id/guideline3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:siBorderColor="@color/white"
                     app:siBorderWidth="3dp" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.4" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.43" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.2" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.33" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.66" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.6" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="338dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Josias"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    app:fontFamily="sans-serif"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.9" />
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_margin="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/btn_bg_round"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline6" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="top|center"
-                    android:text="Josias Violinista incrivel"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline6"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                 <TextView
                     android:id="@+id/lb_nomeUsuario"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="28dp"
                     android:fontFamily="sans-serif"
                     android:text="TextView"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toTopOf="@+id/fotoPerfil"
-                    app:layout_constraintEnd_toStartOf="@+id/fotoCapa"
-                    app:layout_constraintStart_toEndOf="@+id/fotoCapa"
-                    app:layout_constraintTop_toBottomOf="@+id/fotoCapa"
-                    app:layout_constraintVertical_bias="1.0"
+                    app:layout_constraintEnd_toEndOf="@+id/fotoCapa"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Bem-vindo: Username" />
 
                 <android.support.design.widget.FloatingActionButton
@@ -214,17 +87,35 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_margin="@dimen/fab_margin"
-                    android:layout_marginBottom="41dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="28dp"
                     android:onClick="@{postViewModel::addButton}"
                     app:backgroundTint="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageButton3"
-                    app:layout_constraintStart_toStartOf="@+id/imageButton3"
-                    app:layout_constraintTop_toBottomOf="@+id/imageButton3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/lb_nomeUsuario"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_editar" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nao_ha_publicacoes"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/lista_posts"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fotoCapa" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lista_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fotoCapa" />
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>

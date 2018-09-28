@@ -58,7 +58,7 @@ public class ImagemUtils {
         FindFM.setFotoPref(view, base64);
     }
 
-    public static void setImagemToImageView(ImageView imageView, AppCompatActivity view){
+    public static void setImagemPerfilToImageView(ImageView imageView, AppCompatActivity view){
         byte[] image = FindFM.getFotoPrefBytes(view);
         if(image != null && image.length != 0) {
             imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
@@ -68,7 +68,7 @@ public class ImagemUtils {
         }
     }
 
-    public static void setImagemToImageView(ImageView imageView, AppCompatActivity view, ImageButton btnRemoverImagem){
+    public static void setImagemPerfilToImageView(ImageView imageView, AppCompatActivity view, ImageButton btnRemoverImagem){
         byte[] image = FindFM.getImagemPerfilBytes();
         if(image != null && image.length != 0) {
             imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));

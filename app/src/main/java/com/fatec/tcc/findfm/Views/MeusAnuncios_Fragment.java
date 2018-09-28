@@ -76,7 +76,6 @@ public class MeusAnuncios_Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         if( !FindFM.getTelaAtual().equals("CRIAR_POST")) {
-
             getPost();
         }
     }

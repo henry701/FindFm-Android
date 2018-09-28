@@ -68,7 +68,7 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
                             byte[] dados = ((BinaryResponse) arg).getData();
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
-
+                            post.setFotoBytes(dados);
                             holder.bindingVH.fotoPublicacao.setImageBitmap(ext_pic);
                             holder.bindingVH.fotoPublicacao.setVisibility(View.VISIBLE);
                         } else{

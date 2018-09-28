@@ -77,7 +77,7 @@ public class RegistrarMusicoViewModel {
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
-        ImagemUtils.setImagemToImageView(imageView, view, btnRemoverImagem);
+        ImagemUtils.setImagemPerfilToImageView(imageView, view, btnRemoverImagem);
     }
 
     private void initRequests() {

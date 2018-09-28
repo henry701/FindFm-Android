@@ -16,8 +16,10 @@ public class Post {
     private String cidade;
     private String idFoto;
     private List<String> idFotos;
+    private byte[] fotoBytes;
     private String idVideo;
     private List<String> idVideos;
+    private byte[] videoBytes;
     private Date data;
     private Long likes;
     private List<Comentario> comentarios;
@@ -152,5 +154,21 @@ public class Post {
 
     public void setLikes(Long likes) {
         this.likes = likes;
+    }
+
+    public byte[] getFotoBytes() {
+        return fotoBytes;
+    }
+
+    public void setFotoBytes(byte[] fotoBytes) {
+        this.fotoBytes = fotoBytes;
+    }
+
+    public byte[] getVideoBytes() {
+        return videoBytes;
+    }
+
+    public void setVideoBytes(byte[] videoBytes) {
+        this.videoBytes = videoBytes;
     }
 }

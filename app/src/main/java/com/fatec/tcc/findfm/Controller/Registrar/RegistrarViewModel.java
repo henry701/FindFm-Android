@@ -138,6 +138,6 @@ public class RegistrarViewModel {
     }
 
     public void setFoto(){
-        ImagemUtils.setImagemToImageView(this.imageView, view, btnRemoverImagem);
+        ImagemUtils.setImagemPerfilToImageView(this.imageView, view, btnRemoverImagem);
     }
 }

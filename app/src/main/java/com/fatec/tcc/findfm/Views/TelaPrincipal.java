@@ -55,7 +55,7 @@ public class TelaPrincipal extends AppCompatActivity
         radioMenu = navigationView.getMenu().findItem(R.id.playRadio);
 
         ImageView imageView = header.findViewById(R.id.imageViewHeader);
-        ImagemUtils.setImagemToImageView(imageView, this);
+        ImagemUtils.setImagemPerfilToImageView(imageView, this);
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
