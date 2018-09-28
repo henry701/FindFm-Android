@@ -46,7 +46,7 @@ public class Post {
         usuario.setNomeCompleto(postResponse.getAutor().getFullName());
         this.autor = usuario;
         //TODO: colocar esses campos
-        this.data = postResponse.getData();
+        this.data = postResponse.getCriacao();
         usuario.setEmail(postResponse.getAutor().getEmail());
         if(postResponse.getAutor().getTelefone() != null)
             usuario.setTelefone(postResponse.getAutor().getTelefone().getStateCode() + postResponse.getAutor().getTelefone().getNumber());

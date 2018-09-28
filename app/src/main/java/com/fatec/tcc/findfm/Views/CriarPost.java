@@ -73,6 +73,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FindFM.setTelaAtual("CRIAR_POST");
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_post);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -308,6 +310,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 "Post cadastrado com sucesso","OK",
                                 (dialog, id) -> {
                                                 dialog.dismiss();
+                                                FindFM.setTelaAtual("POST_CRIADO");
                                                 super.onBackPressed(); }).create().show();
 
                     }

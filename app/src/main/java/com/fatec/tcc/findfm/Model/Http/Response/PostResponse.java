@@ -7,9 +7,9 @@ public class PostResponse {
 
     private String titulo;
     private String descricao;
+    private Date criacao;
     private Autor autor;
     private Long likes;
-    private Date data;
     private String cidade;
     private String UF;
     private List<Midias> midias;
@@ -54,14 +54,6 @@ public class PostResponse {
         this.titulo = titulo;
     }
 
-    public Date getData() {
-        return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
     public String getCidade() {
         return cidade;
     }
@@ -76,6 +68,14 @@ public class PostResponse {
 
     public void setUF(String UF) {
         this.UF = UF;
+    }
+
+    public Date getCriacao() {
+        return criacao;
+    }
+
+    public void setCriacao(Date criacao) {
+        this.criacao = criacao;
     }
 
     public class Autor {

@@ -25,9 +25,7 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
-import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Login;
-import com.fatec.tcc.findfm.Views.TelaPrincipal;
 
 import java.util.Map;
 
@@ -47,7 +45,7 @@ public class LoginViewModel {
 
     public void init() {
         initRequests();
-        dialog.setMessage("Carregando...");
+        dialog.setMessage("Aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
     }
@@ -79,21 +77,21 @@ public class LoginViewModel {
                                                 dialog.dismiss();
                                                 ImagemUtils.setImagemToParams(bitmap);
                                                 ImagemUtils.setImagemToPref(view, bitmap);
-                                                Util.open_form__no_return(view, Login.class );
+                                                view.getUser(view);
                                             },
                                             error -> {
                                                 dialog.dismiss();
                                                 AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error, error.getMessage(), "OK",
                                                         (dialog, id) -> {
                                                         }).create().show();
-                                                Util.open_form__no_return(view, Login.class );
+                                                view.getUser(view);
                                             }
                                     );
                                     imagemRequest.execute();
                                 }
                                 else{
                                     dialog.dismiss();
-                                    Util.open_form__no_return(view, TelaPrincipal.class );
+                                    view.getUser(view);
                                 }
                             } else if (ResponseCode.from(response.getCode()).equals(ResponseCode.IncorrectPassword)){
                                 dialog.hide();

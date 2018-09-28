@@ -192,7 +192,6 @@
                         android:buttonTint="@color/white"
                         android:text="@string/contratante"
                         android:textColor="@android:color/background_light"
-                        app:layout_constraintEnd_toStartOf="@+id/rbBanda"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/rbMusico"
                         tools:layout_editor_absoluteY="400dp" />
@@ -203,7 +202,7 @@
                         android:layout_height="wrap_content"
                         android:button="?android:attr/listChoiceIndicatorSingle"
                         android:buttonTint="@color/white"
-                        android:text="@string/musico"
+                        android:text="@string/artista"
                         android:textColor="@android:color/background_light"
                         app:layout_constraintEnd_toStartOf="@+id/rbContratante"
                         app:layout_constraintHorizontal_bias="0.5"

@@ -1,6 +1,5 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +17,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
+import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewMeusAnunciosBinding;
 
 import java.io.ByteArrayInputStream;
@@ -28,12 +28,12 @@ import java.util.List;
 public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncios.ViewHolder> {
 
     private List<Post> posts = new ArrayList<>();
-    private Activity activity;
+    private TelaPrincipal activity;
 
     public AdapterMeusAnuncios() {
     }
 
-    public AdapterMeusAnuncios(List<Post> posts, Activity activity){
+    public AdapterMeusAnuncios(List<Post> posts, TelaPrincipal activity){
         this.posts = posts;
         this.activity = activity;
     }
@@ -78,11 +78,14 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
                                             "\nVerifique sua conexão com a Internet e tente novamente","OK",
                                     (dialog, id1) -> { }).create().show();
                         }
+
+                        activity.getDialog().hide();
+
                     });
                 }
             });
             downloadService.getResource(id);
-
+            activity.getDialog().show();
         }
 
         holder.bindingVH.setClickListener(v -> {
@@ -102,7 +105,7 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
         return posts.size();
     }
 
-    public void setAnuncios(List<Post> posts, Activity activity){
+    public void setAnuncios(List<Post> posts, TelaPrincipal activity){
         this.posts = posts;
         this.activity = activity;
         notifyDataSetChanged();

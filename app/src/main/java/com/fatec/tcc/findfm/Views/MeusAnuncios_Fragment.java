@@ -75,7 +75,10 @@ public class MeusAnuncios_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getPost();
+        if( !FindFM.getTelaAtual().equals("CRIAR_POST")) {
+
+            getPost();
+        }
     }
 
     @Override

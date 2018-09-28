@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
         binding.getViewModel().init();
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Aguarde...");
+        dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
         Util.open_form(getApplicationContext(), Registrar.class);
     }
 
-    private void getUser(Activity activity) {
+    public void getUser(Activity activity) {
         JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,

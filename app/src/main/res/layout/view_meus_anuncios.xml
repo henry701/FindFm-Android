@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -41,89 +41,88 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+
+                <TextView
+                    android:id="@+id/lb_data"
+                    android:layout_width="367dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Publicado em: 32/13/2059 23:59:59"
+                    android:text="@{`Publicado em: ` + post.data}"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
+                    tools:layout_editor_absoluteY="17dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <!--android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"-->
+
                 <TextView
                     android:id="@+id/lb_titulo_anuncio"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
-                    android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
                     android:text="@={post.titulo}"
-                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/lb_cidade"
-                    app:layout_constraintEnd_toEndOf="@+id/lb_descricao"
-                    app:layout_constraintHorizontal_bias="0.5"
+                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintStart_toStartOf="@+id/lb_descricao"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    tools:layout_editor_absoluteY="37dp" />
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="5dp" />
 
-                <TextView
-                    android:id="@+id/lb_cidade"
-                    android:layout_width="367dp"
-                    android:layout_height="42dp"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Maior nome de cidade que vc vera na vida meu amigo"
-                    android:text="@={post.cidade}"
-                    android:visibility="@{post.cidade != null ? View.VISIBLE : View.GONE}"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toTopOf="@+id/lb_descricao"
-                    app:layout_constraintEnd_toEndOf="@+id/lb_descricao"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/lb_descricao"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_titulo_anuncio" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
+                <!--android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"-->
 
                 <TextView
                     android:id="@+id/lb_descricao"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
-                    android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
                     android:text="@={post.descricao}"
-                    android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"
+                    android:textSize="18sp"
+                    android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_cidade" />
+                    tools:layout_editor_absoluteY="83dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
                 <ImageView
                     android:id="@+id/fotoPublicacao"
                     android:layout_width="342dp"
                     android:layout_height="285dp"
-                    android:visibility="gone"
                     android:contentDescription="Imagem"
-                    app:layout_constraintBottom_toTopOf="@+id/videoView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_descricao"
-                    app:srcCompat="@drawable/capaplaceholder_photo" />
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/capaplaceholder_photo"
+                    tools:layout_editor_absoluteX="367dp"
+                    tools:layout_editor_absoluteY="172dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
                 <VideoView
                     android:id="@+id/videoView"
                     android:layout_width="342dp"
                     android:layout_height="285dp"
-                    android:visibility="gone"
-                    android:layout_marginTop="8dp"
                     android:contentDescription="Video"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
+                    android:visibility="gone"
+                    tools:layout_editor_absoluteX="367dp"
+                    tools:layout_editor_absoluteY="172dp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
 
-            </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
