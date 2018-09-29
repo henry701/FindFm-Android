@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="post"
             type="com.fatec.tcc.findfm.Model.Business.Post" />
@@ -17,9 +18,7 @@
         android:background="@drawable/from_bg"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".Views.CriarPost"
-        tools:showIn="@layout/activity_criar_post"
-        android:clickable="@{ clickListener != null ? true : false}"
-        android:onClick="@{clickListener::onClick}">
+        tools:showIn="@layout/activity_criar_post">
 
         <ScrollView
             android:id="@+id/scrollView2"
@@ -73,26 +72,44 @@
                     android:id="@+id/txtData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
+                    android:hint="32/12/1234 15:12:23"
                     android:text="@{post.data}"
                     android:textColor="@color/white"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtTelefone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/circularImageView"
+                    app:layout_constraintTop_toBottomOf="@+id/txtNome" />
+
+                <TextView
+                    android:id="@+id/txtTelefone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone"
+                    android:hint="Contato: (11) 91234-1234 \nClique para ligar"
+                    android:text="@{`Contato: ` + post.autor.telefone + `\nClique para ligar`}"
+                    android:visibility="@{post.autor.telefone != null ? View.VISIBLE : View.INVISIBLE}"
+                    android:onClick="@{clickListener::onClick}"
+                    android:clickable="true"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
                     app:layout_constraintEnd_toEndOf="@+id/txtNome"
-                    app:layout_constraintHorizontal_bias="0.526"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@+id/txtNome"
-                    app:layout_constraintTop_toBottomOf="@+id/txtNome"
-                    app:layout_constraintVertical_bias="0.223" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtData" />
 
                 <EditText
                     android:id="@+id/txtTitulo"
                     android:layout_width="342dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="21dp"
                     android:layout_marginStart="21dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="21dp"
-                    android:layout_marginBottom="8dp"
                     android:backgroundTint="@color/white"
                     android:ems="10"
                     android:hint="@string/titulo"

@@ -18,22 +18,22 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewMeusAnunciosBinding;
+import com.fatec.tcc.findfm.databinding.ViewFeedBinding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncios.ViewHolder> {
+public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
 
     private List<Post> posts = new ArrayList<>();
     private TelaPrincipal activity;
 
-    public AdapterMeusAnuncios() {
+    public AdapterFeed() {
     }
 
-    public AdapterMeusAnuncios(List<Post> posts, TelaPrincipal activity){
+    public AdapterFeed(List<Post> posts, TelaPrincipal activity){
         this.posts = posts;
         this.activity = activity;
     }
@@ -43,18 +43,18 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
     }
 
     @Override
-    public AdapterMeusAnuncios.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterFeed.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewMeusAnunciosBinding binding =
+        ViewFeedBinding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_meus_anuncios, parent, false);
+                        R.layout.view_feed, parent, false);
 
-        return new AdapterMeusAnuncios.ViewHolder(binding);
+        return new AdapterFeed.ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(AdapterMeusAnuncios.ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterFeed.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bindingVH.setPost(post);
 
@@ -88,6 +88,34 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
             activity.getDialog().show();
         }
 
+        if(post.getAutor().getFotoID() != null){
+
+            DownloadResourceService downloadService = new DownloadResourceService(activity);
+            downloadService.addObserver( (download, arg) -> {
+                if(download instanceof DownloadResourceService) {
+                    activity.runOnUiThread(() -> {
+                        if (arg instanceof BinaryResponse) {
+                            byte[] dados = ((BinaryResponse) arg).getData();
+                            InputStream input=new ByteArrayInputStream(dados);
+                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                            holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
+                        } else{
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id1) -> { }).create().show();
+                        }
+
+                        activity.getDialog().hide();
+
+                    });
+                }
+            });
+            downloadService.getResource(post.getAutor().getFotoID());
+            activity.getDialog().show();
+        }
+
         //TODO: COLOCAR VIDEO
 
         holder.bindingVH.setClickListener(v -> {
@@ -116,9 +144,9 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewMeusAnunciosBinding bindingVH;
+        public ViewFeedBinding bindingVH;
 
-        ViewHolder(ViewMeusAnunciosBinding binding){
+        ViewHolder(ViewFeedBinding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }
