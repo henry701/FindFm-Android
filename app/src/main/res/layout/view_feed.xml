@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="post"
+            type="com.fatec.tcc.findfm.Model.Business.Post"/>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lilasClaro"
+        android:onClick="@{clickListener::onClick}">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/retangular_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.github.siyamed.shapeimageview.CircularImageView
+                android:id="@+id/fotoPerfil"
+                android:layout_width="79dp"
+                android:layout_height="96dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="btnFoto_Click"
+                android:src="@drawable/capaplaceholder_photo"
+                app:layout_constraintBottom_toTopOf="@+id/textView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.029"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:siBorderColor="@color/white"
+                app:siBorderWidth="2dp" />
+
+            <TextView
+                android:id="@+id/lb_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Publicado em: 32/13/2059 23:59:59"
+                android:text="@{`Publicado em: ` + post.data}"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+                app:layout_constraintTop_toBottomOf="@+id/txtNome" />
+
+            <TextView
+                android:id="@+id/txtNome"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:hint="Jóse augusto de pereira barbosa roger"
+                android:text="@{post.autor.nomeCompleto}"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
+                app:layout_constraintEnd_toEndOf="@+id/txtTitulo"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+                app:layout_constraintTop_toTopOf="@+id/fotoPerfil"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="194dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fotoPerfil">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <!---->
+
+                <TextView
+                    android:id="@+id/lb_titulo_anuncio"
+                    android:layout_width="367dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
+                    android:text="@={post.titulo}"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="@+id/lb_descricao"
+                    tools:layout_editor_absoluteY="37dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+                <!---->
+
+                <TextView
+                    android:id="@+id/lb_descricao"
+                    android:layout_width="367dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
+                    android:text="@={post.descricao}"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:layout_editor_absoluteY="83dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <ImageView
+                    android:id="@+id/fotoPublicacao"
+                    android:layout_width="342dp"
+                    android:layout_height="285dp"
+                    android:contentDescription="Imagem"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/capaplaceholder_photo"
+                    tools:layout_editor_absoluteX="367dp"
+                    tools:layout_editor_absoluteY="172dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <VideoView
+                    android:id="@+id/videoView"
+                    android:layout_width="342dp"
+                    android:layout_height="285dp"
+                    android:contentDescription="Video"
+                    android:visibility="gone"
+                    tools:layout_editor_absoluteX="367dp"
+                    tools:layout_editor_absoluteY="172dp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
 
@@ -153,6 +155,18 @@ public class Home_Fragment extends Fragment {
         if( !FindFM.getTelaAtual().equals("CRIAR_POST")) {
             getFeed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Util.hideSoftKeyboard(activity);
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                getFeed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
     
 }

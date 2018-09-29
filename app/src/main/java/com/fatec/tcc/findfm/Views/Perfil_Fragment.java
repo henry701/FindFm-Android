@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,6 +41,7 @@ import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 import java.io.FileNotFoundException;
@@ -229,4 +231,17 @@ public class Perfil_Fragment extends Fragment {
         registrarRequest.execute();
         activity.getDialog().show();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Util.hideSoftKeyboard(activity);
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                getUser();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

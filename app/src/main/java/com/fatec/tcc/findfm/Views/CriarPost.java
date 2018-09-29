@@ -23,6 +23,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
@@ -30,6 +31,7 @@ import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
+import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
@@ -113,7 +115,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Publicando, aguarde...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
@@ -123,20 +124,64 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             binding.incluirContent.setPost(post);
-            //TODO: colocar midias
-
-            if(post.getFotoBytes() != null) {
-                InputStream input = new ByteArrayInputStream(post.getFotoBytes());
-                Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
-                binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
-                this.fotoBytes_ContentType = "image/jpeg";
-            }
+            preencherTela(post);
         }
 
         if (telaMode.equals("editavel")){
             ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
         }
+
+    }
+
+    private void preencherTela(Post post){
+        //TODO: colocar midias
+        if(post.getFotoBytes() != null) {
+            InputStream input = new ByteArrayInputStream(post.getFotoBytes());
+            Bitmap ext_pic = BitmapFactory.decodeStream(input);
+            binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
+            binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+            this.fotoBytes_ContentType = "image/jpeg";
+        }
+
+        if(post.getAutor().getFotoID() != null){
+
+            DownloadResourceService downloadService = new DownloadResourceService(this);
+            downloadService.addObserver( (download, arg) -> {
+                if(download instanceof DownloadResourceService) {
+                    runOnUiThread(() -> {
+                        if (arg instanceof BinaryResponse) {
+                            byte[] dados = ((BinaryResponse) arg).getData();
+                            InputStream input=new ByteArrayInputStream(dados);
+                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                            binding.incluirContent.circularImageView.setImageBitmap(ext_pic);
+                        } else{
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id1) -> { }).create().show();
+                        }
+
+                        dialog.hide();
+
+
+                    });
+                }
+            });
+            downloadService.getResource(post.getAutor().getFotoID());
+            dialog.setMessage("Carregando...");
+            dialog.show();
+        }
+
+        if(post.getAutor().getTelefone() != null){
+            binding.incluirContent.txtTelefone.setVisibility(View.VISIBLE);
+        }
+
+        binding.incluirContent.setClickListener(v -> {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:"+ post.getAutor().getTelefone()));
+            startActivity(callIntent);
+        });
 
     }
 
@@ -214,6 +259,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 }
                 UploadResourceService resourceService = new UploadResourceService(this);
                 resourceService.addObserver(this);
+                dialog.setMessage("Publicando, aguarde...");
                 this.dialog.show();
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
                 if(binding.incluirContent.getPost().getFotoBytes() != null) {
@@ -352,6 +398,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
              .setImagemId(post.getIdFoto())
              .setVideoId(post.getIdVideo());
         postRequest.setRequest(param);
+        dialog.setMessage("Publicando, aguarde...");
         dialog.show();
         postRequest.execute();
     }
