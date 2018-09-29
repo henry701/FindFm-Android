@@ -180,7 +180,7 @@ public class RegistrarContratanteViewModel {
                     Integer.parseInt(this.numeroEndereco.get())
             );
             registrarRequest.setRequest(contratante);
-            SharedRequestQueue.addToRequestQueue(view.getApplicationContext(), registrarRequest);
+            registrarRequest.execute();
         }
     }
 }

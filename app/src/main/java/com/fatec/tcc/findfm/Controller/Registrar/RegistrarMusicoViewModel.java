@@ -167,7 +167,7 @@ public class RegistrarMusicoViewModel {
                     param.getString("uf")
             );
             registrarRequest.setRequest(musico);
-            SharedRequestQueue.addToRequestQueue(view.getApplicationContext(), registrarRequest);
+            registrarRequest.execute();
         }
     }
 

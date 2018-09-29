@@ -353,7 +353,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
              .setVideoId(post.getIdVideo());
         postRequest.setRequest(param);
         dialog.show();
-        SharedRequestQueue.addToRequestQueue(this, postRequest);
+        postRequest.execute();
     }
 
     @Override

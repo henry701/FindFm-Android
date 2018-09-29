@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Controller.Login;
 import android.app.ProgressDialog;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -133,7 +134,7 @@ public class LoginViewModel {
 
         this.dialog.show();
         loginRequest.setRequest(new LoginRequest(usuario, senha));
-        SharedRequestQueue.addToRequestQueue(v.getContext(), loginRequest);
+        loginRequest.execute();
     }
 
     public void dismissDialog(){

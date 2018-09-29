@@ -143,7 +143,7 @@ public class Home_Fragment extends Fragment {
                 );
         postList = new ArrayList<>();
 
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), getFeed);
+        getFeed.execute();
         activity.getDialog().show();
     }
 

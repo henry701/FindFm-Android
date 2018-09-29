@@ -159,7 +159,7 @@ public class Login extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), registrarRequest);
+        registrarRequest.execute();
         this.dialog.show();
     }
 

@@ -143,7 +143,7 @@ public class RegistrarMusico extends AppCompatActivity {
                         }
                 );
         dialog.show();
-        SharedRequestQueue.addToRequestQueue(this, instrumentoRequest);
+        instrumentoRequest.execute();
     }
 
     public void btnFoto_Click(View v){

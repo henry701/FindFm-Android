@@ -139,7 +139,7 @@ public class MeusAnuncios_Fragment extends Fragment {
                 );
         postList = new ArrayList<>();
 
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), getPost);
+        getPost.execute();
         activity.getDialog().show();
     }
 

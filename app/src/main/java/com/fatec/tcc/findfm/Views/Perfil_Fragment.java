@@ -226,7 +226,7 @@ public class Perfil_Fragment extends Fragment {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), registrarRequest);
+        registrarRequest.execute();
         activity.getDialog().show();
     }
 }

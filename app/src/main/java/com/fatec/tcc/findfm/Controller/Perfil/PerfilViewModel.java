@@ -371,7 +371,7 @@ public class PerfilViewModel {
                         }
                 );
         dialog.show();
-        SharedRequestQueue.addToRequestQueue(view, instrumentoRequest);
+        instrumentoRequest.execute();
     }
 
     public void setNascimento(String nascimento) {

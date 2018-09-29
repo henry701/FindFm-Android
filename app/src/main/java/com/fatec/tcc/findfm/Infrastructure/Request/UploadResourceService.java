@@ -49,7 +49,7 @@ public class UploadResourceService extends Observable{
                 },
                 contentType
         );
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), uploadResource);
+        uploadResource.execute();
     }
 
 }

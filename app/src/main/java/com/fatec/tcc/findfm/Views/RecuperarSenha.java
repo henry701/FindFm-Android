@@ -163,7 +163,7 @@ public class RecuperarSenha extends AppCompatActivity {
 
             this.dialog.show();
             requestRenovar1.setRequest(new RecuperarSenhaRequest().setEmail(email.getText().toString()));
-            SharedRequestQueue.addToRequestQueue(this, requestRenovar1);
+            requestRenovar1.execute();
         }
         else {
             if (codigo == null || codigo.getText().toString().isEmpty() ) {
@@ -172,7 +172,7 @@ public class RecuperarSenha extends AppCompatActivity {
             }
             this.dialog.show();
             requestRenovar2(codigo.getText().toString());
-            SharedRequestQueue.addToRequestQueue(this, requestRenovar2);
+            requestRenovar2.execute();
         }
     }
 

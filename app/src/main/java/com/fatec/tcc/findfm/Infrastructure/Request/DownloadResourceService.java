@@ -48,8 +48,7 @@ public class DownloadResourceService extends Observable {
                 },
                 null
         );
-        SharedRequestQueue.addToRequestQueue(activity.getApplicationContext(), uploadResource);
-
+        uploadResource.execute();
     }
 
 }
