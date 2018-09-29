@@ -1,5 +1,7 @@
 package com.fatec.tcc.findfm.Model.Http.Response;
 
+import org.joda.time.DateTime;
+
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class PostResponse {
 
     private String titulo;
     private String descricao;
-    private Date criacao;
+    private DateTime criacao;
     private Autor autor;
     private Long likes;
     private String cidade;
@@ -70,11 +72,11 @@ public class PostResponse {
         this.UF = UF;
     }
 
-    public Date getCriacao() {
+    public DateTime getCriacao() {
         return criacao;
     }
 
-    public void setCriacao(Date criacao) {
+    public void setCriacao(DateTime criacao) {
         this.criacao = criacao;
     }
 

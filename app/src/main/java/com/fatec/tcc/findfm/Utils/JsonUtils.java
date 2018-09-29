@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Utils;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.fatboyindustrial.gsonjodatime.Converters;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,13 +21,12 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-
 /**
  * Classe para facilitar operações repetitivas referente à JSONs
  * **/
 public class JsonUtils {
 
-    public static final Gson GSON =  new GsonBuilder()
+    public static final Gson GSON = Converters.registerDateTime(new GsonBuilder())
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeDeserializer())
             .registerTypeAdapter(NivelHabilidade.class, new NivelHabilidadeTypeSerializer())
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();

@@ -39,4 +39,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'net.sourceforge.streamsupport:android-retrostreams:1.6.3'
+    implementation 'net.danlew:android.joda:2.9.9.4'
+    implementation('com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.0') {
+        exclude module: 'joda-time'
+    }
 }

@@ -38,6 +38,7 @@ import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -109,9 +110,10 @@ public class Home_Fragment extends Fragment {
                         {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                if(((ArrayList) response.getData()).size() != 0) {
-                                    for (Map<String, Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
-                                        PostResponse postResponse = JsonUtils.jsonConvert(retorno, PostResponse.class);
+                                Map<String, Collection<Map<String, Object>>> resp = (Map<String, Collection<Map<String, Object>>>) response.getData();
+                                if(!resp.get("postagens").isEmpty()) {
+                                    for (Map<String, Object> post : resp.get("postagens")) {
+                                        PostResponse postResponse = JsonUtils.jsonConvert(post, PostResponse.class);
                                         postList.add(new Post(postResponse));
                                     }
                                     binding.textView4.setVisibility(View.GONE);

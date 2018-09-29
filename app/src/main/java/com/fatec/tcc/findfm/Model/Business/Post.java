@@ -2,11 +2,14 @@ package com.fatec.tcc.findfm.Model.Business;
 
 import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Post {
 
@@ -20,7 +23,7 @@ public class Post {
     private String idVideo;
     private List<String> idVideos;
     private byte[] videoBytes;
-    private Date data;
+    private DateTime data;
     private Long likes;
     private List<Comentario> comentarios;
 
@@ -34,13 +37,15 @@ public class Post {
         //TODO: talvez colocar
         //this.cidade
         //this.UF
-        for(PostResponse.Midias midia: postResponse.getMidias()){
-            if(midia.getTipoMidia().equals("img"))
-                this.getIdFotos().add(midia.getId());
-            else
-                this.getIdVideos().add(midia.getId());
+        if(postResponse.getMidias() != null) {
+            for (PostResponse.Midias midia : postResponse.getMidias()) {
+                if (midia.getTipoMidia().equals("img")) {
+                    this.getIdFotos().add(midia.getId());
+                } else {
+                    this.getIdVideos().add(midia.getId());
+                }
+            }
         }
-
         Usuario usuario = new Usuario();
         usuario.setId(postResponse.getAutor().get_id());
         usuario.setFotoID(postResponse.getAutor().getAvatar().get_id());
@@ -52,7 +57,6 @@ public class Post {
         usuario.setEmail(postResponse.getAutor().getEmail());
         if(postResponse.getAutor().getTelefone() != null)
             usuario.setTelefone(postResponse.getAutor().getTelefone().getStateCode() + postResponse.getAutor().getTelefone().getNumber());
-
     }
 
     public String getTitulo() {
@@ -100,16 +104,18 @@ public class Post {
         return this;
     }
 
-    public String getData() {
-        if(data != null) {
-            return new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss", Locale.US).format(data);
-        }else
+    public String getData()
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getDefault());
+        if(data == null)
         {
-            return new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(new Date());
+            data = new DateTime();
         }
+        return sdf.format(data.toLocalDateTime().toDate());
     }
 
-    public Post setData(Date data) {
+    public Post setData(DateTime data) {
         this.data = data;
         return this;
     }

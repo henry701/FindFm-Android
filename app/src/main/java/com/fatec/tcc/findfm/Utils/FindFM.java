@@ -12,6 +12,8 @@ import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -40,6 +42,7 @@ public class FindFM extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        JodaTimeAndroid.init(this);
         singleInstance = this;
     }
 
