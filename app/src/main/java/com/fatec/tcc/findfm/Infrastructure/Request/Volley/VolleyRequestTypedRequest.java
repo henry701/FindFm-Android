@@ -27,7 +27,7 @@ public class VolleyRequestTypedRequest<TResponse, TErrorResponse> extends Reques
     public void onErrorResponse(VolleyError error)
     {
         Response<NetworkResponse> res = parseNetworkResponse(error.networkResponse);
-        deliverResponse(res.result);
+        customErrorDelivery(res.result);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class VolleyRequestTypedRequest<TResponse, TErrorResponse> extends Reques
     {
         if(networkResponse == null)
         {
-            throw new RuntimeException("NetworkResponse is Null!");
+            throw new RuntimeException("NetworkResponse is null!");
         }
         Cache.Entry cacheEntry = HttpHeaderParser.parseCacheHeaders(networkResponse);
         return Response.success(networkResponse, cacheEntry);
@@ -51,20 +51,25 @@ public class VolleyRequestTypedRequest<TResponse, TErrorResponse> extends Reques
         }
         catch(Exception e)
         {
-            TErrorResponse errorResponse;
-            try
-            {
-                errorResponse = absReq.parseErrorResponse(response);
-            }
-            catch(Exception e2)
-            {
-                absReq.errorListener.onErrorResponse(new VolleyError(e2));
-                return;
-            }
-            absReq.errorResponseListener.onResponse(errorResponse);
+            customErrorDelivery(response);
             return;
         }
         absReq.responseListener.onResponse(successResponse);
+    }
+
+    private void customErrorDelivery(NetworkResponse response)
+    {
+        TErrorResponse errorResponse;
+        try
+        {
+            errorResponse = absReq.parseErrorResponse(response);
+        }
+        catch(Exception e2)
+        {
+            absReq.errorListener.onErrorResponse(new VolleyError(e2));
+            return;
+        }
+        absReq.errorResponseListener.onResponse(errorResponse);
     }
 
     @Override
