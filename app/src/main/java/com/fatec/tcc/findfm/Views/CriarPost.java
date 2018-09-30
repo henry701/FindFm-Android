@@ -26,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -92,6 +91,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else {
             ImagemUtils.setImagemPerfilToImageView(imageView, this);
             binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
+            //Somente contratante pode colocar titulo para o anuncio
+            if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
+                binding.incluirContent.txtTitulo.setVisibility(View.GONE);
+            }
         }
 
         binding.executePendingBindings();
@@ -101,12 +104,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         videoView = findViewById(R.id.videoView);
         videoView.setVisibility(View.GONE);
-
-        //Somente contratante pode colocar titulo para o anuncio
-        EditText txtTitulo = findViewById(R.id.txtTitulo);
-        if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
-            txtTitulo.setVisibility(View.GONE);
-        }
 
         FloatingActionButton fab = findViewById(R.id.fab_foto);
         fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
@@ -199,12 +196,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         } else if (telaMode.equals("editando") || telaMode.equals("criando")){
             if(optionsMenu != null) {
-                optionsMenu.getItem(0).setVisible(false);
-                optionsMenu.getItem(1).setVisible(true);
+                optionsMenu.getItem(0).setVisible(true);
             }
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
-
+            binding.incluirContent.txtTelefone.setVisibility(View.GONE);
             if(binding.incluirContent.getPost().getFotoBytes() == null) {
                 binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
                 binding.fabFoto.setVisibility(View.VISIBLE);
@@ -223,8 +219,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
 
         if(telaMode.equals("editavel") && optionsMenu != null){
-            optionsMenu.getItem(0).setVisible(true);
-            optionsMenu.getItem(1).setVisible(false);
+            optionsMenu.getItem(0).setVisible(false);
         }
 
     }
@@ -274,12 +269,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 if(!fotoUpload && !videoUpload){
                     initRequest(binding.incluirContent.getPost());
                 }
-            case R.id.action_edit:
-                optionsMenu.getItem(0).setVisible(false);
-                optionsMenu.getItem(1).setVisible(true);
-                telaMode = "editando";
-                checkTelaMode();
-                return true;
         }
 
         return super.onOptionsItemSelected(item);

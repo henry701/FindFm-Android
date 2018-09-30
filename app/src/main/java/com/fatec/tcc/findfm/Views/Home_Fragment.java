@@ -21,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -34,6 +33,7 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterFeed;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
 
@@ -114,10 +114,11 @@ public class Home_Fragment extends Fragment {
                                 if(!resp.get("postagens").isEmpty()) {
                                     for (Map<String, Object> post : resp.get("postagens")) {
                                         PostResponse postResponse = JsonUtils.jsonConvert(post, PostResponse.class);
-                                        postList.add(new Post(postResponse));
+                                        postList.add(new Post(postResponse)
+                                        );
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaPosts.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                                    binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
                                 } else
                                 {
                                     binding.textView4.setVisibility(View.VISIBLE);
@@ -170,5 +171,5 @@ public class Home_Fragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-    
+
 }

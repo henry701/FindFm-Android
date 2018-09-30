@@ -147,7 +147,7 @@ public class User {
         }
     }
 
-    public class Telefone {
+    public static class Telefone {
 
         private int countryCode;
         private int stateCode;
@@ -157,24 +157,27 @@ public class User {
             return String.valueOf(countryCode);
         }
 
-        public void setCountryCode(String countryCode) {
+        public Telefone setCountryCode(String countryCode) {
             this.countryCode = Integer.parseInt(countryCode);
+            return this;
         }
 
         public String getStateCode() {
             return String.valueOf(stateCode);
         }
 
-        public void setStateCode(String stateCode) {
+        public Telefone setStateCode(String stateCode) {
             this.stateCode = Integer.parseInt(stateCode);
+            return this;
         }
 
         public String getNumber() {
             return number;
         }
 
-        public void setNumber(String number) {
+        public Telefone setNumber(String number) {
             this.number = number;
+            return this;
         }
     }
 

@@ -92,7 +92,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/lb_nomeUsuario"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_editar" />
+                    app:srcCompat="@drawable/ic_adicionar" />
 
                 <TextView
                     android:id="@+id/textView4"

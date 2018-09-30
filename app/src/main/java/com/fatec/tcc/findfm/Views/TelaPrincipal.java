@@ -1,5 +1,6 @@
 package com.fatec.tcc.findfm.Views;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -103,8 +104,14 @@ public class TelaPrincipal extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        return id == R.id.action_settings || super.onOptionsItemSelected(item);
+        if(id == R.id.action_settings){
+            return true;
+        }
+        else{
+            Fragment f = getFragmentManager().findFragmentById(R.id.frame_content);
+            return f.onOptionsItemSelected(item);
 
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

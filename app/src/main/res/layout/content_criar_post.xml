@@ -114,6 +114,7 @@
                     android:ems="10"
                     android:hint="@string/titulo"
                     android:inputType="textPersonName"
+                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.INVISIBLE}"
                     android:maxLength="60"
                     android:text="@={post.titulo}"
                     android:textColor="@color/white"
