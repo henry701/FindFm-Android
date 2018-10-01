@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -53,6 +52,7 @@ import java.util.Objects;
 
 public class PerfilViewModel {
 
+    public ObservableField<String> senha = new ObservableField<>();
     public ObservableField<String> confirmaSenha = new ObservableField<>();
 
     public ObservableField<String> nascimento = new ObservableField<>();
@@ -153,7 +153,7 @@ public class PerfilViewModel {
         if(usuario == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
-        else if ( usuario.getEmail() == null || usuario.getSenha() == null ||
+        else if ( usuario.getEmail() == null || this.senha.get() == null ||
                 this.confirmaSenha.get() == null || usuario.getTelefone() == null || this.UF == null){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
@@ -163,13 +163,13 @@ public class PerfilViewModel {
         else if (!Formatadores.validarEmail(usuario.getEmail())) {
             Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
         }
-        else if (usuario.getSenha().length() < 6){
+        else if (this.senha.get().length() < 6){
             Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
         }
-        else if(usuario.getSenha().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty() ){
+        else if(this.senha.get().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty() ){
             Toast.makeText(view.getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        else if ( !usuario.getSenha().equals(this.confirmaSenha.get())) {
+        else if ( !this.senha.get().equals(this.confirmaSenha.get())) {
             Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
         }
         else if (usuario instanceof Contratante ){

@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Model.Http.Response;
 
 import org.joda.time.DateTime;
 
-import java.util.Date;
 import java.util.List;
 
 public class PostResponse {
@@ -82,107 +81,14 @@ public class PostResponse {
 
     public class Autor {
 
-        private String kind;
-        private String _id;
-        private String fullName;
-        private Date startDate;
-        private Avatar avatar;
-        private boolean emailConfirmed;
-        private String email;
-        private Long premiumLevel;
-        private User.Telefone telefone;
+        private User usuario;
 
-        public String getKind() {
-            return kind;
+        public User getUsuario() {
+            return usuario;
         }
 
-        public void setKind(String kind) {
-            this.kind = kind;
-        }
-
-        public String get_id() {
-            return _id;
-        }
-
-        public void set_id(String _id) {
-            this._id = _id;
-        }
-
-        public String getFullName() {
-            return fullName;
-        }
-
-        public void setFullName(String fullName) {
-            this.fullName = fullName;
-        }
-
-        public Date getStartDate() {
-            return startDate;
-        }
-
-        public void setStartDate(Date startDate) {
-            this.startDate = startDate;
-        }
-
-        public Avatar getAvatar() {
-            return avatar;
-        }
-
-        public void setAvatar(Avatar avatar) {
-            this.avatar = avatar;
-        }
-
-        public boolean isEmailConfirmed() {
-            return emailConfirmed;
-        }
-
-        public void setEmailConfirmed(boolean emailConfirmed) {
-            this.emailConfirmed = emailConfirmed;
-        }
-
-        public Long getPremiumLevel() {
-            return premiumLevel;
-        }
-
-        public void setPremiumLevel(Long premiumLevel) {
-            this.premiumLevel = premiumLevel;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public User.Telefone getTelefone() {
-            return telefone;
-        }
-
-        public void setTelefone(User.Telefone telefone) {
-            this.telefone = telefone;
-        }
-
-        public class Avatar {
-            private User.Avatar.MediaMetadata fileMetadata;
-            private String _id;
-
-            public User.Avatar.MediaMetadata getFileMetadata() {
-                return fileMetadata;
-            }
-
-            public void setFileMetadata(User.Avatar.MediaMetadata fileMetadata) {
-                this.fileMetadata = fileMetadata;
-            }
-
-            public String get_id() {
-                return _id;
-            }
-
-            public void set_id(String _id) {
-                this._id = _id;
-            }
+        public void setUsuario(User usuario) {
+            this.usuario = usuario;
         }
     }
 

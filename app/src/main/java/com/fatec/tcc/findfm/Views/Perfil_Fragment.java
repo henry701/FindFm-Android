@@ -24,7 +24,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.Musico;
@@ -145,12 +144,13 @@ public class Perfil_Fragment extends Fragment {
     }
 
     public void btnRegistrar_Click(View v){
+        //TODO: validar os campos
         switch (getUsuario().getTipoUsuario()){
             case CONTRATANTE:
-                binding.getViewModel().registrar(this.contratante);
+                binding.getViewModel().registrar(binding.getContratante());
                 break;
             case MUSICO:
-                binding.getViewModel().registrar(this.musico);
+                binding.getViewModel().registrar(binding.getMusico());
                 break;
         }
     }

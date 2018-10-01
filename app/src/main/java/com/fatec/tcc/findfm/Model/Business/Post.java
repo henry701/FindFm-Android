@@ -6,9 +6,7 @@ import org.joda.time.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class Post {
@@ -47,16 +45,16 @@ public class Post {
             }
         }
         Usuario usuario = new Usuario();
-        usuario.setId(postResponse.getAutor().get_id());
-        usuario.setFotoID(postResponse.getAutor().getAvatar().get_id());
-        usuario.setTipoUsuario(TiposUsuario.fromKind(postResponse.getAutor().getKind()));
-        usuario.setNomeCompleto(postResponse.getAutor().getFullName());
+        usuario.setId(postResponse.getAutor().getUsuario().getId());
+        usuario.setFotoID(postResponse.getAutor().getUsuario().getAvatar().get_id());
+        usuario.setTipoUsuario(TiposUsuario.fromKind(postResponse.getAutor().getUsuario().getKind()));
+        usuario.setNomeCompleto(postResponse.getAutor().getUsuario().getFullName());
         this.autor = usuario;
         //TODO: colocar esses campos
         this.data = postResponse.getCriacao();
-        usuario.setEmail(postResponse.getAutor().getEmail());
-        if(postResponse.getAutor().getTelefone() != null)
-            usuario.setTelefone(postResponse.getAutor().getTelefone().getStateCode() + postResponse.getAutor().getTelefone().getNumber());
+        usuario.setEmail(postResponse.getAutor().getUsuario().getEmail());
+        if(postResponse.getAutor().getUsuario().getTelefone() != null)
+            usuario.setTelefone(postResponse.getAutor().getUsuario().getTelefone().getStateCode() + postResponse.getAutor().getUsuario().getTelefone().getNumber());
     }
 
     public String getTitulo() {
