@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Views.TelaPrincipal">
-
-    <android.support.design.widget.AppBarLayout
+<layout>
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+        android:layout_height="match_parent"
+        tools:context=".Views.TelaPrincipal">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+            android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
-    <include
-        android:id="@+id/app_bar_include"
-        layout="@layout/content_tela_principal" />
+        </android.support.design.widget.AppBarLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+        <include
+            android:id="@+id/app_bar_include"
+            layout="@layout/content_tela_principal" />
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

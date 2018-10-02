@@ -16,8 +16,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lilasClaro"
-        android:onClick="@{clickListener::onClick}">
+        android:background="@color/lilasClaro">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="btnFoto_Click"
+                android:onClick="@{clickListener::onClick}"
                 android:src="@drawable/capaplaceholder_photo"
                 app:layout_constraintBottom_toTopOf="@+id/textView5"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,6 +46,7 @@
 
             <TextView
                 android:id="@+id/lb_data"
+                android:onClick="@{clickListener::onClick}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Publicado em: 32/13/2059 23:59:59"
@@ -64,6 +64,7 @@
 
             <TextView
                 android:id="@+id/txtNome"
+                android:onClick="@{clickListener::onClick}"
                 android:layout_width="281dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -103,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
                     android:text="@={post.titulo}"
+                    android:onClick="@{clickListener::onClick}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="18sp"
@@ -121,6 +123,7 @@
                     android:id="@+id/lb_descricao"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
+                    android:onClick="@{clickListener::onClick}"
                     android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
                     android:text="@={post.descricao}"
                     android:textColor="@color/white"
@@ -137,6 +140,7 @@
                     android:id="@+id/fotoPublicacao"
                     android:layout_width="342dp"
                     android:layout_height="285dp"
+                    android:onClick="@{clickListener::onClick}"
                     android:contentDescription="Imagem"
                     android:visibility="gone"
                     app:srcCompat="@drawable/capaplaceholder_photo"

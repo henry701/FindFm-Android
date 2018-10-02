@@ -3,11 +3,13 @@ package com.fatec.tcc.findfm.Views.Adapters;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Model.Business.Post;
@@ -15,6 +17,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
@@ -88,6 +91,16 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             activity.getDialog().show();
         }
 
+        for(String id : post.getIdVideos()){
+            Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(),"resource/" + id));
+            MediaController m = new MediaController(activity);
+            holder.bindingVH.videoView.setMediaController(m);
+            m.setAnchorView(holder.bindingVH.videoView);
+            holder.bindingVH.videoView.setVideoURI(uri);
+            holder.bindingVH.videoView.setVisibility(View.VISIBLE);
+            holder.bindingVH.videoView.seekTo(100);
+        }
+
         if(post.getAutor().getFotoID() != null){
 
             DownloadResourceService downloadService = new DownloadResourceService(activity);
@@ -116,14 +129,20 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             activity.getDialog().show();
         }
 
-        //TODO: COLOCAR VIDEO
-
         holder.bindingVH.setClickListener(v -> {
-            String path = "CriarPost";
-            Bundle param = new Bundle();
-            FindFM.getMap().put("post", post);
-            param.putString("telaMode", "editavel");
-            Util.open_form_withParam(activity, CriarPost.class, path, param);
+            if(post.getAutor().getId().equals(FindFM.getUsuario().getId())){
+                String path = "CriarPost";
+                Bundle param = new Bundle();
+                FindFM.getMap().put("post", post);
+                param.putString("telaMode", "editavel");
+                Util.open_form_withParam(activity, CriarPost.class, path, param);
+            } else {
+                String path = "CriarPost";
+                Bundle param = new Bundle();
+                FindFM.getMap().put("post", post);
+                param.putString("telaMode", "visualizar");
+                Util.open_form_withParam(activity, CriarPost.class, path, param);
+            }
         });
     }
 

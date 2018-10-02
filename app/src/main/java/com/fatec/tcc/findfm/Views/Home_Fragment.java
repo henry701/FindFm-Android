@@ -62,7 +62,12 @@ public class Home_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        activity.getSupportActionBar().setTitle("FindFM - Home");
+        try {
+            activity.getSupportActionBar().setTitle("FindFM - Home");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_home_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
 
@@ -155,7 +160,7 @@ public class Home_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if( !FindFM.getTelaAtual().equals("CRIAR_POST")) {
+        if( !FindFM.getTelaAtual().equals("CRIAR_POST") && !FindFM.getTelaAtual().equals("VIDEO")) {
             getFeed();
         }
     }

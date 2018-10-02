@@ -7,17 +7,12 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.android.volley.Request;
@@ -37,7 +32,6 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
-import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -55,22 +49,21 @@ public class Perfil_Fragment extends Fragment {
     public ActivityPerfilFragmentBinding binding;
 
     //TODO FORTE: atualizar o objeto na FindFM quando atualizar o carinha
+    private String URL;
 
     private Usuario usuario;
     private Contratante contratante;
     private Musico musico;
-
-    private Spinner cb_uf_musico;
-    private Spinner cb_uf_contratante;
 
     private TelaPrincipal activity;
 
     public Perfil_Fragment(){}
 
     @SuppressLint("ValidFragment")
-    public Perfil_Fragment(TelaPrincipal activity){
+    public Perfil_Fragment(TelaPrincipal activity, String URL){
         this.activity = activity;
         this.usuario = new Usuario();
+        this.URL = URL;
         getUser();
     }
 
@@ -81,17 +74,14 @@ public class Perfil_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        activity.getSupportActionBar().setTitle("Meu Perfil");
+        try {
+            activity.getSupportActionBar().setTitle("Meu Perfil");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         FindFM.setTelaAtual("MEU_PERFIL");
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_perfil_fragment, container, false);
-
-        ImageView imageView = binding.getRoot().findViewById(R.id.circularImageView);
-        ImageButton btnRemoverImagem =  binding.getRoot().findViewById(R.id.btnRemoverImagem);
-
-        EditText txtTelefone = binding.getRoot().findViewById(R.id.txtTelefone);
-
-        Formatadores addLineNumberFormatter = new Formatadores(new WeakReference<>(txtTelefone));
-        txtTelefone.addTextChangedListener(addLineNumberFormatter);
 
         SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(activity, R.layout.simple_custom_list, getResources().getStringArray(R.array.lista_uf));
 
@@ -107,18 +97,16 @@ public class Perfil_Fragment extends Fragment {
             }
         };
 
-        cb_uf_contratante = binding.getRoot().findViewById(R.id.cb_uf_contratante);
-        cb_uf_contratante.setAdapter(spinnerAdapter);
-        cb_uf_contratante.setOnItemSelectedListener(onItemSelectedListener);
+        Formatadores addLineNumberFormatter = new Formatadores(new WeakReference<>(binding.txtTelefone));
+        binding.txtTelefone.addTextChangedListener(addLineNumberFormatter);
 
-        cb_uf_musico = binding.getRoot().findViewById(R.id.cb_uf_musico);
-        cb_uf_musico.setAdapter(spinnerAdapter);
+        binding.cbUfContratante.setAdapter(spinnerAdapter);
+        binding.cbUfContratante.setOnItemSelectedListener(onItemSelectedListener);
 
-        cb_uf_musico.setOnItemSelectedListener(onItemSelectedListener);
+        binding.cbUfMusico.setAdapter(spinnerAdapter);
+        binding.cbUfMusico.setOnItemSelectedListener(onItemSelectedListener);
 
-        RecyclerView rc = binding.getRoot().findViewById(R.id.listaInstrumentos);
-
-        binding.setViewModel(new PerfilViewModel(activity, this, imageView, btnRemoverImagem, activity.getDialog(), rc));
+        binding.setViewModel(new PerfilViewModel(activity, this, binding.circularImageView, binding.btnRemoverImagem, activity.getDialog(), binding.listaInstrumentos));
         return binding.getRoot();
     }
 
@@ -162,7 +150,7 @@ public class Perfil_Fragment extends Fragment {
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(activity.getResources(),"account", "me"),
+                        URL,
                         null,
                         (ResponseBody response) ->
                         {
@@ -197,7 +185,7 @@ public class Perfil_Fragment extends Fragment {
                                                 Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
                                         );
                                         musico.setInstrumentos(user.getIntrumentos());
-                                        cb_uf_musico.setSelection(Estados.fromSigla(musico.getUf()).getIndex());
+                                        binding.cbUfMusico.setSelection(Estados.fromSigla(musico.getUf()).getIndex());
                                         binding.setMusico(musico);
                                         binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));
                                         binding.getViewModel().setNascimentoDate(musico.getNascimento());

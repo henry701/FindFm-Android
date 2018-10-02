@@ -23,6 +23,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
@@ -131,7 +132,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     private void preencherTela(Post post){
-        //TODO: colocar midias
         if(post.getFotoBytes() != null) {
             InputStream input = new ByteArrayInputStream(post.getFotoBytes());
             Bitmap ext_pic = BitmapFactory.decodeStream(input);
@@ -170,11 +170,38 @@ public class CriarPost extends AppCompatActivity implements Observer{
             dialog.show();
         }
 
+        for(String id : post.getIdVideos()){
+            Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(),"resource/" + id));
+            FullScreenMediaController m = new FullScreenMediaController(this);
+            m.setUrl(HttpUtils.buildUrl(getResources(),"resource/" + id));
+            binding.incluirContent.videoView.setMediaController(m);
+            m.setAnchorView(binding.incluirContent.videoView);
+            binding.incluirContent.videoView.setVideoURI(uri);
+            binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+            binding.incluirContent.videoView.seekTo(100);
+        }
+
         if(post.getAutor().getTelefone() != null){
             binding.incluirContent.txtTelefone.setVisibility(View.VISIBLE);
         }
 
-        binding.incluirContent.setClickListener(v -> {
+
+        Bundle bundle = new Bundle();
+        View.OnClickListener irPerfil = v -> {
+            if(post.getAutor().getId().equals(FindFM.getUsuario().getId())){
+                bundle.putBoolean("euMesmo", true);
+                Util.open_form_withParam__no_return(this, TelaPrincipal.class, "CriarPost", bundle);
+            }else{
+                bundle.putString("id_usuario", post.getAutor().getId());
+                Util.open_form_withParam__no_return(this, TelaPrincipal.class, "CriarPost", bundle);
+            }
+        };
+
+
+        binding.incluirContent.circularImageView.setOnClickListener(irPerfil);
+        binding.incluirContent.txtNome.setOnClickListener(irPerfil);
+
+        binding.incluirContent.txtTelefone.setOnClickListener(v -> {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:"+ post.getAutor().getTelefone()));
             startActivity(callIntent);
@@ -184,7 +211,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     private void checkTelaMode(){
         if(telaMode.equals("visualizar") || telaMode.equals("editavel")){
-            //TODO: pegar id do recurso e fazer get, nossa que trabalho
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
 

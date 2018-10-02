@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Views;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,10 +11,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +20,10 @@ import android.widget.Toast;
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.databinding.ActivityTelaPrincipalBinding;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -40,27 +41,24 @@ public class TelaPrincipal extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tela_principal);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ActivityTelaPrincipalBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_tela_principal);
+        setSupportActionBar(binding.appBarInclude.toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, binding.drawerLayout, binding.appBarInclude.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        binding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View header =  navigationView.getHeaderView(0);
-        TextView textView = header.findViewById(R.id.txtUsuarioHeader);
-        radioMenu = navigationView.getMenu().findItem(R.id.playRadio);
+        radioMenu = binding.navView.getMenu().findItem(R.id.playRadio);
 
-        ImageView imageView = header.findViewById(R.id.imageViewHeader);
+        TextView textView = binding.navView.getHeaderView(0).findViewById(R.id.txtUsuarioHeader);
+        textView.setText(FindFM.getNomeUsuario(this));
+
+        ImageView imageView = binding.navView.getHeaderView(0).findViewById(R.id.imageViewHeader);
         ImagemUtils.setImagemPerfilToImageView(imageView, this);
 
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
-        textView.setText(FindFM.getNomeUsuario(this));
+        binding.navView.setNavigationItemSelectedListener(this);
+        binding.navView.getMenu().getItem(0).setChecked(true);
 
         init();
     }
@@ -72,7 +70,24 @@ public class TelaPrincipal extends AppCompatActivity
 
         this.radioController = new RadioController(this);
         this.radioController.addObserver(this);
+
+        Bundle bundle = getIntent().getBundleExtra("CriarPost");
         fragmentManager = getFragmentManager();
+
+        if(bundle != null) {
+            if (bundle.getString("id_usuario") != null){
+                fragmentManager.beginTransaction().replace(R.id.frame_content,
+                        new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", bundle.getString("id_usuario"))))
+                        .commit();
+                return;
+            } else if (bundle.getBoolean("euMesmo") == true){
+                fragmentManager.beginTransaction().replace(R.id.frame_content,
+                        new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                        .commit();
+                return;
+            }
+        }
+
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
                 .commit();
     }
@@ -129,7 +144,7 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
             case R.id.meu_perfil:
                 if(!tela.equals("MEU_PERFIL")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this))
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
                             .commit();
                 }
                 break;

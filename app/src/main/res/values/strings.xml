@@ -121,4 +121,8 @@
     <string name="nova_senha">Sua nova senha, não se esqueça de altera-lá</string>
     <string name="nao_ha_publicacoes">Não há publicações para serem mostradas</string>
     <string name="artista">Artísta</string>
+
+    <string name="title_activity_full_screen_video">FullScreenVideoActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
