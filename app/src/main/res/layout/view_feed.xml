@@ -83,7 +83,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="237dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -103,8 +103,8 @@
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
                     android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"
-                    android:text="@={post.titulo}"
                     android:onClick="@{clickListener::onClick}"
+                    android:text="@={post.titulo}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="18sp"
@@ -123,8 +123,8 @@
                     android:id="@+id/lb_descricao"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
-                    android:onClick="@{clickListener::onClick}"
                     android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
+                    android:onClick="@{clickListener::onClick}"
                     android:text="@={post.descricao}"
                     android:textColor="@color/white"
                     android:textSize="18sp"
@@ -140,8 +140,8 @@
                     android:id="@+id/fotoPublicacao"
                     android:layout_width="342dp"
                     android:layout_height="285dp"
-                    android:onClick="@{clickListener::onClick}"
                     android:contentDescription="Imagem"
+                    android:onClick="@{clickListener::onClick}"
                     android:visibility="gone"
                     app:srcCompat="@drawable/capaplaceholder_photo"
                     tools:layout_editor_absoluteX="367dp"
@@ -163,6 +163,45 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
+                <!--//TODO: colocar se o cara curtiu ou nao o post-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_gravity="right"
+                        android:layout_margin="10dp"
+                        android:background="@mipmap/ic_likes"
+                        android:elevation="10dp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:text="876"
+                        android:textColor="#FFF"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="(123) Curtir"
+                        android:text="Curtir"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnComentarios"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/comentarios"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
 
             </LinearLayout>

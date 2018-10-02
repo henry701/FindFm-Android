@@ -125,4 +125,5 @@
     <string name="title_activity_full_screen_video">FullScreenVideoActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="comentarios">Comentários</string>
 </resources>
