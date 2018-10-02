@@ -4,19 +4,17 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Http.Request.RecuperarSenhaRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -26,36 +24,28 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.databinding.ActivityRecuperarSenhaBinding;
 
 public class RecuperarSenha extends AppCompatActivity {
 
     private JsonTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar1;
     private JsonTypedRequest<RecuperarSenhaRequest, ResponseBody, ErrorResponse> requestRenovar2;
-
+    private ActivityRecuperarSenhaBinding binding;
     private ProgressDialog dialog;
 
-    private TextView lb_instrucao;
-    private EditText email;
-    private EditText codigo;
     private boolean primeiraRequest = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recuperar_senha);
-
-        ImageView imageView = findViewById(R.id.circularImageView2);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_recuperar_senha);
         byte[] image = FindFM.getFotoPrefBytes(this);
         if(image != null && image.length != 0) {
-            imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
+            binding.circularImageView2.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
         }
         else{
-            imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
+            binding.circularImageView2.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
         }
-
-        lb_instrucao  = findViewById(R.id.lb_instrucao);
-        email  = findViewById(R.id.txtEmail);
-        codigo = findViewById(R.id.txtCodigo);
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Aguarde...");
@@ -77,9 +67,9 @@ public class RecuperarSenha extends AppCompatActivity {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                lb_instrucao.setText(R.string.instrucao_recuperar_senha_codigo);
-                                email.setVisibility(View.INVISIBLE);
-                                codigo.setVisibility(View.VISIBLE);
+                                binding.lbInstrucao.setText(R.string.instrucao_recuperar_senha_codigo);
+                                binding.txtEmail.setVisibility(View.INVISIBLE);
+                                binding.txtCodigo.setVisibility(View.VISIBLE);
                                 primeiraRequest = false;
                             }
                         },
@@ -120,8 +110,8 @@ public class RecuperarSenha extends AppCompatActivity {
                                 String senha = (String) response.getData();
 
                                 this.dialog.dismiss();
-                                lb_instrucao.setText(R.string.nova_senha);
-                                codigo.setVisibility(View.INVISIBLE);
+                                binding.lbInstrucao.setText(R.string.nova_senha);
+                                binding.txtCodigo.setVisibility(View.INVISIBLE);
 
                                 EditText novaSenha = findViewById(R.id.txtNovaSenha);
                                 novaSenha.setVisibility(View.VISIBLE);
@@ -156,22 +146,22 @@ public class RecuperarSenha extends AppCompatActivity {
 
     public void buttonEnviar_Click(View view){
         if(primeiraRequest) {
-            if (email == null || email.getText().toString().isEmpty() || !Formatadores.validarEmail(email.getText().toString())) {
+            if (binding.txtEmail == null || binding.txtEmail.getText().toString().isEmpty() || !Formatadores.validarEmail(binding.txtEmail.getText().toString())) {
                 Toast.makeText(this, "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             this.dialog.show();
-            requestRenovar1.setRequest(new RecuperarSenhaRequest().setEmail(email.getText().toString()));
+            requestRenovar1.setRequest(new RecuperarSenhaRequest().setEmail(binding.txtEmail.getText().toString()));
             requestRenovar1.execute();
         }
         else {
-            if (codigo == null || codigo.getText().toString().isEmpty() ) {
+            if (binding.txtCodigo == null || binding.txtCodigo.getText().toString().isEmpty() ) {
                 Toast.makeText(this, "Insira o código!", Toast.LENGTH_SHORT).show();
                 return;
             }
             this.dialog.show();
-            requestRenovar2(codigo.getText().toString());
+            requestRenovar2(binding.txtCodigo.getText().toString());
             requestRenovar2.execute();
         }
     }

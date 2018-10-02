@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
@@ -56,16 +55,13 @@ public class RegistrarMusicoViewModel {
     private String UF;
     private Date nascimentoDate;
 
-    private ImageView imageView;
-    private ImageButton btnRemoverImagem;
-
     public RegistrarMusicoViewModel(RegistrarMusico view){
         this.view = view;
     }
 
     public void init(){
-        this.imageView = view.findViewById(R.id.circularImageView);
-        this.btnRemoverImagem = view.findViewById(R.id.btnRemoverImagem);
+        ImageView imageView = view.findViewById(R.id.circularImageView);
+        ImageButton btnRemoverImagem = view.findViewById(R.id.btnRemoverImagem);
         initRequests();
         this.rc = view.findViewById(R.id.listaInstrumentos);
         EditText txtNascimento = view.findViewById(R.id.txtNascimento);
