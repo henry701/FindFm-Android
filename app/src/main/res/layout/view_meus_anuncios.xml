@@ -16,7 +16,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/lilasClaro"
+        android:background="#bb68fa"
         android:onClick="@{clickListener::onClick}">
 
         <android.support.constraint.ConstraintLayout
@@ -43,6 +43,20 @@
 
 
                 <TextView
+                    android:id="@+id/lb_titulo_anuncio"
+                    android:layout_width="367dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|left"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintStart_toStartOf="@+id/lb_descricao"
+                    tools:layout_editor_absoluteY="37dp"
+                    tools:text="Nome" />
+
+                <TextView
                     android:id="@+id/lb_data"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
@@ -50,33 +64,13 @@
                     android:text="@{`Publicado em: ` + post.data}"
                     android:textAlignment="textStart"
                     android:textColor="@color/white"
-                    android:textSize="15sp"
+                    android:textSize="10sp"
                     android:textStyle="italic"
                     android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
-                    tools:layout_editor_absoluteY="17dp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
+                    tools:layout_editor_absoluteY="17dp"
+                    tools:text="Publicado em: 05/05/2018 22:00:05" />
 
                 <!--android:hint="Maior Titulo dos titulos muito grande meu Deus que titulo!!!"-->
-
-                <TextView
-                    android:id="@+id/lb_titulo_anuncio"
-                    android:layout_width="367dp"
-                    android:layout_height="wrap_content"
-                    android:text="@={post.titulo}"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toStartOf="@+id/lb_descricao"
-                    tools:layout_editor_absoluteY="37dp" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
 
                 <!--android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"-->
 
@@ -84,12 +78,12 @@
                     android:id="@+id/lb_descricao"
                     android:layout_width="367dp"
                     android:layout_height="wrap_content"
-                    android:text="@={post.descricao}"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="83dp" />
+                    tools:layout_editor_absoluteY="83dp"
+                    tools:text="Descrição/Texto lorem ipsum" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -117,6 +111,7 @@
                     android:visibility="gone"
                     tools:layout_editor_absoluteX="367dp"
                     tools:layout_editor_absoluteY="172dp" />
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
