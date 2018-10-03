@@ -109,9 +109,7 @@
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintStart_toStartOf="@+id/lb_descricao"
-                    tools:layout_editor_absoluteY="37dp" />
+                    android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -128,9 +126,7 @@
                     android:text="@={post.descricao}"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:layout_editor_absoluteY="83dp" />
+                    android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -143,9 +139,7 @@
                     android:contentDescription="Imagem"
                     android:onClick="@{clickListener::onClick}"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/capaplaceholder_photo"
-                    tools:layout_editor_absoluteX="367dp"
-                    tools:layout_editor_absoluteY="172dp" />
+                    app:srcCompat="@drawable/capaplaceholder_photo"/>
 
                 <Space
                     android:layout_width="match_parent"
@@ -156,9 +150,7 @@
                     android:layout_width="342dp"
                     android:layout_height="285dp"
                     android:contentDescription="Video"
-                    android:visibility="gone"
-                    tools:layout_editor_absoluteX="367dp"
-                    tools:layout_editor_absoluteY="172dp" />
+                    android:visibility="gone" />
 
                 <Space
                     android:layout_width="match_parent"

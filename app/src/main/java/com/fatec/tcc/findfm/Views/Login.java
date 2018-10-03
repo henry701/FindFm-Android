@@ -16,10 +16,10 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Login.LoginViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -104,11 +104,13 @@ public class Login extends AppCompatActivity {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
                                 Usuario usuario = new Usuario();
                                 usuario.setId(user.getId());
-                                usuario.setFotoID(user.getAvatar().get_id());
+                                if(user.getAvatar() != null) {
+                                    usuario.setFotoID(user.getAvatar().get_id());
+                                }
                                 usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                 usuario.setNomeCompleto(user.getFullName());
                                 usuario.setEmail(user.getEmail());
-                                usuario.setTelefone(user.getTelefone().getStateCode() + user.getTelefone().getNumber());
+                                usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
 
                                 FindFM.setUsuario(usuario);
 

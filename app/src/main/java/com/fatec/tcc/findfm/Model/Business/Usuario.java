@@ -6,7 +6,7 @@ public class Usuario {
     private String nomeCompleto;
     private boolean confirmado;
     private boolean premium;
-    private String telefone;
+    private Telefone telefone;
     private String email;
     private String senha;
     private String fotoID;
@@ -35,7 +35,7 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeCompleto, String senha, String email, String telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
+    public Usuario(String nomeCompleto, String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
         this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.email = email;
@@ -96,11 +96,11 @@ public class Usuario {
         this.premium = premium;
     }
 
-    public String getTelefone() {
+    public Telefone getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(Telefone telefone) {
         this.telefone = telefone;
     }
 

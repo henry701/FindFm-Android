@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
+                <!--TODO: Colocar imagem padrão melhor-->
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/circularImageView2"
                     android:layout_width="130dp"

@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Model.Http.Response;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Set;
 
 public class PostResponse {
 
@@ -10,7 +11,7 @@ public class PostResponse {
     private String descricao;
     private DateTime criacao;
     private Autor autor;
-    private Long likes;
+    private Set<String> UsuarioLikes;
     private String cidade;
     private String UF;
     private List<Midias> midias;
@@ -31,12 +32,12 @@ public class PostResponse {
         this.autor = autor;
     }
 
-    public Long getLikes() {
-        return likes;
+    public Set<String> getUsuarioLikes() {
+        return UsuarioLikes;
     }
 
-    public void setLikes(Long likes) {
-        this.likes = likes;
+    public void setUsuarioLikes(Set<String> usuarioLikes) {
+        UsuarioLikes = usuarioLikes;
     }
 
     public List<Midias> getMidias() {

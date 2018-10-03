@@ -24,7 +24,7 @@ public class Contratante extends Usuario {
                 TiposUsuario.CONTRATANTE);
     }
 
-    public Contratante(String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
+    public Contratante(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium,
                  String nomeEstabelecimento, Date inauguracao, int capacidadeLocal, String cidade, String uf, String endereco, int numero) {
         super(nomeEstabelecimento, senha, email, telefone, foto, confirmado, premium, TiposUsuario.CONTRATANTE);
         this.inauguracao = inauguracao;

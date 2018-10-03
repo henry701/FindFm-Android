@@ -22,6 +22,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -160,7 +161,7 @@ public class Perfil_Fragment extends Fragment {
                                 this.usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                 this.usuario.setNomeCompleto(user.getFullName());
                                 this.usuario.setEmail(user.getEmail());
-                                this.usuario.setTelefone(user.getTelefone().getStateCode() + user.getTelefone().getNumber());
+                                this.usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
                                 this.usuario.setFoto(FindFM.getFotoPrefBase64(activity));
 
                                 binding.setUsuario(this.usuario);

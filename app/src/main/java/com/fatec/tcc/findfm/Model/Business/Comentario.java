@@ -3,8 +3,7 @@ package com.fatec.tcc.findfm.Model.Business;
 public class Comentario {
 
     private Usuario comentador;
-    private String texto;
-    private int likes;
+    private String comentario;
 
     public Usuario getComentador() {
         return comentador;
@@ -15,21 +14,12 @@ public class Comentario {
         return this;
     }
 
-    public String getTexto() {
-        return texto;
+    public String getComentario() {
+        return comentario;
     }
 
-    public Comentario setTexto(String texto) {
-        this.texto = texto;
-        return this;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public Comentario setLikes(int likes) {
-        this.likes = likes;
+    public Comentario setComentario(String comentario) {
+        this.comentario = comentario;
         return this;
     }
 }

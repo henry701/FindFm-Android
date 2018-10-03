@@ -1,7 +1,9 @@
 package com.fatec.tcc.findfm.Model.Http.Response;
 
+import com.fatec.tcc.findfm.Model.Business.Endereco;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
@@ -144,80 +146,6 @@ public class User {
             public void setContentType(String contentType) {
                 this.contentType = contentType;
             }
-        }
-    }
-
-    public static class Telefone {
-
-        private int countryCode;
-        private int stateCode;
-        private String number;
-
-        public String getCountryCode() {
-            return String.valueOf(countryCode);
-        }
-
-        public Telefone setCountryCode(String countryCode) {
-            this.countryCode = Integer.parseInt(countryCode);
-            return this;
-        }
-
-        public String getStateCode() {
-            return String.valueOf(stateCode);
-        }
-
-        public Telefone setStateCode(String stateCode) {
-            this.stateCode = Integer.parseInt(stateCode);
-            return this;
-        }
-
-        public String getNumber() {
-            return number;
-        }
-
-        public Telefone setNumber(String number) {
-            this.number = number;
-            return this;
-        }
-    }
-
-    public class Endereco {
-
-        private String estado;
-        private String cidade;
-        private String endereco;
-        private String numero;
-
-        public String getEstado() {
-            return estado;
-        }
-
-        public void setEstado(String estado) {
-            this.estado = estado;
-        }
-
-        public String getCidade() {
-            return cidade;
-        }
-
-        public void setCidade(String cidade) {
-            this.cidade = cidade;
-        }
-
-        public String getEndereco() {
-            return endereco;
-        }
-
-        public void setEndereco(String endereco) {
-            this.endereco = endereco;
-        }
-
-        public String getNumero() {
-            return numero;
-        }
-
-        public void setNumero(String numero) {
-            this.numero = numero;
         }
     }
 }

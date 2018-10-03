@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -164,10 +164,15 @@ public class RegistrarContratanteViewModel {
             this.param.putString("uf", UF);
             int capacidade = Integer.parseInt(this.capacidade.get());
 
+            Telefone telefone = new Telefone()
+                    .setCountryCode("55")
+                    .setStateCode(param.getString("ddd"))
+                    .setNumber(param.getString("telefone"));
+
             Contratante contratante = new Contratante(
                     param.getString("senha"),
                     param.getString("email"),
-                    param.getString("telefone"),
+                    telefone,
                     FindFM.getImagemPerfilBase64(),
                     false,
                     false,

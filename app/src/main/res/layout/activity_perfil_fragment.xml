@@ -109,7 +109,7 @@
                     android:hint="@string/telefone_contato"
                     android:inputType="text|phone"
                     android:maxLength="15"
-                    android:text="@={usuario.telefone}"
+                    android:text="@{`` + usuario.telefone.stateCode + `` + usuario.telefone.number}"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtEmail"
                     app:layout_constraintEnd_toEndOf="parent"

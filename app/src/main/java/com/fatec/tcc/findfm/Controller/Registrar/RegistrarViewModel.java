@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
@@ -99,8 +100,9 @@ public class RegistrarViewModel {
         else {
             this.telefone.set(this.tratarTelefone());
             tipoConta = view.findViewById(selectedId);
-
-            this.param.putString("telefone",    this.telefone.get());
+            Telefone telefone = getTelefone();
+            this.param.putString("ddd", telefone.getStateCode());
+            this.param.putString("telefone",    telefone.getNumber());
             this.param.putString("email",       this.email.get());
             this.param.putString("senha",       this.senha.get());
 
@@ -129,6 +131,20 @@ public class RegistrarViewModel {
             telefone += telefoneBuild[0] + telefoneBuild[1];
         }
         return telefone;
+    }
+
+    private Telefone getTelefone(){
+        Telefone telefone1 = new Telefone();
+
+        if(this.telefone.get() != null ) {
+            if(this.telefone.get().length() >= 10) {
+                //DDD
+                telefone1.setStateCode(this.telefone.get().substring(0,2));
+                //NUMERO
+                telefone1.setNumber(this.telefone.get().substring(2));
+            }
+        }
+        return telefone1;
     }
 
     public void removerImagem() {

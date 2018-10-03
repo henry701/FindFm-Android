@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 public class Post {
@@ -15,6 +16,7 @@ public class Post {
     private String titulo;
     private String descricao;
     private String cidade;
+    private String uf;
     private String idFoto;
     private List<String> idFotos;
     private byte[] fotoBytes;
@@ -23,6 +25,8 @@ public class Post {
     private byte[] videoBytes;
     private DateTime data;
     private Long likes;
+    private Set<String> likesId;
+    private boolean liked;
     private List<Comentario> comentarios;
 
     public Post(){}
@@ -32,9 +36,7 @@ public class Post {
         this.setIdVideos(new ArrayList<>());
         this.titulo = postResponse.getTitulo();
         this.descricao = postResponse.getDescricao();
-        //TODO: talvez colocar
-        //this.cidade
-        //this.UF
+
         if(postResponse.getMidias() != null) {
             for (PostResponse.Midias midia : postResponse.getMidias()) {
                 if (midia.getTipoMidia().equals("img")) {
@@ -44,17 +46,29 @@ public class Post {
                 }
             }
         }
+        this.likesId = postResponse.getUsuarioLikes();
+        this.likes = likesId == null ? 0L : (long) likesId.size();
+
         Usuario usuario = new Usuario();
         usuario.setId(postResponse.getAutor().getUsuario().getId());
-        usuario.setFotoID(postResponse.getAutor().getUsuario().getAvatar().get_id());
+        usuario.setFotoID(postResponse.getAutor().getUsuario().getAvatar() != null ? postResponse.getAutor().getUsuario().getAvatar().get_id() : null);
         usuario.setTipoUsuario(TiposUsuario.fromKind(postResponse.getAutor().getUsuario().getKind()));
         usuario.setNomeCompleto(postResponse.getAutor().getUsuario().getFullName());
-        this.autor = usuario;
-        //TODO: colocar esses campos
-        this.data = postResponse.getCriacao();
         usuario.setEmail(postResponse.getAutor().getUsuario().getEmail());
-        if(postResponse.getAutor().getUsuario().getTelefone() != null)
-            usuario.setTelefone(postResponse.getAutor().getUsuario().getTelefone().getStateCode() + postResponse.getAutor().getUsuario().getTelefone().getNumber());
+
+        if(postResponse.getAutor().getUsuario().getTelefone() != null) {
+            usuario.setTelefone( new Telefone(postResponse.getAutor().getUsuario().getTelefone().getStateCode(),
+                    postResponse.getAutor().getUsuario().getTelefone().getNumber()));
+        }
+
+        if(postResponse.getAutor().getUsuario().getEndereco() != null) {
+            this.cidade = postResponse.getAutor().getUsuario().getEndereco().getCidade();
+            this.uf = postResponse.getAutor().getUsuario().getEndereco().getEstado();
+        }
+
+        this.autor = usuario;
+        this.liked = likes != 0L ? likesId.contains(usuario.getId()) : false;
+        this.data = postResponse.getCriacao();
     }
 
     public String getTitulo() {
@@ -174,5 +188,29 @@ public class Post {
 
     public void setVideoBytes(byte[] videoBytes) {
         this.videoBytes = videoBytes;
+    }
+
+    public Set<String> getLikesId() {
+        return likesId;
+    }
+
+    public void setLikesId(Set<String> likesId) {
+        this.likesId = likesId;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 }

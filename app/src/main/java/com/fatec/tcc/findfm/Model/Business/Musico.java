@@ -23,7 +23,7 @@ public class Musico extends Usuario {
                 TiposUsuario.MUSICO);
     }
 
-    public Musico(String senha, String email, String telefone, String foto, boolean confirmado, boolean premium,
+    public Musico(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium,
                   String nomeCompleto, Date nascimento, List<Instrumento> instrumentos, String cidade, String uf) {
         super(nomeCompleto, senha, email, telefone, foto, confirmado, premium, TiposUsuario.MUSICO);
         this.nascimento = nascimento;

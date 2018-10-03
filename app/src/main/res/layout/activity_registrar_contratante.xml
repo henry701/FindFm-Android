@@ -39,7 +39,6 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
-
                     android:onClick="btnRemoverImagem_Click"
                     app:layout_constraintBottom_toTopOf="@+id/txtNomeEstabelecimento"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +46,7 @@
                     app:layout_constraintStart_toEndOf="@+id/circularImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.122" />
-
+                <!--TODO: Colocar imagem padrão melhor-->
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/circularImageView"
                     android:layout_width="130dp"

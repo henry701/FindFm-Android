@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -149,10 +150,15 @@ public class RegistrarMusicoViewModel {
             this.param.putString("cidade", this.cidade.get());
             this.param.putString("uf", UF);
 
+            Telefone telefone = new Telefone()
+                    .setCountryCode("55")
+                    .setStateCode(param.getString("ddd"))
+                    .setNumber(param.getString("telefone"));
+
             Musico musico = new Musico(
                     param.getString("senha"),
                     param.getString("email"),
-                    param.getString("telefone"),
+                    telefone,
                     FindFM.getImagemPerfilBase64(),
                     false,
                     false,

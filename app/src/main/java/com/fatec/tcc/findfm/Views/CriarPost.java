@@ -119,6 +119,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if(telaMode.equals("criando")){
             binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
             ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
+            //Somente contratante pode colocar titulo para o anuncio
+            if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
+                binding.incluirContent.txtTitulo.setVisibility(View.GONE);
+            }
+            else {
+                binding.incluirContent.getPost().setTitulo("");
+            }
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             binding.incluirContent.setPost(post);
