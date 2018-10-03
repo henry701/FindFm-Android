@@ -34,7 +34,6 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterFeed;
-import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusAnuncios;
 import com.fatec.tcc.findfm.databinding.ActivityHomeFragmentBinding;
 
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class Home_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -142,7 +141,7 @@ public class Home_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterMeusAnuncios(postList, activity));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,

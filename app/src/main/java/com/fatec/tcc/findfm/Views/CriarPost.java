@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +29,11 @@ import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.Comentario;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
+import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -42,11 +46,15 @@ import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.ImagemUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterComentario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
+
+import org.joda.time.DateTime;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -136,9 +144,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
             ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
         }
 
+        binding.incluirContent.listaComentarios.setLayoutManager(new LinearLayoutManager(this));
+        binding.incluirContent.listaComentarios.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
     }
 
     private void preencherTela(Post post){
+        
         if(post.getFotoBytes() != null) {
             InputStream input = new ByteArrayInputStream(post.getFotoBytes());
             Bitmap ext_pic = BitmapFactory.decodeStream(input);
@@ -188,6 +201,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.videoView.seekTo(100);
         }
 
+        if(post.getComentarios() != null){
+            binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getComentarios(), this));
+        }
+
         if(post.getAutor().getTelefone() != null){
             binding.incluirContent.txtTelefone.setVisibility(View.VISIBLE);
         }
@@ -214,6 +231,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
             startActivity(callIntent);
         });
 
+        binding.incluirContent.btnComentar.setOnClickListener(v -> {
+            comentar(post);
+        });
+
+
     }
 
     private void checkTelaMode(){
@@ -226,7 +248,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
             binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
-
+            optionsMenu.getItem(0).setVisible(false);
         } else if (telaMode.equals("editando") || telaMode.equals("criando")){
             if(optionsMenu != null) {
                 optionsMenu.getItem(0).setVisible(true);
@@ -234,6 +256,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
             binding.incluirContent.txtTelefone.setVisibility(View.GONE);
+            binding.incluirContent.listaComentarios.setVisibility(View.GONE);
+            binding.incluirContent.txtComentar.setVisibility(View.GONE);
+            binding.incluirContent.btnComentar.setVisibility(View.GONE);
+
             if(binding.incluirContent.getPost().getFotoBytes() == null) {
                 binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
                 binding.fabFoto.setVisibility(View.VISIBLE);
@@ -420,6 +446,58 @@ public class CriarPost extends AppCompatActivity implements Observer{
              .setImagemId(post.getIdFoto())
              .setVideoId(post.getIdVideo());
         postRequest.setRequest(param);
+        dialog.setMessage("Publicando, aguarde...");
+        dialog.show();
+        postRequest.execute();
+    }
+
+    private void comentar(Post post){
+        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
+                this,
+                HttpMethod.POST.getCodigo(),
+                ComentarRequest.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                HttpUtils.buildUrl(getResources(),"post/comment/" + post.getId()),
+                null,
+                (ResponseBody response) -> {
+                    this.dialog.hide();
+                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                        AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                "Sucesso!", R.drawable.ic_error,
+                                "Comentário cadastrado com sucesso","OK",
+                                (dialog, id) -> {
+                                    //TODO: get do post
+                                    dialog.dismiss();
+                                    FindFM.setTelaAtual("POST_CRIADO");
+                                    super.onBackPressed(); }).create().show();
+
+                    }
+                },
+                (ErrorResponse error) -> {
+                    dialog.hide();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            error.getMessage(),"OK",
+                            (dialog, id) -> { }).create().show();
+                },
+                (VolleyError error) -> {
+                    dialog.hide();
+                    error.printStackTrace();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                            (dialog, id) -> { }).create().show();
+                }
+        );
+
+        PostRequest param = new PostRequest();
+        param.setTitulo(post.getTitulo())
+                .setDescricao(post.getDescricao())
+                .setImagemId(post.getIdFoto())
+                .setVideoId(post.getIdVideo());
+        postRequest.setRequest(new ComentarRequest(binding.incluirContent.txtComentar.getText().toString()));
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
         postRequest.execute();

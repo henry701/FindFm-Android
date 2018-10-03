@@ -126,4 +126,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="comentarios">Comentários</string>
+    <string name="escreva_comentario">Escreva seu comentário</string>
+    <string name="comentar">Comentar</string>
 </resources>

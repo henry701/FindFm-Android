@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class PostResponse {
 
+    private String id;
     private String titulo;
     private String descricao;
     private DateTime criacao;
@@ -78,6 +79,14 @@ public class PostResponse {
 
     public void setCriacao(DateTime criacao) {
         this.criacao = criacao;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public class Autor {

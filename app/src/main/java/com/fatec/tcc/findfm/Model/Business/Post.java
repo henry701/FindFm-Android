@@ -12,6 +12,7 @@ import java.util.TimeZone;
 
 public class Post {
 
+    private String id;
     private Usuario autor;
     private String titulo;
     private String descricao;
@@ -32,6 +33,7 @@ public class Post {
     public Post(){}
 
     public Post(PostResponse postResponse){
+        this.setId(postResponse.getId());
         this.setIdFotos(new ArrayList<>());
         this.setIdVideos(new ArrayList<>());
         this.titulo = postResponse.getTitulo();
@@ -212,5 +214,13 @@ public class Post {
 
     public void setUf(String uf) {
         this.uf = uf;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
