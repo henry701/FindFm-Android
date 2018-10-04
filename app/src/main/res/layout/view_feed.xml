@@ -159,6 +159,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lb_likes"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_gravity="right"
@@ -167,17 +168,16 @@
                         android:elevation="10dp"
                         android:fontFamily="sans-serif"
                         android:gravity="center"
-                        android:text="876"
+                        android:text="@={post.likes}"
                         android:textColor="#FFF"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/btnLike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="(123) Curtir"
-                        android:text="Curtir"
+                        android:text="@string/curtir"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textStyle="bold" />

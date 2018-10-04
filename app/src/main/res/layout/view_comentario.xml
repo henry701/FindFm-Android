@@ -84,8 +84,9 @@
 
                 <TextView
                     android:id="@+id/lb_descricao"
-                    android:layout_width="367dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:hint="Maior descrição do universo, muito detalhada estou praticamente contando minha vida inteira nessa descrição de tão grande que é muito obrigado por ler"
                     android:text="@={comentario.comentario}"
                     android:textColor="@color/white"

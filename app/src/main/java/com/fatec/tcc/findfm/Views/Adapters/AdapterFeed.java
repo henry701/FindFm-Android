@@ -11,12 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
+import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
@@ -129,6 +135,52 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             activity.getDialog().show();
         }
 
+        holder.bindingVH.btnLike.setOnClickListener(
+                v -> {
+                    if (!post.getLikesId().contains(FindFM.getUsuario().getId())) {
+                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.GET.getCodigo(),
+                                ComentarRequest.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(), "post/like/" + post.getId()),
+                                null,
+                                (ResponseBody response) -> {
+                                },
+                                (ErrorResponse error) -> {
+                                },
+                                (VolleyError error) -> {
+                                }
+                        );
+                        postRequest.setRequest(null);
+                        postRequest.execute();
+                        post.setLikes(post.getLikes() + 1);
+                        holder.bindingVH.btnLike.setText(R.string.curti);
+                    }else {
+                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.DELETE.getCodigo(),
+                                ComentarRequest.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(), "post/like/" + post.getId()),
+                                null,
+                                (ResponseBody response) -> {
+                                },
+                                (ErrorResponse error) -> {
+                                },
+                                (VolleyError error) -> {
+                                }
+                        );
+                        postRequest.setRequest(null);
+                        postRequest.execute();
+                        post.setLikes(post.getLikes() + 1);
+                        holder.bindingVH.btnLike.setText(R.string.curtir);
+                    }
+                }
+        );
+
         holder.bindingVH.setClickListener(v -> {
             if(post.getAutor().getId().equals(FindFM.getUsuario().getId())){
                 String path = "CriarPost";
@@ -144,6 +196,13 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                 Util.open_form_withParam(activity, CriarPost.class, path, param);
             }
         });
+
+        if(post.getLikesId().contains(FindFM.getUsuario().getId())){
+            holder.bindingVH.btnLike.setText(R.string.curti);
+        }else {
+            holder.bindingVH.btnLike.setText(R.string.curtir);
+        }
+
     }
 
     @Override

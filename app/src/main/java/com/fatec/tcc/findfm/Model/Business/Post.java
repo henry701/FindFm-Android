@@ -68,6 +68,10 @@ public class Post {
             this.uf = postResponse.getAutor().getUsuario().getEndereco().getEstado();
         }
 
+        if(postResponse.getComentarios() != null){
+            this.comentarios = postResponse.getComentarios();
+        }
+
         this.autor = usuario;
         this.liked = likes != 0L ? likesId.contains(usuario.getId()) : false;
         this.data = postResponse.getCriacao();
@@ -168,12 +172,16 @@ public class Post {
         this.idVideos = idVideos;
     }
 
-    public Long getLikes() {
-        return likes;
+    public String getLikes() {
+        return likes.toString();
     }
 
     public void setLikes(Long likes) {
         this.likes = likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = Long.parseLong(likes);
     }
 
     public byte[] getFotoBytes() {

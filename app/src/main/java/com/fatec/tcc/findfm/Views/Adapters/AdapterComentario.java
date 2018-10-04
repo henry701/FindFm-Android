@@ -69,12 +69,13 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
                             holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
+                            holder.bindingVH.executePendingBindings();
                         } else{
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     "Ocorreu um erro ao tentar conectar com nossos servidores." +
                                             "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id1) -> { }).create().show();
+                                    (dialog, id1) -> { holder.bindingVH.executePendingBindings(); }).create().show();
                         }
 
                     });
