@@ -29,7 +29,6 @@ import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Model.Business.Comentario;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -49,12 +48,9 @@ import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterComentario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
 
-import org.joda.time.DateTime;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -198,7 +194,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
             m.setAnchorView(binding.incluirContent.videoView);
             binding.incluirContent.videoView.setVideoURI(uri);
             binding.incluirContent.videoView.setVisibility(View.VISIBLE);
-            binding.incluirContent.videoView.seekTo(100);
         }
 
         if(post.getComentarios() != null){
@@ -227,7 +222,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         binding.incluirContent.txtTelefone.setOnClickListener(v -> {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            callIntent.setData(Uri.parse("tel:"+ post.getAutor().getTelefone()));
+            callIntent.setData(Uri.parse("tel:"+ post.getAutor().getTelefone().getTelefoneFormatado()));
             startActivity(callIntent);
         });
 

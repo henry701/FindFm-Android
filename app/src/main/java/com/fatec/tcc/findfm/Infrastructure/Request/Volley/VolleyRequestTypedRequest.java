@@ -1,5 +1,7 @@
 package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 
+import android.util.Log;
+
 import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -35,7 +37,8 @@ public class VolleyRequestTypedRequest<TResponse, TErrorResponse> extends Reques
     {
         if(networkResponse == null)
         {
-            throw new RuntimeException("NetworkResponse is null!");
+            Log.e("[VOLEY REQUEST]", "NetworkResponse is null!!");
+            //throw new RuntimeException("NetworkResponse is null!");
         }
         Cache.Entry cacheEntry = HttpHeaderParser.parseCacheHeaders(networkResponse);
         return Response.success(networkResponse, cacheEntry);

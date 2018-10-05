@@ -44,13 +44,13 @@ public class Telefone {
     public String getTelefoneFormatado(){
         try {
             if(number.length() == 8) {
-                return "(" + stateCode + ")" + this.number.substring(0,4) + "-" + this.number.substring(number.length() - 4, number.length());
+                return "(0" + stateCode + ")" + this.number.substring(0,4) + "-" + this.number.substring(number.length() - 4, number.length());
             }
             else {
-                return "(" + stateCode + ")" + this.number.substring(0,5) + "-" + this.number.substring(number.length() - 4, number.length());
+                return "(0" + stateCode + ")" + this.number.substring(0,5) + "-" + this.number.substring(number.length() - 4, number.length());
             }
         }catch (Exception e){
-            return "(" + stateCode + ")" + " " + number;
+            return "(0" + stateCode + ")" + " " + number;
         }
     }
 

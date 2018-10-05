@@ -129,5 +129,5 @@
     <string name="escreva_comentario">Escreva seu comentário</string>
     <string name="comentar">Comentar</string>
     <string name="curtir">Curtir</string>
-    <string name="curti">Curti</string>
+    <string name="descurtir">Descurtir</string>
 </resources>

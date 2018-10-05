@@ -10,12 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Comentario;
+import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpMethod;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewComentarioBinding;
@@ -97,6 +104,65 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
 
         holder.bindingVH.fotoPerfil.setOnClickListener(irPerfil);
         holder.bindingVH.txtNome.setOnClickListener(irPerfil);
+
+        holder.bindingVH.btnLike.setOnClickListener(
+                v -> {
+                    if (!holder.bindingVH.getComentario().getLikes().contains(FindFM.getUsuario().getId())) {
+                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> comentarioRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.GET.getCodigo(),
+                                ComentarRequest.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + comentario.getId()),
+                                null,
+                                (ResponseBody response) -> {
+                                },
+                                (ErrorResponse error) -> {
+                                },
+                                (VolleyError error) -> {
+                                }
+                        );
+                        comentarioRequest.setRequest(null);
+                        comentarioRequest.execute();
+                        holder.bindingVH.getComentario().setLikesNumb((Long.parseLong(comentario.getLikesNumb()) +1));
+                        holder.bindingVH.getComentario().getLikes().add(FindFM.getUsuario().getId());
+                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getComentario().getLikesNumb());
+                        holder.bindingVH.btnLike.setText(R.string.descurtir);
+                        holder.bindingVH.executePendingBindings();
+                    }else {
+                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> comentarioRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.DELETE.getCodigo(),
+                                ComentarRequest.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + comentario.getId()),
+                                null,
+                                (ResponseBody response) -> {
+                                },
+                                (ErrorResponse error) -> {
+                                },
+                                (VolleyError error) -> {
+                                }
+                        );
+                        comentarioRequest.setRequest(null);
+                        comentarioRequest.execute();
+                        holder.bindingVH.getComentario().setLikesNumb((Long.parseLong(comentario.getLikesNumb()) -1));
+                        holder.bindingVH.getComentario().getLikes().remove(FindFM.getUsuario().getId());
+                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getComentario().getLikesNumb());
+                        holder.bindingVH.btnLike.setText(R.string.curtir);
+                        holder.bindingVH.executePendingBindings();
+                    }
+                }
+        );
+
+
+        if(comentario.getLikes().contains(FindFM.getUsuario().getId())){
+            holder.bindingVH.btnLike.setText(R.string.descurtir);
+        }else {
+            holder.bindingVH.btnLike.setText(R.string.curtir);
+        }
     }
 
     @Override

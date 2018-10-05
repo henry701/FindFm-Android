@@ -104,7 +104,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             m.setAnchorView(holder.bindingVH.videoView);
             holder.bindingVH.videoView.setVideoURI(uri);
             holder.bindingVH.videoView.setVisibility(View.VISIBLE);
-            holder.bindingVH.videoView.seekTo(100);
         }
 
         if(post.getAutor().getFotoID() != null){
@@ -137,7 +136,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
 
         holder.bindingVH.btnLike.setOnClickListener(
                 v -> {
-                    if (!post.getLikesId().contains(FindFM.getUsuario().getId())) {
+                    if (!holder.bindingVH.getPost().getLikesId().contains(FindFM.getUsuario().getId())) {
                         JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
                                 activity,
                                 HttpMethod.GET.getCodigo(),
@@ -155,8 +154,12 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                         );
                         postRequest.setRequest(null);
                         postRequest.execute();
-                        post.setLikes(post.getLikes() + 1);
-                        holder.bindingVH.btnLike.setText(R.string.curti);
+                        holder.bindingVH.getPost().getLikesId().remove(FindFM.getUsuario().getId());
+                        holder.bindingVH.getPost().setLikes((Long.parseLong(post.getLikes()) +1));
+                        holder.bindingVH.getPost().getLikesId().add(FindFM.getUsuario().getId());
+                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getPost().getLikes());
+                        holder.bindingVH.btnLike.setText(R.string.descurtir);
+                        holder.bindingVH.executePendingBindings();
                     }else {
                         JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
                                 activity,
@@ -175,8 +178,11 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                         );
                         postRequest.setRequest(null);
                         postRequest.execute();
-                        post.setLikes(post.getLikes() + 1);
+                        holder.bindingVH.getPost().setLikes((Long.parseLong(post.getLikes()) -1));
+                        holder.bindingVH.getPost().getLikesId().remove(FindFM.getUsuario().getId());
+                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getPost().getLikes());
                         holder.bindingVH.btnLike.setText(R.string.curtir);
+                        holder.bindingVH.executePendingBindings();
                     }
                 }
         );
@@ -198,7 +204,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
         });
 
         if(post.getLikesId().contains(FindFM.getUsuario().getId())){
-            holder.bindingVH.btnLike.setText(R.string.curti);
+            holder.bindingVH.btnLike.setText(R.string.descurtir);
         }else {
             holder.bindingVH.btnLike.setText(R.string.curtir);
         }
