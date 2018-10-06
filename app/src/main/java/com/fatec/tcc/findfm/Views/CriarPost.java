@@ -197,7 +197,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
 
         if(post.getComentarios() != null){
-            binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getComentarios(), this));
+            binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this));
         }
 
         if(post.getAutor().getTelefone() != null){
@@ -251,6 +251,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
             binding.incluirContent.txtTelefone.setVisibility(View.GONE);
+            binding.incluirContent.textView5.setVisibility(View.GONE);
             binding.incluirContent.listaComentarios.setVisibility(View.GONE);
             binding.incluirContent.txtComentar.setVisibility(View.GONE);
             binding.incluirContent.btnComentar.setVisibility(View.GONE);

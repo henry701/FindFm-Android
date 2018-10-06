@@ -34,13 +34,15 @@ import java.util.List;
 
 public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.ViewHolder>{
 
+    private String postId;
     private List<Comentario> comentarios = new ArrayList<>();
     private Activity activity;
 
     public AdapterComentario() {
     }
 
-    public AdapterComentario(List<Comentario> comentarios, Activity activity){
+    public AdapterComentario(String postId, List<Comentario> comentarios, Activity activity){
+        this.postId = postId;
         this.comentarios = comentarios;
         this.activity = activity;
     }
@@ -114,7 +116,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                                 ComentarRequest.class,
                                 ResponseBody.class,
                                 ErrorResponse.class,
-                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + comentario.getId()),
+                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + postId, comentario.getId()),
                                 null,
                                 (ResponseBody response) -> {
                                 },
@@ -137,7 +139,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                                 ComentarRequest.class,
                                 ResponseBody.class,
                                 ErrorResponse.class,
-                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + comentario.getId()),
+                                HttpUtils.buildUrl(activity.getResources(), "comment/like/" + postId, comentario.getId()),
                                 null,
                                 (ResponseBody response) -> {
                                 },
