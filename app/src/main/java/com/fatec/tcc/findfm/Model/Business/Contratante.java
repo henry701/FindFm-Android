@@ -21,12 +21,14 @@ public class Contratante extends Usuario {
                 usuario.getFoto(),
                 usuario.isConfirmado(),
                 usuario.isPremium(),
+                usuario.getId(),
+                usuario.getFotoID(),
                 TiposUsuario.CONTRATANTE);
     }
 
-    public Contratante(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium,
+    public Contratante(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium, String id, String fotoId,
                  String nomeEstabelecimento, Date inauguracao, int capacidadeLocal, String cidade, String uf, String endereco, int numero) {
-        super(nomeEstabelecimento, senha, email, telefone, foto, confirmado, premium, TiposUsuario.CONTRATANTE);
+        super(nomeEstabelecimento, senha, email, telefone, foto, confirmado, premium, id, fotoId, TiposUsuario.CONTRATANTE);
         this.inauguracao = inauguracao;
         this.capacidadeLocal = capacidadeLocal;
         this.cidade = cidade;

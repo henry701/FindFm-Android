@@ -26,7 +26,7 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
 
     private List<Instrumento> instrumentos = new ArrayList<>();
     private Set<Instrumento> instrumentosUsuario = new HashSet<>();
-
+    private boolean itsMe;
     private SparseBooleanArray itemStateArray= new SparseBooleanArray();
     private Context context;
 
@@ -34,9 +34,10 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
 
     }
 
-    public AdapterInstrumentos(List<Instrumento> instrumentos, Context context){
+    public AdapterInstrumentos(List<Instrumento> instrumentos, Context context, boolean itsMe){
         this.instrumentos = instrumentos;
         this.context = context;
+        this.itsMe = itsMe;
     }
 
     public List<Instrumento> getInstrumentos(){
@@ -80,18 +81,21 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
         ViewHolder(View itemView) {
             super(itemView);
             checkInstrumento = itemView.findViewById( R.id.checkInstumento );
+            checkInstrumento.setEnabled(itsMe);
+            if(!itsMe)
+                checkInstrumento.setOnClickListener(null);
             cb_nivelHabilidade = itemView.findViewById( R.id.cb_nivelHabilidade );
-
+            cb_nivelHabilidade.setEnabled(itsMe);
             itemView.setOnClickListener(v -> {
                 int adapterPosition = getAdapterPosition();
                 Instrumento instrumento = instrumentos.get(adapterPosition);
 
-                if (!itemStateArray.get(adapterPosition, false)) {
+                if (!itemStateArray.get(adapterPosition, false) && itsMe) {
                     checkInstrumento.setChecked(true);
                     itemStateArray.put(adapterPosition, true);
                     instrumentosUsuario.add(instrumento);
                 }
-                else {
+                else if (itsMe){
                     checkInstrumento.setChecked(false);
                     itemStateArray.put(adapterPosition, false);
                     instrumentosUsuario.remove(instrumento);

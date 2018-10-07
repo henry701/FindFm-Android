@@ -21,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarMusicoViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -113,7 +112,7 @@ public class RegistrarMusico extends AppCompatActivity {
                                     );
                                 }
 
-                                rc.setAdapter( new AdapterInstrumentos(instrumentos, this) );
+                                rc.setAdapter( new AdapterInstrumentos(instrumentos, this, true) );
                                 RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
                                         LinearLayoutManager.VERTICAL, false);
                                 rc.setLayoutManager( layout );

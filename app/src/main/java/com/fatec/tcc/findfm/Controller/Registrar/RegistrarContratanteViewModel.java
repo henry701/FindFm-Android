@@ -176,6 +176,8 @@ public class RegistrarContratanteViewModel {
                     FindFM.getImagemPerfilBase64(),
                     false,
                     false,
+                    null,
+                    null,
                     param.getString("nomeCompleto"),
                     inauguracaoDate,
                     capacidade,

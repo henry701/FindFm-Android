@@ -35,7 +35,7 @@ public class Usuario {
      * @param confirmado
      * @param premium
      */
-    public Usuario(String nomeCompleto, String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium, TiposUsuario tipoUsuario){
+    public Usuario(String nomeCompleto, String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium, String id, String fotoID, TiposUsuario tipoUsuario){
         this.nomeCompleto = nomeCompleto;
         this.senha = senha;
         this.email = email;
@@ -43,6 +43,8 @@ public class Usuario {
         this.foto = foto;
         this.confirmado = confirmado;
         this.premium = premium;
+        this.id = id;
+        this.fotoID = fotoID;
         this.tipoUsuario = tipoUsuario;
 
     }

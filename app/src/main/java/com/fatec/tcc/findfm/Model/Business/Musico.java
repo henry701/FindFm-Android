@@ -20,12 +20,14 @@ public class Musico extends Usuario {
                 usuario.getFoto(),
                 usuario.isConfirmado(),
                 usuario.isPremium(),
+                usuario.getId(),
+                usuario.getFotoID(),
                 TiposUsuario.MUSICO);
     }
 
-    public Musico(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium,
+    public Musico(String senha, String email, Telefone telefone, String foto, boolean confirmado, boolean premium, String id, String fotoId,
                   String nomeCompleto, Date nascimento, List<Instrumento> instrumentos, String cidade, String uf) {
-        super(nomeCompleto, senha, email, telefone, foto, confirmado, premium, TiposUsuario.MUSICO);
+        super(nomeCompleto, senha, email, telefone, foto, confirmado, premium, id, fotoId, TiposUsuario.MUSICO);
         this.nascimento = nascimento;
         this.instrumentos = instrumentos;
         this.cidade = cidade;

@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.SpinnerAdapter;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Perfil.PerfilViewModel;
+import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Estados;
@@ -25,6 +28,7 @@ import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
+import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
@@ -38,7 +42,9 @@ import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -158,11 +164,45 @@ public class Perfil_Fragment extends Fragment {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
+                                this.usuario.setId(user.getId());
                                 this.usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                 this.usuario.setNomeCompleto(user.getFullName());
                                 this.usuario.setEmail(user.getEmail());
                                 this.usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
-                                this.usuario.setFoto(FindFM.getFotoPrefBase64(activity));
+                                this.usuario.setFotoID(null);
+
+                                if(user.getAvatar() != null){
+                                    if(user.getAvatar().get_id() != null){
+                                        this.usuario.setFotoID(user.getAvatar().get_id());
+                                        DownloadResourceService downloadService = new DownloadResourceService(activity);
+                                        downloadService.addObserver( (download, arg) -> {
+                                            if(download instanceof DownloadResourceService) {
+                                                activity.runOnUiThread(() -> {
+                                                    if (arg instanceof BinaryResponse) {
+                                                        byte[] dados = ((BinaryResponse) arg).getData();
+                                                        InputStream input=new ByteArrayInputStream(dados);
+                                                        Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                                                        binding.circularImageView.setImageBitmap(ext_pic);
+                                                    } else{
+                                                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                                                "Ops!", R.drawable.ic_error,
+                                                                "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                                                        "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                                                (dialog, id1) -> { }).create().show();
+                                                    }
+
+                                                    activity.getDialog().hide();
+
+                                                });
+                                            }
+                                        });
+                                        downloadService.getResource(user.getAvatar().get_id());
+                                        activity.getDialog().show();
+                                    }
+                                }
+                                else {
+                                    binding.circularImageView.setImageDrawable(activity.getDrawable(R.drawable.capaplaceholder_photo));
+                                }
 
                                 binding.setUsuario(this.usuario);
 
@@ -190,12 +230,13 @@ public class Perfil_Fragment extends Fragment {
                                         binding.setMusico(musico);
                                         binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));
                                         binding.getViewModel().setNascimentoDate(musico.getNascimento());
-                                        binding.getViewModel().updateList(musico.getInstrumentos());
+                                        binding.getViewModel().updateList(musico.getInstrumentos(), usuario.getId().equals(FindFM.getUsuario().getId()));
                                         break;
                                 }
 
                                 binding.executePendingBindings();
                                 binding.getViewModel().init();
+                                this.tratarTela();
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -219,6 +260,50 @@ public class Perfil_Fragment extends Fragment {
                 );
         registrarRequest.execute();
         activity.getDialog().show();
+    }
+
+    private void tratarTela() {
+        boolean itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
+
+        binding.circularImageView.setEnabled(itsMe);
+        binding.txtNomeCompleto.setEnabled(itsMe);
+        binding.txtTelefone.setEnabled(itsMe);
+        binding.txtEmail.setEnabled(itsMe);
+
+        binding.txtInauguracao.setEnabled(itsMe);
+        binding.txtCapacidadeLocal.setEnabled(itsMe);
+        binding.txtCidadeContratante.setEnabled(itsMe);
+        binding.cbUfContratante.setEnabled(itsMe);
+        binding.txtEndereco.setEnabled(itsMe);
+        binding.txtNumeroEndereco.setEnabled(itsMe);
+
+        binding.txtNascimento.setEnabled(itsMe);
+        binding.txtCidadeMusico.setEnabled(itsMe);
+        binding.cbUfMusico.setEnabled(itsMe);
+        binding.listaInstrumentos.setEnabled(itsMe);
+
+        if(itsMe){
+            binding.txtSenha.setVisibility(View.VISIBLE);
+            binding.txtConfirmaSenha.setVisibility(View.VISIBLE);
+            binding.buttonRegistrar.setVisibility(View.VISIBLE);
+        } else {
+            try {
+                activity.getSupportActionBar().setTitle("Perfil de: " + usuario.getNomeCompleto().split("\\s+")[0]);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            FindFM.setTelaAtual("PERFIL_DE_OUTRO");
+            binding.txtSenha.setVisibility(View.GONE);
+            binding.txtConfirmaSenha.setVisibility(View.GONE);
+            binding.buttonRegistrar.setVisibility(View.GONE);
+        }
+
+        if(usuario.getFotoID() != null && itsMe){
+            binding.btnRemoverImagem.setVisibility(View.VISIBLE);
+        } else {
+            binding.btnRemoverImagem.setVisibility(View.GONE);
+        }
+
     }
 
     @Override

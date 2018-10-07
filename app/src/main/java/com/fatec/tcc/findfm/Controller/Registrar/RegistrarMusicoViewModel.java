@@ -162,6 +162,8 @@ public class RegistrarMusicoViewModel {
                     FindFM.getImagemPerfilBase64(),
                     false,
                     false,
+                    null,
+                    null,
                     param.getString("nomeCompleto"),
                     nascimentoDate,
                     instrumentos,

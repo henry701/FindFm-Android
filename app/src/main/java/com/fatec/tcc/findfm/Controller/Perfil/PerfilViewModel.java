@@ -81,7 +81,6 @@ public class PerfilViewModel {
     }
 
     public void init(){
-        ImagemUtils.setImagemToImageView_FromPref(imageView, view, btnRemoverImagem);
         initRequests();
     }
 
@@ -315,7 +314,7 @@ public class PerfilViewModel {
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void updateList(List<Instrumento> instrumentosUsuario) {
+    public void updateList(List<Instrumento> instrumentosUsuario, boolean itsMe) {
         JsonTypedRequest<Instrumento, ResponseBody, ErrorResponse> instrumentoRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.GET,
@@ -335,7 +334,7 @@ public class PerfilViewModel {
                                     );
                                 }
 
-                                rc.setAdapter( new AdapterInstrumentos(instrumentos, view).setInstrumentosUsuario(instrumentosUsuario) );
+                                rc.setAdapter( new AdapterInstrumentos(instrumentos, view, itsMe).setInstrumentosUsuario(instrumentosUsuario) );
                                 RecyclerView.LayoutManager layout = new LinearLayoutManager(view,
                                         LinearLayoutManager.VERTICAL, false);
                                 rc.setLayoutManager( layout );

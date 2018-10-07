@@ -75,7 +75,12 @@ public class Home_Fragment extends Fragment {
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
         byte[] imagePerfil = FindFM.getFotoPrefBytes(getActivity());
-        binding.fotoPerfil.setImageBitmap(BitmapFactory.decodeByteArray(imagePerfil, 0 , imagePerfil.length));
+        if(imagePerfil != null) {
+            binding.fotoPerfil.setImageBitmap(BitmapFactory.decodeByteArray(imagePerfil, 0, imagePerfil.length));
+        }
+        else {
+            binding.fotoPerfil.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, activity.getTheme()));
+        }
         return binding.getRoot();
     }
 

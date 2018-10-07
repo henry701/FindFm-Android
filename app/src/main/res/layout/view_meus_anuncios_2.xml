@@ -23,12 +23,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="Imagem"
+        android:onClick="@{clickListener::onClick}"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoView2"
-        android:onClick="@{clickListener::onClick}"
         app:srcCompat="@drawable/capaplaceholder_photo" />
 
     <VideoView
@@ -100,14 +100,14 @@
 
     <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/fotoPerfil"
-        android:onClick="@{clickListener::onClick}"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:adjustViewBounds="false"
+        android:onClick="@{clickListener::onClick}"
         android:scaleType="matrix"
-        android:src="@drawable/profile_pic_placeholder"
+        android:src="@drawable/capaplaceholder_photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:siBorderColor="@color/white"
