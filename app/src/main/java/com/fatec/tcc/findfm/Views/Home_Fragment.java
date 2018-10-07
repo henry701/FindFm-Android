@@ -74,7 +74,8 @@ public class Home_Fragment extends Fragment {
         binding.listaPosts.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
-
+        byte[] imagePerfil = FindFM.getFotoPrefBytes(getActivity());
+        binding.fotoPerfil.setImageBitmap(BitmapFactory.decodeByteArray(imagePerfil, 0 , imagePerfil.length));
         return binding.getRoot();
     }
 

@@ -21,7 +21,7 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewMeusAnunciosBinding;
+import com.fatec.tcc.findfm.databinding.ViewMeusAnuncios2Binding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -48,10 +48,10 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
     @Override
     public AdapterMeusAnuncios.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewMeusAnunciosBinding binding =
+        ViewMeusAnuncios2Binding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_meus_anuncios, parent, false);
+                        R.layout.view_meus_anuncios_2, parent, false);
 
         return new AdapterMeusAnuncios.ViewHolder(binding);
     }
@@ -60,6 +60,35 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
     public void onBindViewHolder(AdapterMeusAnuncios.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bindingVH.setPost(post);
+
+        if(post.getAutor().getFotoID() != null){
+
+            DownloadResourceService downloadService = new DownloadResourceService(activity);
+            downloadService.addObserver( (download, arg) -> {
+                if(download instanceof DownloadResourceService) {
+                    activity.runOnUiThread(() -> {
+                        if (arg instanceof BinaryResponse) {
+                            byte[] dados = ((BinaryResponse) arg).getData();
+                            InputStream input=new ByteArrayInputStream(dados);
+                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                            holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
+                        } else{
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id1) -> { }).create().show();
+                        }
+
+                        activity.getDialog().hide();
+
+                    });
+                }
+            });
+            downloadService.getResource(post.getAutor().getFotoID());
+            activity.getDialog().show();
+        }
+
         for(String id : post.getIdFotos()){
             DownloadResourceService downloadService = new DownloadResourceService(activity);
             downloadService.addObserver( (download, arg) -> {
@@ -70,8 +99,8 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
                             InputStream input = new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
                             post.setFotoBytes(dados);
-                            holder.bindingVH.fotoPublicacao.setImageBitmap(ext_pic);
-                            holder.bindingVH.fotoPublicacao.setVisibility(View.VISIBLE);
+                            holder.bindingVH.fotoPublicacao2.setImageBitmap(ext_pic);
+                            holder.bindingVH.fotoPublicacao2.setVisibility(View.VISIBLE);
                         } else{
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
@@ -90,11 +119,11 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
         for(String id : post.getIdVideos()){
             Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(),"resource/" + id));
             MediaController m = new MediaController(activity);
-            holder.bindingVH.videoView.setMediaController(m);
-            m.setAnchorView(holder.bindingVH.videoView);
-            holder.bindingVH.videoView.setVideoURI(uri);
-            holder.bindingVH.videoView.setVisibility(View.VISIBLE);
-            holder.bindingVH.videoView.seekTo(100);
+            holder.bindingVH.videoView2.setMediaController(m);
+            m.setAnchorView(holder.bindingVH.videoView2);
+            holder.bindingVH.videoView2.setVideoURI(uri);
+            holder.bindingVH.videoView2.setVisibility(View.VISIBLE);
+            holder.bindingVH.videoView2.seekTo(100);
         }
 
         holder.bindingVH.setClickListener(v -> {
@@ -123,9 +152,9 @@ public class AdapterMeusAnuncios extends RecyclerView.Adapter<AdapterMeusAnuncio
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewMeusAnunciosBinding bindingVH;
+        public ViewMeusAnuncios2Binding bindingVH;
 
-        ViewHolder(ViewMeusAnunciosBinding binding){
+        ViewHolder(ViewMeusAnuncios2Binding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }

@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="post"
+            type="com.fatec.tcc.findfm.Model.Business.Post"/>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,46 +19,52 @@
         android:id="@+id/fotoPublicacao2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:contentDescription="Imagem"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoView2"
+        android:onClick="@{clickListener::onClick}"
         app:srcCompat="@drawable/capaplaceholder_photo" />
 
     <VideoView
         android:id="@+id/videoView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="285dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:contentDescription="Video"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lb_descricao3" />
 
     <TextView
         android:id="@+id/lb_descricao3"
+        android:onClick="@{clickListener::onClick}"
         android:layout_width="367dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:text="@{post.descricao}"
         android:textColor="@color/white"
         android:textSize="15sp"
         android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/fotoPerfil"
         app:layout_constraintTop_toBottomOf="@+id/fotoPerfil"
         tools:text="Descrição" />
 
     <TextView
         android:id="@+id/lb_data3"
+        android:onClick="@{clickListener::onClick}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -67,6 +82,7 @@
 
     <TextView
         android:id="@+id/lb_titulo_anuncio2"
+        android:onClick="@{clickListener::onClick}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -76,6 +92,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:text="@{post.titulo}"
         android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
         app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
         app:layout_constraintTop_toTopOf="parent"
@@ -83,6 +100,7 @@
 
     <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/fotoPerfil"
+        android:onClick="@{clickListener::onClick}"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -96,3 +114,4 @@
         app:siBorderWidth="3dp" />
 
 </android.support.constraint.ConstraintLayout>
+</layout>
