@@ -6,6 +6,7 @@ public class PostRequest {
     private String descricao;
     private String imagemId;
     private String videoId;
+    private String audioId;
 
     public String getTitulo() {
         return titulo;
@@ -41,5 +42,13 @@ public class PostRequest {
     public PostRequest setVideoId(String videoId) {
         this.videoId = videoId;
         return this;
+    }
+
+    public String getAudioId() {
+        return audioId;
+    }
+
+    public void setAudioId(String audioId) {
+        this.audioId = audioId;
     }
 }

@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Views.Home_Fragment"
+            android:name=".Views.Feed_Fragment"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Views.Registrar"

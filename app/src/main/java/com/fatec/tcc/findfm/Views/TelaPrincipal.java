@@ -21,7 +21,7 @@ import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityTelaPrincipalBinding;
 
@@ -55,7 +55,7 @@ public class TelaPrincipal extends AppCompatActivity
         textView.setText(FindFM.getNomeUsuario(this));
 
         ImageView imageView = binding.navView.getHeaderView(0).findViewById(R.id.imageViewHeader);
-        ImagemUtils.setImagemPerfilToImageView(imageView, this);
+        MidiaUtils.setImagemPerfilToImageView(imageView, this);
 
         binding.navView.setNavigationItemSelectedListener(this);
         binding.navView.getMenu().getItem(0).setChecked(true);
@@ -88,7 +88,7 @@ public class TelaPrincipal extends AppCompatActivity
             }
         }
 
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
                 .commit();
     }
 
@@ -104,7 +104,7 @@ public class TelaPrincipal extends AppCompatActivity
                 System.exit(0);
             } else {
                 fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
+                fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
                         .commit();
             }
         }
@@ -138,7 +138,7 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Home_Fragment(this))
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
                             .commit();
                 }
                 break;
@@ -150,7 +150,7 @@ public class TelaPrincipal extends AppCompatActivity
                 break;
             case R.id.meus_anuncios:
                 if(!tela.equals("MEUS_ANUNCIOS")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusAnuncios_Fragment(this))
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
                             .commit();
                 }
                 break;

@@ -33,7 +33,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
@@ -89,7 +89,7 @@ public class PerfilViewModel {
                 .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
         this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
-        ImagemUtils.setImagemToParams(this.imageView);
+        MidiaUtils.setImagemToParams(this.imageView);
     }
 
     public void registrar(Contratante contratante) {

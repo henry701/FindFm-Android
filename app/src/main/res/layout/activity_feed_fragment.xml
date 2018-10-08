@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="postViewModel"
+            type="com.fatec.tcc.findfm.Controller.Posts.PostViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/from_bg"
+        tools:context=".Views.Feed_Fragment">
+
+
+        <com.santalu.diagonalimageview.DiagonalImageView
+            android:id="@+id/fotoCapa"
+            android:layout_width="0dp"
+            android:layout_height="95dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            app:di_borderColor="#FF5722"
+            app:di_borderEnabled="false"
+            app:di_direction="left"
+            app:di_overlap="40dp"
+            app:di_position="bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/capaplaceholder" />
+
+        <com.github.siyamed.shapeimageview.CircularImageView
+            android:id="@+id/fotoPerfil"
+            android:layout_width="82dp"
+            android:layout_height="84dp"
+            android:layout_marginStart="10dp"
+            android:adjustViewBounds="false"
+            android:scaleType="matrix"
+            android:src="@drawable/capaplaceholder_photo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:siBorderColor="@color/white"
+            app:siBorderWidth="3dp" />
+
+        <TextView
+            android:id="@+id/lb_nomeUsuario"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/fotoCapa"
+            app:layout_constraintEnd_toEndOf="@+id/fotoCapa"
+            app:layout_constraintHorizontal_bias="0.422"
+            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Bem-vindo: Username" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/adicionar_anuncio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:onClick="@{postViewModel::addButton}"
+            app:backgroundTint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.927"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.938"
+            app:srcCompat="@drawable/ic_adicionar" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/nao_ha_publicacoes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/lista_posts"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fotoCapa" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lista_posts"
+            android:layout_width="match_parent"
+            android:layout_height="412dp"
+            app:layout_constraintBottom_toTopOf="@+id/space"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fotoCapa"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Space
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lista_posts" />
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

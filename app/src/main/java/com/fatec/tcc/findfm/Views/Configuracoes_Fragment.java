@@ -30,7 +30,7 @@ public class Configuracoes_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_home_fragment, container, false);
+        view = inflater.inflate(R.layout.activity_feed_fragment, container, false);
         return view;
     }
 

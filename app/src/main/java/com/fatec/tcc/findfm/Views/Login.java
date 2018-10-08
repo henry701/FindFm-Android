@@ -30,7 +30,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityLoginBinding;
@@ -170,7 +170,7 @@ public class Login extends AppCompatActivity {
         ImageRequest imagemRequest = new ImageRequest(context, id_imagem, 0, 0, ImageView.ScaleType.CENTER_CROP,
                 response -> {
                     dialog.dismiss();
-                    String base64 = new String(Base64.encode(ImagemUtils.getByteArrayFromBitmap(response), Base64.DEFAULT), Charset.forName("UTF-8"));
+                    String base64 = new String(Base64.encode(MidiaUtils.getByteArrayFromBitmap(response), Base64.DEFAULT), Charset.forName("UTF-8"));
                     FindFM.getUsuario().setFoto(base64);
                     FindFM.setFotoPref(this, base64);
                     Util.open_form(getApplicationContext(), TelaPrincipal.class);

@@ -24,6 +24,7 @@ public class Post {
     private String idVideo;
     private List<String> idVideos;
     private byte[] videoBytes;
+    private String idAudio;
     private DateTime data;
     private Long likes;
     private Set<String> likesId;
@@ -41,10 +42,16 @@ public class Post {
 
         if(postResponse.getMidias() != null) {
             for (PostResponse.Midias midia : postResponse.getMidias()) {
-                if (midia.getTipoMidia().equals("img")) {
-                    this.getIdFotos().add(midia.getId());
-                } else {
-                    this.getIdVideos().add(midia.getId());
+                switch (midia.getTipoMidia()) {
+                    case "img":
+                        this.getIdFotos().add(midia.getId());
+                        break;
+                    case "mus":
+                        this.idAudio = midia.getId();
+                        break;
+                    default:
+                        this.getIdVideos().add(midia.getId());
+                        break;
                 }
             }
         }
@@ -230,5 +237,13 @@ public class Post {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdAudio() {
+        return idAudio;
+    }
+
+    public void setIdAudio(String idAudio) {
+        this.idAudio = idAudio;
     }
 }

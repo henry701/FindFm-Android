@@ -25,9 +25,10 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Audio_Fragment;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewFeed2Binding;
+import com.fatec.tcc.findfm.databinding.ViewItemFeedBinding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -54,10 +55,10 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
     @Override
     public AdapterFeed.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewFeed2Binding binding =
+        ViewItemFeedBinding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_feed_2, parent, false);
+                        R.layout.view_item_feed, parent, false);
 
         return new AdapterFeed.ViewHolder(binding);
     }
@@ -66,6 +67,9 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
     public void onBindViewHolder(AdapterFeed.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bindingVH.setPost(post);
+
+        holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
+        holder.bindingVH.videoView.setVisibility(View.GONE);
 
         for(String id : post.getIdFotos()){
 
@@ -104,6 +108,23 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             m.setAnchorView(holder.bindingVH.videoView);
             holder.bindingVH.videoView.setVideoURI(uri);
             holder.bindingVH.videoView.setVisibility(View.VISIBLE);
+        }
+
+        if(post.getIdAudio() != null) {
+            try {
+                Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + post.getIdAudio()));
+                holder.bindingVH.frameAudio.setVisibility(View.VISIBLE);
+                activity.getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                        new Audio_Fragment(activity, uri))
+                        .commit();
+            } catch (Exception e){
+                e.printStackTrace();
+                AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                        "Ops!", R.drawable.ic_error,
+                        "Não foi possível obter a música." +
+                                "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                        (dialog, id1) -> { }).create().show();
+            }
         }
 
         if(post.getAutor().getFotoID() != null){
@@ -226,9 +247,9 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewFeed2Binding bindingVH;
+        public ViewItemFeedBinding bindingVH;
 
-        ViewHolder(ViewFeed2Binding binding){
+        ViewHolder(ViewItemFeedBinding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }

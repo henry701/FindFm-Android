@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Views;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -43,7 +42,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterComentario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
@@ -60,6 +59,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private ActivityCriarPostBinding binding;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
+    private static final int PICK_AUDIO = 3;
     private ImageView fotoPublicacao;
     private VideoView videoView;
     private ProgressDialog dialog;
@@ -74,6 +74,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private String videoBytesId;
     private byte[] videoBytes;
     private String videoBytes_ContentType;
+
+    private boolean audioUpload;
+    private String audioBytesId;
+    private byte[] audioBytes;
+    private String audioBytes_ContentType;
+
     private Menu optionsMenu;
 
     @Override
@@ -94,7 +100,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 telaMode = param.getString("telaMode");
             }
         } else {
-            ImagemUtils.setImagemPerfilToImageView(imageView, this);
+            MidiaUtils.setImagemPerfilToImageView(imageView, this);
             binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
             //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
@@ -111,10 +117,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
         videoView.setVisibility(View.GONE);
 
         FloatingActionButton fab = findViewById(R.id.fab_foto);
-        fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
+        fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
 
         FloatingActionButton video = findViewById(R.id.fab_video);
-        video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(ImagemUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
+        video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
+
+        FloatingActionButton audio = findViewById(R.id.fab_audio);
+        audio.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha o arquivo de áudio"), PICK_AUDIO));
+
 
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
@@ -122,7 +132,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         if(telaMode.equals("criando")){
             binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
-            ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
+            MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
             //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
@@ -137,7 +147,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
 
         if (telaMode.equals("editavel")){
-            ImagemUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
+            MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
         }
 
         binding.incluirContent.listaComentarios.setLayoutManager(new LinearLayoutManager(this));
@@ -198,6 +208,23 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.scrollView2.scrollTo(0,0);
         }
 
+        if(post.getIdAudio() != null) {
+            try {
+                Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + post.getIdAudio()));
+                binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+                getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                        new Audio_Fragment(this, uri))
+                        .commit();
+            } catch (Exception e){
+                e.printStackTrace();
+                AlertDialogUtils.newSimpleDialog__OneButton(this,
+                        "Ops!", R.drawable.ic_error,
+                        "Não foi possível obter a música." +
+                                "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                        (dialog, id1) -> { }).create().show();
+            }
+        }
+
         if(post.getComentarios() != null){
             binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this));
         }
@@ -242,9 +269,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
+            binding.fabAudio.setVisibility(View.INVISIBLE);
 
             binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
+            binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
         } else if (telaMode.equals("editando") || telaMode.equals("criando")){
             if(optionsMenu != null) {
@@ -272,6 +301,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
             } else {
                 binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
                 binding.fabVideo.setVisibility(View.GONE);
+            }
+
+            if(audioBytes == null) {
+                binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
+                binding.fabAudio.setVisibility(View.VISIBLE);
+            } else {
+                binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
+                binding.fabAudio.setVisibility(View.GONE);
             }
         }
 
@@ -316,14 +353,18 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
                 if(binding.incluirContent.getPost().getFotoBytes() != null) {
                     fotoUpload = true;
-                    resourceService.uploadFiles(binding.incluirContent.getPost().getFotoBytes(), fotoBytes_ContentType, true);
+                    resourceService.uploadFiles(binding.incluirContent.getPost().getFotoBytes(), fotoBytes_ContentType, "foto");
                 }
                 if(videoBytes != null) {
                     videoUpload = true;
-                    resourceService.uploadFiles(videoBytes, videoBytes_ContentType, false);
+                    resourceService.uploadFiles(videoBytes, videoBytes_ContentType, "video");
+                }
+                if(audioBytes != null) {
+                    audioUpload = true;
+                    resourceService.uploadFiles(audioBytes, audioBytes_ContentType, "audio");
                 }
 
-                if(!fotoUpload && !videoUpload){
+                if(!fotoUpload && !videoUpload && !audioUpload){
                     initRequest(binding.incluirContent.getPost());
                 }
         }
@@ -334,7 +375,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        //TODO: ADICIONAR REGRAS DE DURAÇÃO DE VIDEO E AUDIO MAIOR QUE 15S -> MODAL "Sim isso é de autoria propria"
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getApplicationContext()
@@ -354,12 +395,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if (requestCode == PICK_VIDEO && resultCode == Activity.RESULT_OK && data != null) {
             try {
                 Uri u = data.getData();
-                MediaController m = new MediaController(this);
 
-                ContentResolver contentResolver = getContentResolver();
-                MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-
-                videoView.setMediaController(m);
+                videoView.setMediaController(new MediaController(this));
                 videoView.setVideoURI(u);
                 videoView.setVisibility(View.VISIBLE);
 
@@ -372,7 +409,30 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     baos.write(buf, 0, n);
 
                 this.videoBytes = baos.toByteArray();
-                this.videoBytes_ContentType = "video/" + mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(u));
+                this.videoBytes_ContentType = "video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u));
+                checkTelaMode();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (requestCode == PICK_AUDIO && resultCode == Activity.RESULT_OK && data != null) {
+            try {
+                Uri uri = data.getData();
+                binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+                getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                        new Audio_Fragment(this, uri))
+                        .commit();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                InputStream fis = getContentResolver().openInputStream(uri);
+
+                byte[] buf = new byte[1024];
+                int n;
+                while (-1 != (n = fis.read(buf)))
+                    baos.write(buf, 0, n);
+
+                this.audioBytes = baos.toByteArray();
+                this.audioBytes_ContentType = "audio/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri));
                 checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -395,6 +455,17 @@ public class CriarPost extends AppCompatActivity implements Observer{
         videoBytes = null;
         videoBytes_ContentType = null;
         videoView.setVisibility(View.GONE);
+        checkTelaMode();
+    }
+
+    public void btnRemoverAudio_Click(View v){
+        audioUpload = false;
+        audioBytesId = null;
+        audioBytes = null;
+        audioBytes_ContentType= null;
+        getSupportFragmentManager().beginTransaction().
+                remove(getSupportFragmentManager().findFragmentById(R.id.frame_audio)).commit();
+        binding.incluirContent.frameAudio.setVisibility(View.GONE);
         checkTelaMode();
     }
 
@@ -442,7 +513,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
         param.setTitulo(post.getTitulo())
              .setDescricao(post.getDescricao())
              .setImagemId(post.getIdFoto())
-             .setVideoId(post.getIdVideo());
+             .setVideoId(post.getIdVideo())
+             .setAudioId(post.getIdAudio());
         postRequest.setRequest(param);
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
@@ -523,9 +595,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     String result = (String) arg;
                     if(result.equals("foto"))
                         fotoUpload = false;
-                    else
+                    else if(result.equals("video"))
                         videoUpload = false;
-
+                    else
+                        audioUpload = false;
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             error.getMessage(),"OK",
@@ -537,8 +610,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     String result = (String) arg;
                     if(result.equals("foto"))
                         fotoUpload = false;
-                    else
+                    else if(result.equals("video"))
                         videoUpload = false;
+                    else
+                        audioUpload = false;
 
                     error.printStackTrace();
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -572,9 +647,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         videoUpload = false;
                         videoBytesId = resultados[1];
                         binding.incluirContent.getPost().setIdVideo(videoBytesId);
+                    } else if (resultados[0].equals("audio")){
+                        audioUpload = false;
+                        audioBytesId = resultados[1];
+                        binding.incluirContent.getPost().setIdAudio(audioBytesId);
                     }
 
-                    if(!videoUpload && !fotoUpload){
+                    if(!videoUpload && !fotoUpload && !audioUpload){
                         initRequest(binding.incluirContent.getPost());
                     }
                 }

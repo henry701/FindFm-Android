@@ -24,7 +24,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Login;
@@ -71,7 +71,7 @@ public class RegistrarContratanteViewModel {
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
-        ImagemUtils.setImagemPerfilToImageView(imageView, view, btnRemoverImagem);
+        MidiaUtils.setImagemPerfilToImageView(imageView, view, btnRemoverImagem);
     }
 
     private void initRequests() {

@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.BinaryTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
@@ -21,7 +20,7 @@ public class UploadResourceService extends Observable{
         this.activity = activity;
     }
 
-    public void uploadFiles(byte[] dados, String contentType, boolean isFoto) {
+    public void uploadFiles(byte[] dados, String contentType, String tipoMidia) {
         BinaryTypedRequest<ResponseBody, ErrorResponse> uploadResource = new BinaryTypedRequest<>(
                 activity,
                 HttpMethod.PUT.getCodigo(),
@@ -31,19 +30,19 @@ public class UploadResourceService extends Observable{
                 dados,
                 (ResponseBody response) -> {
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                        String retorno = isFoto ? "foto," : "video,";
+                        String retorno = tipoMidia + ",";
                         retorno += (String) response.getData();
                         setChanged();
                         notifyObservers(retorno);
                     }
                 },
                 (ErrorResponse error) -> {
-                    String retorno = isFoto ? "foto" : "video";
+                    String retorno = tipoMidia;
                     setChanged();
                     notifyObservers(retorno);
                 },
                 (VolleyError error) -> {
-                    String retorno = isFoto ? "foto" : "video";
+                    String retorno = tipoMidia;
                     setChanged();
                     notifyObservers(retorno);
                 },

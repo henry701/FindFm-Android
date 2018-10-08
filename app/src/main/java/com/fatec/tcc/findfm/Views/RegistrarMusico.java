@@ -30,7 +30,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.databinding.ActivityRegistrarMusicoBinding;
 
@@ -146,7 +146,7 @@ public class RegistrarMusico extends AppCompatActivity {
     }
 
     public void btnFoto_Click(View v){
-        startActivityForResult(Intent.createChooser(ImagemUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE);
+        startActivityForResult(Intent.createChooser(MidiaUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE);
     }
 
     @Override
@@ -159,7 +159,7 @@ public class RegistrarMusico extends AppCompatActivity {
                         .getContentResolver().openInputStream(data.getData())));
                 this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
-                ImagemUtils.setImagemToParams(this.imageView);
+                MidiaUtils.setImagemToParams(this.imageView);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

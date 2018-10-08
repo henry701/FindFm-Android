@@ -25,7 +25,7 @@ import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewComentario2Binding;
+import com.fatec.tcc.findfm.databinding.ViewComentarioBinding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -54,10 +54,10 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
     @Override
     public AdapterComentario.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewComentario2Binding binding =
+        ViewComentarioBinding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_comentario_2, parent, false);
+                        R.layout.view_comentario, parent, false);
 
         return new AdapterComentario.ViewHolder(binding);
     }
@@ -183,9 +183,9 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewComentario2Binding bindingVH;
+        public ViewComentarioBinding bindingVH;
 
-        ViewHolder(ViewComentario2Binding binding){
+        ViewHolder(ViewComentarioBinding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }

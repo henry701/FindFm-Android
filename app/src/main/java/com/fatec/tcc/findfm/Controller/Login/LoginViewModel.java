@@ -3,7 +3,6 @@ package com.fatec.tcc.findfm.Controller.Login;
 import android.app.ProgressDialog;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -12,7 +11,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.ImageRequest;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Infrastructure.Request.Volley.SharedRequestQueue;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.LoginRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -24,7 +22,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Views.Login;
 
@@ -76,8 +74,8 @@ public class LoginViewModel {
                                     ImageRequest imagemRequest = new ImageRequest(view, usuario.getAvatar().get_id(), 0, 0, ImageView.ScaleType.CENTER_CROP,
                                             (Bitmap bitmap) -> {
                                                 dialog.dismiss();
-                                                ImagemUtils.setImagemToParams(bitmap);
-                                                ImagemUtils.setImagemToPref(view, bitmap);
+                                                MidiaUtils.setImagemToParams(bitmap);
+                                                MidiaUtils.setImagemToPref(view, bitmap);
                                                 view.getUser(view);
                                             },
                                             error -> {

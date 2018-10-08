@@ -16,7 +16,7 @@ import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
-import com.fatec.tcc.findfm.Utils.ImagemUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Registrar;
 import com.fatec.tcc.findfm.Views.RegistrarContratante;
@@ -60,7 +60,7 @@ public class RegistrarViewModel {
                 .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
         this.btnRemoverImagem.setVisibility(View.VISIBLE);
 
-        ImagemUtils.setImagemToParams(this.imageView);
+        MidiaUtils.setImagemToParams(this.imageView);
     }
 
     public void registrar() {
@@ -154,6 +154,6 @@ public class RegistrarViewModel {
     }
 
     public void setFoto(){
-        ImagemUtils.setImagemPerfilToImageView(this.imageView, view, btnRemoverImagem);
+        MidiaUtils.setImagemPerfilToImageView(this.imageView, view, btnRemoverImagem);
     }
 }
