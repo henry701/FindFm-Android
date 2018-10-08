@@ -89,25 +89,4 @@ public class JsonUtils {
         }
     }
 
-    /*
-    String input = "2018-08-30T17:43:14.0689106-03:00";
-    SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:s" );
-
-    //this is zero time so we need to add that TZ indicator for
-    if ( input.endsWith( "Z" ) ) {
-        input = input.substring( 0, input.length() - 1) + "GMT-00:00";
-    } else {
-        int inset = 6;
-
-        String s0 = input.substring( 0, input.length() - inset );
-        String s1 = input.substring( input.length() - inset, input.length() );
-
-        input = s0 + "GMT" + s1;
-    }
-
-    return df.parse( input );
-
-     */
-
-
 }

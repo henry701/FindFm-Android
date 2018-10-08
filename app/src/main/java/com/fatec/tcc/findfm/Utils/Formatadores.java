@@ -5,6 +5,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import com.fatec.tcc.findfm.Model.Business.Telefone;
+
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.Date;
@@ -144,6 +146,11 @@ public class Formatadores implements TextWatcher {
         text.clear();
         text.append(formattedString.toString());
         return formattedString.toString();
+    }
+
+    public static boolean validarTelefone(Telefone tel) {
+        String telefone = "(" + tel.getStateCode() + ")" + tel.getNumber();
+        return validarTelefone(telefone);
     }
 
     public static boolean validarTelefone(String tel) {

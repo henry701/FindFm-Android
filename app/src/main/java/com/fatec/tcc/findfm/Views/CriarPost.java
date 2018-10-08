@@ -167,6 +167,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
                             binding.incluirContent.circularImageView.setImageBitmap(ext_pic);
+                            binding.incluirContent.scrollView2.scrollTo(0,0);
                         } else{
                             AlertDialogUtils.newSimpleDialog__OneButton(this,
                                     "Ops!", R.drawable.ic_error,
@@ -194,6 +195,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             m.setAnchorView(binding.incluirContent.videoView);
             binding.incluirContent.videoView.setVideoURI(uri);
             binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+            binding.incluirContent.scrollView2.scrollTo(0,0);
         }
 
         if(post.getComentarios() != null){

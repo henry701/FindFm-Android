@@ -27,7 +27,7 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewFeedBinding;
+import com.fatec.tcc.findfm.databinding.ViewFeed2Binding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -54,10 +54,10 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
     @Override
     public AdapterFeed.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewFeedBinding binding =
+        ViewFeed2Binding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_feed, parent, false);
+                        R.layout.view_feed_2, parent, false);
 
         return new AdapterFeed.ViewHolder(binding);
     }
@@ -116,7 +116,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                             byte[] dados = ((BinaryResponse) arg).getData();
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
+                            holder.bindingVH.fotoPerfilAnuncio.setImageBitmap(ext_pic);
                         } else{
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
@@ -157,8 +157,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                         holder.bindingVH.getPost().getLikesId().remove(FindFM.getUsuario().getId());
                         holder.bindingVH.getPost().setLikes((Long.parseLong(post.getLikes()) +1));
                         holder.bindingVH.getPost().getLikesId().add(FindFM.getUsuario().getId());
-                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getPost().getLikes());
-                        holder.bindingVH.btnLike.setText(R.string.descurtir);
+                        holder.bindingVH.btnLike.setText(holder.bindingVH.getPost().getLikes());
                         holder.bindingVH.executePendingBindings();
                     }else {
                         JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> postRequest = new JsonTypedRequest<>(
@@ -180,8 +179,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                         postRequest.execute();
                         holder.bindingVH.getPost().setLikes((Long.parseLong(post.getLikes()) -1));
                         holder.bindingVH.getPost().getLikesId().remove(FindFM.getUsuario().getId());
-                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getPost().getLikes());
-                        holder.bindingVH.btnLike.setText(R.string.curtir);
+                        holder.bindingVH.btnLike.setText(holder.bindingVH.getPost().getLikes());
                         holder.bindingVH.executePendingBindings();
                     }
                 }
@@ -228,9 +226,9 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewFeedBinding bindingVH;
+        public ViewFeed2Binding bindingVH;
 
-        ViewHolder(ViewFeedBinding binding){
+        ViewHolder(ViewFeed2Binding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }

@@ -155,10 +155,10 @@ public class PerfilViewModel {
         else if ( usuario.getEmail() == null || this.senha.get() == null ||
                 this.confirmaSenha.get() == null || usuario.getTelefone() == null || this.UF == null){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
-        }/*
+        }
         else if(!Formatadores.validarTelefone(usuario.getTelefone())){
             Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
-        }*/
+        }
         else if (!Formatadores.validarEmail(usuario.getEmail())) {
             Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
         }
@@ -223,9 +223,6 @@ public class PerfilViewModel {
         }
         else if ( nascimentoDate.after(new Date())) {
             Toast.makeText(view.getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( Formatadores.converterData(nascimentoDate).get(Calendar.YEAR) + 18 > Calendar.getInstance().get(Calendar.YEAR)) {
-            Toast.makeText(view.getApplicationContext(), "O usuário não pode ser menor de 18 anos!", Toast.LENGTH_SHORT).show();
         }
         else if( musico.getCidade().trim().isEmpty()){
             Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();

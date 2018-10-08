@@ -34,7 +34,7 @@ public class Comentario {
     }
 
     public String getDataComentario() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm");
         sdf.setTimeZone(TimeZone.getDefault());
         if(dataComentario == null)
         {

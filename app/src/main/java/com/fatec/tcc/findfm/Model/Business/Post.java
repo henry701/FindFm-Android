@@ -124,7 +124,7 @@ public class Post {
 
     public String getData()
     {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy' 'HH:mm");
         sdf.setTimeZone(TimeZone.getDefault());
         if(data == null)
         {

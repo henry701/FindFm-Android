@@ -25,7 +25,7 @@ import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
-import com.fatec.tcc.findfm.databinding.ViewComentarioBinding;
+import com.fatec.tcc.findfm.databinding.ViewComentario2Binding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -54,10 +54,10 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
     @Override
     public AdapterComentario.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ViewComentarioBinding binding =
+        ViewComentario2Binding binding =
                 DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
-                        R.layout.view_comentario, parent, false);
+                        R.layout.view_comentario_2, parent, false);
 
         return new AdapterComentario.ViewHolder(binding);
     }
@@ -129,8 +129,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                         comentarioRequest.execute();
                         holder.bindingVH.getComentario().setLikesNumb((Long.parseLong(comentario.getLikesNumb()) +1));
                         holder.bindingVH.getComentario().getLikes().add(FindFM.getUsuario().getId());
-                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getComentario().getLikesNumb());
-                        holder.bindingVH.btnLike.setText(R.string.descurtir);
+                        holder.bindingVH.btnLike.setText(holder.bindingVH.getComentario().getLikesNumb());
                         holder.bindingVH.executePendingBindings();
                     }else {
                         JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> comentarioRequest = new JsonTypedRequest<>(
@@ -152,8 +151,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                         comentarioRequest.execute();
                         holder.bindingVH.getComentario().setLikesNumb((Long.parseLong(comentario.getLikesNumb()) -1));
                         holder.bindingVH.getComentario().getLikes().remove(FindFM.getUsuario().getId());
-                        holder.bindingVH.lbLikes.setText(holder.bindingVH.getComentario().getLikesNumb());
-                        holder.bindingVH.btnLike.setText(R.string.curtir);
+                        holder.bindingVH.btnLike.setText(holder.bindingVH.getComentario().getLikesNumb());
                         holder.bindingVH.executePendingBindings();
                     }
                 }
@@ -185,9 +183,9 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewComentarioBinding bindingVH;
+        public ViewComentario2Binding bindingVH;
 
-        ViewHolder(ViewComentarioBinding binding){
+        ViewHolder(ViewComentario2Binding binding){
             super(binding.getRoot());
             this.bindingVH = binding;
         }

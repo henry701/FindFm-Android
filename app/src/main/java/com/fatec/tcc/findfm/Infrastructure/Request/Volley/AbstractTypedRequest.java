@@ -1,21 +1,11 @@
 package com.fatec.tcc.findfm.Infrastructure.Request.Volley;
 
 import android.app.Activity;
+import android.util.Log;
 
-import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.Volley;
-import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
-import com.fatec.tcc.findfm.Utils.FindFM;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AbstractTypedRequest<TResponse, TErrorResponse>
 {
@@ -54,6 +44,8 @@ public abstract class AbstractTypedRequest<TResponse, TErrorResponse>
 
         encappedRequest = new VolleyRequestTypedRequest<TResponse, TErrorResponse>(method, fullUrl, this);
         encappedRequest.setRetryPolicy(new DefaultRetryPolicy(600000, 0, 1));
+
+        Log.d("CHAMADAS ABSTRACT TYPED", "Chamada para: " + fullUrl);
     }
 
     protected abstract TResponse parseResponse(NetworkResponse response);
