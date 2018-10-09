@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
-import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.AtualizarUsuarioRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -33,7 +31,6 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
@@ -60,14 +57,13 @@ public class PerfilViewModel {
     public ObservableField<String> inauguracao = new ObservableField<>();
     private Date inauguracaoDate;
 
-    private JsonTypedRequest<AtualizarUsuarioRequest, ResponseBody, ErrorResponse> registrarRequest;
-    private String UF;
+    private JsonTypedRequest<AtualizarUsuarioRequest, ResponseBody, ErrorResponse> updateRequest;
     private ImageView imageView;
     private ImageButton btnRemoverImagem;
     private RecyclerView rc;
 
     private ProgressDialog dialog;
-    private Bundle param = new Bundle();
+    private Usuario usuario;
     private TelaPrincipal view;
     private Perfil_Fragment fragment;
 
@@ -80,43 +76,34 @@ public class PerfilViewModel {
         this.rc = rc;
     }
 
-    public void init(){
-        initRequests();
-    }
-
     public void pickImage(Intent data) throws FileNotFoundException {
         this.imageView.setImageBitmap(BitmapFactory.decodeStream(view.getApplicationContext()
                 .getContentResolver().openInputStream(Objects.requireNonNull(data.getData()))));
         this.btnRemoverImagem.setVisibility(View.VISIBLE);
-
-        MidiaUtils.setImagemToParams(this.imageView);
     }
 
-    public void registrar(Contratante contratante) {
+    public boolean registrar(Usuario usuario) {
 
-        if( !this.validarCampos(contratante))
-            return;
+        if( !this.validarCampos(usuario))
+            return false;
         else {
-            //contratante.setTelefone(this.tratarTelefone(contratante.getTelefone()));
-
-            //this.param.putString("telefone",    contratante.getTelefone());
-            this.param.putString("email",       contratante.getEmail());
-            this.param.putString("senha",       contratante.getSenha());
-
+            this.usuario = usuario;
+            initRequests();
+            return true;
         }
     }
 
     public void registrar(Musico musico) {
+        if(registrar((Usuario)musico)) {
+            updateRequest.setRequest(new AtualizarUsuarioRequest((Musico) usuario));
+            updateRequest.execute();
+        }
+    }
 
-        if( !this.validarCampos(musico))
-            return;
-        else {
-            //musico.setTelefone(this.tratarTelefone(musico.getTelefone()));
-
-            //this.param.putString("telefone",    musico.getTelefone());
-            this.param.putString("email",       musico.getEmail());
-            this.param.putString("senha",       musico.getSenha());
-
+    public void registrar(Contratante contratante) {
+        if(registrar((Usuario)contratante)) {
+            updateRequest.setRequest(new AtualizarUsuarioRequest((Contratante) usuario));
+            updateRequest.execute();
         }
     }
 
@@ -153,10 +140,10 @@ public class PerfilViewModel {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
         else if ( usuario.getEmail() == null || this.senha.get() == null ||
-                this.confirmaSenha.get() == null || usuario.getTelefone() == null || this.UF == null){
+                this.confirmaSenha.get() == null || usuario.getTelefone() == null ){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
-        else if(!Formatadores.validarTelefone(usuario.getTelefone())){
+        else if(usuario.getTelefone().getStateCode() == null && (usuario.getTelefone().getNumber() == null || usuario.getTelefone().getNumber().length() < 8)){
             Toast.makeText(view.getApplicationContext(), "Insira um telefone válido!", Toast.LENGTH_SHORT).show();
         }
         else if (!Formatadores.validarEmail(usuario.getEmail())) {
@@ -184,16 +171,13 @@ public class PerfilViewModel {
         return false;
     }
 
-
     private boolean validarCampos_Contratante(Contratante contratante){
-        if ( contratante.getNomeCompleto() == null || this.inauguracao.get() == null || contratante.getCapacidadeLocal() == 0 ||
+        if ( contratante.getNomeCompleto() == null || contratante.getInauguracao() == null || contratante.getCapacidadeLocal() == 0 || contratante.getUf() == null ||
                 contratante.getCidade() == null || contratante.getEndereco() == null || contratante.getNumero() == 0) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         } else if (contratante.getNomeCompleto().trim().isEmpty()) {
             Toast.makeText(view.getApplicationContext(), "O nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        } else if (inauguracao.get().isEmpty()) {
-            Toast.makeText(view.getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
-        } else if (inauguracaoDate.after(new Date())) {
+        } else if (contratante.getInauguracao().after(new Date())) {
             Toast.makeText(view.getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
         } else if (contratante.getCidade().trim().isEmpty()) {
             Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
@@ -206,28 +190,20 @@ public class PerfilViewModel {
     }
 
     private boolean validarCampos_Musico(Musico musico){
-        AdapterInstrumentos adapter = (AdapterInstrumentos) rc.getAdapter();
-        List<Instrumento> instrumentos = new ArrayList<>();
 
-        if(adapter != null)
-            instrumentos.addAll(adapter.getInstrumentos());
-
-        if( musico.getNomeCompleto() == null || this.nascimento.get() == null || musico.getCidade() == null) {
+        if( musico.getNomeCompleto() == null || musico.getNascimento() == null || musico.getCidade() == null || musico.getUf() == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos", Toast.LENGTH_SHORT).show();
         }
         else if( musico.getNomeCompleto().trim().isEmpty()){
             Toast.makeText(view.getApplicationContext(), "Seu nome não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        else if ( this.nascimento.get().isEmpty() ) {
-            Toast.makeText(view.getApplicationContext(), "Preencha uma data válida!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( nascimentoDate.after(new Date())) {
+        else if ( musico.getNascimento().after(new Date())) {
             Toast.makeText(view.getApplicationContext(), "Não é permitido selecionar uma data futura!", Toast.LENGTH_SHORT).show();
         }
         else if( musico.getCidade().trim().isEmpty()){
             Toast.makeText(view.getApplicationContext(), "O nome da cidade não pode ser vazio ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
         }
-        else if ( instrumentos.isEmpty() && adapter != null ) {
+        else if ( musico.getInstrumentos() == null || musico.getInstrumentos().isEmpty() ) {
             Toast.makeText(view.getApplicationContext(), "Selecione ao menos um instrumento!", Toast.LENGTH_SHORT).show();
         }
         else {
@@ -236,18 +212,14 @@ public class PerfilViewModel {
         return false;
     }
 
-    public void setUF(String UF) {
-        this.UF = UF;
-    }
-
     private void initRequests() {
-        registrarRequest = new JsonTypedRequest<>
+        updateRequest = new JsonTypedRequest<>
                 (       view,
                         Request.Method.POST,
                         AtualizarUsuarioRequest.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(view.getResources(),"register", "musician"),
+                        HttpUtils.buildUrl(view.getResources(),"editSelf", usuario.getTipoUsuario().getKind().toLowerCase()),
                         null,
                         (ResponseBody response) ->
                         {
@@ -255,9 +227,17 @@ public class PerfilViewModel {
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
                                 FindFM.setTokenData(view, tokenData);
-                                FindFM.logarUsuario(view, TiposUsuario.MUSICO, param.getString("nomeCompleto", ""));
+                                FindFM.logarUsuario(view, usuario.getTipoUsuario(), usuario.getNomeCompleto() );
                                 FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
-
+                                FindFM.setUsuario(usuario);
+                                switch (usuario.getTipoUsuario()){
+                                    case CONTRATANTE:
+                                        FindFM.setContratante((Contratante)usuario);
+                                        break;
+                                    case MUSICO:
+                                        FindFM.setMusico((Musico) usuario);
+                                        break;
+                                }
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -291,6 +271,7 @@ public class PerfilViewModel {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             this.nascimentoDate = myCalendar.getTime();
             this.nascimento.set(sdf.format(myCalendar.getTime()));
+            fragment.binding.getMusico().setNascimento(nascimentoDate);
         };
         new DatePickerDialog(view, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -306,6 +287,7 @@ public class PerfilViewModel {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
             this.inauguracaoDate = myCalendar.getTime();
             this.inauguracao.set(sdf.format(myCalendar.getTime()));
+            fragment.binding.getContratante().setInauguracao(inauguracaoDate);
         };
         new DatePickerDialog(view, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();

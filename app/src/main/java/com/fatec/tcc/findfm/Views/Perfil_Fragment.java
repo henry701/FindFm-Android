@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,15 +39,18 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
-import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.databinding.ActivityPerfilFragmentBinding;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -55,12 +60,9 @@ public class Perfil_Fragment extends Fragment {
     private static final int PICK_IMAGE = 1;
     public ActivityPerfilFragmentBinding binding;
 
-    //TODO FORTE: atualizar o objeto na FindFM quando atualizar o carinha
     private String URL;
 
     private Usuario usuario;
-    private Contratante contratante;
-    private Musico musico;
 
     private TelaPrincipal activity;
 
@@ -72,10 +74,6 @@ public class Perfil_Fragment extends Fragment {
         this.usuario = new Usuario();
         this.URL = URL;
         getUser();
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
     }
 
     @Nullable
@@ -95,13 +93,18 @@ public class Perfil_Fragment extends Fragment {
         AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                binding.getViewModel().setUF(parent.getItemAtPosition(position).toString());
+                switch (usuario.getTipoUsuario()){
+                    case CONTRATANTE:
+                        binding.getContratante().setUf(parent.getItemAtPosition(position).toString());
+                        break;
+                    case MUSICO:
+                        binding.getMusico().setUf(parent.getItemAtPosition(position).toString());
+                        break;
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         };
 
         Formatadores addLineNumberFormatter = new Formatadores(new WeakReference<>(binding.txtTelefone));
@@ -123,6 +126,7 @@ public class Perfil_Fragment extends Fragment {
 
     public void btnRemoverImagem_Click(View v){
         binding.getViewModel().removerImagem();
+        binding.getUsuario().setFoto(null);
     }
 
     @Override
@@ -132,6 +136,11 @@ public class Perfil_Fragment extends Fragment {
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             try {
                 binding.getViewModel().pickImage(data);
+                Bitmap bitmap = ((BitmapDrawable) binding.circularImageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                String base64 = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT), Charset.forName("UTF-8"));
+                binding.getUsuario().setFoto(base64);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -139,15 +148,49 @@ public class Perfil_Fragment extends Fragment {
     }
 
     public void btnRegistrar_Click(View v){
-        //TODO: validar os campos
-        switch (getUsuario().getTipoUsuario()){
+        Util.hideSoftKeyboard(activity);
+        Usuario usuario = binding.getUsuario();
+        binding.getUsuario().setTelefone(getTelefone());
+        switch (usuario.getTipoUsuario()){
             case CONTRATANTE:
+                binding.getContratante().setId(usuario.getId());
+                binding.getContratante().setNomeCompleto(usuario.getNomeCompleto());
+                binding.getContratante().setConfirmado(usuario.isConfirmado());
+                binding.getContratante().setPremium(usuario.isPremium());
+                binding.getContratante().setTelefone(usuario.getTelefone());
+                binding.getContratante().setEmail(usuario.getEmail());
+                binding.getContratante().setFotoID(usuario.getFotoID());
+                binding.getContratante().setFoto(usuario.getFoto());
                 binding.getViewModel().registrar(binding.getContratante());
                 break;
             case MUSICO:
+                binding.getMusico().setId(usuario.getId());
+                binding.getMusico().setNomeCompleto(usuario.getNomeCompleto());
+                binding.getMusico().setConfirmado(usuario.isConfirmado());
+                binding.getMusico().setPremium(usuario.isPremium());
+                binding.getMusico().setTelefone(usuario.getTelefone());
+                binding.getMusico().setEmail(usuario.getEmail());
+                binding.getMusico().setFotoID(usuario.getFotoID());
+                binding.getMusico().setFoto(usuario.getFoto());
+                binding.getMusico().setInstrumentos(((AdapterInstrumentos) binding.listaInstrumentos.getAdapter()).getInstrumentos());
                 binding.getViewModel().registrar(binding.getMusico());
                 break;
         }
+    }
+
+    private Telefone getTelefone(){
+        Telefone telefone1 = new Telefone();
+
+        if(binding.txtTelefone.getText() != null ) {
+            if(binding.txtTelefone.getText().length() >= 14) {
+                //DDD
+                telefone1.setStateCode(binding.txtTelefone.getText().toString().substring(1,3));
+                //NUMERO
+                String[] array = binding.txtTelefone.getText().toString().substring(5).split("\\-");
+                telefone1.setNumber(array[0] + array[1]);
+            }
+        }
+        return telefone1;
     }
 
     private void getUser() {
@@ -170,6 +213,7 @@ public class Perfil_Fragment extends Fragment {
                                 this.usuario.setEmail(user.getEmail());
                                 this.usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
                                 this.usuario.setFotoID(null);
+                                this.usuario.setFoto(null);
 
                                 if(user.getAvatar() != null){
                                     if(user.getAvatar().get_id() != null){
@@ -182,6 +226,7 @@ public class Perfil_Fragment extends Fragment {
                                                         byte[] dados = ((BinaryResponse) arg).getData();
                                                         InputStream input=new ByteArrayInputStream(dados);
                                                         Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                                                        this.usuario.setFoto(new String(Base64.encode(dados, Base64.DEFAULT), Charset.forName("UTF-8")));
                                                         binding.circularImageView.setImageBitmap(ext_pic);
                                                     } else{
                                                         AlertDialogUtils.newSimpleDialog__OneButton(activity,
@@ -206,7 +251,7 @@ public class Perfil_Fragment extends Fragment {
 
                                 binding.setUsuario(this.usuario);
 
-                                switch (getUsuario().getTipoUsuario()){
+                                switch (usuario.getTipoUsuario()){
                                     case CONTRATANTE:
                                         Contratante contratante = new Contratante(usuario);
                                         contratante.setInauguracao(user.getDate());
@@ -235,7 +280,6 @@ public class Perfil_Fragment extends Fragment {
                                 }
 
                                 binding.executePendingBindings();
-                                binding.getViewModel().init();
                                 this.tratarTela();
                             }
                         },

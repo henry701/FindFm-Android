@@ -1,7 +1,9 @@
 package com.fatec.tcc.findfm.Model.Http.Request;
 
+import com.fatec.tcc.findfm.Model.Business.Contratante;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 
 import java.util.Date;
@@ -9,11 +11,9 @@ import java.util.List;
 
 public class AtualizarUsuarioRequest {
 
-    private String nomeUsuario;
+    private String id;
     private String nomeCompleto;
-    private boolean confirmado;
-    private boolean premium;
-    private String telefone;
+    private Telefone telefone;
     private String email;
     private String senha;
     private String foto;
@@ -22,15 +22,10 @@ public class AtualizarUsuarioRequest {
     private String cidade;
     private String uf;
 
-    //Banda
-    private int numeroIntegrantes;
-    private Date formacao;
-
-    private List<Musico> musicos;
-
     //Contratante
     private int capacidadeLocal;
     private Date inauguracao;
+
     private String endereco;
     private int numero;
 
@@ -38,12 +33,42 @@ public class AtualizarUsuarioRequest {
     private Date nascimento;
     private List<Instrumento> instrumentos;
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public AtualizarUsuarioRequest(){ }
+
+    public AtualizarUsuarioRequest(Musico musico) {
+        this.id = musico.getId();
+        this.nomeCompleto = musico.getNomeCompleto();
+        this.telefone = musico.getTelefone();
+        this.email = musico.getEmail();
+        this.foto = musico.getFoto();
+        this.senha = musico.getSenha();
+        this.nascimento = musico.getNascimento();
+        this.cidade = musico.getCidade();
+        this.uf = musico.getUf();
+        this.instrumentos = musico.getInstrumentos();
     }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public AtualizarUsuarioRequest(Contratante contratante) {
+        this.id = contratante.getId();
+        this.nomeCompleto = contratante.getNomeCompleto();
+        this.telefone = contratante.getTelefone();
+        this.email = contratante.getEmail();
+        this.foto = contratante.getFoto();
+        this.senha = contratante.getSenha();
+        this.inauguracao = contratante.getInauguracao();
+        this.cidade = contratante.getCidade();
+        this.uf = contratante.getUf();
+        this.endereco = contratante.getEndereco();
+        this.numero = contratante.getNumero();
+        this.capacidadeLocal = contratante.getCapacidadeLocal();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNomeCompleto() {
@@ -54,27 +79,11 @@ public class AtualizarUsuarioRequest {
         this.nomeCompleto = nomeCompleto;
     }
 
-    public boolean isConfirmado() {
-        return confirmado;
-    }
-
-    public void setConfirmado(boolean confirmado) {
-        this.confirmado = confirmado;
-    }
-
-    public boolean isPremium() {
-        return premium;
-    }
-
-    public void setPremium(boolean premium) {
-        this.premium = premium;
-    }
-
-    public String getTelefone() {
+    public Telefone getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(Telefone telefone) {
         this.telefone = telefone;
     }
 
@@ -124,30 +133,6 @@ public class AtualizarUsuarioRequest {
 
     public void setUf(String uf) {
         this.uf = uf;
-    }
-
-    public int getNumeroIntegrantes() {
-        return numeroIntegrantes;
-    }
-
-    public void setNumeroIntegrantes(int numeroIntegrantes) {
-        this.numeroIntegrantes = numeroIntegrantes;
-    }
-
-    public Date getFormacao() {
-        return formacao;
-    }
-
-    public void setFormacao(Date formacao) {
-        this.formacao = formacao;
-    }
-
-    public List<Musico> getMusicos() {
-        return musicos;
-    }
-
-    public void setMusicos(List<Musico> musicos) {
-        this.musicos = musicos;
     }
 
     public int getCapacidadeLocal() {

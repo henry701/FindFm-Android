@@ -124,7 +124,6 @@ public class AdapterMeusPosts extends RecyclerView.Adapter<AdapterMeusPosts.View
             m.setAnchorView(holder.bindingVH.videoView2);
             holder.bindingVH.videoView2.setVideoURI(uri);
             holder.bindingVH.videoView2.setVisibility(View.VISIBLE);
-            holder.bindingVH.videoView2.seekTo(100);
         }
 
         if(post.getIdAudio() != null) {
