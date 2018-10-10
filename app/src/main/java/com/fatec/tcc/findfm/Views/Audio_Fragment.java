@@ -39,7 +39,8 @@ public class Audio_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_audio, container, false);
 
-
+        binding.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
+        //TODO: colocar o botao de stop cinza
         if(mediaPlayer != null){
             mediaPlayer.release();
         }
@@ -56,8 +57,13 @@ public class Audio_Fragment extends Fragment {
         binding.btnPlay.setOnClickListener(v -> {
             mediaPlayer.start();
             startPlayProgressUpdater();
+
             binding.btnPlay.setEnabled(false);
+            binding.btnPlay.setBackgroundResource(R.drawable.ic_play_dark);
+
             binding.btnPause.setEnabled(true);
+            binding.btnPause.setBackgroundResource(R.drawable.ic_pause);
+
             binding.btnStop.setEnabled(true);
         });
 
@@ -65,7 +71,11 @@ public class Audio_Fragment extends Fragment {
         binding.btnPause.setOnClickListener(v -> {
             mediaPlayer.pause();
             binding.btnPlay.setEnabled(true);
+            binding.btnPlay.setBackgroundResource(R.drawable.ic_play);
+
             binding.btnPause.setEnabled(false);
+            binding.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
+
             binding.btnStop.setEnabled(false);
         });
 
@@ -73,8 +83,13 @@ public class Audio_Fragment extends Fragment {
         binding.btnStop.setOnClickListener(v -> {
             mediaPlayer.stop();
             binding.btnPlay.setEnabled(true);
+            binding.btnPlay.setBackgroundResource(R.drawable.ic_play);
+
             binding.btnPause.setEnabled(false);
+            binding.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
+
             binding.btnStop.setEnabled(false);
+
             try {
                 mediaPlayer.prepare();
                 mediaPlayer.seekTo(0);

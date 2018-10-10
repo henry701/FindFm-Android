@@ -29,7 +29,7 @@ import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
-import com.fatec.tcc.findfm.Views.Adapters.AdapterMeusPosts;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterFeed;
 import com.fatec.tcc.findfm.databinding.ActivityMeusPostsFragmentBinding;
 
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public class MeusPosts_Fragment extends Fragment {
                                         postList.add(new Post(postResponse));
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaAnuncios.setAdapter(new AdapterMeusPosts(postList, activity));
+                                    binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
                                 } else
                                 {
                                     binding.textView4.setVisibility(View.VISIBLE);
@@ -119,7 +119,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterMeusPosts(postList, activity));
+                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -128,7 +128,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterMeusPosts(postList, activity));
+                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,

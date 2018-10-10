@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:hint="Publicado em: 32/13/2059 23:59:59"
             android:onClick="@{clickListener::onClick}"
             android:text="@{`Publicado em: ` + post.data}"
@@ -69,15 +69,16 @@
             app:layout_constraintBottom_toTopOf="@+id/lb_titulo_anuncio"
             app:layout_constraintStart_toEndOf="@+id/fotoPerfilAnuncio"
             app:layout_constraintTop_toBottomOf="@+id/txtNome"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="Publicado em: 05/05/2018 22:00:05" />
 
         <TextView
             android:id="@+id/lb_titulo_anuncio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="66dp"
-            android:layout_marginTop="32dp"
             android:layout_marginEnd="297dp"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="16dp"
             android:gravity="top|left"
             android:onClick="@{clickListener::onClick}"
             android:text="@={post.titulo}"
@@ -106,52 +107,50 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"
+            app:layout_constraintBottom_toTopOf="@+id/linearMidia"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lb_titulo_anuncio"
             app:layout_constraintVertical_bias="0.052"
             tools:text="Descrição" />
 
-        <ImageView
-            android:id="@+id/fotoPublicacao"
+        <LinearLayout
+            android:id="@+id/linearMidia"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="Imagem"
-            android:onClick="@{clickListener::onClick}"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/videoView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lb_descricao"
-            app:srcCompat="@drawable/capaplaceholder_photo" />
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:contentDescription="Video"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/frame_audio"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
-
-        <FrameLayout
-            android:id="@+id/frame_audio"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/btnLike"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoView" />
+            app:layout_constraintTop_toBottomOf="@+id/lb_descricao">
+
+            <ImageView
+                android:id="@+id/fotoPublicacao"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="Imagem"
+                android:onClick="@{clickListener::onClick}"
+                android:visibility="gone"
+                app:srcCompat="@drawable/capaplaceholder_photo" />
+
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="Video"
+                android:visibility="gone" />
+
+
+            <FrameLayout
+                android:id="@+id/frame_audio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnLike"
@@ -166,7 +165,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btnComent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frame_audio" />
+            app:layout_constraintTop_toBottomOf="@+id/linearMidia" />
 
         <Button
             android:id="@+id/btnComent"
