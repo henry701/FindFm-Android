@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -53,6 +54,7 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 public class CriarPost extends AppCompatActivity implements Observer{
 
@@ -65,6 +67,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private ProgressDialog dialog;
 
     private String telaMode = "criando";
+    private String tipo = "post";
 
     private boolean fotoUpload;
     private String fotoBytesId;
@@ -104,6 +107,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
             //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
+                tipo = "ad";
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
             }
         }
@@ -157,7 +161,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     private void preencherTela(Post post){
-        
+
         if(post.getFotoBytes() != null) {
             InputStream input = new ByteArrayInputStream(post.getFotoBytes());
             Bitmap ext_pic = BitmapFactory.decodeStream(input);
@@ -393,50 +397,92 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
         }
         if (requestCode == PICK_VIDEO && resultCode == Activity.RESULT_OK && data != null) {
-            try {
-                Uri u = data.getData();
+            Uri u = data.getData();
+            MediaPlayer mp = MediaPlayer.create(this, u);
+            int duration = mp.getDuration();
+            long duracaoSegundos = TimeUnit.MILLISECONDS.toSeconds(duration);
 
-                videoView.setMediaController(new MediaController(this));
-                videoView.setVideoURI(u);
-                videoView.setVisibility(View.VISIBLE);
+            if(duracaoSegundos > 15L) {
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Esse arquivo tem duração maior do que 15 segundos\n" +
+                                "Só permitimos postar arquivos de vídeo maiores do que 15 segundos se estes forem de sua autoria.\nEsse conteúdo é de sua autoria?",
+                        "Sim, esse vídeo é de minha autoria", "Não, esse vídeo não é de minha autoria",
+                        (dialogInterface, i) -> {
+                            setVideo(u);
+                        },
+                        (dialogInterface, i) -> {
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                InputStream fis = getContentResolver().openInputStream(u);
-
-                byte[] buf = new byte[1024];
-                int n;
-                while (-1 != (n = fis.read(buf)))
-                    baos.write(buf, 0, n);
-
-                this.videoBytes = baos.toByteArray();
-                this.videoBytes_ContentType = "video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u));
-                checkTelaMode();
-            } catch (Exception e) {
-                e.printStackTrace();
+                        });
+            } else {
+                setVideo(u);
             }
         }
         if (requestCode == PICK_AUDIO && resultCode == Activity.RESULT_OK && data != null) {
-            try {
-                Uri uri = data.getData();
-                binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
-                getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                        new Audio_Fragment(this, uri))
-                        .commit();
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                InputStream fis = getContentResolver().openInputStream(uri);
+            Uri uri = data.getData();
 
-                byte[] buf = new byte[1024];
-                int n;
-                while (-1 != (n = fis.read(buf)))
-                    baos.write(buf, 0, n);
+            MediaPlayer mp = MediaPlayer.create(this, uri);
+            int duration = mp.getDuration();
+            long duracaoSegundos = TimeUnit.MILLISECONDS.toSeconds(duration);
 
-                this.audioBytes = baos.toByteArray();
-                this.audioBytes_ContentType = "audio/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri));
-                checkTelaMode();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(duracaoSegundos > 15L){
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Esse arquivo tem duração maior do que 15 segundos\n" +
+                                "Só permitimos postar arquivos de aúdio maiores do que 15 segundos se estes forem de sua autoria.\nEsse conteúdo é de sua autoria?",
+                        "Sim, esse áudio é de minha autoria", "Não, esse áudio não é de minha autoria",
+                        (dialogInterface, i) -> {
+                            setAudio(uri);
+                        },
+                        (dialogInterface, i) -> {
+
+                        });
+            } else {
+                setAudio(uri);
             }
+
+        }
+    }
+
+    private void setVideo(Uri u){
+        try {
+            videoView.setMediaController(new MediaController(this));
+            videoView.setVideoURI(u);
+            videoView.setVisibility(View.VISIBLE);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            InputStream fis = getContentResolver().openInputStream(u);
+
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1 != (n = fis.read(buf)))
+                baos.write(buf, 0, n);
+
+            this.videoBytes = baos.toByteArray();
+            this.videoBytes_ContentType = "video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u));
+            checkTelaMode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setAudio(Uri uri){
+        try {
+            binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+            getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                    new Audio_Fragment(this, uri))
+                    .commit();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            InputStream fis = getContentResolver().openInputStream(uri);
+
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1 != (n = fis.read(buf)))
+                baos.write(buf, 0, n);
+
+            this.audioBytes = baos.toByteArray();
+            this.audioBytes_ContentType = "audio/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri));
+            checkTelaMode();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -476,7 +522,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 PostRequest.class,
                 ResponseBody.class,
                 ErrorResponse.class,
-                HttpUtils.buildUrl(getResources(),"post/create"),
+                HttpUtils.buildUrl(getResources(),tipo, "create"),
                 null,
                 (ResponseBody response) -> {
                     this.dialog.hide();
@@ -485,9 +531,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 "Sucesso!", R.drawable.ic_error,
                                 "Post cadastrado com sucesso","OK",
                                 (dialog, id) -> {
-                                                dialog.dismiss();
-                                                FindFM.setTelaAtual("POST_CRIADO");
-                                                super.onBackPressed(); }).create().show();
+                                    dialog.dismiss();
+                                    FindFM.setTelaAtual("POST_CRIADO");
+                                    super.onBackPressed(); }).create().show();
 
                     }
                 },
@@ -511,10 +557,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         PostRequest param = new PostRequest();
         param.setTitulo(post.getTitulo())
-             .setDescricao(post.getDescricao())
-             .setImagemId(post.getIdFoto())
-             .setVideoId(post.getIdVideo())
-             .setAudioId(post.getIdAudio());
+                .setDescricao(post.getDescricao())
+                .setImagemId(post.getIdFoto())
+                .setVideoId(post.getIdVideo())
+                .setAudioId(post.getIdAudio());
         postRequest.setRequest(param);
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
