@@ -411,7 +411,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         },
                         (dialogInterface, i) -> {
 
-                        });
+                        }).show();
             } else {
                 setVideo(u);
             }
@@ -433,7 +433,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         },
                         (dialogInterface, i) -> {
 
-                        });
+                        }).show();
             } else {
                 setAudio(uri);
             }
