@@ -37,6 +37,7 @@ public class TelaPrincipal extends AppCompatActivity
     private boolean tocandoRadio = false;
     private RadioController radioController;
     private boolean radioIniciando = false;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,13 +114,15 @@ public class TelaPrincipal extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        this.optionsMenu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_settings){
+        if(id == R.id.action_busca){
+            //TODO: MANDA PRA TELA DE BUSCAR
             return true;
         }
         else{
@@ -154,15 +157,9 @@ public class TelaPrincipal extends AppCompatActivity
                             .commit();
                 }
                 break;
-            case R.id.notificacoes:
-                if(!tela.equals("NOTIFICACOES")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Notificacoes_Fragment(this))
-                            .commit();
-                }
-                break;
-            case R.id.configuracoes:
-                if(!tela.equals("CONFIGURACOES")) {
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Configuracoes_Fragment(this))
+            case R.id.trabalhos:
+                if(!tela.equals("TRABALHOS")) {
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this))
                             .commit();
                 }
                 break;
@@ -238,5 +235,9 @@ public class TelaPrincipal extends AppCompatActivity
 
     public ProgressDialog getDialog() {
         return dialog;
+    }
+
+    public Menu getOptionsMenu() {
+        return optionsMenu;
     }
 }

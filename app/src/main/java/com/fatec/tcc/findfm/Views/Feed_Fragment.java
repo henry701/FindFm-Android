@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Views;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,11 +42,8 @@ import java.util.Map;
 
 public class Feed_Fragment extends Fragment {
 
-    private ProgressDialog dialog;
     private TelaPrincipal activity;
     private ActivityFeedFragmentBinding binding;
-    private View view;
-    private Usuario usuario;
 
     private List<Post> postList;
 

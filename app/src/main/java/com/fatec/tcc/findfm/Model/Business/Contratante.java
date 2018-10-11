@@ -84,4 +84,8 @@ public class Contratante extends Usuario {
     public void setNumero(int numero) {
         this.numero = numero;
     }
+
+    public String getLocalizacaoFormatada() {
+        return this.cidade + " - " + this.uf;
+    }
 }

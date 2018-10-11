@@ -96,9 +96,15 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
                     instrumentosUsuario.add(instrumento);
                 }
                 else if (itsMe){
+                    Set<Instrumento> instrumentosParaRemover = new HashSet<>();
                     checkInstrumento.setChecked(false);
                     itemStateArray.put(adapterPosition, false);
-                    instrumentosUsuario.remove(instrumento);
+                    for (Instrumento inst : instrumentosUsuario) {
+                        if (inst.getNome().equals(instrumento.getNome())) {
+                            instrumentosParaRemover.add(inst);
+                        }
+                    }
+                    instrumentosUsuario.removeAll(instrumentosParaRemover);
                 }
             });
         }
@@ -127,6 +133,9 @@ public class AdapterInstrumentos extends RecyclerView.Adapter<AdapterInstrumento
                 if (inst.getNome().equals(instrumento.getNome())) {
                     checkInstrumento.setChecked(true);
                     cb_nivelHabilidade.setSelection(inst.getNivelHabilidade().getCodigo() -1);
+                    if(!itemStateArray.get(getAdapterPosition())){
+                        itemStateArray.put(getAdapterPosition(), true);
+                    }
                 }
             }
 

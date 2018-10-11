@@ -2,7 +2,6 @@ package com.fatec.tcc.findfm.Views;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,9 +37,7 @@ import java.util.Map;
 
 public class MeusPosts_Fragment extends Fragment {
 
-    private ProgressDialog dialog;
     private TelaPrincipal activity;
-    private View view;
 
     private ActivityMeusPostsFragmentBinding binding;
     private List<Post> postList;
@@ -63,12 +60,6 @@ public class MeusPosts_Fragment extends Fragment {
         binding.listaAnuncios.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
-
-        dialog = new ProgressDialog(activity);
-        dialog.setMessage("Aguarde...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
-
         return binding.getRoot();
     }
 

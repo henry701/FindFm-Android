@@ -12,6 +12,7 @@ public class Usuario {
     private String fotoID;
     private String foto;
     private TiposUsuario tipoUsuario;
+    private String sobre;
 
     public Usuario(){}
 
@@ -128,5 +129,13 @@ public class Usuario {
 
     public void setFotoID(String fotoID) {
         this.fotoID = fotoID;
+    }
+
+    public String getSobre() {
+        return sobre;
+    }
+
+    public void setSobre(String sobre) {
+        this.sobre = sobre;
     }
 }

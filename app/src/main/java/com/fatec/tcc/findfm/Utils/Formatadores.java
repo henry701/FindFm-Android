@@ -182,6 +182,11 @@ public class Formatadores implements TextWatcher {
         return "" + value;
     }
     public static int toInt(String value) {
-        return Integer.parseInt(value);
+        try{
+            return Integer.parseInt(value);
+        } catch (Exception e){
+            return 0;
+        }
+
     }
 }

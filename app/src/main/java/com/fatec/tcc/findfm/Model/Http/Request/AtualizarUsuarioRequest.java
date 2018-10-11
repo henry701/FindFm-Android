@@ -18,6 +18,7 @@ public class AtualizarUsuarioRequest {
     private String senha;
     private String foto;
     private TiposUsuario tipoUsuario;
+    private String sobre;
     //Comum
     private String cidade;
     private String uf;
@@ -46,6 +47,7 @@ public class AtualizarUsuarioRequest {
         this.cidade = musico.getCidade();
         this.uf = musico.getUf();
         this.instrumentos = musico.getInstrumentos();
+        this.setSobre(musico.getSobre());
     }
 
     public AtualizarUsuarioRequest(Contratante contratante) {
@@ -61,6 +63,7 @@ public class AtualizarUsuarioRequest {
         this.endereco = contratante.getEndereco();
         this.numero = contratante.getNumero();
         this.capacidadeLocal = contratante.getCapacidadeLocal();
+        this.setSobre(contratante.getSobre());
     }
 
     public String getId() {
@@ -181,5 +184,13 @@ public class AtualizarUsuarioRequest {
 
     public void setInstrumentos(List<Instrumento> instrumentos) {
         this.instrumentos = instrumentos;
+    }
+
+    public String getSobre() {
+        return sobre;
+    }
+
+    public void setSobre(String sobre) {
+        this.sobre = sobre;
     }
 }

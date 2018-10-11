@@ -25,13 +25,11 @@ import com.fatec.tcc.findfm.Model.Http.Request.AtualizarUsuarioRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
-import com.fatec.tcc.findfm.Model.Http.Response.TokenData;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.Views.Perfil_Fragment;
@@ -44,7 +42,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class PerfilViewModel {
@@ -88,6 +85,7 @@ public class PerfilViewModel {
             return false;
         else {
             this.usuario = usuario;
+            this.usuario.setSenha(this.senha.get());
             initRequests();
             return true;
         }
@@ -97,6 +95,7 @@ public class PerfilViewModel {
         if(registrar((Usuario)musico)) {
             updateRequest.setRequest(new AtualizarUsuarioRequest((Musico) usuario));
             updateRequest.execute();
+            dialog.show();
         }
     }
 
@@ -104,6 +103,7 @@ public class PerfilViewModel {
         if(registrar((Usuario)contratante)) {
             updateRequest.setRequest(new AtualizarUsuarioRequest((Contratante) usuario));
             updateRequest.execute();
+            dialog.show();
         }
     }
 
@@ -225,10 +225,8 @@ public class PerfilViewModel {
                         {
                             this.dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                TokenData tokenData = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("tokenData"), TokenData.class);
-                                FindFM.setTokenData(view, tokenData);
                                 FindFM.logarUsuario(view, usuario.getTipoUsuario(), usuario.getNomeCompleto() );
-                                FindFM.setFotoPref(view, FindFM.getImagemPerfilBase64());
+                                FindFM.setFotoPref(view, usuario.getFoto());
                                 FindFM.setUsuario(usuario);
                                 switch (usuario.getTipoUsuario()){
                                     case CONTRATANTE:
@@ -238,6 +236,12 @@ public class PerfilViewModel {
                                         FindFM.setMusico((Musico) usuario);
                                         break;
                                 }
+                                AlertDialogUtils.newSimpleDialog__OneButton(view,
+                                        "", R.drawable.ic_save,
+                                        "Perfil atualizado com sucesso!","OK",
+                                        (dialog, id) -> {
+                                            fragment.getUser();
+                                        }).create().show();
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -348,8 +352,18 @@ public class PerfilViewModel {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        dialog.show();
-        instrumentoRequest.execute();
+
+        if(itsMe) {
+            dialog.show();
+            instrumentoRequest.execute();
+        } else {
+            rc.setAdapter( new AdapterInstrumentos(instrumentosUsuario, view, itsMe).setInstrumentosUsuario(instrumentosUsuario) );
+            RecyclerView.LayoutManager layout = new LinearLayoutManager(view,
+                    LinearLayoutManager.VERTICAL, false);
+            rc.setLayoutManager( layout );
+        }
+
+
     }
 
     public void setNascimento(String nascimento) {

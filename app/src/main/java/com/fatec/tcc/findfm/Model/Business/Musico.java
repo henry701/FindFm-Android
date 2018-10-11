@@ -65,4 +65,8 @@ public class Musico extends Usuario {
     public void setUf(String uf) {
         this.uf = uf;
     }
+
+    public String getLocalizacaoFormatada() {
+        return this.cidade + " - " + this.uf;
+    }
 }

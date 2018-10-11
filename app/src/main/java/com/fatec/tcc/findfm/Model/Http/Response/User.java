@@ -19,6 +19,7 @@ public class User {
     private Telefone telefone;
     private Endereco endereco;
     private Date date;
+    private String sobre;
     private LinkedTreeMap<String, Double> habilidades;
 
     public ArrayList<Instrumento> getIntrumentos() {
@@ -103,6 +104,14 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getSobre() {
+        return sobre;
+    }
+
+    public void setSobre(String sobre) {
+        this.sobre = sobre;
     }
 
     public class Avatar {

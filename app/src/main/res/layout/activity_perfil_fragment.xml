@@ -132,11 +132,28 @@
                     android:maxLength="255"
                     android:text="@={usuario.email}"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/linearContratante"
+                    app:layout_constraintBottom_toTopOf="@+id/txtSobre"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtTelefone" />
 
+                <EditText
+                    android:id="@+id/txtSobre"
+                    android:layout_width="282dp"
+                    android:layout_height="123dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="@string/biografia"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:text="@={usuario.sobre}"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/linearContratante"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
                 <LinearLayout
                     android:id="@+id/linearContratante"
@@ -151,7 +168,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/linearMusico"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+                    app:layout_constraintTop_toBottomOf="@+id/txtSobre">
 
                     <EditText
                         android:id="@+id/txtInauguracao"
@@ -346,12 +363,13 @@
 
                     <TextView
                         android:id="@+id/lb_selecione_titulo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/escolha_instrumento"
+                        android:textAlignment="center"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />

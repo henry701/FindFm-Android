@@ -4,12 +4,19 @@
     <item
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
-        android:title="@string/editar"
+        android:title="@string/recarregar"
         android:icon="@drawable/ic_refresh"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_editar"
         android:orderInCategory="100"
-        android:title="@string/configuracoes"
+        android:title="@string/editar"
+        android:icon="@drawable/ic_editar"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_busca"
+        android:orderInCategory="100"
+        android:title="@string/busca"
         app:showAsAction="never" />
 </menu>

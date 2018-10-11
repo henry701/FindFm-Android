@@ -17,26 +17,17 @@
             android:icon="@drawable/ic_anuncios"
             android:title="@string/meus_anuncios" />
         <item
-            android:id="@+id/notificacoes"
-            android:icon="@drawable/ic_avisos"
-            android:title="@string/notificacoes" />
+            android:id="@+id/trabalhos"
+            android:icon="@drawable/ic_trabalho"
+            android:title="@string/trabalhos" />
         <item
             android:id="@+id/playRadio"
             android:icon="@drawable/ic_play"
             android:title="@string/radio_iniciar" />
+        <item
+            android:id="@+id/sair"
+            android:icon="@drawable/ic_sair"
+            android:title="@string/sair" />
     </group>
-
-    <item android:title="@string/configuracoes" >
-        <menu>
-            <item
-                android:id="@+id/configuracoes"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/configuracoes" />
-            <item
-                android:id="@+id/sair"
-                android:icon="@drawable/ic_sair"
-                android:title="@string/sair" />
-        </menu>
-    </item>
 
 </menu>

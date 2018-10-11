@@ -13,17 +13,17 @@ import android.view.ViewGroup;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 
-public class Notificacoes_Fragment extends Fragment {
+public class Trabalhos_Fragment extends Fragment {
 
     private ProgressDialog dialog;
     private AppCompatActivity activity;
     private View view;
 
-    public Notificacoes_Fragment(){
+    public Trabalhos_Fragment(){
     }
 
     @SuppressLint("ValidFragment")
-    public Notificacoes_Fragment(AppCompatActivity activity){
+    public Trabalhos_Fragment(AppCompatActivity activity){
         this.activity = activity;
     }
 

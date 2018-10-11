@@ -65,6 +65,7 @@ public class Perfil_Fragment extends Fragment {
     private Usuario usuario;
 
     private TelaPrincipal activity;
+    boolean itsMe = false;
 
     public Perfil_Fragment(){}
 
@@ -161,6 +162,7 @@ public class Perfil_Fragment extends Fragment {
                 binding.getContratante().setEmail(usuario.getEmail());
                 binding.getContratante().setFotoID(usuario.getFotoID());
                 binding.getContratante().setFoto(usuario.getFoto());
+                binding.getContratante().setSobre(usuario.getSobre());
                 binding.getViewModel().registrar(binding.getContratante());
                 break;
             case MUSICO:
@@ -172,6 +174,7 @@ public class Perfil_Fragment extends Fragment {
                 binding.getMusico().setEmail(usuario.getEmail());
                 binding.getMusico().setFotoID(usuario.getFotoID());
                 binding.getMusico().setFoto(usuario.getFoto());
+                binding.getMusico().setSobre(usuario.getSobre());
                 binding.getMusico().setInstrumentos(((AdapterInstrumentos) binding.listaInstrumentos.getAdapter()).getInstrumentos());
                 binding.getViewModel().registrar(binding.getMusico());
                 break;
@@ -193,7 +196,7 @@ public class Perfil_Fragment extends Fragment {
         return telefone1;
     }
 
-    private void getUser() {
+    public void getUser() {
         JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,
@@ -214,7 +217,7 @@ public class Perfil_Fragment extends Fragment {
                                 this.usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
                                 this.usuario.setFotoID(null);
                                 this.usuario.setFoto(null);
-
+                                this.usuario.setSobre(user.getSobre());
                                 if(user.getAvatar() != null){
                                     if(user.getAvatar().get_id() != null){
                                         this.usuario.setFotoID(user.getAvatar().get_id());
@@ -259,7 +262,10 @@ public class Perfil_Fragment extends Fragment {
                                         contratante.setUf(
                                                 Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
                                         );
-                                        binding.setContratante(new Contratante(usuario));
+                                        contratante.setEndereco(user.getEndereco().getRua());
+                                        contratante.setNumero(Integer.parseInt(user.getEndereco().getNumero()));
+                                        binding.setContratante(contratante);
+                                        binding.cbUfContratante.setSelection(Estados.fromSigla(contratante.getUf()).getIndex());
                                         binding.getViewModel().setInauguracao(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(contratante.getInauguracao()));
                                         binding.getViewModel().setInauguracaoDate(contratante.getInauguracao());
                                         break;
@@ -275,12 +281,19 @@ public class Perfil_Fragment extends Fragment {
                                         binding.setMusico(musico);
                                         binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));
                                         binding.getViewModel().setNascimentoDate(musico.getNascimento());
-                                        binding.getViewModel().updateList(musico.getInstrumentos(), usuario.getId().equals(FindFM.getUsuario().getId()));
+                                        if(!itsMe)
+                                            binding.lbSelecioneTitulo.setText(R.string.instrumento_e_nivel);
+                                        binding.getViewModel().updateList(musico.getInstrumentos(), itsMe);
                                         break;
                                 }
 
                                 binding.executePendingBindings();
+                                itsMe = false;
                                 this.tratarTela();
+                                itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
+                                if(itsMe){
+                                    activity.getOptionsMenu().getItem(1).setVisible(true);
+                                }
                             }
                         },
                         (ErrorResponse errorResponse) ->
@@ -307,12 +320,12 @@ public class Perfil_Fragment extends Fragment {
     }
 
     private void tratarTela() {
-        boolean itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
 
         binding.circularImageView.setEnabled(itsMe);
         binding.txtNomeCompleto.setEnabled(itsMe);
         binding.txtTelefone.setEnabled(itsMe);
         binding.txtEmail.setEnabled(itsMe);
+        binding.txtSobre.setEnabled(itsMe);
 
         binding.txtInauguracao.setEnabled(itsMe);
         binding.txtCapacidadeLocal.setEnabled(itsMe);
@@ -356,6 +369,17 @@ public class Perfil_Fragment extends Fragment {
         switch (item.getItemId()){
             case R.id.action_refresh:
                 getUser();
+                return true;
+            case R.id.action_editar:
+                this.itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
+                activity.getOptionsMenu().getItem(1).setVisible(false);
+
+                if(TiposUsuario.MUSICO.equals(binding.getUsuario().getTipoUsuario())){
+                    binding.lbSelecioneTitulo.setText(R.string.instrumento_e_nivel);
+                    binding.getViewModel().updateList(binding.getMusico().getInstrumentos(), itsMe);
+                }
+
+                tratarTela();
                 return true;
         }
 

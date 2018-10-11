@@ -17,8 +17,8 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://192.168.43.253:8083</string>
-    <string name="radio_url">http://192.168.43.253:8084</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->
@@ -50,6 +50,7 @@
     <string name="nivel_habilidade">Nível Habilidade</string>
     <string name="usuario_ou_senha_incorretos">Usuário e/ou Senha incorretos</string>
     <string name="escolha_instrumento">Selecione seus instrumentos e nível de habilidade:</string>
+    <string name="instrumento_e_nivel">Instrumentos e nível de habilidade:</string>
     <string name="suas_informacoes">Preencha suas informações</string>
     <string name="as_informacoes">Preencha as informações</string>
     <string name="banda_informacoes">Preencha as informações da Banda</string>
@@ -99,11 +100,11 @@
     <string name="navigation_drawer_open">Abrir menu lateral</string>
     <string name="navigation_drawer_close">Fechar menu lateral</string>
     <string name="sair">Sair</string>
-    <string name="configuracoes">Configurações</string>
+    <string name="busca">Buscar</string>
     <string name="inicio">Início</string>
     <string name="meu_perfil">Meu Perfil</string>
     <string name="meus_anuncios">Minhas Publicações</string>
-    <string name="notificacoes">Notificações</string>
+    <string name="trabalhos">Trabalhos</string>
     <string name="title_activity_perfil_fragment">Perfil_fragment</string>
     <string name="radio_iniciar">Iniciar Rádio</string>
     <string name="radio_carregando">Carregando Rádio</string>
@@ -116,6 +117,7 @@
     <string name="titulo">Adicione um título…</string>
     <string name="publicar">Publicar</string>
     <string name="editar">Editar</string>
+    <string name="recarregar">Recarregar</string>
     <string name="sua_publicacao">Escreva sua publicação…</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
@@ -131,4 +133,5 @@
     <string name="comentar">Comentar</string>
     <string name="curtir">Curtir</string>
     <string name="descurtir">Descurtir</string>
+    <string name="biografia">Biografia</string>
 </resources>

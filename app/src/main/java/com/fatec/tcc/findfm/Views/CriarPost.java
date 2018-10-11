@@ -29,6 +29,8 @@ import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.Contratante;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -168,6 +170,17 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
             binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
             this.fotoBytes_ContentType = "image/jpeg";
+        }
+        try {
+            if(TiposUsuario.CONTRATANTE.equals(post.getAutor().getTipoUsuario())){
+                binding.incluirContent.txtLocalizacao.setText(((Contratante) post.getAutor()).getLocalizacaoFormatada());
+            } else if (TiposUsuario.MUSICO.equals(post.getAutor().getTipoUsuario())){
+
+                binding.incluirContent.txtLocalizacao.setText(((Musico) post.getAutor()).getLocalizacaoFormatada());
+
+            }
+        } catch (Exception e){
+            binding.incluirContent.txtLocalizacao.setVisibility(View.GONE);
         }
 
         if(post.getAutor().getFotoID() != null){
@@ -403,12 +416,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             long duracaoSegundos = TimeUnit.MILLISECONDS.toSeconds(duration);
 
             if(duracaoSegundos > 15L) {
-                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Esse arquivo tem duração maior do que 15 segundos\n" +
-                                "Só permitimos postar arquivos de vídeo maiores do que 15 segundos se estes forem de sua autoria.\nEsse conteúdo é de sua autoria?",
-                        "Sim, esse vídeo é de minha autoria", "Não, esse vídeo não é de minha autoria",
-                        (dialogInterface, i) -> {
-                            setVideo(u);
-                        },
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Este vídeo tem duração maior do que 15 segundos!\n" +
+                                "Só permitimos postar vídeos maiores do que 15 segundos se as músicas nos mesmos forem de sua autoria.\nAs músicas deste vídeo são de sua autoria?",
+                        "Sim, as músicas são de minha autoria.", "Não, as músicas não são de minha autoria.",
+                        (dialogInterface, i) -> setVideo(u),
                         (dialogInterface, i) -> {
 
                         }).show();
@@ -425,15 +436,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
             long duracaoSegundos = TimeUnit.MILLISECONDS.toSeconds(duration);
 
             if(duracaoSegundos > 15L){
-                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Esse arquivo tem duração maior do que 15 segundos\n" +
-                                "Só permitimos postar arquivos de aúdio maiores do que 15 segundos se estes forem de sua autoria.\nEsse conteúdo é de sua autoria?",
-                        "Sim, esse áudio é de minha autoria", "Não, esse áudio não é de minha autoria",
-                        (dialogInterface, i) -> {
-                            setAudio(uri);
-                        },
-                        (dialogInterface, i) -> {
-
-                        }).show();
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Este arquivo de áudio tem duração maior do que 15 segundos!\n" +
+                                "Só permitimos postar arquivos de áudio maiores do que 15 segundos se as músicas nos mesmos forem de sua autoria.\nAs músicas deste arquivo de áudio são de sua autoria?",
+                        "Sim, as músicas são de minha autoria.", "Não, as músicas não são de minha autoria.",
+                        (dialogInterface, i) -> setAudio(uri),
+                        (dialogInterface, i) -> { }).show();
             } else {
                 setAudio(uri);
             }
@@ -528,7 +535,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                "Sucesso!", R.drawable.ic_error,
+                                "Sucesso!", R.drawable.ic_save,
                                 "Post cadastrado com sucesso","OK",
                                 (dialog, id) -> {
                                     dialog.dismiss();
