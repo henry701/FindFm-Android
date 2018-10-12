@@ -24,13 +24,12 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Model.Business.Contratante;
-import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -38,6 +37,7 @@ import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
@@ -45,6 +45,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterComentario;
@@ -133,13 +134,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
 
         dialog = new ProgressDialog(this);
+        dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
         if(telaMode.equals("criando")){
             binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
             MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
-            //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
             }
@@ -149,7 +150,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             binding.incluirContent.setPost(post);
-            preencherTela(post);
+            getPost();
         }
 
         if (telaMode.equals("editavel")){
@@ -171,17 +172,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
             this.fotoBytes_ContentType = "image/jpeg";
         }
-        try {
-            if(TiposUsuario.CONTRATANTE.equals(post.getAutor().getTipoUsuario())){
-                binding.incluirContent.txtLocalizacao.setText(((Contratante) post.getAutor()).getLocalizacaoFormatada());
-            } else if (TiposUsuario.MUSICO.equals(post.getAutor().getTipoUsuario())){
 
-                binding.incluirContent.txtLocalizacao.setText(((Musico) post.getAutor()).getLocalizacaoFormatada());
-
-            }
-        } catch (Exception e){
-            binding.incluirContent.txtLocalizacao.setVisibility(View.GONE);
-        }
+        if(post.getCidade() != null && post.getUf() != null)
+            binding.incluirContent.txtLocalizacao.setText(post.getLocalizacaoFormatada());
 
         if(post.getAutor().getFotoID() != null){
 
@@ -242,12 +235,20 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
         }
 
-        if(post.getComentarios() != null){
+        if(post.getComentarios() == null || post.getComentarios().isEmpty()){
+            binding.incluirContent.textView5.setText(R.string.sem_comentarios);
+            binding.incluirContent.listaComentarios.setVisibility(View.GONE);
+        } else {
+            binding.incluirContent.textView5.setText(R.string.comentarios);
+            binding.incluirContent.listaComentarios.setVisibility(View.VISIBLE);
             binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this));
+
         }
 
         if(post.getAutor().getTelefone() != null){
             binding.incluirContent.txtTelefone.setVisibility(View.VISIBLE);
+        } else {
+            binding.incluirContent.txtTelefone.setVisibility(View.GONE);
         }
 
 
@@ -292,13 +293,15 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
+            optionsMenu.getItem(1).setVisible(true);
         } else if (telaMode.equals("editando") || telaMode.equals("criando")){
             if(optionsMenu != null) {
                 optionsMenu.getItem(0).setVisible(true);
+                optionsMenu.getItem(1).setVisible(false);
             }
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
-            binding.incluirContent.txtTelefone.setVisibility(View.GONE);
+            //binding.incluirContent.txtTelefone.setVisibility(View.GONE);
             binding.incluirContent.textView5.setVisibility(View.GONE);
             binding.incluirContent.listaComentarios.setVisibility(View.GONE);
             binding.incluirContent.txtComentar.setVisibility(View.GONE);
@@ -354,6 +357,50 @@ public class CriarPost extends AppCompatActivity implements Observer{
         return true;
     }
 
+    private void getPost(){
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> getPost = new JsonTypedRequest<>
+                (       this,
+                        Request.Method.GET,
+                        Usuario.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(),"post", binding.incluirContent.getPost().getId() ),
+                        null,
+                        (ResponseBody response) ->
+                        {
+                            dialog.hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                PostResponse postResponse = JsonUtils.jsonConvert(response.getData(), PostResponse.class);
+                                binding.incluirContent.setPost(new Post(postResponse));
+                                binding.incluirContent.executePendingBindings();
+                                checkTelaMode();
+                                preencherTela(binding.incluirContent.getPost());
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            dialog.hide();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    errorResponse.getMessage(),"OK",
+                                    (dialog, id) -> { }).create().show();
+                        },
+                        (VolleyError error) ->
+                        {
+                            dialog.hide();
+                            error.printStackTrace();
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id) -> { }).create().show();
+                        }
+                );
+
+        getPost.execute();
+        dialog.show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Util.hideSoftKeyboard(this);
@@ -384,6 +431,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 if(!fotoUpload && !videoUpload && !audioUpload){
                     initRequest(binding.incluirContent.getPost());
                 }
+                break;
+            case R.id.action_refresh:
+                getPost();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -392,7 +443,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //TODO: ADICIONAR REGRAS DE DURAÇÃO DE VIDEO E AUDIO MAIOR QUE 15S -> MODAL "Sim isso é de autoria propria"
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getApplicationContext()
@@ -512,12 +562,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     public void btnRemoverAudio_Click(View v){
+        //TODO: bug aqui
         audioUpload = false;
         audioBytesId = null;
         audioBytes = null;
         audioBytes_ContentType= null;
-        getSupportFragmentManager().beginTransaction().
-                remove(getSupportFragmentManager().findFragmentById(R.id.frame_audio)).commit();
+        getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
         binding.incluirContent.frameAudio.setVisibility(View.GONE);
         checkTelaMode();
     }
@@ -590,10 +640,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 "Sucesso!", R.drawable.ic_error,
                                 "Comentário cadastrado com sucesso","OK",
                                 (dialog, id) -> {
-                                    //TODO: get do post
-                                    dialog.dismiss();
+                                    binding.incluirContent.txtComentar.setText("");
+                                    this.dialog.setMessage("Carregando...");
                                     FindFM.setTelaAtual("POST_CRIADO");
-                                    super.onBackPressed(); }).create().show();
+                                    getPost(); }).create().show();
 
                     }
                 },

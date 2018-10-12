@@ -111,6 +111,10 @@ public class Post {
         return this;
     }
 
+    public String getLocalizacaoFormatada() {
+        return this.cidade + " - " + this.uf;
+    }
+
     public List<Comentario> getComentarios() {
         return comentarios;
     }

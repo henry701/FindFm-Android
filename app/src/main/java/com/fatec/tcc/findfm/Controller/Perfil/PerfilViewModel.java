@@ -241,6 +241,9 @@ public class PerfilViewModel {
                                         "Perfil atualizado com sucesso!","OK",
                                         (dialog, id) -> {
                                             fragment.getUser();
+                                            senha.set("");
+                                            confirmaSenha.set("");
+                                            fragment.setItsMe(false);
                                         }).create().show();
                             }
                         },

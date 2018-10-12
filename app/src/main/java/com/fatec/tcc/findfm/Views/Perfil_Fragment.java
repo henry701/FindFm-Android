@@ -368,6 +368,7 @@ public class Perfil_Fragment extends Fragment {
         Util.hideSoftKeyboard(activity);
         switch (item.getItemId()){
             case R.id.action_refresh:
+                itsMe = false;
                 getUser();
                 return true;
             case R.id.action_editar:
@@ -386,4 +387,7 @@ public class Perfil_Fragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public void setItsMe(boolean itsMe) {
+        this.itsMe = itsMe;
+    }
 }
