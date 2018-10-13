@@ -59,7 +59,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/stop"
+            android:background="@drawable/ic_stop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btnPause"
             app:layout_constraintTop_toBottomOf="@+id/duracaoBar" />
