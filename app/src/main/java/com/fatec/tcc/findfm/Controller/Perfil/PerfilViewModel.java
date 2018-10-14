@@ -244,6 +244,7 @@ public class PerfilViewModel {
                                             senha.set("");
                                             confirmaSenha.set("");
                                             fragment.setItsMe(false);
+                                            view.atualizarBarraLateral();
                                         }).create().show();
                             }
                         },

@@ -107,6 +107,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
             holder.bindingVH.videoView.setMediaController(m);
             m.setAnchorView(holder.bindingVH.videoView);
             holder.bindingVH.videoView.setVideoURI(uri);
+            holder.bindingVH.videoView.setZOrderOnTop(true);
             holder.bindingVH.videoView.setVisibility(View.VISIBLE);
         }
 

@@ -113,11 +113,15 @@ public class Audio_Fragment extends Fragment {
     }
 
     public void startPlayProgressUpdater() {
-        binding.duracaoBar.setProgress(mediaPlayer.getCurrentPosition());
+        try {
+            binding.duracaoBar.setProgress(mediaPlayer.getCurrentPosition());
 
-        if (mediaPlayer.isPlaying()) {
-            Runnable notification = () -> startPlayProgressUpdater();
-            handler.postDelayed(notification,1000);
+            if (mediaPlayer.isPlaying()) {
+                Runnable notification = () -> startPlayProgressUpdater();
+                handler.postDelayed(notification, 1000);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -125,7 +129,17 @@ public class Audio_Fragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if(mediaPlayer != null){
-            mediaPlayer.release();
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.prepare();
+                mediaPlayer.seekTo(0);
+                mediaPlayer.release();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

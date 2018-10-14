@@ -562,14 +562,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     public void btnRemoverAudio_Click(View v){
-        //TODO: bug aqui
         audioUpload = false;
         audioBytesId = null;
         audioBytes = null;
         audioBytes_ContentType= null;
         getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
         binding.incluirContent.frameAudio.setVisibility(View.GONE);
-        checkTelaMode();
+        binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
+        binding.fabAudio.setVisibility(View.VISIBLE);
     }
 
     private void initRequest(Post post){

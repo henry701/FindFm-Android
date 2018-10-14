@@ -37,12 +37,13 @@ public class TelaPrincipal extends AppCompatActivity
     private boolean tocandoRadio = false;
     private RadioController radioController;
     private boolean radioIniciando = false;
+    private ActivityTelaPrincipalBinding binding;
     private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTelaPrincipalBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_tela_principal);
+        binding  = DataBindingUtil.setContentView(this, R.layout.activity_tela_principal);
         setSupportActionBar(binding.appBarInclude.toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,7 +54,7 @@ public class TelaPrincipal extends AppCompatActivity
         radioMenu = binding.navView.getMenu().findItem(R.id.playRadio);
 
         TextView textView = binding.navView.getHeaderView(0).findViewById(R.id.txtUsuarioHeader);
-        textView.setText(FindFM.getNomeUsuario(this));
+        textView.setText(FindFM.getUsuario().getNomeCompleto());
 
         ImageView imageView = binding.navView.getHeaderView(0).findViewById(R.id.imageViewHeader);
         MidiaUtils.setImagemPerfilToImageView(imageView, this);
@@ -231,6 +232,14 @@ public class TelaPrincipal extends AppCompatActivity
                 radioMenu.setTitle(R.string.radio_tocar);
             });
         }
+    }
+
+    public void atualizarBarraLateral(){
+        ImageView imageView = binding.navView.getHeaderView(0).findViewById(R.id.imageViewHeader);
+        MidiaUtils.setImagemPerfilToImageView(imageView, this);
+
+        TextView textView = binding.navView.getHeaderView(0).findViewById(R.id.txtUsuarioHeader);
+        textView.setText(FindFM.getUsuario().getNomeCompleto());
     }
 
     public ProgressDialog getDialog() {
