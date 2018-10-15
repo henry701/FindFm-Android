@@ -2,12 +2,14 @@ package com.fatec.tcc.findfm.Model.Http.Response;
 
 import com.fatec.tcc.findfm.Model.Business.Endereco;
 import com.fatec.tcc.findfm.Model.Business.Instrumento;
+import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class User {
 
@@ -21,6 +23,7 @@ public class User {
     private Date date;
     private String sobre;
     private LinkedTreeMap<String, Double> habilidades;
+    private List<Musica> musicas;
 
     public ArrayList<Instrumento> getIntrumentos() {
         ArrayList<Instrumento> instrumentos = new ArrayList<>();
