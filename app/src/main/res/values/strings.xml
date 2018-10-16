@@ -135,4 +135,5 @@
     <string name="curtir">Curtir</string>
     <string name="descurtir">Descurtir</string>
     <string name="biografia">Biografia</string>
+    <string name="sem_trabalhos">Não há trabalhos para serem mostrados</string>
 </resources>

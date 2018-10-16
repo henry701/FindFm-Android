@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
@@ -29,6 +28,18 @@ import com.fatec.tcc.findfm.Views.Audio_Fragment;
 import com.fatec.tcc.findfm.Views.CriarPost;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewItemFeedBinding;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -102,13 +113,23 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
         }
 
         for(String id : post.getIdVideos()){
-            Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(),"resource/" + id));
-            MediaController m = new MediaController(activity);
-            holder.bindingVH.videoView.setMediaController(m);
-            m.setAnchorView(holder.bindingVH.videoView);
-            holder.bindingVH.videoView.setVideoURI(uri);
-            holder.bindingVH.videoView.setZOrderOnTop(true);
-            holder.bindingVH.videoView.setVisibility(View.VISIBLE);
+            try {
+                Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + id));
+
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
+                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+
+                holder.bindingVH.videoView.setPlayer(exoPlayer);
+                exoPlayer.prepare(mediaSource);
+                exoPlayer.seekTo(100);
+                holder.bindingVH.videoView.setVisibility(View.VISIBLE);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         if(post.getIdAudio() != null) {

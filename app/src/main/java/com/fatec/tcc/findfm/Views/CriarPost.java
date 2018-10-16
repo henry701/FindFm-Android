@@ -20,13 +20,10 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.fatec.tcc.findfm.Controller.Midia.FullScreenMediaController;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
@@ -50,6 +47,19 @@ import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterComentario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarPostBinding;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -66,7 +76,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
     private ImageView fotoPublicacao;
-    private VideoView videoView;
     private ProgressDialog dialog;
 
     private String telaMode = "criando";
@@ -120,8 +129,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         fotoPublicacao = findViewById(R.id.fotoPublicacao);
         fotoPublicacao.setVisibility(View.GONE);
 
-        videoView = findViewById(R.id.videoView);
-        videoView.setVisibility(View.GONE);
+        binding.incluirContent.videoView.setVisibility(View.GONE);
 
         FloatingActionButton fab = findViewById(R.id.fab_foto);
         fab.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickImageIntent(), "Escolha uma foto"), PICK_IMAGE));
@@ -164,13 +172,35 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     private void preencherTela(Post post){
+        for(String id : post.getIdFotos()){
 
-        if(post.getFotoBytes() != null) {
-            InputStream input = new ByteArrayInputStream(post.getFotoBytes());
-            Bitmap ext_pic = BitmapFactory.decodeStream(input);
-            binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
-            binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
-            this.fotoBytes_ContentType = "image/jpeg";
+            DownloadResourceService downloadService = new DownloadResourceService(this);
+            downloadService.addObserver( (download, arg) -> {
+                if(download instanceof DownloadResourceService) {
+                    runOnUiThread(() -> {
+                        if (arg instanceof BinaryResponse) {
+                            byte[] dados = ((BinaryResponse) arg).getData();
+                            InputStream input=new ByteArrayInputStream(dados);
+                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                            post.setFotoBytes(dados);
+                            binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
+                            binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+                            this.fotoBytes_ContentType = "image/jpeg";
+                        } else{
+                            AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                    "Ops!", R.drawable.ic_error,
+                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
+                                    (dialog, id1) -> { }).create().show();
+                        }
+
+                        dialog.hide();
+
+                    });
+                }
+            });
+            downloadService.getResource(id);
+            dialog.show();
         }
 
         if(post.getCidade() != null && post.getUf() != null)
@@ -208,14 +238,23 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
 
         for(String id : post.getIdVideos()){
-            Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(),"resource/" + id));
-            FullScreenMediaController m = new FullScreenMediaController(this);
-            m.setUrl(HttpUtils.buildUrl(getResources(),"resource/" + id));
-            binding.incluirContent.videoView.setMediaController(m);
-            m.setAnchorView(binding.incluirContent.videoView);
-            binding.incluirContent.videoView.setVideoURI(uri);
-            binding.incluirContent.videoView.setVisibility(View.VISIBLE);
-            binding.incluirContent.scrollView2.scrollTo(0,0);
+            try {
+                Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + id));
+
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+
+                binding.incluirContent.videoView.setPlayer(exoPlayer);
+                exoPlayer.prepare(mediaSource);
+                exoPlayer.seekTo(100);
+                binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         if(post.getIdAudio() != null) {
@@ -500,9 +539,19 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     private void setVideo(Uri u){
         try {
-            videoView.setMediaController(new MediaController(this));
-            videoView.setVideoURI(u);
-            videoView.setVisibility(View.VISIBLE);
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+            SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
+                    this, "exoplayer_video");
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                    .setExtractorsFactory(new DefaultExtractorsFactory())
+                    .createMediaSource(u);
+            exoPlayer.prepare(mediaSource);
+            binding.incluirContent.videoView.setPlayer(exoPlayer);
+            exoPlayer.prepare(mediaSource);
+            exoPlayer.seekTo(100);
+            binding.incluirContent.videoView.setVisibility(View.VISIBLE);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             InputStream fis = getContentResolver().openInputStream(u);
@@ -515,9 +564,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
             this.videoBytes = baos.toByteArray();
             this.videoBytes_ContentType = "video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u));
             checkTelaMode();
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
+
+
     }
 
     private void setAudio(Uri uri){
@@ -557,7 +608,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         videoBytesId = null;
         videoBytes = null;
         videoBytes_ContentType = null;
-        videoView.setVisibility(View.GONE);
+        binding.incluirContent.videoView.setVisibility(View.GONE);
         checkTelaMode();
     }
 

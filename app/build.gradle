@@ -44,4 +44,5 @@ dependencies {
     implementation('com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers:1.7.0') {
         exclude module: 'joda-time'
     }
+    implementation 'com.google.android.exoplayer:exoplayer:2.9.0'
 }

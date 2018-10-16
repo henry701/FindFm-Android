@@ -124,11 +124,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:contentDescription="Imagem"
+                android:background="#000000"
                 android:onClick="@{clickListener::onClick}"
                 android:visibility="gone"
                 app:srcCompat="@drawable/capaplaceholder_photo" />
 
-            <VideoView
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -136,6 +141,9 @@
                 android:visibility="gone"
                 android:background="#000000"/>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
 
             <FrameLayout
                 android:id="@+id/frame_audio"

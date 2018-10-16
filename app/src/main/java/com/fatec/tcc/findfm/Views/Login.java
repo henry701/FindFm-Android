@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private ProgressDialog dialog;
-
+    //TODO: logar como visitante
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
