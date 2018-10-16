@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
@@ -90,7 +91,7 @@ public class TelaPrincipal extends AppCompatActivity
             }
         }
 
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
+        fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                 .commit();
     }
 
@@ -106,10 +107,28 @@ public class TelaPrincipal extends AppCompatActivity
                 System.exit(0);
             } else {
                 fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
+                fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                         .commit();
             }
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.VISITANTE)) {
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            Menu menuNav = navigationView.getMenu();
+
+            MenuItem meu_perfil = menuNav.findItem(R.id.meu_perfil);
+            meu_perfil.setEnabled(false);
+
+            MenuItem meus_posts = menuNav.findItem(R.id.meus_posts);
+            meus_posts.setEnabled(false);
+
+            MenuItem trabalhos = menuNav.findItem(R.id.trabalhos);
+            trabalhos.setEnabled(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -142,7 +161,7 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this))
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                             .commit();
                 }
                 break;
@@ -152,7 +171,7 @@ public class TelaPrincipal extends AppCompatActivity
                             .commit();
                 }
                 break;
-            case R.id.meus_anuncios:
+            case R.id.meus_posts:
                 if(!tela.equals("MEUS_ANUNCIOS")) {
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
                             .commit();

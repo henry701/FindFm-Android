@@ -17,8 +17,8 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://192.168.3.100:8083</string>
-    <string name="radio_url">http://192.168.3.100:8084</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->
@@ -44,6 +44,7 @@
     <string name="e_mail">E-mail</string>
     <string name="usuario">Usuário</string>
     <string name="entrar">Entrar</string>
+    <string name="entrar_visitante">Entrar como visitante</string>
     <string name="title_activity_registrar__musico">Registrar_Musico</string>
     <string name="nascimento">Data de Nascimento</string>
     <string name="data_formacao">Data de Formação</string>

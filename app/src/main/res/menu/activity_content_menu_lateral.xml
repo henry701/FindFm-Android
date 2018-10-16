@@ -13,7 +13,7 @@
             android:icon="@drawable/ic_login"
             android:title="@string/meu_perfil" />
         <item
-            android:id="@+id/meus_anuncios"
+            android:id="@+id/meus_posts"
             android:icon="@drawable/ic_anuncios"
             android:title="@string/meus_anuncios" />
         <item

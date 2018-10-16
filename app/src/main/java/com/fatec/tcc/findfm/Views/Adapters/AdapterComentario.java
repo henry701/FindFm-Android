@@ -37,14 +37,16 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
     private String postId;
     private List<Comentario> comentarios = new ArrayList<>();
     private Activity activity;
+    private boolean isVisitante;
 
     public AdapterComentario() {
     }
 
-    public AdapterComentario(String postId, List<Comentario> comentarios, Activity activity){
+    public AdapterComentario(String postId, List<Comentario> comentarios, Activity activity, boolean isVisitante){
         this.postId = postId;
         this.comentarios = comentarios;
         this.activity = activity;
+        this.isVisitante = isVisitante;
     }
 
     public List<Comentario> getComentarios(){
@@ -156,6 +158,13 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                     }
                 }
         );
+
+        if(isVisitante){
+            holder.bindingVH.btnLike.setOnClickListener(view -> AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                    "Ops!", R.drawable.ic_error,
+                    "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
+                    (dialog, id) -> { }).create().show());
+        }
 
 
         if(comentario.getLikes().contains(FindFM.getUsuario().getId())){

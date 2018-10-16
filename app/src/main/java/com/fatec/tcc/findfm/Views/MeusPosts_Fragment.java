@@ -100,7 +100,7 @@ public class MeusPosts_Fragment extends Fragment {
                                         postList.add(new Post(postResponse));
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
+                                    binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
                                 } else
                                 {
                                     binding.textView4.setVisibility(View.VISIBLE);
@@ -110,7 +110,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
+                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -119,7 +119,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity));
+                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,

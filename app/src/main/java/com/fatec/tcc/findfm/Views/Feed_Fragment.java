@@ -44,14 +44,15 @@ public class Feed_Fragment extends Fragment {
 
     private TelaPrincipal activity;
     private ActivityFeedFragmentBinding binding;
-
+    private boolean isVisitante;
     private List<Post> postList;
 
     public Feed_Fragment(){}
 
     @SuppressLint("ValidFragment")
-    public Feed_Fragment(TelaPrincipal activity){
+    public Feed_Fragment(TelaPrincipal activity, boolean isVisitante){
         this.activity = activity;
+        this.isVisitante = isVisitante;
     }
 
     @Nullable
@@ -77,6 +78,8 @@ public class Feed_Fragment extends Fragment {
         else {
             binding.fotoPerfil.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, activity.getTheme()));
         }
+        if(isVisitante)
+            binding.adicionarAnuncio.setVisibility(View.GONE);
         return binding.getRoot();
     }
 
@@ -85,10 +88,9 @@ public class Feed_Fragment extends Fragment {
         FindFM.setTelaAtual("HOME");
         super.onActivityCreated(savedInstanceState);
         setFoto();
-        if(FindFM.isLogado(getActivity())) {
-            TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
-            lb_nomeUsuario.setText(FindFM.getNomeUsuario(getActivity()));
-        }
+        TextView lb_nomeUsuario = getActivity().findViewById(R.id.lb_nomeUsuario);
+        lb_nomeUsuario.setText(FindFM.getUsuario().getNomeCompleto());
+
     }
 
     private void setFoto(){
@@ -124,7 +126,7 @@ public class Feed_Fragment extends Fragment {
                                         );
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
+                                    binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                                 } else
                                 {
                                     binding.textView4.setVisibility(View.VISIBLE);
@@ -134,7 +136,7 @@ public class Feed_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -143,7 +145,7 @@ public class Feed_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,

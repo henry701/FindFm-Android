@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewModel"
@@ -8,8 +9,6 @@
 
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/from_bg"
@@ -29,80 +28,62 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <!--TODO: Colocar imagem padrão melhor-->
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/circularImageView2"
                     android:layout_width="130dp"
                     android:layout_height="135dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/capaplaceholder"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline8"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/appname"
+                    app:layout_constraintBottom_toTopOf="@+id/txtLogin"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.53"
+                    app:layout_constraintVertical_bias="0.0"
                     app:siBorderColor="@color/white"
-                    app:siBorderWidth="2dp" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.3" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.35" />
+                    app:siBorderWidth="2dp"
+                    tools:src="@drawable/appName" />
 
                 <EditText
-                    android:text="@={viewModel.email}"
                     android:id="@+id/txtLogin"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="36dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
                     android:hint="@string/e_mail"
                     android:inputType="text"
-                    android:textColor="@color/white"
                     android:maxLength="255"
+                    android:text="@={viewModel.email}"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toTopOf="@+id/txtSenha"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline9"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/circularImageView2" />
 
                 <EditText
-                    android:text="@={viewModel.password}"
                     android:id="@+id/txtSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp"
                     android:backgroundTint="@color/white"
+                    android:drawableLeft="@drawable/ic_password"
                     android:ems="10"
                     android:hint="@string/senha"
                     android:inputType="textPassword"
+                    android:maxLength="20"
+                    android:text="@={viewModel.password}"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:maxLength="20"
-                    android:drawableLeft="@drawable/ic_password"
                     app:layout_constraintBottom_toTopOf="@+id/buttonEntrar"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtLogin" />
 
@@ -110,69 +91,69 @@
                     android:id="@+id/buttonEntrar"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="btnEntrar_Click"
                     android:text="@string/entrar"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toTopOf="@+id/lb_recuperarSenha"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonEntrarVisitante"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline10" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtSenha" />
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline10"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/buttonEntrarVisitante"
+                    android:layout_width="192dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.58" />
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/btn_bg"
+                    android:onClick="btnEntrarVisitante_Click"
+                    android:text="@string/entrar_visitante"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@+id/lb_registrar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonEntrar" />
 
                 <TextView
                     android:id="@+id/lb_recuperarSenha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="50dp"
                     android:clickable="true"
+                    android:focusable="true"
                     android:onClick="lb_recuperarSenha_Click"
                     android:text="@string/perderSenha"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonEntrar"
-                    android:focusable="true" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.87" />
-
-                <TextView
-                    android:id="@+id/lb_registrar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:layout_marginBottom="40dp"
-                    android:layout_marginTop="8dp"
-                    android:clickable="true"
-                    android:onClick="lb_registrar_Click"
-                    android:text="@string/registro"
-                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_recuperarSenha"
-                    app:layout_constraintVertical_bias="0.485"
-                    android:focusable="true" />
+                    app:layout_constraintTop_toBottomOf="@+id/lb_registrar" />
+
+                <TextView
+                    android:id="@+id/lb_registrar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="lb_registrar_Click"
+                    android:text="@string/registro"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@+id/lb_recuperarSenha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonEntrarVisitante" />
 
 
             </android.support.constraint.ConstraintLayout>

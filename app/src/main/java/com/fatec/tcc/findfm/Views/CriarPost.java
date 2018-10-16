@@ -95,6 +95,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private byte[] audioBytes;
     private String audioBytes_ContentType;
 
+    private boolean isVisitante;
     private Menu optionsMenu;
 
     @Override
@@ -113,6 +114,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if( param != null ) {
             if( !param.isEmpty() ) {
                 telaMode = param.getString("telaMode");
+                isVisitante = param.getBoolean("visitante");
             }
         } else {
             MidiaUtils.setImagemPerfilToImageView(imageView, this);
@@ -280,7 +282,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else {
             binding.incluirContent.textView5.setText(R.string.comentarios);
             binding.incluirContent.listaComentarios.setVisibility(View.VISIBLE);
-            binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this));
+            binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this, isVisitante));
 
         }
 
@@ -315,7 +317,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
         binding.incluirContent.btnComentar.setOnClickListener(v -> {
             comentar(post);
         });
-
+        if(isVisitante){
+            Activity activity = this;
+            binding.incluirContent.btnComentar.setOnClickListener(view -> AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                    "Ops!", R.drawable.ic_error,
+                    "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
+                    (dialog, id) -> { }).create().show());
+        }
 
     }
 

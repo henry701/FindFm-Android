@@ -111,8 +111,9 @@ public class Usuario {
         return tipoUsuario;
     }
 
-    public void setTipoUsuario(TiposUsuario tipoUsuario) {
+    public Usuario setTipoUsuario(TiposUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+        return this;
     }
 
     public String getId() {

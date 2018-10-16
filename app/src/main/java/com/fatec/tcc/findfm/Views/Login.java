@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private ProgressDialog dialog;
-    //TODO: logar como visitante
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity {
                 imageView.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
             }
             else{
-                imageView.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
+                imageView.setImageDrawable(getResources().getDrawable(R.drawable.appname, getTheme()));
             }
         }
     }
@@ -80,6 +80,13 @@ public class Login extends AppCompatActivity {
 
     public void btnEntrar_Click(View v) {
         binding.getViewModel().btnEntrar_Click(v);
+    }
+
+    public void btnEntrarVisitante_Click(View v) {
+        FindFM.setUsuario(new Usuario().setNomeCompleto("Visitante")
+                .setTipoUsuario(TiposUsuario.VISITANTE));
+        FindFM.setFotoPref(this, null);
+        Util.open_form(getApplicationContext(), TelaPrincipal.class);
     }
 
     public void lb_recuperarSenha_Click(View v){

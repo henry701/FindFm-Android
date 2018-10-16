@@ -4,7 +4,8 @@ public enum TiposUsuario {
 
     INDEFINIDO(0, "Indefinido", "Unknown"),
     CONTRATANTE(2, "Contratante", "Contractor"),
-    MUSICO(3, "Musico", "Musician");
+    MUSICO(3, "Musico", "Musician"),
+    VISITANTE(4, "Visitante", "Visitor");
 
     private int codigo;
     private String texto;

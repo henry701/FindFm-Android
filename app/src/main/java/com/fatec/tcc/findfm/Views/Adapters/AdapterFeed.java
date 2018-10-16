@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -50,13 +51,15 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
 
     private List<Post> posts = new ArrayList<>();
     private TelaPrincipal activity;
+    private boolean isVisitante;
 
     public AdapterFeed() {
     }
 
-    public AdapterFeed(List<Post> posts, TelaPrincipal activity){
+    public AdapterFeed(List<Post> posts, TelaPrincipal activity, boolean isVisitante){
         this.posts = posts;
         this.activity = activity;
+        this.isVisitante = isVisitante;
     }
 
     public List<Post> getPosts(){
@@ -234,15 +237,25 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                 Bundle param = new Bundle();
                 FindFM.getMap().put("post", post);
                 param.putString("telaMode", "editavel");
+                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarPost.class, path, param);
             } else {
                 String path = "CriarPost";
                 Bundle param = new Bundle();
                 FindFM.getMap().put("post", post);
                 param.putString("telaMode", "visualizar");
+                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarPost.class, path, param);
             }
         });
+
+        if(isVisitante){
+            holder.bindingVH.btnLike.setOnClickListener(
+                    v -> AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                            "Ops!", R.drawable.ic_error,
+                            "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
+                            (dialog, id) -> { }).create().show());
+        }
 
         if(post.getLikesId().contains(FindFM.getUsuario().getId())){
             holder.bindingVH.btnLike.setText(R.string.descurtir);
