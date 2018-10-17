@@ -118,7 +118,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
         } else {
             MidiaUtils.setImagemPerfilToImageView(imageView, this);
-            binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this))));
+            binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this))));
             //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 tipo = "ad";
@@ -325,6 +325,20 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     (dialog, id) -> { }).create().show());
         }
 
+        if(TiposUsuario.MUSICO.equals(binding.incluirContent.getPost().getAutor().getTipoUsuario())) {
+            try {
+                getSupportActionBar().setTitle("Publicação");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                getSupportActionBar().setTitle("Anúncio");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private void checkTelaMode(){
@@ -454,14 +468,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
         switch (item.getItemId()){
             case R.id.action_salvar:
                 if(binding.incluirContent.txtDesc.getText().toString().isEmpty() ){
-                    Toast.makeText(this, "Escreva algo em sua publicação...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Adicione um texto...", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 UploadResourceService resourceService = new UploadResourceService(this);
                 resourceService.addObserver(this);
                 dialog.setMessage("Publicando, aguarde...");
                 this.dialog.show();
-                Toast.makeText(this, "Salvando post...", Toast.LENGTH_SHORT).show();
                 if(binding.incluirContent.getPost().getFotoBytes() != null) {
                     fotoUpload = true;
                     resourceService.uploadFiles(binding.incluirContent.getPost().getFotoBytes(), fotoBytes_ContentType, "foto");
@@ -645,11 +658,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
                                 "Sucesso!", R.drawable.ic_save,
-                                "Post cadastrado com sucesso","OK",
+                                "Publicado com sucesso!","OK",
                                 (dialog, id) -> {
                                     dialog.dismiss();
                                     FindFM.setTelaAtual("POST_CRIADO");
-                                    super.onBackPressed(); }).create().show();
+                                    binding.incluirContent.setPost(new Post().setId(response.getData().toString()));
+                                    telaMode = "visualizar";
+                                    isVisitante = false;
+                                    getPost(); }).create().show();
 
                     }
                 },

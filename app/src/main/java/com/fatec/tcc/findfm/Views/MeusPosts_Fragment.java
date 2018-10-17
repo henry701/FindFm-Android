@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
@@ -53,7 +54,11 @@ public class MeusPosts_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        activity.getSupportActionBar().setTitle("Minhas Publicações");
+        if(FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
+            activity.getSupportActionBar().setTitle("Meus Anúncios");
+        } else {
+            activity.getSupportActionBar().setTitle("Minhas Publicações");
+        }
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
         binding.listaAnuncios.setLayoutManager(new LinearLayoutManager(activity));

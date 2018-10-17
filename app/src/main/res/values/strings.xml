@@ -6,8 +6,8 @@
     -->
 
     <!--
-    <string name="base_url">http://192.168.3.100:8080</string>
-    <string name="radio_url">http://192.168.3.100:8081</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
 
 
     <string name="base_url">http://172.23.191.146:8080</string>
@@ -17,8 +17,8 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://10.0.2.2:8083</string>
-    <string name="radio_url">http://10.0.2.2:8084</string>
+    <string name="base_url">http://192.168.3.100:8083</string>
+    <string name="radio_url">http://192.168.3.100:8084</string>
     <!--
     <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
     -->
@@ -105,7 +105,7 @@
     <string name="inicio">Início</string>
     <string name="meu_perfil">Meu Perfil</string>
     <string name="meus_anuncios">Minhas Publicações</string>
-    <string name="trabalhos">Trabalhos</string>
+    <string name="trabalhos">Meus Trabalhos</string>
     <string name="title_activity_perfil_fragment">Perfil_fragment</string>
     <string name="radio_iniciar">Iniciar Rádio</string>
     <string name="radio_carregando">Carregando Rádio</string>
@@ -119,7 +119,7 @@
     <string name="publicar">Publicar</string>
     <string name="editar">Editar</string>
     <string name="recarregar">Recarregar</string>
-    <string name="sua_publicacao">Escreva sua publicação…</string>
+    <string name="sua_publicacao">Adicione um texto…</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
     <string name="codigo_de_recuperacao">Código de recuperação</string>

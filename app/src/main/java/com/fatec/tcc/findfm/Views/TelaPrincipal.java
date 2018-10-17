@@ -128,6 +128,16 @@ public class TelaPrincipal extends AppCompatActivity
             MenuItem trabalhos = menuNav.findItem(R.id.trabalhos);
             trabalhos.setEnabled(false);
         }
+        if(FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            Menu menuNav = navigationView.getMenu();
+
+            MenuItem meus_posts = menuNav.findItem(R.id.meus_posts);
+            meus_posts.setTitle("Meus Anúncios");
+
+            MenuItem trabalhos = menuNav.findItem(R.id.trabalhos);
+            trabalhos.setVisible(false);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
