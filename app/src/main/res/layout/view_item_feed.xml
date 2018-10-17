@@ -17,7 +17,7 @@
         android:background="#41000000">
 
         <com.github.siyamed.shapeimageview.CircularImageView
-            android:id="@+id/fotoPerfilAnuncio"
+            android:id="@+id/fotoPerfil"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -45,7 +45,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/btnComent"
             app:layout_constraintStart_toStartOf="@+id/lb_data"
-            app:layout_constraintTop_toTopOf="@+id/fotoPerfilAnuncio"
+            app:layout_constraintTop_toTopOf="@+id/fotoPerfil"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <TextView
@@ -61,12 +61,12 @@
             android:textSize="12sp"
             android:textStyle="italic"
             android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintStart_toEndOf="@+id/fotoPerfilAnuncio"
+            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
             app:layout_constraintTop_toBottomOf="@+id/txtNome"
             tools:text="Publicado em: 05/05/2018 22:00:05" />
 
         <TextView
-            android:id="@+id/lb_titulo_anuncio"
+            android:id="@+id/lb_titulo_post"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:layout_marginStart="66dp"
@@ -102,7 +102,7 @@
             app:layout_constraintBottom_toTopOf="@+id/linearMidia"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_anuncio"
+            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
             app:layout_constraintVertical_bias="0.052"
             tools:text="Descrição" />
 

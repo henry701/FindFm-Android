@@ -182,7 +182,7 @@ public class TelaPrincipal extends AppCompatActivity
                 }
                 break;
             case R.id.meus_posts:
-                if(!tela.equals("MEUS_ANUNCIOS")) {
+                if(!tela.equals("MEUS_POSTS")) {
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
                             .commit();
                 }

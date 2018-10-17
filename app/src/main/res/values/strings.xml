@@ -104,7 +104,7 @@
     <string name="busca">Buscar</string>
     <string name="inicio">Início</string>
     <string name="meu_perfil">Meu Perfil</string>
-    <string name="meus_anuncios">Minhas Publicações</string>
+    <string name="meus_posts">Minhas Publicações</string>
     <string name="trabalhos">Meus Trabalhos</string>
     <string name="title_activity_perfil_fragment">Perfil_fragment</string>
     <string name="radio_iniciar">Iniciar Rádio</string>

@@ -79,7 +79,7 @@ public class Feed_Fragment extends Fragment {
             binding.fotoPerfil.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, activity.getTheme()));
         }
         if(isVisitante)
-            binding.adicionarAnuncio.setVisibility(View.GONE);
+            binding.adicionarPost.setVisibility(View.GONE);
         return binding.getRoot();
     }
 

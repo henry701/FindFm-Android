@@ -61,8 +61,8 @@ public class MeusPosts_Fragment extends Fragment {
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
-        binding.listaAnuncios.setLayoutManager(new LinearLayoutManager(activity));
-        binding.listaAnuncios.addItemDecoration(
+        binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
+        binding.listaPosts.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         );
         return binding.getRoot();
@@ -78,7 +78,7 @@ public class MeusPosts_Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        FindFM.setTelaAtual("MEUS_ANUNCIOS");
+        FindFM.setTelaAtual("MEUS_POSTS");
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -105,7 +105,7 @@ public class MeusPosts_Fragment extends Fragment {
                                         postList.add(new Post(postResponse));
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
+                                    binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
                                 } else
                                 {
                                     binding.textView4.setVisibility(View.VISIBLE);
@@ -115,7 +115,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -124,7 +124,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaAnuncios.setAdapter(new AdapterFeed(postList, activity, false));
+                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,

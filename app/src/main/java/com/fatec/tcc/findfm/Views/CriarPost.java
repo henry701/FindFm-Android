@@ -119,7 +119,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
         } else {
             MidiaUtils.setImagemPerfilToImageView(imageView, this);
             binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this))));
-            //Somente contratante pode colocar titulo para o anuncio
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 tipo = "ad";
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);

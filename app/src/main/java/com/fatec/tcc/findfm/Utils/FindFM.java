@@ -152,10 +152,6 @@ public class FindFM extends Application {
         return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("nomeUsuario","Visitante");
     }
 
-    public static String getFotoPrefBase64(Activity view){
-        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("foto","");
-    }
-
     public static byte[] getFotoPrefBytes(Activity view){
         String image64 = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).getString("foto","");
         return Base64.decode(image64, Base64.DEFAULT);

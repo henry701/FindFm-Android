@@ -162,7 +162,7 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                             byte[] dados = ((BinaryResponse) arg).getData();
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            holder.bindingVH.fotoPerfilAnuncio.setImageBitmap(ext_pic);
+                            holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
                         } else{
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
@@ -272,13 +272,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
         }
         return posts.size();
     }
-
-    public void setAnuncios(List<Post> posts, TelaPrincipal activity){
-        this.posts = posts;
-        this.activity = activity;
-        notifyDataSetChanged();
-    }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

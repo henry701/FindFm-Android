@@ -15,7 +15,7 @@
         <item
             android:id="@+id/meus_posts"
             android:icon="@drawable/ic_anuncios"
-            android:title="@string/meus_anuncios" />
+            android:title="@string/meus_posts" />
         <item
             android:id="@+id/trabalhos"
             android:icon="@drawable/ic_trabalho"

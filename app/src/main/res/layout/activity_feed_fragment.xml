@@ -66,7 +66,7 @@
             tools:text="Bem-vindo: Username" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/adicionar_anuncio"
+            android:id="@+id/adicionar_post"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
