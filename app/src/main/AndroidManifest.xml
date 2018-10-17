@@ -17,6 +17,7 @@
         android:roundIcon="@drawable/favicon2"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
         <activity
             android:name=".Views.Login"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -49,12 +50,17 @@
         <activity
             android:name=".Views.CriarPost"
             android:label="@string/title_activity_criar_post"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Views.FullScreenVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_full_screen_video"
             android:theme="@style/FullscreenTheme"></activity>
+        <activity
+            android:name=".Views.CriarTrabalho"
+            android:label="@string/trabalhos"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

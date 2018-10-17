@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="trabalho"
+            type="com.fatec.tcc.findfm.Model.Business.Trabalho" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/from_bg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".Views.CriarPost"
+        tools:showIn="@layout/activity_criar_post">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbarThumbVertical="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/txtTitulo"
+                    android:layout_width="342dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="43dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:hint="@string/titulo"
+                    android:inputType="textPersonName"
+                    android:maxLength="60"
+                    android:text="@={trabalho.nome}"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/txtDesc"
+                    android:layout_width="342dp"
+                    android:layout_height="147dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/white"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="@string/sua_publicacao"
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:text="@={trabalho.descricao}"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
+
+                <TextView
+                    android:id="@+id/lbParticipantes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/integrantes"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDesc" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listaPessoas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lbParticipantes" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoverImagem"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverImagem_Click"
+                    app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas" />
+
+                <ImageView
+                    android:id="@+id/fotoPublicacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Imagem"
+                    android:background="#000000"
+                    app:layout_constraintBottom_toTopOf="@+id/videoView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas"
+                    app:srcCompat="@drawable/capaplaceholder_photo" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoverVideo"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverVideo_Click"
+                    app:layout_constraintBottom_toTopOf="@+id/videoView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                    android:id="@+id/videoView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="#000000"
+                    android:contentDescription="Video"
+                    app:layout_constraintBottom_toTopOf="@+id/frame_audio"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoverAudio"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverAudio_Click"
+                    app:layout_constraintBottom_toTopOf="@+id/frame_audio"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/videoView"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <FrameLayout
+                    android:id="@+id/frame_audio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="32dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/textView5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/videoView" />
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

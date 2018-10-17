@@ -20,7 +20,6 @@ public class Post {
     private String uf;
     private String idFoto;
     private List<String> idFotos;
-    private byte[] fotoBytes;
     private String idVideo;
     private List<String> idVideos;
     private byte[] videoBytes;
@@ -193,14 +192,6 @@ public class Post {
 
     public void setLikes(String likes) {
         this.likes = Long.parseLong(likes);
-    }
-
-    public byte[] getFotoBytes() {
-        return fotoBytes;
-    }
-
-    public void setFotoBytes(byte[] fotoBytes) {
-        this.fotoBytes = fotoBytes;
     }
 
     public byte[] getVideoBytes() {

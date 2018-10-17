@@ -65,7 +65,7 @@ public class Feed_Fragment extends Fragment {
         }
 
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_feed_fragment, container, false);
-        binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
+        binding.setPostViewModel(new PostViewModel(activity));
 
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
         binding.listaPosts.addItemDecoration(

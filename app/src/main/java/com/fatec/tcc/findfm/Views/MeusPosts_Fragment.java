@@ -54,13 +54,17 @@ public class MeusPosts_Fragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if(FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
-            activity.getSupportActionBar().setTitle("Meus Anúncios");
-        } else {
-            activity.getSupportActionBar().setTitle("Minhas Publicações");
+        try {
+            if (FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
+                activity.getSupportActionBar().setTitle("Meus Anúncios");
+            } else {
+                activity.getSupportActionBar().setTitle("Minhas Publicações");
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
-        binding.setPostViewModel(new PostViewModel(activity, this, activity.getDialog()));
+        binding.setPostViewModel(new PostViewModel(activity));
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
         binding.listaPosts.addItemDecoration(
                 new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)

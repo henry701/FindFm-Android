@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -75,7 +74,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
-    private ImageView fotoPublicacao;
+
     private ProgressDialog dialog;
 
     private String telaMode = "criando";
@@ -83,6 +82,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     private boolean fotoUpload;
     private String fotoBytesId;
+    private byte[] fotoBytes;
     private String fotoBytes_ContentType;
 
     private boolean videoUpload;
@@ -127,9 +127,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         binding.executePendingBindings();
 
-        fotoPublicacao = findViewById(R.id.fotoPublicacao);
-        fotoPublicacao.setVisibility(View.GONE);
-
+        binding.incluirContent.fotoPublicacao.setVisibility(View.GONE);
         binding.incluirContent.videoView.setVisibility(View.GONE);
 
         FloatingActionButton fab = findViewById(R.id.fab_foto);
@@ -183,7 +181,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             byte[] dados = ((BinaryResponse) arg).getData();
                             InputStream input=new ByteArrayInputStream(dados);
                             Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            post.setFotoBytes(dados);
+                            fotoBytes = dados;
                             binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
                             binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
                             this.fotoBytes_ContentType = "image/jpeg";
@@ -367,7 +365,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtComentar.setVisibility(View.GONE);
             binding.incluirContent.btnComentar.setVisibility(View.GONE);
 
-            if(binding.incluirContent.getPost().getFotoBytes() == null) {
+            if(fotoBytes == null) {
                 binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
                 binding.fabFoto.setVisibility(View.VISIBLE);
             } else {
@@ -396,11 +394,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
             optionsMenu.getItem(0).setVisible(false);
         }
 
-    }
-
-    public void btnRegistrar_Click(View v) {
-        EditText txtTitulo = findViewById(R.id.txtTitulo);
-        txtTitulo.setVisibility(View.GONE);
     }
 
     @Override
@@ -474,9 +467,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 resourceService.addObserver(this);
                 dialog.setMessage("Publicando, aguarde...");
                 this.dialog.show();
-                if(binding.incluirContent.getPost().getFotoBytes() != null) {
+                if(fotoBytes != null) {
                     fotoUpload = true;
-                    resourceService.uploadFiles(binding.incluirContent.getPost().getFotoBytes(), fotoBytes_ContentType, "foto");
+                    resourceService.uploadFiles(fotoBytes, fotoBytes_ContentType, "foto");
                 }
                 if(videoBytes != null) {
                     videoUpload = true;
@@ -506,12 +499,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getApplicationContext()
                         .getContentResolver().openInputStream(Objects.requireNonNull(data.getData())));
-                this.fotoPublicacao.setImageBitmap(bitmap);
-                this.fotoPublicacao.setVisibility(View.VISIBLE);
+                binding.incluirContent.fotoPublicacao.setImageBitmap(bitmap);
+                binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                binding.incluirContent.getPost().setFotoBytes(stream.toByteArray());
+                fotoBytes = stream.toByteArray();
                 this.fotoBytes_ContentType = "image/jpeg";
                 checkTelaMode();
             } catch (Exception e) {
@@ -617,9 +610,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
     public void btnRemoverImagem_Click(View v){
         fotoUpload = false;
         fotoBytesId = null;
-        binding.incluirContent.getPost().setFotoBytes(null);
+        fotoBytes = null;
         fotoBytes_ContentType = null;
-        fotoPublicacao.setVisibility(View.GONE);
+        binding.incluirContent.fotoPublicacao.setVisibility(View.GONE);
         checkTelaMode();
     }
 

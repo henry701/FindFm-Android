@@ -1,31 +1,19 @@
 <resources>
     <string name="app_name">FindFM</string>
     <!--
-    <string name="base_url">http://192.168.43.253:8080</string>
-    <string name="radio_url">http://192.168.43.253:8081</string>
-    -->
-
-    <!--
     <string name="base_url">http://10.0.2.2:8083</string>
     <string name="radio_url">http://10.0.2.2:8084</string>
 
-
-    <string name="base_url">http://172.23.191.146:8080</string>
-    <string name="radio_url">http://172.23.191.146:8081</string>
-    
-
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://192.168.3.100:8083</string>
-    <string name="radio_url">http://192.168.3.100:8084</string>
-    <!--
-    <string name="radio_url">http://fs-west.theblast.fast-serv.com:80/blastozoic56ogg.opus</string>
-    -->
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
+
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
-    <string name="registro">Não possui cadastro? <b><u>Registre-se aqui</u>!</b></string>
-    <string name="perderSenha">Esqueceu sua senha? <b><u>Recupere aqui</u>!</b></string>
+    <string name="registro">Não possui cadastro? <b>Registre-se aqui!</b></string>
+    <string name="perderSenha">Esqueceu sua senha? <b>Recupere aqui!</b></string>
     <string name="escolha_sua_foto">Escolha sua foto:</string>
     <string name="repita_a_senha">Repita a senha</string>
     <string name="escolha_tipo_conta">Escolha um tipo de conta</string>
@@ -137,4 +125,7 @@
     <string name="descurtir">Descurtir</string>
     <string name="biografia">Biografia</string>
     <string name="sem_trabalhos">Não há trabalhos para serem mostrados</string>
+    <string name="descricao">Adicione uma descrição…</string>
+    <string name="integrantes">Integrantes</string>
+    <string name="sem_integrantes">Não há integrantes</string>
 </resources>

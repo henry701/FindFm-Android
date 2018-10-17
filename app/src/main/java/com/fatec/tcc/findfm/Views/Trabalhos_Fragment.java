@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityTrabalhosListaBinding;
 
 public class Trabalhos_Fragment extends Fragment {
@@ -21,8 +22,8 @@ public class Trabalhos_Fragment extends Fragment {
     private AppCompatActivity activity;
     private View view;
     private ActivityTrabalhosListaBinding binding;
-    public Trabalhos_Fragment(){
-    }
+
+    public Trabalhos_Fragment(){}
 
     @SuppressLint("ValidFragment")
     public Trabalhos_Fragment(AppCompatActivity activity){
@@ -33,7 +34,12 @@ public class Trabalhos_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trabalhos_lista, container, false);
-
+        try {
+            activity.getSupportActionBar().setTitle("Meus Trabalhos");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        binding.adicionarTrabalho.setOnClickListener(this.adicionar_trabalho_click());
         return binding.getRoot();
     }
 
@@ -43,7 +49,7 @@ public class Trabalhos_Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void adicionar_trabalho_click(View v){
-
+    public View.OnClickListener adicionar_trabalho_click(){
+        return view -> Util.open_form(activity, CriarTrabalho.class);
     }
 }
