@@ -82,7 +82,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FindFM.setTelaAtual("CRIAR_POST");
+        FindFM.setTelaAtual("CRIAR_TRABALHO");
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_trabalho);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -206,6 +206,10 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
         }
 
+        binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
+        if(!telaMode.equals("CRIANDO"))
+            binding.incluirContent.checkOriginal.setEnabled(false);
+
         if (trabalho.getMusicos() == null) {
             binding.incluirContent.lbParticipantes.setText(R.string.sem_integrantes);
             binding.incluirContent.listaPessoas.setVisibility(View.GONE);
@@ -231,12 +235,31 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
+            try {
+                getSupportActionBar().setTitle("Trabalho");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
 
         } else if (telaMode.equals("criando")) {
+            try {
+                getSupportActionBar().setTitle("Novo trabalho");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             if (optionsMenu != null) {
                 optionsMenu.getItem(0).setVisible(true);
                 optionsMenu.getItem(1).setVisible(false);
             }
+            binding.incluirContent.checkOriginal.setOnClickListener(view -> {
+                if(binding.incluirContent.checkOriginal.isChecked()) {
+                    binding.incluirContent.checkOriginal.setChecked(false);
+                    binding.incluirContent.getTrabalho().setOriginal(false);
+                } else {
+                    binding.incluirContent.checkOriginal.setChecked(true);
+                    binding.incluirContent.getTrabalho().setOriginal(true);
+                }
+            });
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
 
@@ -359,7 +382,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         .getContentResolver().openInputStream(Objects.requireNonNull(data.getData())));
                 binding.incluirContent.fotoPublicacao.setImageBitmap(bitmap);
                 binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
-
+                binding.incluirContent.btnRemoverImagem.setVisibility(View.VISIBLE);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 filesToUpload.add( new FileReference()
@@ -425,7 +448,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             exoPlayer.prepare(mediaSource);
             exoPlayer.seekTo(100);
             binding.incluirContent.videoView.setVisibility(View.VISIBLE);
-
+            binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             InputStream fis = getContentResolver().openInputStream(u);
 
@@ -450,6 +473,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private void setAudio(Uri uri){
         try {
             binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+            binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
             getFragmentManager().beginTransaction().replace(R.id.frame_audio,
                     new Audio_Fragment(this, uri))
                     .commit();

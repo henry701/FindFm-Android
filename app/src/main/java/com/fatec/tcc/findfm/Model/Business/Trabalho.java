@@ -24,8 +24,17 @@ public class Trabalho {
         return original;
     }
 
+    public String getOriginal() {
+        return String.valueOf(original);
+    }
+
     public Trabalho setOriginal(boolean original) {
         this.original = original;
+        return this;
+    }
+
+    public Trabalho setOriginal(String original) {
+        this.original = Boolean.valueOf(original);
         return this;
     }
 
