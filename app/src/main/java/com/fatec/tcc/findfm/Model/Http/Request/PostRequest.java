@@ -1,12 +1,14 @@
 package com.fatec.tcc.findfm.Model.Http.Request;
 
+import com.fatec.tcc.findfm.Model.Business.FileReference;
+
+import java.util.List;
+
 public class PostRequest {
 
     private String titulo;
     private String descricao;
-    private String imagemId;
-    private String videoId;
-    private String audioId;
+    private List<FileReference> midias;
 
     public String getTitulo() {
         return titulo;
@@ -26,29 +28,12 @@ public class PostRequest {
         return this;
     }
 
-    public String getImagemId() {
-        return imagemId;
+    public List<FileReference> getMidias() {
+        return midias;
     }
 
-    public PostRequest setImagemId(String imagemId) {
-        this.imagemId = imagemId;
+    public PostRequest setMidias(List<FileReference> midias) {
+        this.midias = midias;
         return this;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public PostRequest setVideoId(String videoId) {
-        this.videoId = videoId;
-        return this;
-    }
-
-    public String getAudioId() {
-        return audioId;
-    }
-
-    public void setAudioId(String audioId) {
-        this.audioId = audioId;
     }
 }

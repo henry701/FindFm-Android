@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.FileReference;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
@@ -85,69 +86,72 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
         holder.bindingVH.videoView.setVisibility(View.GONE);
 
-        for(String id : post.getIdFotos()){
+        for(FileReference midia : post.getMidias()) {
 
-            DownloadResourceService downloadService = new DownloadResourceService(activity);
-            downloadService.addObserver( (download, arg) -> {
-                if(download instanceof DownloadResourceService) {
-                    activity.runOnUiThread(() -> {
-                        if (arg instanceof BinaryResponse) {
-                            byte[] dados = ((BinaryResponse) arg).getData();
-                            InputStream input=new ByteArrayInputStream(dados);
-                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            holder.bindingVH.fotoPublicacao.setImageBitmap(ext_pic);
-                            holder.bindingVH.fotoPublicacao.setVisibility(View.VISIBLE);
-                        } else{
-                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id1) -> { }).create().show();
-                        }
+            if(midia.getContentType().contains("img")) {
+                DownloadResourceService downloadService = new DownloadResourceService(activity);
+                downloadService.addObserver((download, arg) -> {
+                    if (download instanceof DownloadResourceService) {
+                        activity.runOnUiThread(() -> {
+                            if (arg instanceof BinaryResponse) {
+                                byte[] dados = ((BinaryResponse) arg).getData();
+                                InputStream input = new ByteArrayInputStream(dados);
+                                Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                                holder.bindingVH.fotoPublicacao.setImageBitmap(ext_pic);
+                                holder.bindingVH.fotoPublicacao.setVisibility(View.VISIBLE);
+                            } else {
+                                AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                        "Ops!", R.drawable.ic_error,
+                                        "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                                "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                        (dialog, id1) -> {
+                                        }).create().show();
+                            }
 
-                        activity.getDialog().hide();
+                            activity.getDialog().hide();
 
-                    });
-                }
-            });
-            downloadService.getResource(id);
-            activity.getDialog().show();
-        }
-
-        for(String id : post.getIdVideos()){
-            try {
-                Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + id));
-
-                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-                SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
-                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
-
-                holder.bindingVH.videoView.setPlayer(exoPlayer);
-                exoPlayer.prepare(mediaSource);
-                exoPlayer.seekTo(100);
-                holder.bindingVH.videoView.setVisibility(View.VISIBLE);
-            } catch (Exception e){
-                e.printStackTrace();
+                        });
+                    }
+                });
+                downloadService.getResource(midia.getId());
+                activity.getDialog().show();
             }
-        }
 
-        if(post.getIdAudio() != null) {
-            try {
-                Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + post.getIdAudio()));
-                holder.bindingVH.frameAudio.setVisibility(View.VISIBLE);
-                activity.getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                        new Audio_Fragment(activity, uri))
-                        .commit();
-            } catch (Exception e){
-                e.printStackTrace();
-                AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                        "Ops!", R.drawable.ic_error,
-                        "Não foi possível obter a música." +
-                                "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                        (dialog, id1) -> { }).create().show();
+            if(midia.getContentType().contains("vid")) {
+                try {
+                    Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + midia.getId()));
+
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
+                    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+                    holder.bindingVH.videoView.setPlayer(exoPlayer);
+                    exoPlayer.prepare(mediaSource);
+                    exoPlayer.seekTo(100);
+                    holder.bindingVH.videoView.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(midia.getContentType().contains("mus")) {
+                try {
+                    Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + midia.getId()));
+                    holder.bindingVH.frameAudio.setVisibility(View.VISIBLE);
+                    activity.getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                            new Audio_Fragment(activity, uri))
+                            .commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                            "Ops!", R.drawable.ic_error,
+                            "Não foi possível obter a música." +
+                                    "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                            (dialog, id1) -> {
+                            }).create().show();
+                }
             }
         }
 

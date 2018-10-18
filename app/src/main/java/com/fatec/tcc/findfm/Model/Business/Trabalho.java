@@ -8,9 +8,7 @@ public class Trabalho {
     private String nome;
     private String descricao;
     private boolean original;
-    private List<String> idAudios;
-    private List<String> idFotos;
-    private List<String> idVideos;
+    private List<FileReference> midias;
     private List<Musico> musicos;
 
     public String getNome() {
@@ -28,33 +26,6 @@ public class Trabalho {
 
     public Trabalho setOriginal(boolean original) {
         this.original = original;
-        return this;
-    }
-
-    public List<String> getIdAudios() {
-        return idAudios;
-    }
-
-    public Trabalho setIdAudios(List<String> idAudios) {
-        this.idAudios = idAudios;
-        return this;
-    }
-
-    public List<String> getIdFotos() {
-        return idFotos;
-    }
-
-    public Trabalho setIdFotos(List<String> idFotos) {
-        this.idFotos = idFotos;
-        return this;
-    }
-
-    public List<String> getIdVideos() {
-        return idVideos;
-    }
-
-    public Trabalho setIdVideos(List<String> idVideos) {
-        this.idVideos = idVideos;
         return this;
     }
 
@@ -81,6 +52,15 @@ public class Trabalho {
 
     public Trabalho setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public List<FileReference> getMidias() {
+        return midias;
+    }
+
+    public Trabalho setMidias(List<FileReference> midias) {
+        this.midias = midias;
         return this;
     }
 }

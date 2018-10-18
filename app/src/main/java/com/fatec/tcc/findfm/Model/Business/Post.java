@@ -18,12 +18,7 @@ public class Post {
     private String descricao;
     private String cidade;
     private String uf;
-    private String idFoto;
-    private List<String> idFotos;
-    private String idVideo;
-    private List<String> idVideos;
-    private byte[] videoBytes;
-    private String idAudio;
+    private List<FileReference> midias;
     private DateTime data;
     private Long likes;
     private Set<String> likesId;
@@ -34,26 +29,19 @@ public class Post {
 
     public Post(PostResponse postResponse){
         this.setId(postResponse.getId());
-        this.setIdFotos(new ArrayList<>());
-        this.setIdVideos(new ArrayList<>());
         this.titulo = postResponse.getTitulo();
         this.descricao = postResponse.getDescricao();
+        this.midias = new ArrayList<>();
 
         if(postResponse.getMidias() != null) {
             for (PostResponse.Midias midia : postResponse.getMidias()) {
-                switch (midia.getTipoMidia()) {
-                    case "img":
-                        this.getIdFotos().add(midia.getId());
-                        break;
-                    case "mus":
-                        this.idAudio = midia.getId();
-                        break;
-                    default:
-                        this.getIdVideos().add(midia.getId());
-                        break;
-                }
+                midias.add(new FileReference()
+                        .setId(midia.getId())
+                        .setContentType(midia.getTipoMidia())
+                );
             }
         }
+
         this.likesId = postResponse.getUsuarioLikes();
         this.likes = likesId == null ? 0L : (long) likesId.size();
 
@@ -148,40 +136,6 @@ public class Post {
         return this;
     }
 
-    public String getIdFoto() {
-        return idFoto;
-    }
-
-    public Post setIdFoto(String idFoto) {
-        this.idFoto = idFoto;
-        return this;
-    }
-
-    public String getIdVideo() {
-        return idVideo;
-    }
-
-    public Post setIdVideo(String idVideo) {
-        this.idVideo = idVideo;
-        return this;
-    }
-
-    public List<String> getIdFotos() {
-        return idFotos;
-    }
-
-    public void setIdFotos(List<String> idFotos) {
-        this.idFotos = idFotos;
-    }
-
-    public List<String> getIdVideos() {
-        return idVideos;
-    }
-
-    public void setIdVideos(List<String> idVideos) {
-        this.idVideos = idVideos;
-    }
-
     public String getLikes() {
         return likes.toString();
     }
@@ -192,14 +146,6 @@ public class Post {
 
     public void setLikes(String likes) {
         this.likes = Long.parseLong(likes);
-    }
-
-    public byte[] getVideoBytes() {
-        return videoBytes;
-    }
-
-    public void setVideoBytes(byte[] videoBytes) {
-        this.videoBytes = videoBytes;
     }
 
     public Set<String> getLikesId() {
@@ -235,11 +181,12 @@ public class Post {
         return this;
     }
 
-    public String getIdAudio() {
-        return idAudio;
+    public List<FileReference> getMidias() {
+        return midias;
     }
 
-    public void setIdAudio(String idAudio) {
-        this.idAudio = idAudio;
+    public Post setMidias(List<FileReference> midias) {
+        this.midias = midias;
+        return this;
     }
 }

@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.FileReference;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
@@ -63,6 +64,8 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -80,20 +83,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private String telaMode = "criando";
     private String tipo = "post";
 
-    private boolean fotoUpload;
-    private String fotoBytesId;
-    private byte[] fotoBytes;
-    private String fotoBytes_ContentType;
-
-    private boolean videoUpload;
-    private String videoBytesId;
-    private byte[] videoBytes;
-    private String videoBytes_ContentType;
-
-    private boolean audioUpload;
-    private String audioBytesId;
-    private byte[] audioBytes;
-    private String audioBytes_ContentType;
+    private List<FileReference> filesToUpload = new ArrayList<>();
 
     private boolean isVisitante;
     private Menu optionsMenu;
@@ -118,7 +108,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
         } else {
             MidiaUtils.setImagemPerfilToImageView(imageView, this);
-            binding.incluirContent.setPost(new Post().setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this))));
+            binding.incluirContent.setPost(
+                    new Post()
+                        .setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this)))
+                        .setMidias(new ArrayList<>()));
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 tipo = "ad";
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
@@ -146,7 +139,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
         dialog.setInverseBackgroundForced(false);
 
         if(telaMode.equals("criando")){
-            binding.incluirContent.setPost(new Post().setAutor(FindFM.getUsuario()));
+            binding.incluirContent.setPost(
+                    new Post()
+                        .setAutor(FindFM.getUsuario())
+                        .setMidias(new ArrayList<>()));
             MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
@@ -171,35 +167,73 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     private void preencherTela(Post post){
-        for(String id : post.getIdFotos()){
+        for(FileReference midia : post.getMidias()) {
 
-            DownloadResourceService downloadService = new DownloadResourceService(this);
-            downloadService.addObserver( (download, arg) -> {
-                if(download instanceof DownloadResourceService) {
-                    runOnUiThread(() -> {
-                        if (arg instanceof BinaryResponse) {
-                            byte[] dados = ((BinaryResponse) arg).getData();
-                            InputStream input=new ByteArrayInputStream(dados);
-                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            fotoBytes = dados;
-                            binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
-                            binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
-                            this.fotoBytes_ContentType = "image/jpeg";
-                        } else{
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id1) -> { }).create().show();
-                        }
+            if(midia.getContentType().contains("img")) {
+                DownloadResourceService downloadService = new DownloadResourceService(this);
+                downloadService.addObserver((download, arg) -> {
+                    if (download instanceof DownloadResourceService) {
+                        runOnUiThread(() -> {
+                            if (arg instanceof BinaryResponse) {
+                                byte[] dados = ((BinaryResponse) arg).getData();
+                                InputStream input = new ByteArrayInputStream(dados);
+                                Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                                binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
+                                binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+                            } else {
+                                AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                        "Ops!", R.drawable.ic_error,
+                                        "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                                "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                        (dialog, id1) -> {
+                                        }).create().show();
+                            }
 
-                        dialog.hide();
+                            dialog.hide();
 
-                    });
+                        });
+                    }
+                });
+                downloadService.getResource(midia.getId());
+                dialog.show();
+            }
+
+            if(midia.getContentType().contains("vid")) {
+                try {
+                    Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
+
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+                    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
+                    binding.incluirContent.videoView.setPlayer(exoPlayer);
+                    exoPlayer.prepare(mediaSource);
+                    exoPlayer.seekTo(100);
+                    binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            });
-            downloadService.getResource(id);
-            dialog.show();
+            }
+
+            if(midia.getContentType().contains("mus")) {
+                try {
+                    Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
+                    binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+                    getFragmentManager().beginTransaction().replace(R.id.frame_audio,
+                            new Audio_Fragment(this, uri))
+                            .commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                            "Ops!", R.drawable.ic_error,
+                            "Não foi possível obter a música." +
+                                    "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                            (dialog, id1) -> {
+                            }).create().show();
+                }
+            }
         }
 
         if(post.getCidade() != null && post.getUf() != null)
@@ -236,48 +270,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
             dialog.show();
         }
 
-        for(String id : post.getIdVideos()){
-            try {
-                Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + id));
-
-                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-                SimpleExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                MediaSource mediaSource = new ExtractorMediaSource(uri, dataSourceFactory, extractorsFactory, null, null);
-
-                binding.incluirContent.videoView.setPlayer(exoPlayer);
-                exoPlayer.prepare(mediaSource);
-                exoPlayer.seekTo(100);
-                binding.incluirContent.videoView.setVisibility(View.VISIBLE);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        if(post.getIdAudio() != null) {
-            try {
-                Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + post.getIdAudio()));
-                binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
-                getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                        new Audio_Fragment(this, uri))
-                        .commit();
-            } catch (Exception e){
-                e.printStackTrace();
-                AlertDialogUtils.newSimpleDialog__OneButton(this,
-                        "Ops!", R.drawable.ic_error,
-                        "Não foi possível obter a música." +
-                                "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                        (dialog, id1) -> { }).create().show();
-            }
-        }
-
         if(post.getComentarios() == null || post.getComentarios().isEmpty()){
-            binding.incluirContent.textView5.setText(R.string.sem_comentarios);
             binding.incluirContent.listaComentarios.setVisibility(View.GONE);
         } else {
-            binding.incluirContent.textView5.setText(R.string.comentarios);
             binding.incluirContent.listaComentarios.setVisibility(View.VISIBLE);
             binding.incluirContent.listaComentarios.setAdapter(new AdapterComentario(post.getId(), post.getComentarios(), this, isVisitante));
 
@@ -365,28 +360,22 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtComentar.setVisibility(View.GONE);
             binding.incluirContent.btnComentar.setVisibility(View.GONE);
 
-            if(fotoBytes == null) {
-                binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
-                binding.fabFoto.setVisibility(View.VISIBLE);
-            } else {
-                binding.incluirContent.btnRemoverImagem.setVisibility(View.VISIBLE);
-                binding.fabFoto.setVisibility(View.GONE);
-            }
+            for(FileReference midia : filesToUpload) {
 
-            if(videoBytes == null) {
-                binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
-                binding.fabVideo.setVisibility(View.VISIBLE);
-            } else {
-                binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
-                binding.fabVideo.setVisibility(View.GONE);
-            }
+                if(midia.getContentType().contains("img")) {
+                    binding.incluirContent.btnRemoverImagem.setVisibility(View.VISIBLE);
+                    binding.fabFoto.setVisibility(View.GONE);
+                }
 
-            if(audioBytes == null) {
-                binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
-                binding.fabAudio.setVisibility(View.VISIBLE);
-            } else {
-                binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
-                binding.fabAudio.setVisibility(View.GONE);
+                if(midia.getContentType().contains("vid")) {
+                    binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
+                    binding.fabVideo.setVisibility(View.GONE);
+                }
+
+                if(midia.getContentType().contains("mus")) {
+                    binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
+                    binding.fabAudio.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -467,20 +456,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 resourceService.addObserver(this);
                 dialog.setMessage("Publicando, aguarde...");
                 this.dialog.show();
-                if(fotoBytes != null) {
-                    fotoUpload = true;
-                    resourceService.uploadFiles(fotoBytes, fotoBytes_ContentType, "foto");
-                }
-                if(videoBytes != null) {
-                    videoUpload = true;
-                    resourceService.uploadFiles(videoBytes, videoBytes_ContentType, "video");
-                }
-                if(audioBytes != null) {
-                    audioUpload = true;
-                    resourceService.uploadFiles(audioBytes, audioBytes_ContentType, "audio");
-                }
 
-                if(!fotoUpload && !videoUpload && !audioUpload){
+                for(FileReference midia : filesToUpload) {
+                    resourceService.uploadFiles(midia.getConteudo(), midia.getContentType());
+                }
+                if(filesToUpload.isEmpty()){
                     initRequest(binding.incluirContent.getPost());
                 }
                 break;
@@ -504,8 +484,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                fotoBytes = stream.toByteArray();
-                this.fotoBytes_ContentType = "image/jpeg";
+                filesToUpload.add( new FileReference()
+                        .setContentType("img/jpeg")
+                        .setConteudo(stream.toByteArray())
+                );
                 checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -574,8 +556,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             while (-1 != (n = fis.read(buf)))
                 baos.write(buf, 0, n);
 
-            this.videoBytes = baos.toByteArray();
-            this.videoBytes_ContentType = "video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u));
+            filesToUpload.add( new FileReference()
+                    .setContentType("video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u)))
+                    .setConteudo(baos.toByteArray())
+            );
             checkTelaMode();
         } catch (Exception e){
             e.printStackTrace();
@@ -599,8 +583,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
             while (-1 != (n = fis.read(buf)))
                 baos.write(buf, 0, n);
 
-            this.audioBytes = baos.toByteArray();
-            this.audioBytes_ContentType = "audio/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri));
+            filesToUpload.add( new FileReference()
+                    .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri)))
+                    .setConteudo(baos.toByteArray())
+            );
             checkTelaMode();
         } catch (Exception e) {
             e.printStackTrace();
@@ -608,32 +594,46 @@ public class CriarPost extends AppCompatActivity implements Observer{
     }
 
     public void btnRemoverImagem_Click(View v){
-        fotoUpload = false;
-        fotoBytesId = null;
-        fotoBytes = null;
-        fotoBytes_ContentType = null;
-        binding.incluirContent.fotoPublicacao.setVisibility(View.GONE);
+        List<FileReference> filesToRemove = new ArrayList<>();
+        for(FileReference midia : filesToUpload){
+            if(midia.getContentType().contains("img")){
+                filesToRemove.add(midia);
+                binding.incluirContent.fotoPublicacao.setVisibility(View.GONE);
+                binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
+                binding.fabFoto.setVisibility(View.VISIBLE);
+            }
+        }
+        filesToUpload.removeAll(filesToRemove);
         checkTelaMode();
     }
 
     public void btnRemoverVideo_Click(View v){
-        videoUpload = false;
-        videoBytesId = null;
-        videoBytes = null;
-        videoBytes_ContentType = null;
-        binding.incluirContent.videoView.setVisibility(View.GONE);
+        List<FileReference> filesToRemove = new ArrayList<>();
+        for(FileReference midia : filesToUpload){
+            if(midia.getContentType().contains("vid")){
+                filesToRemove.add(midia);
+                binding.incluirContent.videoView.setVisibility(View.GONE);
+                binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
+                binding.fabVideo.setVisibility(View.VISIBLE);
+            }
+        }
+        filesToUpload.removeAll(filesToRemove);
         checkTelaMode();
     }
 
     public void btnRemoverAudio_Click(View v){
-        audioUpload = false;
-        audioBytesId = null;
-        audioBytes = null;
-        audioBytes_ContentType= null;
-        getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
-        binding.incluirContent.frameAudio.setVisibility(View.GONE);
-        binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
-        binding.fabAudio.setVisibility(View.VISIBLE);
+        List<FileReference> filesToRemove = new ArrayList<>();
+        for(FileReference midia : filesToUpload){
+            if(midia.getContentType().contains("mus")) {
+                filesToRemove.add(midia);
+                getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+                binding.incluirContent.frameAudio.setVisibility(View.GONE);
+                binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
+                binding.fabAudio.setVisibility(View.VISIBLE);
+            }
+        }
+        filesToUpload.removeAll(filesToRemove);
+        checkTelaMode();
     }
 
     private void initRequest(Post post){
@@ -654,7 +654,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 (dialog, id) -> {
                                     dialog.dismiss();
                                     FindFM.setTelaAtual("POST_CRIADO");
-                                    binding.incluirContent.setPost(new Post().setId(response.getData().toString()));
+                                    binding.incluirContent.setPost(
+                                            new Post()
+                                                .setId(response.getData().toString())
+                                                .setMidias(new ArrayList<>()));
                                     telaMode = "visualizar";
                                     isVisitante = false;
                                     getPost(); }).create().show();
@@ -682,9 +685,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         PostRequest param = new PostRequest();
         param.setTitulo(post.getTitulo())
                 .setDescricao(post.getDescricao())
-                .setImagemId(post.getIdFoto())
-                .setVideoId(post.getIdVideo())
-                .setAudioId(post.getIdAudio());
+                .setMidias(post.getMidias());
         postRequest.setRequest(param);
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
@@ -731,12 +732,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             (dialog, id) -> { }).create().show();
                 }
         );
-
-        PostRequest param = new PostRequest();
-        param.setTitulo(post.getTitulo())
-                .setDescricao(post.getDescricao())
-                .setImagemId(post.getIdFoto())
-                .setVideoId(post.getIdVideo());
         postRequest.setRequest(new ComentarRequest(binding.incluirContent.txtComentar.getText().toString()));
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
@@ -755,7 +750,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     @Override
     public void update(Observable upload, Object arg) {
-        //TODO: fazer tentar novamente
         if(upload instanceof UploadResourceService){
             runOnUiThread(() -> {
                 if(arg instanceof ErrorResponse){
@@ -763,41 +757,38 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     dialog.hide();
 
                     String result = (String) arg;
-                    if(result.equals("foto"))
-                        fotoUpload = false;
-                    else if(result.equals("video"))
-                        videoUpload = false;
-                    else
-                        audioUpload = false;
+
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
-                            error.getMessage(),"OK",
-                            (dialog, id) -> { }).create().show();
+                            error.getMessage(),"Tentar novamente",
+                            (dialog, id) -> {
+                                UploadResourceService resourceService = new UploadResourceService(this);
+                                resourceService.addObserver(this);
+                                this.dialog.setMessage("Publicando, aguarde...");
+                                this.dialog.show();
+
+                                for(FileReference midia : filesToUpload) {
+                                    if(midia.getContentType().equals(result)) {
+                                        resourceService.uploadFiles(midia.getConteudo(), midia.getContentType());
+                                    }
+                                }
+                            }).create().show();
                 } else if (arg instanceof Exception){
                     Exception error = (Exception) arg;
                     dialog.hide();
-
-                    String result = (String) arg;
-                    if(result.equals("foto"))
-                        fotoUpload = false;
-                    else if(result.equals("video"))
-                        videoUpload = false;
-                    else
-                        audioUpload = false;
-
                     error.printStackTrace();
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Ocorreu um erro ao tentar conectar com nossos servidores." +
                                     "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                            (dialog, id) -> { }).create().show();
+                            (dialog, id) -> {
+                            }).create().show();
                 }
                 else if (arg instanceof String) {
                     String result = (String) arg;
                     String[] resultados = result.split(",");
 
                     //Por algum motivo as vezes não retorna o id, isso é só pra nao dar exception
-
                     if(resultados.length == 1){
                         dialog.hide();
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -808,22 +799,20 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         return;
                     }
 
-                    if(resultados[0].equals("foto")){
-                        fotoUpload = false;
-                        fotoBytesId = resultados[1];
-                        binding.incluirContent.getPost().setIdFoto(fotoBytesId);
-                    }
-                    else if(resultados[0].equals("video")){
-                        videoUpload = false;
-                        videoBytesId = resultados[1];
-                        binding.incluirContent.getPost().setIdVideo(videoBytesId);
-                    } else if (resultados[0].equals("audio")){
-                        audioUpload = false;
-                        audioBytesId = resultados[1];
-                        binding.incluirContent.getPost().setIdAudio(audioBytesId);
-                    }
+                    binding.incluirContent.getPost()
+                            .getMidias().add(new FileReference()
+                            .setId(resultados[1])
+                            .setContentType(resultados[0]));
 
-                    if(!videoUpload && !fotoUpload && !audioUpload){
+                    List<FileReference> filesToRemove = new ArrayList<>();
+                    for(FileReference midia : filesToUpload){
+                        if(midia.getContentType().equals(resultados[0])){
+                            filesToRemove.add(midia);
+                        }
+                    }
+                    filesToUpload.removeAll(filesToRemove);
+
+                    if(filesToUpload.isEmpty()){
                         initRequest(binding.incluirContent.getPost());
                     }
                 }

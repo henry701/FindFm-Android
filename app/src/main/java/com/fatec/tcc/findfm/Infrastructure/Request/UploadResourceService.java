@@ -20,7 +20,7 @@ public class UploadResourceService extends Observable{
         this.activity = activity;
     }
 
-    public void uploadFiles(byte[] dados, String contentType, String tipoMidia) {
+    public void uploadFiles(byte[] dados, String contentType) {
         BinaryTypedRequest<ResponseBody, ErrorResponse> uploadResource = new BinaryTypedRequest<>(
                 activity,
                 HttpMethod.PUT.getCodigo(),
@@ -30,19 +30,19 @@ public class UploadResourceService extends Observable{
                 dados,
                 (ResponseBody response) -> {
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                        String retorno = tipoMidia + ",";
+                        String retorno = contentType + ",";
                         retorno += (String) response.getData();
                         setChanged();
                         notifyObservers(retorno);
                     }
                 },
                 (ErrorResponse error) -> {
-                    String retorno = tipoMidia;
+                    String retorno = contentType;
                     setChanged();
                     notifyObservers(retorno);
                 },
                 (VolleyError error) -> {
-                    String retorno = tipoMidia;
+                    String retorno = contentType;
                     setChanged();
                     notifyObservers(retorno);
                 },
