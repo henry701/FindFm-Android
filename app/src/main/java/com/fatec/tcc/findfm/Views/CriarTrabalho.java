@@ -187,6 +187,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
 
             if(midia.getContentType().contains("mus")) {
+                /*
                 //PODE TER VARIOS
                 try {
                     Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
@@ -203,6 +204,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                             (dialog, id1) -> {
                             }).create().show();
                 }
+                */
             }
         }
 
@@ -226,12 +228,9 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
-            binding.fabAudio.setVisibility(View.INVISIBLE);
-            binding.fabPessoa.setVisibility(View.INVISIBLE);
 
             binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
-            binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
 
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
@@ -276,8 +275,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 }
 
                 if(midia.getContentType().contains("mus")) {
-                    binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
-                    binding.fabAudio.setVisibility(View.GONE);
+
                 }
             }
         }
@@ -472,6 +470,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     //TODO: PODEM TER VARIOS
     private void setAudio(Uri uri){
         try {
+            /*
             binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
             binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
             getFragmentManager().beginTransaction().replace(R.id.frame_audio,
@@ -491,6 +490,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     .setConteudo(baos.toByteArray())
             );
             checkTelaMode();
+            */
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -518,22 +518,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 binding.incluirContent.videoView.setVisibility(View.GONE);
                 binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
                 binding.fabVideo.setVisibility(View.VISIBLE);
-            }
-        }
-        filesToUpload.removeAll(filesToRemove);
-        checkTelaMode();
-    }
-
-    public void btnRemoverAudio_Click(View v){
-        //TODO: remover varios?
-        List<FileReference> filesToRemove = new ArrayList<>();
-        for(FileReference midia : filesToUpload){
-            if(midia.getContentType().contains("mus")) {
-                filesToRemove.add(midia);
-                getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
-                binding.incluirContent.frameAudio.setVisibility(View.GONE);
-                binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
-                binding.fabAudio.setVisibility(View.VISIBLE);
             }
         }
         filesToUpload.removeAll(filesToRemove);

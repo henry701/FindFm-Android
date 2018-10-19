@@ -50,23 +50,6 @@
                 app:backgroundTint="@color/colorPrimary"
                 app:srcCompat="@drawable/ic_video" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_audio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:layout_margin="@dimen/fab_margin"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_audio" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_pessoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:layout_margin="@dimen/fab_margin"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_add_pessoas" />
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>

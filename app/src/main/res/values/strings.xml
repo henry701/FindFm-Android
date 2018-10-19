@@ -129,4 +129,7 @@
     <string name="integrantes">Integrantes</string>
     <string name="sem_integrantes">Não há integrantes</string>
     <string name="original">Original?</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="musicas">Músicas</string>
+    <string name="sem_musicas">Não há músicas para serem mostradas</string>
 </resources>

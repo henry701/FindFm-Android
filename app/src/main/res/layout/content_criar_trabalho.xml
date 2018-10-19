@@ -115,6 +115,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lbParticipantes" />
 
+                <Button
+                    android:id="@+id/btnAdicionarPessoa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="50dp"
+                    android:background="@drawable/btn_bg"
+                    android:onClick="@{clickListener::onClick}"
+                    android:text="@string/adicionar"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas" />
+
                 <ImageButton
                     android:id="@+id/btnRemoverImagem"
                     android:layout_width="34dp"
@@ -143,7 +162,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas"
+                    app:layout_constraintTop_toBottomOf="@+id/btnAdicionarPessoa"
                     app:srcCompat="@drawable/capaplaceholder_photo" />
 
                 <ImageButton
@@ -172,40 +191,55 @@
                     android:layout_marginBottom="8dp"
                     android:background="#000000"
                     android:contentDescription="Video"
-                    app:layout_constraintBottom_toTopOf="@+id/frame_audio"
+                    app:layout_constraintBottom_toTopOf="@+id/lb_listaMusicas"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
 
-                <ImageButton
-                    android:id="@+id/btnRemoverAudio"
-                    android:layout_width="34dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="50dp"
-                    android:background="@drawable/ic_remover"
-                    android:contentDescription="@string/foto_perfil"
-                    android:onClick="btnRemoverAudio_Click"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/frame_audio"
+                <TextView
+                    android:id="@+id/lb_listaMusicas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/musicas"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/videoView"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
-                <FrameLayout
-                    android:id="@+id/frame_audio"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listaMusicas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="32dp"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/textView5"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/btnAdicionarMusica"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/videoView" />
+                    app:layout_constraintTop_toBottomOf="@+id/lb_listaMusicas" />
+
+                <Button
+                    android:id="@+id/btnAdicionarMusica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/btn_bg"
+                    android:text="@string/adicionar"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaMusicas" />
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
