@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 import java.util.Set;
 
-public class PostResponse {
+public class FeedResponse {
 
     private String id;
     private String titulo;

@@ -17,6 +17,10 @@
             android:icon="@drawable/ic_anuncios"
             android:title="@string/meus_posts" />
         <item
+            android:id="@+id/anuncio_sugerido"
+            android:icon="@drawable/ic_comentario"
+            android:title="@string/anuncios_sugeridos" />
+        <item
             android:id="@+id/trabalhos"
             android:icon="@drawable/ic_trabalho"
             android:title="@string/trabalhos" />

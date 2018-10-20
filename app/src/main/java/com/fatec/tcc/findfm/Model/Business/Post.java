@@ -1,6 +1,6 @@
 package com.fatec.tcc.findfm.Model.Business;
 
-import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.FeedResponse;
 
 import org.joda.time.DateTime;
 
@@ -27,14 +27,14 @@ public class Post {
 
     public Post(){}
 
-    public Post(PostResponse postResponse){
-        this.setId(postResponse.getId());
-        this.titulo = postResponse.getTitulo();
-        this.descricao = postResponse.getDescricao();
+    public Post(FeedResponse feedResponse){
+        this.setId(feedResponse.getId());
+        this.titulo = feedResponse.getTitulo();
+        this.descricao = feedResponse.getDescricao();
         this.midias = new ArrayList<>();
 
-        if(postResponse.getMidias() != null) {
-            for (PostResponse.Midias midia : postResponse.getMidias()) {
+        if(feedResponse.getMidias() != null) {
+            for (FeedResponse.Midias midia : feedResponse.getMidias()) {
                 midias.add(new FileReference()
                         .setId(midia.getId())
                         .setContentType(midia.getTipoMidia())
@@ -42,33 +42,33 @@ public class Post {
             }
         }
 
-        this.likesId = postResponse.getUsuarioLikes();
+        this.likesId = feedResponse.getUsuarioLikes();
         this.likes = likesId == null ? 0L : (long) likesId.size();
 
         Usuario usuario = new Usuario();
-        usuario.setId(postResponse.getAutor().getUsuario().getId());
-        usuario.setFotoID(postResponse.getAutor().getUsuario().getAvatar() != null ? postResponse.getAutor().getUsuario().getAvatar().get_id() : null);
-        usuario.setTipoUsuario(TiposUsuario.fromKind(postResponse.getAutor().getUsuario().getKind()));
-        usuario.setNomeCompleto(postResponse.getAutor().getUsuario().getFullName());
-        usuario.setEmail(postResponse.getAutor().getUsuario().getEmail());
+        usuario.setId(feedResponse.getAutor().getUsuario().getId());
+        usuario.setFotoID(feedResponse.getAutor().getUsuario().getAvatar() != null ? feedResponse.getAutor().getUsuario().getAvatar().get_id() : null);
+        usuario.setTipoUsuario(TiposUsuario.fromKind(feedResponse.getAutor().getUsuario().getKind()));
+        usuario.setNomeCompleto(feedResponse.getAutor().getUsuario().getFullName());
+        usuario.setEmail(feedResponse.getAutor().getUsuario().getEmail());
 
-        if(postResponse.getAutor().getUsuario().getTelefone() != null) {
-            usuario.setTelefone( new Telefone(postResponse.getAutor().getUsuario().getTelefone().getStateCode(),
-                    postResponse.getAutor().getUsuario().getTelefone().getNumber()));
+        if(feedResponse.getAutor().getUsuario().getTelefone() != null) {
+            usuario.setTelefone( new Telefone(feedResponse.getAutor().getUsuario().getTelefone().getStateCode(),
+                    feedResponse.getAutor().getUsuario().getTelefone().getNumber()));
         }
 
-        if(postResponse.getAutor().getUsuario().getEndereco() != null) {
-            this.cidade = postResponse.getAutor().getUsuario().getEndereco().getCidade();
-            this.uf = postResponse.getAutor().getUsuario().getEndereco().getEstado();
+        if(feedResponse.getAutor().getUsuario().getEndereco() != null) {
+            this.cidade = feedResponse.getAutor().getUsuario().getEndereco().getCidade();
+            this.uf = feedResponse.getAutor().getUsuario().getEndereco().getEstado();
         }
 
-        if(postResponse.getComentarios() != null){
-            this.comentarios = postResponse.getComentarios();
+        if(feedResponse.getComentarios() != null){
+            this.comentarios = feedResponse.getComentarios();
         }
 
         this.autor = usuario;
         this.liked = likes != 0L ? likesId.contains(usuario.getId()) : false;
-        this.data = postResponse.getCriacao();
+        this.data = feedResponse.getCriacao();
     }
 
     public String getTitulo() {

@@ -34,7 +34,7 @@ import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
-import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.FeedResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
@@ -113,8 +113,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         .setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this)))
                         .setMidias(new ArrayList<>()));
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
-                tipo = "ad";
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
+            } else {
+                binding.incluirContent.txtTitulo.setVisibility(View.VISIBLE);
+                binding.incluirContent.getPost().setTitulo("");
+                tipo = "ad";
+
             }
         }
 
@@ -144,14 +148,19 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         .setAutor(FindFM.getUsuario())
                         .setMidias(new ArrayList<>()));
             MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
-            if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
+            if(!TiposUsuario.CONTRATANTE.equals(FindFM.getTipoUsuario(this))){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
             }
             else {
+                binding.incluirContent.txtTitulo.setVisibility(View.VISIBLE);
                 binding.incluirContent.getPost().setTitulo("");
+                tipo = "ad";
             }
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
+            if(TiposUsuario.CONTRATANTE.equals(post.getAutor().getTipoUsuario()))
+                tipo = "ad";
+
             binding.incluirContent.setPost(post);
             getPost();
         }
@@ -379,9 +388,22 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
         }
 
+        if(telaMode.equals("criando")) {
+            binding.incluirContent.txtData.setVisibility(View.GONE);
+        }
+
         if(telaMode.equals("editavel") && optionsMenu != null){
             optionsMenu.getItem(0).setVisible(false);
         }
+
+        //Diferenciar post de anuncio
+        if (binding.incluirContent.getPost().getTitulo() != null) {
+            binding.incluirContent.textView5.setVisibility(View.GONE);
+            binding.incluirContent.txtComentar.setVisibility(View.GONE);
+            binding.incluirContent.listaComentarios.setVisibility(View.GONE);
+            binding.incluirContent.btnComentar.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -406,14 +428,14 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(getResources(),"post", binding.incluirContent.getPost().getId() ),
+                        HttpUtils.buildUrl(getResources(),tipo, binding.incluirContent.getPost().getId() ),
                         null,
                         (ResponseBody response) ->
                         {
                             dialog.hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                PostResponse postResponse = JsonUtils.jsonConvert(response.getData(), PostResponse.class);
-                                binding.incluirContent.setPost(new Post(postResponse));
+                                FeedResponse feedResponse = JsonUtils.jsonConvert(response.getData(), FeedResponse.class);
+                                binding.incluirContent.setPost(new Post(feedResponse));
                                 binding.incluirContent.executePendingBindings();
                                 checkTelaMode();
                                 preencherTela(binding.incluirContent.getPost());

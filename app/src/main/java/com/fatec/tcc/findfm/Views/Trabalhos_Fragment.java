@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +18,14 @@ import com.fatec.tcc.findfm.databinding.ActivityTrabalhosListaBinding;
 public class Trabalhos_Fragment extends Fragment {
 
     private ProgressDialog dialog;
-    private AppCompatActivity activity;
+    private TelaPrincipal activity;
     private View view;
     private ActivityTrabalhosListaBinding binding;
 
     public Trabalhos_Fragment(){}
 
     @SuppressLint("ValidFragment")
-    public Trabalhos_Fragment(AppCompatActivity activity){
+    public Trabalhos_Fragment(TelaPrincipal activity){
         this.activity = activity;
     }
 
@@ -36,6 +35,7 @@ public class Trabalhos_Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trabalhos_lista, container, false);
         try {
             activity.getSupportActionBar().setTitle("Meus Trabalhos");
+            activity.getOptionsMenu().getItem(2).setVisible(false);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class Trabalhos_Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        FindFM.setTelaAtual("TRABALHOS");
+        FindFM.setTelaAtual("MEUS_POSTS");
         super.onActivityCreated(savedInstanceState);
     }
 

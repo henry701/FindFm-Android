@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
-import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.FeedResponse;
@@ -33,41 +32,38 @@ import com.fatec.tcc.findfm.Views.Adapters.AdapterFeed;
 import com.fatec.tcc.findfm.databinding.ActivityMeusPostsFragmentBinding;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class MeusPosts_Fragment extends Fragment {
+public class AnunciosSugeridos_Fragment extends Fragment {
 
     private TelaPrincipal activity;
-    private String tipo;
     private ActivityMeusPostsFragmentBinding binding;
-    private List<Post> postList;
+    private List<Post> anunciosList;
 
-    public MeusPosts_Fragment(){
+    public AnunciosSugeridos_Fragment(){
     }
 
     @SuppressLint("ValidFragment")
-    public MeusPosts_Fragment(TelaPrincipal activity){
+    public AnunciosSugeridos_Fragment(TelaPrincipal activity){
         this.activity = activity;
     }
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
-            if (FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
-                activity.getSupportActionBar().setTitle("Meus Anúncios");
-            } else {
-                activity.getSupportActionBar().setTitle("Minhas Publicações");
-            }
+            activity.getSupportActionBar().setTitle("Anúncios Sugeridos para você");
+            activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        tipo = FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE) ? "ad" : "post";
+        
         activity.getOptionsMenu().getItem(1).setVisible(false);
-        activity.getOptionsMenu().getItem(2).setVisible(false);
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
+        binding.adicionarPost.setVisibility(View.GONE);
         binding.setPostViewModel(new PostViewModel(activity));
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
         binding.listaPosts.addItemDecoration(
@@ -80,42 +76,41 @@ public class MeusPosts_Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         if( !FindFM.getTelaAtual().equals("CRIAR_POST")) {
-            getPost();
+            getAnuncios();
         }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        FindFM.setTelaAtual("MEUS_POSTS");
+        FindFM.setTelaAtual("ANUNCIOS_SUGERIDOS");
         super.onActivityCreated(savedInstanceState);
     }
 
-    public void addButton(View view){
-        Util.open_form(activity, CriarPost.class);
-    }
-
-    private void getPost( ) {
-        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> getPost = new JsonTypedRequest<>
+    private void getAnuncios( ) {
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> getAnuncios = new JsonTypedRequest<>
                 (       activity,
                         Request.Method.GET,
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(activity.getResources(),tipo, "author", FindFM.getUsuario().getId()),
+                        HttpUtils.buildUrl(activity.getResources(),"feed"),
                         null,
                         (ResponseBody response) ->
                         {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                if(((ArrayList) response.getData()).size() != 0) {
-                                    for (Map<String, Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
-                                        FeedResponse feedResponse = JsonUtils.jsonConvert(retorno, FeedResponse.class);
-                                        postList.add(new Post(feedResponse));
+                                Map<String, Collection<Map<String, Object>>> resp = (Map<String, Collection<Map<String, Object>>>) response.getData();
+                                if(!resp.get("anuncios").isEmpty()) {
+                                    for (Map<String, Object> post : resp.get("anuncios")) {
+                                        FeedResponse postResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                        anunciosList.add(new Post(postResponse)
+                                        );
                                     }
                                     binding.textView4.setVisibility(View.GONE);
-                                    binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
+                                    binding.listaPosts.setAdapter(new AdapterFeed(anunciosList, activity, false));
                                 } else
                                 {
+                                    binding.textView4.setText(R.string.nao_ha_anuncios);
                                     binding.textView4.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -123,7 +118,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (ErrorResponse errorResponse) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
+                            binding.listaPosts.setAdapter(new AdapterFeed(anunciosList, activity, false));
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -132,7 +127,7 @@ public class MeusPosts_Fragment extends Fragment {
                         (VolleyError error) ->
                         {
                             activity.getDialog().hide();
-                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, false));
+                            binding.listaPosts.setAdapter(new AdapterFeed(anunciosList, activity, false));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
@@ -141,9 +136,9 @@ public class MeusPosts_Fragment extends Fragment {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        postList = new ArrayList<>();
+        anunciosList = new ArrayList<>();
 
-        getPost.execute();
+        getAnuncios.execute();
         activity.getDialog().show();
     }
 
@@ -152,7 +147,7 @@ public class MeusPosts_Fragment extends Fragment {
         Util.hideSoftKeyboard(activity);
         switch (item.getItemId()){
             case R.id.action_refresh:
-                getPost();
+                getAnuncios();
                 return true;
         }
 

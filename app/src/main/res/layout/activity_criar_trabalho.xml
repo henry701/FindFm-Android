@@ -26,11 +26,12 @@
             layout="@layout/content_criar_trabalho" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_anchor="@+id/incluirContent"
-            app:layout_anchorGravity="bottom|center">
+            app:layout_anchorGravity="left|bottom">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_foto"

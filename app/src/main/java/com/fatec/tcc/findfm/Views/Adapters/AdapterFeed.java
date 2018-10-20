@@ -82,6 +82,16 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
     public void onBindViewHolder(AdapterFeed.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bindingVH.setPost(post);
+        //Diferenciar post de anuncio
+        if (post.getTitulo() != null) {
+            holder.bindingVH.lbAnuncio.setVisibility(View.VISIBLE);
+            holder.bindingVH.layout.setBackgroundResource(R.color.bg_lilas_transparente);
+            holder.bindingVH.btnLike.setVisibility(View.GONE);
+            holder.bindingVH.btnComent.setVisibility(View.GONE);
+        } else {
+            holder.bindingVH.lbAnuncio.setVisibility(View.GONE);
+            holder.bindingVH.layout.setBackgroundResource(R.color.bg_preto_transparente);
+        }
 
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
         holder.bindingVH.videoView.setVisibility(View.GONE);
@@ -234,6 +244,21 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                 }
         );
 
+        if(isVisitante){
+            holder.bindingVH.btnLike.setOnClickListener(
+                    v -> AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                            "Ops!", R.drawable.ic_error,
+                            "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
+                            (dialog, id) -> { }).create().show());
+        }
+
+        if(post.getLikesId() != null) {
+            if (post.getLikesId().contains(FindFM.getUsuario().getId())) {
+                holder.bindingVH.btnLike.setText(R.string.descurtir);
+            } else {
+                holder.bindingVH.btnLike.setText(R.string.curtir);
+            }
+        }
         holder.bindingVH.setClickListener(v -> {
             if(post.getAutor().getId().equals(FindFM.getUsuario().getId())){
                 String path = "CriarPost";
@@ -251,20 +276,6 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                 Util.open_form_withParam(activity, CriarPost.class, path, param);
             }
         });
-
-        if(isVisitante){
-            holder.bindingVH.btnLike.setOnClickListener(
-                    v -> AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                            "Ops!", R.drawable.ic_error,
-                            "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
-                            (dialog, id) -> { }).create().show());
-        }
-
-        if(post.getLikesId().contains(FindFM.getUsuario().getId())){
-            holder.bindingVH.btnLike.setText(R.string.descurtir);
-        }else {
-            holder.bindingVH.btnLike.setText(R.string.curtir);
-        }
 
     }
 

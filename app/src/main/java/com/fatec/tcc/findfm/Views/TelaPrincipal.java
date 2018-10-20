@@ -128,6 +128,7 @@ public class TelaPrincipal extends AppCompatActivity
             MenuItem trabalhos = menuNav.findItem(R.id.trabalhos);
             trabalhos.setEnabled(false);
         }
+
         if(FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
             NavigationView navigationView = findViewById(R.id.nav_view);
             Menu menuNav = navigationView.getMenu();
@@ -137,6 +138,9 @@ public class TelaPrincipal extends AppCompatActivity
 
             MenuItem trabalhos = menuNav.findItem(R.id.trabalhos);
             trabalhos.setVisible(false);
+
+            MenuItem anuncios_sugeridos = menuNav.findItem(R.id.anuncio_sugerido);
+            anuncios_sugeridos.setVisible(false);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -150,16 +154,9 @@ public class TelaPrincipal extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.action_busca){
-            //TODO: MANDA PRA TELA DE BUSCAR
-            return true;
-        }
-        else{
-            Fragment f = getFragmentManager().findFragmentById(R.id.frame_content);
-            return f.onOptionsItemSelected(item);
+        Fragment f = getFragmentManager().findFragmentById(R.id.frame_content);
+        return f.onOptionsItemSelected(item);
 
-        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -184,6 +181,12 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.meus_posts:
                 if(!tela.equals("MEUS_POSTS")) {
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
+                            .commit();
+                }
+                break;
+            case R.id.anuncio_sugerido:
+                if(!tela.equals("ANUNCIOS_SUGERIDOS")) {
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new AnunciosSugeridos_Fragment(this))
                             .commit();
                 }
                 break;

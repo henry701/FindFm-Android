@@ -23,7 +23,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
-import com.fatec.tcc.findfm.Model.Http.Response.PostResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.FeedResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
@@ -60,6 +60,7 @@ public class Feed_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
             activity.getSupportActionBar().setTitle("FindFM - Home");
+            activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -119,12 +120,46 @@ public class Feed_Fragment extends Fragment {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 Map<String, Collection<Map<String, Object>>> resp = (Map<String, Collection<Map<String, Object>>>) response.getData();
+                                //Intercalar posts e anuncios
                                 if(!resp.get("postagens").isEmpty()) {
-                                    for (Map<String, Object> post : resp.get("postagens")) {
-                                        PostResponse postResponse = JsonUtils.jsonConvert(post, PostResponse.class);
-                                        postList.add(new Post(postResponse)
-                                        );
+                                    if(!resp.get("anuncios").isEmpty()) {
+
+                                        int postSize = resp.get("postagens").size();
+                                        int adSize  = resp.get("anuncios").size();
+                                        int adIndex = 0;
+
+                                        List<Map<String, Object>> posts = (List<Map<String, Object>>) resp.get("postagens");
+                                        List<Map<String, Object>> ads   = (List<Map<String, Object>>) resp.get("anuncios");
+
+                                        for (Map<String, Object> post : posts) {
+                                            FeedResponse feedResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                            postList.add(new Post(feedResponse));
+                                            postSize--;
+                                            if(postSize%2 == 0){
+                                                if(adIndex < adSize) {
+                                                    post = ads.get(adIndex);
+                                                    feedResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                                    postList.add(new Post(feedResponse));
+                                                    adIndex++;
+                                                }
+                                            }
+                                        }
+
+                                        if(adIndex < adSize){
+                                            for(; adIndex < adSize; adIndex ++){
+                                                Map<String, Object> post = ads.get(adIndex);
+                                                FeedResponse feedResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                                postList.add(new Post(feedResponse));
+                                            }
+                                        }
+                                    } else {
+                                        for (Map<String, Object> post : resp.get("postagens")) {
+                                            FeedResponse feedResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                            postList.add(new Post(feedResponse)
+                                            );
+                                        }
                                     }
+
                                     binding.textView4.setVisibility(View.GONE);
                                     binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                                 } else

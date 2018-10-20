@@ -12,24 +12,41 @@
             type="android.view.View.OnClickListener" />
     </data>
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#41000000">
+        android:background="@color/bg_preto_transparente">
+
+        <TextView
+            android:id="@+id/lbAnuncio"
+            android:layout_width="0dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="Jóse augusto de pereira barbosa roger"
+            android:onClick="@{clickListener::onClick}"
+            android:text="Anúncio sugerido"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <com.github.siyamed.shapeimageview.CircularImageView
             android:id="@+id/fotoPerfil"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:adjustViewBounds="false"
             android:onClick="@{clickListener::onClick}"
             android:scaleType="matrix"
             android:src="@drawable/capaplaceholder_photo"
             app:layout_constraintEnd_toStartOf="@+id/lb_data"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lbAnuncio"
             app:siBorderColor="@color/white"
             app:siBorderWidth="3dp" />
 
@@ -37,13 +54,15 @@
             android:id="@+id/txtNome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Jóse augusto de pereira barbosa roger"
+            android:layout_marginEnd="8dp"
+            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
             android:onClick="@{clickListener::onClick}"
             android:text="@{post.autor.nomeCompleto}"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btnComent"
+            app:layout_constraintEnd_toEndOf="@+id/lb_descricao"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/lb_data"
             app:layout_constraintTop_toTopOf="@+id/fotoPerfil"
             app:layout_constraintVertical_chainStyle="spread_inside" />
@@ -67,11 +86,10 @@
 
         <TextView
             android:id="@+id/lb_titulo_post"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="66dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="297dp"
             android:gravity="top|left"
             android:onClick="@{clickListener::onClick}"
             android:text="@={post.titulo}"
@@ -80,11 +98,11 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/txtNome"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lb_data"
-            tools:text="Nome" />
+            tools:text="Jóse de pereira barbosa roger Jóse augusto de pereira barros" />
 
         <TextView
             android:id="@+id/lb_descricao"
@@ -113,7 +131,6 @@
             android:layout_marginTop="8dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/btnLike"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,8 +140,8 @@
                 android:id="@+id/fotoPublicacao"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:contentDescription="Imagem"
                 android:background="#000000"
+                android:contentDescription="Imagem"
                 android:onClick="@{clickListener::onClick}"
                 android:visibility="gone"
                 app:srcCompat="@drawable/capaplaceholder_photo" />
@@ -137,9 +154,9 @@
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
+                android:background="#000000"
                 android:contentDescription="Video"
-                android:visibility="gone"
-                android:background="#000000"/>
+                android:visibility="gone" />
 
             <Space
                 android:layout_width="match_parent"
@@ -163,6 +180,7 @@
             android:textColor="@color/red"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/btnComent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,14 +190,15 @@
             android:id="@+id/btnComent"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="253dp"
             android:layout_marginEnd="44dp"
+            android:layout_marginStart="253dp"
             android:background="@drawable/comment"
             android:onClick="@{clickListener::onClick}"
             android:text="@{post.comentarios != null ? String.valueOf(post.comentarios.size()) : `0`}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnLike"
             app:layout_constraintTop_toTopOf="@+id/btnLike" />

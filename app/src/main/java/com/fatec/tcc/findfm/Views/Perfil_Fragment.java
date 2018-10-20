@@ -56,7 +56,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Perfil_Fragment extends Fragment {
-
+    //TODO: MOSTRAR DADOS ESTATISTICOS
+    //TODO: BUSCA
     private static final int PICK_IMAGE = 1;
     public ActivityPerfilFragmentBinding binding;
 
@@ -82,6 +83,7 @@ public class Perfil_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
             activity.getSupportActionBar().setTitle("Meu Perfil");
+            activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -370,6 +372,11 @@ public class Perfil_Fragment extends Fragment {
             case R.id.action_refresh:
                 itsMe = false;
                 getUser();
+                return true;
+            case R.id.action_busca:
+                //TODO: busca de perfil
+                //itsMe = false;
+                //getUser();
                 return true;
             case R.id.action_editar:
                 this.itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
