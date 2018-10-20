@@ -18,98 +18,88 @@
         android:background="@color/bg_preto_transparente">
 
         <TextView
-            android:id="@+id/lbAnuncio"
+            android:id="@+id/txt_musicas_trabalho"
             android:layout_width="0dp"
-            android:layout_height="27dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:hint="Jóse augusto de pereira barbosa roger"
+            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
             android:onClick="@{clickListener::onClick}"
-            android:text="Anúncio sugerido"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
-
-        <com.github.siyamed.shapeimageview.CircularImageView
-            android:id="@+id/fotoPerfil"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:adjustViewBounds="false"
-            android:onClick="@{clickListener::onClick}"
-            android:scaleType="matrix"
-            android:src="@drawable/capaplaceholder_photo"
-            app:layout_constraintEnd_toStartOf="@+id/lb_data"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbAnuncio"
-            app:siBorderColor="@color/white"
-            app:siBorderWidth="3dp" />
-
-        <TextView
-            android:id="@+id/txtNome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
-            android:onClick="@{clickListener::onClick}"
-            android:text="@{post.autor.nomeCompleto}"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/lb_descricao"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/lb_data"
-            app:layout_constraintTop_toTopOf="@+id/fotoPerfil"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearMidia"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            tools:text="Músicas" />
 
         <TextView
-            android:id="@+id/lb_data"
+            android:id="@+id/txt_subtitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:hint="Publicado em: 32/13/2059 23:59:59"
             android:onClick="@{clickListener::onClick}"
             android:text="@{`Publicado em: ` + post.data}"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="italic"
             android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
-            app:layout_constraintTop_toBottomOf="@+id/txtNome"
-            tools:text="Publicado em: 05/05/2018 22:00:05" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/lb_titulo_post"
+            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
+            tools:text="Cover Iron Maiden" />
+
+        <TextView
+            android:id="@+id/txt_feats"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
+            android:onClick="@{clickListener::onClick}"
+            android:text="Participações:"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_musicas" />
 
         <TextView
             android:id="@+id/lb_titulo_post"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:gravity="top|left"
             android:onClick="@{clickListener::onClick}"
             android:text="@={post.titulo}"
-            android:textAlignment="gravity"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
-            app:layout_constraintEnd_toEndOf="@+id/txtNome"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/lb_data"
-            app:layout_constraintTop_toBottomOf="@+id/lb_data"
-            tools:text="Jóse de pereira barbosa roger Jóse augusto de pereira barros" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Um trab bem maneiro" />
 
         <TextView
             android:id="@+id/lb_descricao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:onClick="@{clickListener::onClick}"
@@ -119,9 +109,10 @@
             android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/linearMidia"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/lb_data"
-            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_subtitulo"
             app:layout_constraintVertical_bias="0.052"
+            app:layout_constraintVertical_chainStyle="spread_inside"
             tools:text="Descrição" />
 
         <LinearLayout
@@ -175,6 +166,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="55dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/like"
             android:text="@{post.likes}"
             android:textColor="@color/red"
@@ -184,7 +176,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btnComent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearMidia" />
+            app:layout_constraintTop_toBottomOf="@+id/view_feats" />
 
         <Button
             android:id="@+id/btnComent"
@@ -209,6 +201,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/view_feats"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clipToPadding="false"
+            app:layout_constraintEnd_toEndOf="@+id/btnComent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_feats" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/view_musicas"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_musicas_trabalho" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
