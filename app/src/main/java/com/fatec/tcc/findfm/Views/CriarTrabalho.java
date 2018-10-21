@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterUsuario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarTrabalhoBinding;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -98,7 +101,8 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         } else {
             binding.incluirContent.setTrabalho(
                     new Trabalho()
-                        .setMidias(new ArrayList<>()));
+                        .setMidias(new ArrayList<>())
+                        .setMusicos(Collections.singletonList(FindFM.getMusico())));
         }
 
         binding.executePendingBindings();
@@ -111,10 +115,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
-
-        FloatingActionButton audio = findViewById(R.id.fab_audio);
-        audio.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha o arquivo de áudio"), PICK_AUDIO));
-
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
@@ -216,7 +216,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.lbParticipantes.setText(R.string.sem_integrantes);
             binding.incluirContent.listaPessoas.setVisibility(View.GONE);
         } else {
-            //TODO: adapter de usuarios
+            binding.incluirContent.lbParticipantes.setText(R.string.integrantes);
+            binding.incluirContent.listaPessoas.setLayoutManager(new LinearLayoutManager(this));
+            binding.incluirContent.listaPessoas.addItemDecoration(
+                    new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+           binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(trabalho.getMusicos(), this));
         }
 
     }
@@ -278,6 +282,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
                 }
             }
+            preencherTela(binding.incluirContent.getTrabalho());
         }
 
     }

@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.CriarTrabalho;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewUsuarioBinding;
 
@@ -27,14 +29,14 @@ import java.util.List;
 
 public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHolder> {
 
-    private List<Usuario> usuarios = new ArrayList<>();
+    private List<Musico> usuarios = new ArrayList<>();
     private Activity activity;
 
     public AdapterUsuario() {
     }
 
-    public AdapterUsuario(List<Usuario> usuarios, Activity activity){
-        this.usuarios = usuarios;
+    public AdapterUsuario(List<Musico> musicos, CriarTrabalho activity){
+        this.usuarios = musicos;
         this.activity = activity;
     }
 
@@ -107,7 +109,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     }
 
 
-    public void setusuarios(List<Usuario> usuarios, Activity activity) {
+    public void setusuarios(List<Musico> usuarios, Activity activity) {
         this.usuarios = usuarios;
         this.activity = activity;
         notifyDataSetChanged();
