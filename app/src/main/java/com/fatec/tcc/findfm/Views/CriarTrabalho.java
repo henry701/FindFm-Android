@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,6 +27,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.FileReference;
+import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
@@ -40,6 +42,7 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterMusica;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterUsuario;
 import com.fatec.tcc.findfm.databinding.ActivityCriarTrabalhoBinding;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -78,32 +81,44 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private String telaMode = "criando";
 
     private List<FileReference> filesToUpload = new ArrayList<>();
-
+    private List<Musica> listaMusicas = new ArrayList<>();
     private Menu optionsMenu;
 
-    //TODO: podem ter varios audios!!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FindFM.setTelaAtual("CRIAR_TRABALHO");
+        try {
+            binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_trabalho);
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_trabalho);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        Bundle param = getIntent().getBundleExtra("CriarTrabalho");
-        if (param != null) {
-            if (!param.isEmpty()) {
-                telaMode = param.getString("telaMode");
+            Bundle param = getIntent().getBundleExtra("CriarTrabalho");
+            if (param != null) {
+                if (!param.isEmpty()) {
+                    telaMode = param.getString("telaMode");
+                }
             }
-        } else {
-            binding.incluirContent.setTrabalho(
-                    new Trabalho()
-                        .setMidias(new ArrayList<>())
-                        .setMusicos(Collections.singletonList(FindFM.getMusico())));
+
+            if (telaMode.equals("criando")) {
+                binding.incluirContent.setTrabalho(
+                        new Trabalho()
+                                .setMusicos(Collections.singletonList(FindFM.getMusico()))
+                                .setMidias(new ArrayList<>()));
+                getSupportActionBar().setTitle("Novo Trabalho");
+            } else if (telaMode.equals("visualizar") || telaMode.equals("editavel")) {
+                Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
+                binding.incluirContent.setTrabalho(trabalho);
+                getTrabalho();
+                getSupportActionBar().setTitle(binding.incluirContent.getTrabalho().getNome());
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
         }
+
 
         binding.executePendingBindings();
 
@@ -116,22 +131,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
+        binding.incluirContent.listaMusicas.setLayoutManager(new LinearLayoutManager(this));
+        binding.incluirContent.btnAdicionarMusica.setOnClickListener(v -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha a música"), PICK_AUDIO));
+
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
-
-        if (telaMode.equals("criando")) {
-            binding.incluirContent.setTrabalho(
-                    new Trabalho()
-                        .setMusicos(Collections.singletonList(FindFM.getMusico()))
-                        .setMidias(new ArrayList<>()));
-        } else if (telaMode.equals("visualizar") || telaMode.equals("editavel")) {
-            Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
-            binding.incluirContent.setTrabalho(trabalho);
-            getTrabalho();
-        }
-
     }
 
     private void preencherTela(Trabalho trabalho) {
@@ -220,7 +226,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.listaPessoas.setLayoutManager(new LinearLayoutManager(this));
             binding.incluirContent.listaPessoas.addItemDecoration(
                     new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-           binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(trabalho.getMusicos(), this));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(trabalho.getMusicos(), this));
         }
 
     }
@@ -422,15 +428,30 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             MediaPlayer mp = MediaPlayer.create(this, uri);
             int duration = mp.getDuration();
             long duracaoSegundos = TimeUnit.MILLISECONDS.toSeconds(duration);
+            Musica musica = new Musica()
+                    .setDuracao(duracaoSegundos)
+                    .setUri(uri);
 
             if(duracaoSegundos > 15L){
                 AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "Este arquivo de áudio tem duração maior do que 15 segundos!\n" +
                                 "Só permitimos postar arquivos de áudio maiores do que 15 segundos se as músicas nos mesmos forem de sua autoria.\nAs músicas deste arquivo de áudio são de sua autoria?",
                         "Sim, as músicas são de minha autoria.", "Não, as músicas não são de minha autoria.",
-                        (dialogInterface, i) -> setAudio(uri),
+                        (dialogInterface, i) -> {
+                            musica.setAutoral(true);
+                            setAudio(musica);
+                        },
                         (dialogInterface, i) -> { }).show();
             } else {
-                setAudio(uri);
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Atenção!", R.drawable.ic_error, "As músicas deste arquivo de áudio são de sua autoria?",
+                        "Sim, as músicas são de minha autoria.", "Não, as músicas não são de minha autoria.",
+                        (dialogInterface, i) -> {
+                            musica.setAutoral(true);
+                            setAudio(musica);
+                        },
+                        (dialogInterface, i) -> {
+                            musica.setAutoral(false);
+                            setAudio(musica);
+                        }).show();
             }
 
         }
@@ -473,32 +494,39 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     }
 
     //TODO: PODEM TER VARIOS
-    private void setAudio(Uri uri){
-        try {
-            /*
-            binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
-            binding.incluirContent.btnRemoverAudio.setVisibility(View.VISIBLE);
-            getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                    new Audio_Fragment(this, uri))
-                    .commit();
+    private void setAudio(Musica musica){
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            InputStream fis = getContentResolver().openInputStream(uri);
+        EditText input = new EditText(this);
+        final String[] titulo = {""};
+        AlertDialogUtils.newTextDialog(this, "Nova música", R.drawable.ic_audio, "Qual o nome da música?",
+                "Adicionar", "Cancelar",
+                (dialog, which) -> {
+                    try {
+                        titulo[0] = input.getText().toString();
+                        musica.setNome(titulo[0]);
+                        listaMusicas.add(musica);
 
-            byte[] buf = new byte[1024];
-            int n;
-            while (-1 != (n = fis.read(buf)))
-                baos.write(buf, 0, n);
+                        binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
+                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        InputStream fis = getContentResolver().openInputStream(musica.getUri());
 
-            filesToUpload.add( new FileReference()
-                    .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri)))
-                    .setConteudo(baos.toByteArray())
-            );
-            checkTelaMode();
-            */
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                        byte[] buf = new byte[1024];
+                        int n;
+                        while (-1 != (n = fis.read(buf)))
+                            baos.write(buf, 0, n);
+
+                        filesToUpload.add( new FileReference()
+                                .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())))
+                                .setConteudo(baos.toByteArray())
+                        );
+                        checkTelaMode();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                (dialog, which) -> { }, input).show();
+
     }
 
     public void btnRemoverImagem_Click(View v){
@@ -549,8 +577,8 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                     FindFM.setTelaAtual("TRABALHO_CRIADO");
                                     binding.incluirContent.setTrabalho(
                                             new Trabalho()
-                                                .setId(response.getData().toString())
-                                                .setMidias(new ArrayList<>()));
+                                                    .setId(response.getData().toString())
+                                                    .setMidias(new ArrayList<>()));
                                     telaMode = "visualizar";
                                     getTrabalho();
                                 }).create().show();

@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.databinding.FragmentAudioBinding;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     @Override
     public void onBindViewHolder(AdapterMusica.ViewHolder holder, int position) {
         Musica musica = Musicas.get(position);
-        Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + musica.getIdResource()));
+        Uri uri = musica.getUri();
         holder.bindingVH.setMusica(musica);
         holder.bindingVH.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
 

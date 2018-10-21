@@ -1,5 +1,7 @@
 package com.fatec.tcc.findfm.Model.Business;
 
+import android.net.Uri;
+
 public class Musica {
     
     private String idResource;
@@ -7,6 +9,7 @@ public class Musica {
     private long duracao;
     private boolean autoral;
     private boolean autorizadoRadio;
+    private Uri uri;
 
     public Musica(){}
 
@@ -19,39 +22,53 @@ public class Musica {
         return idResource;
     }
 
-    public void setIdResource(String idResource) {
+    public Musica setIdResource(String idResource) {
         this.idResource = idResource;
+        return this;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public Musica setNome(String nome) {
         this.nome = nome;
+        return this;
     }
 
     public long getDuracao() {
         return duracao;
     }
 
-    public void setDuracao(long duracao) {
+    public Musica setDuracao(long duracao) {
         this.duracao = duracao;
+        return this;
     }
 
     public boolean isAutoral() {
         return autoral;
     }
 
-    public void setAutoral(boolean autoral) {
+    public Musica setAutoral(boolean autoral) {
         this.autoral = autoral;
+        return this;
     }
 
     public boolean isAutorizadoRadio() {
         return autorizadoRadio;
     }
 
-    public void setAutorizadoRadio(boolean autorizadoRadio) {
+    public Musica setAutorizadoRadio(boolean autorizadoRadio) {
         this.autorizadoRadio = autorizadoRadio;
+        return this;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public Musica setUri(Uri uri) {
+        this.uri = uri;
+        return this;
     }
 }

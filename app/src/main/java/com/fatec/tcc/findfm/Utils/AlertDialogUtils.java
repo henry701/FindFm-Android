@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
+import android.widget.EditText;
 
 /**
  * Classe para facilitar criação de AlertDialogs
@@ -71,5 +73,20 @@ public class AlertDialogUtils {
         return alert;
     }
 
+    public static AlertDialog newTextDialog(Context usaThis, String titulo, int icone, String mensagem,
+                                            String textoPositiveButton, String textoNegativeButton,
+                                            final DialogInterface.OnClickListener listenerOk,
+                                            final DialogInterface.OnClickListener listenerNegative, EditText input){
+        AlertDialog.Builder builder = new AlertDialog.Builder(usaThis);
+        builder.setTitle(titulo);
+        builder.setMessage(mensagem);
+        builder.setIcon(icone);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setPositiveButton(textoPositiveButton, listenerOk);
+        builder.setNegativeButton(textoNegativeButton, listenerNegative);
+        AlertDialog alert = builder.create();
+        return alert;
+    }
 
 }
