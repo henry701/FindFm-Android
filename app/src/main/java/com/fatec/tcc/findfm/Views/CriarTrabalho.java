@@ -215,7 +215,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
-        if(!telaMode.equals("CRIANDO"))
+        if(!telaMode.equals("criando"))
             binding.incluirContent.checkOriginal.setEnabled(false);
 
         if (trabalho.getMusicos() == null) {
@@ -283,11 +283,34 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     binding.incluirContent.btnRemoverVideo.setVisibility(View.VISIBLE);
                     binding.fabVideo.setVisibility(View.GONE);
                 }
+            }
 
-                if(midia.getContentType().contains("mus")) {
+            for (Musica musica : binding.incluirContent.getTrabalho().getMusicas()){
+                try {
+                    listaMusicas = new ArrayList<>();
+                    listaMusicas.add(musica);
+                    binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
+                    if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
+                        ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
+                    }
+                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    InputStream fis = getContentResolver().openInputStream(musica.getUri());
 
+                    byte[] buf = new byte[1024];
+                    int n;
+                    while (-1 != (n = fis.read(buf)))
+                        baos.write(buf, 0, n);
+
+                    filesToUpload.add( new FileReference()
+                            .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())))
+                            .setConteudo(baos.toByteArray())
+                    );
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+
             preencherTela(binding.incluirContent.getTrabalho());
         }
 
@@ -394,10 +417,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 binding.incluirContent.btnRemoverImagem.setVisibility(View.VISIBLE);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                filesToUpload.add( new FileReference()
+                FileReference fileReference =  new FileReference()
                         .setContentType("img/jpeg")
-                        .setConteudo(stream.toByteArray())
-                );
+                        .setConteudo(stream.toByteArray());
+                binding.incluirContent.getTrabalho().getMidias().add(fileReference);
+                filesToUpload.add(fileReference);
                 checkTelaMode();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -493,7 +517,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
     }
 
-    //TODO: PODEM TER VARIOS
     private void setAudio(Musica musica){
 
         EditText input = new EditText(this);
@@ -507,6 +530,9 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         listaMusicas.add(musica);
 
                         binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
+                        if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
+                            ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
+                        }
                         binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         InputStream fis = getContentResolver().openInputStream(musica.getUri());

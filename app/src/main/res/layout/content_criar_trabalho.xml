@@ -48,9 +48,9 @@
                     android:text="@={trabalho.nome}"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.619"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkOriginal" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckedTextView
                     android:id="@+id/checkOriginal"
@@ -68,11 +68,10 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:theme="@style/temaCheck"
-                    app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
                 <EditText
                     android:id="@+id/txtDesc"
@@ -88,8 +87,9 @@
                     android:text="@={trabalho.descricao}"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
+                    app:layout_constraintTop_toBottomOf="@+id/checkOriginal" />
 
                 <TextView
                     android:id="@+id/lbParticipantes"
@@ -119,10 +119,10 @@
                     android:id="@+id/btnAdicionarPessoa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="50dp"
                     android:background="@drawable/btn_bg"
                     android:text="@string/adicionar"
                     android:textAlignment="center"
@@ -137,8 +137,8 @@
                     android:id="@+id/btnRemoverImagem"
                     android:layout_width="34dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="50dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
                     android:onClick="btnRemoverImagem_Click"
@@ -153,8 +153,8 @@
                     android:id="@+id/fotoPublicacao"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="#000000"
                     android:contentDescription="Imagem"
                     app:layout_constraintBottom_toTopOf="@+id/videoView"
@@ -168,8 +168,8 @@
                     android:id="@+id/btnRemoverVideo"
                     android:layout_width="34dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="50dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
                     android:onClick="btnRemoverVideo_Click"
@@ -185,9 +185,9 @@
                     android:id="@+id/videoView"
                     android:layout_width="wrap_content"
                     android:layout_height="300dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="#000000"
                     android:contentDescription="Video"
                     app:layout_constraintBottom_toTopOf="@+id/lb_listaMusicas"

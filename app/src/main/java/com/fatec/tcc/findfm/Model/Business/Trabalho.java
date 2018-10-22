@@ -9,6 +9,7 @@ public class Trabalho {
     private String descricao;
     private boolean original;
     private List<FileReference> midias;
+    private List<Musica> musicas;
     private List<Musico> musicos;
 
     public String getNome() {
@@ -70,6 +71,15 @@ public class Trabalho {
 
     public Trabalho setMidias(List<FileReference> midias) {
         this.midias = midias;
+        return this;
+    }
+
+    public List<Musica> getMusicas() {
+        return musicas;
+    }
+
+    public Trabalho setMusicas(List<Musica> musicas) {
+        this.musicas = musicas;
         return this;
     }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder> {
 
     private List<Musica> Musicas = new ArrayList<>();
+    private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
 
     public AdapterMusica() { }
@@ -49,6 +50,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     public void onBindViewHolder(AdapterMusica.ViewHolder holder, int position) {
         Musica musica = Musicas.get(position);
         Uri uri = musica.getUri();
+        holders.add(holder);
         holder.bindingVH.setMusica(musica);
         holder.bindingVH.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
 
@@ -112,6 +114,12 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
             }
         });
 
+    }
+
+    public void stopMedia() {
+        for ( ViewHolder holder : holders){
+            holder.mediaPlayer.stop();
+        }
     }
 
     @Override
