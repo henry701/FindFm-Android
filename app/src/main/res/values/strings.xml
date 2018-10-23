@@ -134,4 +134,5 @@
     <string name="sem_musicas">Não há músicas para serem mostradas</string>
     <string name="anuncios_sugeridos">Anúncios Sugeridos</string>
     <string name="nao_ha_anuncios">Não há anúncios para serem mostrados</string>
+    <string name="buscar">Buscar...</string>
 </resources>

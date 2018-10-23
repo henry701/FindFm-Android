@@ -18,7 +18,6 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
-import com.fatec.tcc.findfm.Views.CriarTrabalho;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewUsuarioBinding;
 
@@ -35,7 +34,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     public AdapterUsuario() {
     }
 
-    public AdapterUsuario(List<Musico> musicos, CriarTrabalho activity){
+    public AdapterUsuario(List<Musico> musicos, Activity activity){
         this.usuarios = musicos;
         this.activity = activity;
     }

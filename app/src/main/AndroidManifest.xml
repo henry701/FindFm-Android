@@ -62,7 +62,8 @@
             android:name=".Views.CriarTrabalho"
             android:label="@string/trabalhos"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Views.AnunciosSugeridos_Fragment"></activity>
+        <activity android:name=".Views.AnunciosSugeridos_Fragment" />
+        <activity android:name=".Views.SearchUsuario"></activity>
     </application>
 
 </manifest>
