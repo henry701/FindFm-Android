@@ -28,6 +28,7 @@ import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.FileReference;
 import com.fatec.tcc.findfm.Model.Business.Musica;
+import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
@@ -64,6 +65,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
@@ -226,7 +228,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.listaPessoas.setLayoutManager(new LinearLayoutManager(this));
             binding.incluirContent.listaPessoas.addItemDecoration(
                     new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(trabalho.getMusicos(), this));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), this));
         }
 
     }
@@ -314,6 +316,15 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             preencherTela(binding.incluirContent.getTrabalho());
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
+            binding.incluirContent.getTrabalho().getMusicos().add((Musico) FindFM.getMap().get("USUARIO_BUSCA"));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(binding.incluirContent.getTrabalho().getMusicos()), this));
+        }
     }
 
     @Override

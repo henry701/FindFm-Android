@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.android.volley.Request;
@@ -25,28 +24,26 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
-import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterUsuario;
 import com.fatec.tcc.findfm.databinding.ActivitySearchUsuarioBinding;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class SearchUsuario extends AppCompatActivity {
     
     private ActivitySearchUsuarioBinding binding;
     private ProgressDialog dialog;
-    private List<Musico> userList;
+    private Set<Musico> userList = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FindFM.setTelaAtual("BUSCANDO_USER");
         try {
-            if (FindFM.getUsuario().getTipoUsuario().equals(TiposUsuario.CONTRATANTE)) {
-                getSupportActionBar().setTitle("Buscar usuário");
-            }
+            getSupportActionBar().setTitle("Buscar usuário");
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -62,12 +59,9 @@ public class SearchUsuario extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
-        binding.btnBusca.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(binding.txtBusca.getText() != null){
-                    buscarUser(binding.btnBusca.getText().toString());
-                }
+        binding.btnBusca.setOnClickListener(v -> {
+            if(binding.txtBusca.getText() != null){
+                buscarUser(binding.btnBusca.getText().toString());
             }
         });
     }
@@ -129,24 +123,10 @@ public class SearchUsuario extends AppCompatActivity {
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-        userList = new ArrayList<>();
+        userList = new HashSet<>();
 
         buscarUser.execute();
         this.dialog.show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Util.hideSoftKeyboard(this);
-        switch (item.getItemId()){
-            case R.id.action_refresh:
-                buscarUser();
-                return true;
-            case R.id.action_salvar:
-                //TODO SETAR NO MAP E DAR UM BACKPRESSED
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

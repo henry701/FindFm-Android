@@ -23,24 +23,24 @@ import com.fatec.tcc.findfm.databinding.ViewUsuarioBinding;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHolder> {
 
-    private List<Musico> usuarios = new ArrayList<>();
+    private Set<Musico> usuarios = new HashSet<>();
     private Activity activity;
 
     public AdapterUsuario() {
     }
 
-    public AdapterUsuario(List<Musico> musicos, Activity activity){
+    public AdapterUsuario(Set<Musico> musicos, Activity activity){
         this.usuarios = musicos;
         this.activity = activity;
     }
 
-    public List<Usuario> getUsuarios(){
-        return new ArrayList<>(this.usuarios);
+    public Set<Musico> getUsuarios(){
+        return this.usuarios;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
     @Override
     public void onBindViewHolder(AdapterUsuario.ViewHolder holder, int position) {
-        Usuario usuario = usuarios.get(position);
+        Usuario usuario = (Usuario) usuarios.toArray()[position];
         holder.bindingVH.setUsuario(usuario);
 
         if(usuario.getFotoID() != null){
@@ -84,19 +84,11 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             downloadService.getResource(usuario.getFotoID());
         }
 
-        Bundle bundle = new Bundle();
-        View.OnClickListener irPerfil = v -> {
-            if(usuario.getId().equals(FindFM.getUsuario().getId())){
-                bundle.putBoolean("euMesmo", true);
-                Util.open_form_withParam__no_return(activity, TelaPrincipal.class, "CriarPost", bundle);
-            }else{
-                bundle.putString("id_usuario", usuario.getId());
-                Util.open_form_withParam__no_return(activity, TelaPrincipal.class, "CriarPost", bundle);
-            }
-        };
-
-        holder.bindingVH.fotoPerfil.setOnClickListener(irPerfil);
-        holder.bindingVH.txtNome.setOnClickListener(irPerfil);
+        holder.bindingVH.layout.setOnClickListener((View.OnClickListener) v -> {
+            Util.hideSoftKeyboard(activity);
+            FindFM.getMap().put("USUARIO_BUSCA", usuario);
+            activity.onBackPressed();
+        });
     }
 
     @Override
@@ -108,7 +100,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     }
 
 
-    public void setusuarios(List<Musico> usuarios, Activity activity) {
+    public void setusuarios(Set<Musico> usuarios, Activity activity) {
         this.usuarios = usuarios;
         this.activity = activity;
         notifyDataSetChanged();
