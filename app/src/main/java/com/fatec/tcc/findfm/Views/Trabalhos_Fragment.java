@@ -21,7 +21,7 @@ public class Trabalhos_Fragment extends Fragment {
     private TelaPrincipal activity;
     private View view;
     private ActivityTrabalhosListaBinding binding;
-
+    //TODO: adapter de trabalhos
     public Trabalhos_Fragment(){}
 
     @SuppressLint("ValidFragment")

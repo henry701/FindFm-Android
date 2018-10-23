@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
@@ -18,7 +16,6 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
-import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewUsuarioBinding;
 
 import java.io.ByteArrayInputStream;
@@ -30,12 +27,14 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
     private Set<Musico> usuarios = new HashSet<>();
     private Activity activity;
+    private boolean isBusca;
 
     public AdapterUsuario() {
     }
 
-    public AdapterUsuario(Set<Musico> musicos, Activity activity){
+    public AdapterUsuario(Set<Musico> musicos, Activity activity, boolean isBusca){
         this.usuarios = musicos;
+        this.isBusca = isBusca;
         this.activity = activity;
     }
 
@@ -84,11 +83,13 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             downloadService.getResource(usuario.getFotoID());
         }
 
-        holder.bindingVH.layout.setOnClickListener((View.OnClickListener) v -> {
-            Util.hideSoftKeyboard(activity);
-            FindFM.getMap().put("USUARIO_BUSCA", usuario);
-            activity.onBackPressed();
-        });
+        if(isBusca) {
+            holder.bindingVH.layout.setOnClickListener(v -> {
+                Util.hideSoftKeyboard(activity);
+                FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                activity.onBackPressed();
+            });
+        }
     }
 
     @Override

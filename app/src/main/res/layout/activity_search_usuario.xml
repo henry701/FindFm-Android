@@ -12,17 +12,18 @@
 
         <EditText
             android:id="@+id/txtBusca"
-            android:layout_width="258dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:ems="10"
-            android:inputType="textPersonName"
+            android:backgroundTint="@color/white"
             android:drawableLeft="@drawable/ic_search"
-            android:text="@string/buscar"
+            android:ems="10"
+            android:hint="@string/buscar"
+            android:inputType="textPersonName"
             android:maxLength="40"
             android:textColor="@color/white"
-            android:backgroundTint="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/btnBusca"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/btn_bg"
             android:text="@string/busca"
@@ -41,7 +42,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/listaUsuarios"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listaUsuarios"

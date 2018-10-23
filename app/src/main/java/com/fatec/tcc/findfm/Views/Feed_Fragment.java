@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Posts.PostViewModel;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Post;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.FeedResponse;
@@ -102,7 +103,9 @@ public class Feed_Fragment extends Fragment {
         }
         else {
             imagemUsuarioHeader.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getActivity().getTheme()));
-            Toast.makeText(getActivity().getApplicationContext(), "Você pode adicionar uma foto acessando o menu Meu Perfil ;)", Toast.LENGTH_SHORT).show();
+            if(!TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(activity))) {
+                Toast.makeText(getActivity().getApplicationContext(), "Você pode adicionar uma foto acessando o menu Meu Perfil ;)", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -179,7 +182,7 @@ public class Feed_Fragment extends Fragment {
                         },
                         (VolleyError error) ->
                         {
-                            activity.getDialog().hide();
+                            activity.getDialog().dismiss();
                             binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,

@@ -38,7 +38,7 @@ public class VolleyRequestTypedRequest<TResponse, TErrorResponse> extends Reques
         if(networkResponse == null)
         {
             Log.e("[VOLEY REQUEST]", "NetworkResponse is null!!");
-            throw new RuntimeException("NetworkResponse is null!");
+            return Response.error(new VolleyError("Sem conexão"));
         }
         Cache.Entry cacheEntry = HttpHeaderParser.parseCacheHeaders(networkResponse);
         return Response.success(networkResponse, cacheEntry);

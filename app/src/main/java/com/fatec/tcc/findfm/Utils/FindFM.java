@@ -131,6 +131,12 @@ public class FindFM extends Application {
         editor.putString("foto", null);
         editor.apply();
     }
+
+    public static void setTipoUsuario(Activity view, TiposUsuario tiposUsuario){
+        SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+        editor.putString("tipoUsuario", tiposUsuario.getTexto());
+        editor.apply();
+    }
 //--------------------------------------------------------------------------------------------------
     /**
      * Referente ao usuário: Imagem Perfil / Nome do Usuário

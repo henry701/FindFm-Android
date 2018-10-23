@@ -64,7 +64,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -105,10 +104,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
 
             if (telaMode.equals("criando")) {
+                List<Musico> musicos = new ArrayList<>();
+                musicos.add(FindFM.getMusico());
                 binding.incluirContent.setTrabalho(
                         new Trabalho()
-                                .setMusicos(Collections.singletonList(FindFM.getMusico()))
-                                .setMidias(new ArrayList<>()));
+                                .setMusicos(musicos)
+                                .setMidias(new ArrayList<>())
+                                .setMusicas(new ArrayList<>()));
                 getSupportActionBar().setTitle("Novo Trabalho");
             } else if (telaMode.equals("visualizar") || telaMode.equals("editavel")) {
                 Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
@@ -135,7 +137,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         binding.incluirContent.listaMusicas.setLayoutManager(new LinearLayoutManager(this));
         binding.incluirContent.btnAdicionarMusica.setOnClickListener(v -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha a música"), PICK_AUDIO));
-
+        binding.incluirContent.btnAdicionarPessoa.setOnClickListener(v -> Util.open_form(getApplicationContext(), SearchUsuario.class));
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
@@ -193,27 +195,16 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     e.printStackTrace();
                 }
             }
+        }
 
-            if(midia.getContentType().contains("mus")) {
-                /*
-                //PODE TER VARIOS
-                try {
-                    Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
-                    binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
-                    getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                            new Audio_Fragment(this, uri))
-                            .commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            "Não foi possível obter a música." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente", "OK",
-                            (dialog, id1) -> {
-                            }).create().show();
-                }
-                */
+        for(Musica musica : trabalho.getMusicas()){
+            listaMusicas = new ArrayList<>();
+            listaMusicas.add(musica);
+            binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
+            if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
+                ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
             }
+            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -228,7 +219,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.listaPessoas.setLayoutManager(new LinearLayoutManager(this));
             binding.incluirContent.listaPessoas.addItemDecoration(
                     new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), this));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), this, false));
         }
 
     }
@@ -240,10 +231,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
-
+            binding.incluirContent.checkOriginal.setEnabled(false);
             binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
-
+            binding.incluirContent.btnAdicionarMusica.setVisibility(View.GONE);
+            binding.incluirContent.btnAdicionarPessoa.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
             try {
@@ -323,7 +315,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         super.onResume();
         if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
             binding.incluirContent.getTrabalho().getMusicos().add((Musico) FindFM.getMap().get("USUARIO_BUSCA"));
-            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(binding.incluirContent.getTrabalho().getMusicos()), this));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(binding.incluirContent.getTrabalho().getMusicos()), this, false));
         }
     }
 
@@ -348,7 +340,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(getResources(), "trabalho", binding.incluirContent.getTrabalho().getId()),
+                        HttpUtils.buildUrl(getResources(), "work", binding.incluirContent.getTrabalho().getId()),
                         null,
                         (ResponseBody response) ->
                         {

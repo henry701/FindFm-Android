@@ -73,7 +73,7 @@ public class SearchUsuario extends AppCompatActivity {
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(getResources(),"author", query),
+                        HttpUtils.buildUrl(getResources(),"/account/search?search=" + query),
                         null,
                         (ResponseBody response) ->
                         {
@@ -92,10 +92,12 @@ public class SearchUsuario extends AppCompatActivity {
                                         usuario.setEmail(user.getEmail());
                                         usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
 
-                                        userList.add(usuario);
+                                        if(!FindFM.getUsuario().getId().equals(usuario.getId())) {
+                                            userList.add(usuario);
+                                        }
                                     }
                                     binding.listaUsuarios.setVisibility(View.VISIBLE);
-                                    binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this));
+                                    binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
                                 } else
                                 {
                                     binding.listaUsuarios.setVisibility(View.GONE);
@@ -105,7 +107,7 @@ public class SearchUsuario extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             this.dialog.hide();
-                            binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this));
+                            binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
                             AlertDialogUtils.newSimpleDialog__OneButton(this,
                                     "Ops!", R.drawable.ic_error,
                                     errorResponse.getMessage(),"OK",
@@ -114,7 +116,7 @@ public class SearchUsuario extends AppCompatActivity {
                         (VolleyError error) ->
                         {
                             this.dialog.hide();
-                            binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this));
+                            binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
                             error.printStackTrace();
                             AlertDialogUtils.newSimpleDialog__OneButton(this,
                                     "Ops!", R.drawable.ic_error,

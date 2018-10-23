@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,7 +20,6 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.databinding.ActivityRecuperarSenhaBinding;
@@ -39,13 +37,7 @@ public class RecuperarSenha extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_recuperar_senha);
-        byte[] image = FindFM.getFotoPrefBytes(this);
-        if(image != null && image.length != 0) {
-            binding.circularImageView2.setImageBitmap(BitmapFactory.decodeByteArray(image, 0, image.length));
-        }
-        else{
-            binding.circularImageView2.setImageDrawable(getResources().getDrawable(R.drawable.capaplaceholder_photo, getTheme()));
-        }
+        binding.circularImageView2.setImageDrawable(getResources().getDrawable(R.drawable.appname, getTheme()));
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Aguarde...");
@@ -120,7 +112,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("Senha", senha);
                                 clipboard.setPrimaryClip(clip);
-                                Toast.makeText(this, "Senha copiada", Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, "A senha foi copiada para a área de transferência, use-a na tela de login", Toast.LENGTH_LONG).show();
                             }
                         },
                         (ErrorResponse errorResponse) ->
