@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class CriarTrabalho extends AppCompatActivity implements Observer {
@@ -314,8 +315,19 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
-            binding.incluirContent.getTrabalho().getMusicos().add((Musico) FindFM.getMap().get("USUARIO_BUSCA"));
-            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(binding.incluirContent.getTrabalho().getMusicos()), this, false));
+            Musico musico = (Musico) FindFM.getMap().get("USUARIO_BUSCA");
+            Set<Musico> musicos = new HashSet<>();
+            musicos.addAll(((AdapterUsuario)binding.incluirContent.listaPessoas.getAdapter()).getUsuarios());
+            List<String> ids = new ArrayList<>();
+            for(Musico mus : musicos){
+                ids.add(mus.getId()) ;
+            }
+            if(!ids.contains(musico.getId())){
+                musicos.add(musico);
+            }
+            binding.incluirContent.getTrabalho().setMusicos( new ArrayList<>(musicos));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(musicos, this, false));
+            FindFM.getMap().remove("USUARIO_BUSCA");
         }
     }
 

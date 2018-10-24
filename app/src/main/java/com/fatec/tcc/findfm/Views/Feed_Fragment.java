@@ -167,7 +167,18 @@ public class Feed_Fragment extends Fragment {
                                     binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
                                 } else
                                 {
-                                    binding.textView4.setVisibility(View.VISIBLE);
+                                    if(!resp.get("anuncios").isEmpty()) {
+                                        for (Map<String, Object> post : resp.get("anuncios")) {
+                                            FeedResponse feedResponse = JsonUtils.jsonConvert(post, FeedResponse.class);
+                                            postList.add(new Post(feedResponse)
+                                            );
+                                            binding.textView4.setVisibility(View.GONE);
+                                            binding.listaPosts.setAdapter(new AdapterFeed(postList, activity, isVisitante));
+                                        }
+                                    }
+                                    else {
+                                        binding.textView4.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             }
                         },

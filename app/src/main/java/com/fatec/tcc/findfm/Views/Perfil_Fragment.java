@@ -56,7 +56,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class Perfil_Fragment extends Fragment {
-    //TODO: MOSTRAR DADOS ESTATISTICOS
+
     //TODO: BUSCA
     private static final int PICK_IMAGE = 1;
     public ActivityPerfilFragmentBinding binding;

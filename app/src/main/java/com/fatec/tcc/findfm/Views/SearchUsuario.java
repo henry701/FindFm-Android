@@ -12,7 +12,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Musico;
-import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -60,8 +59,8 @@ public class SearchUsuario extends AppCompatActivity {
         dialog.setInverseBackgroundForced(false);
 
         binding.btnBusca.setOnClickListener(v -> {
-            if(binding.txtBusca.getText() != null){
-                buscarUser(binding.btnBusca.getText().toString());
+            if(binding.txtBusca.getText() != null && !binding.txtBusca.getText().toString().isEmpty()){
+                buscarUser(binding.txtBusca.getText().toString());
             }
         });
     }
@@ -73,15 +72,15 @@ public class SearchUsuario extends AppCompatActivity {
                         Usuario.class,
                         ResponseBody.class,
                         ErrorResponse.class,
-                        HttpUtils.buildUrl(getResources(),"/account/search?search=" + query),
+                        HttpUtils.buildUrl(getResources(),"account/search?search=" + query),
                         null,
                         (ResponseBody response) ->
                         {
-                            this.dialog.hide();
+                            this.dialog.dismiss();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 if(((ArrayList) response.getData()).size() != 0) {
                                     for (Map<String, Object> retorno : (ArrayList<Map<String, Object>>) response.getData()) {
-                                        User user = JsonUtils.jsonConvert(retorno, User.class);
+                                        User user = JsonUtils.jsonConvert(retorno.get("usuario"), User.class);
                                         Musico usuario = new Musico();
                                         usuario.setId(user.getId());
                                         if(user.getAvatar() != null) {
@@ -89,17 +88,17 @@ public class SearchUsuario extends AppCompatActivity {
                                         }
                                         usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                         usuario.setNomeCompleto(user.getFullName());
-                                        usuario.setEmail(user.getEmail());
-                                        usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
-
-                                        if(!FindFM.getUsuario().getId().equals(usuario.getId())) {
+                                        //TODO: RETIRAR ESSA NEGAÇÃO DO TIPO DE USUARIO
+                                        if(!TiposUsuario.MUSICO.equals(usuario.getTipoUsuario())) {
                                             userList.add(usuario);
                                         }
                                     }
+                                    binding.lbSemUsuario.setVisibility(View.GONE);
                                     binding.listaUsuarios.setVisibility(View.VISIBLE);
                                     binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
                                 } else
                                 {
+                                    binding.lbSemUsuario.setVisibility(View.VISIBLE);
                                     binding.listaUsuarios.setVisibility(View.GONE);
                                 }
                             }
