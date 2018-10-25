@@ -89,6 +89,7 @@
     <string name="navigation_drawer_open">Abrir menu lateral</string>
     <string name="navigation_drawer_close">Fechar menu lateral</string>
     <string name="sair">Sair</string>
+    <string name="busca_usuario">Buscar perfil…</string>
     <string name="busca">Buscar</string>
     <string name="inicio">Início</string>
     <string name="meu_perfil">Meu Perfil</string>

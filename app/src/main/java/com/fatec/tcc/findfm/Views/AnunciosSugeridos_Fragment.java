@@ -56,7 +56,6 @@ public class AnunciosSugeridos_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
             activity.getSupportActionBar().setTitle("Anúncios Sugeridos para você");
-            activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }

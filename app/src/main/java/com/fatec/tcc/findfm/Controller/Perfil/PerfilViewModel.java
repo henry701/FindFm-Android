@@ -172,7 +172,7 @@ public class PerfilViewModel {
     }
 
     private boolean validarCampos_Contratante(Contratante contratante){
-        if ( contratante.getNomeCompleto() == null || contratante.getInauguracao() == null || contratante.getCapacidadeLocal() == 0 || contratante.getUf() == null ||
+        if ( contratante.getNomeCompleto() == null || contratante.getInauguracao() == null ||  contratante.getUf() == null ||
                 contratante.getCidade() == null || contratante.getEndereco() == null || contratante.getNumero() == 0) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         } else if (contratante.getNomeCompleto().trim().isEmpty()) {

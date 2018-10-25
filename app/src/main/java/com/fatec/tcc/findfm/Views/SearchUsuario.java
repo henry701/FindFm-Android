@@ -35,6 +35,7 @@ public class SearchUsuario extends AppCompatActivity {
     
     private ActivitySearchUsuarioBinding binding;
     private ProgressDialog dialog;
+    private boolean apenasMusicos = true;
     private Set<Musico> userList = new HashSet<>();
 
     @Override
@@ -52,6 +53,13 @@ public class SearchUsuario extends AppCompatActivity {
         binding.listaUsuarios.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         );
+
+        Bundle param = getIntent().getBundleExtra("BuscaUsuario");
+        if (param != null) {
+            if (!param.isEmpty()) {
+                apenasMusicos = !param.getString("origem").equals("perfil");
+            }
+        }
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Carregando...");
@@ -88,8 +96,11 @@ public class SearchUsuario extends AppCompatActivity {
                                         }
                                         usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                         usuario.setNomeCompleto(user.getFullName());
-                                        //TODO: RETIRAR ESSA NEGAÇÃO DO TIPO DE USUARIO
-                                        if(!TiposUsuario.MUSICO.equals(usuario.getTipoUsuario())) {
+                                        if(apenasMusicos) {
+                                            if (TiposUsuario.MUSICO.equals(usuario.getTipoUsuario())) {
+                                                userList.add(usuario);
+                                            }
+                                        } else {
                                             userList.add(usuario);
                                         }
                                     }

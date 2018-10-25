@@ -39,6 +39,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
@@ -269,6 +270,8 @@ public class Perfil_Fragment extends Fragment {
                                         binding.setContratante(contratante);
                                         binding.cbUfContratante.setSelection(Estados.fromSigla(contratante.getUf()).getIndex());
                                         binding.getViewModel().setInauguracao(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(contratante.getInauguracao()));
+                                        binding.txtCapacidadeLocal.setText("0");
+                                        binding.txtCapacidadeLocal.setVisibility(View.GONE);
                                         binding.getViewModel().setInauguracaoDate(contratante.getInauguracao());
                                         break;
                                     case MUSICO:
@@ -374,9 +377,15 @@ public class Perfil_Fragment extends Fragment {
                 getUser();
                 return true;
             case R.id.action_busca:
-                //TODO: busca de perfil
-                //itsMe = false;
-                //getUser();
+                try {
+                    activity.getOptionsMenu().getItem(2).setVisible(true);
+                } catch (Exception e){
+
+                }
+                String path = "BuscaUsuario";
+                Bundle param = new Bundle();
+                param.putString("origem", "perfil");
+                Util.open_form_withParam(activity, SearchUsuario.class, path, param);
                 return true;
             case R.id.action_editar:
                 this.itsMe = usuario.getId().equals(FindFM.getUsuario().getId());
@@ -396,5 +405,17 @@ public class Perfil_Fragment extends Fragment {
 
     public void setItsMe(boolean itsMe) {
         this.itsMe = itsMe;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
+            Usuario usuario = (Usuario) FindFM.getMap().get("USUARIO_BUSCA");
+            itsMe = false;
+            URL = HttpUtils.buildUrl(getResources(),"account",usuario.getId());
+            getUser();
+            FindFM.getMap().remove("USUARIO_BUSCA");
+        }
     }
 }

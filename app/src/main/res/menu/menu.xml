@@ -16,7 +16,8 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_busca"
+        android:visible="false"
         android:orderInCategory="100"
-        android:title="@string/busca"
+        android:title="@string/busca_usuario"
         app:showAsAction="never" />
 </menu>

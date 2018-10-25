@@ -460,7 +460,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                     (dialog, id) -> { }).create().show();
                         }
                 );
-
+        try {
+            getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+        }
+        catch (Exception e){}
         getPost.execute();
         dialog.show();
     }
@@ -648,7 +651,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
         for(FileReference midia : filesToUpload){
             if(midia.getContentType().contains("mus")) {
                 filesToRemove.add(midia);
-                getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+                try {
+                    getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+                }
+                catch (Exception e){}
                 binding.incluirContent.frameAudio.setVisibility(View.GONE);
                 binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
                 binding.fabAudio.setVisibility(View.VISIBLE);
@@ -709,6 +715,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 .setDescricao(post.getDescricao())
                 .setMidias(post.getMidias());
         postRequest.setRequest(param);
+        try {
+            getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+        }
+        catch (Exception e){}
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
         postRequest.execute();
@@ -755,6 +765,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 }
         );
         postRequest.setRequest(new ComentarRequest(binding.incluirContent.txtComentar.getText().toString()));
+        try {
+            getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
+        }
+        catch (Exception e){}
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
         postRequest.execute();

@@ -61,7 +61,6 @@ public class Feed_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
             activity.getSupportActionBar().setTitle("FindFM - Home");
-            activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -215,6 +214,12 @@ public class Feed_Fragment extends Fragment {
         if( !FindFM.getTelaAtual().equals("CRIAR_POST") && !FindFM.getTelaAtual().equals("VIDEO")) {
             getFeed();
         }
+        if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
+            Usuario usuario = (Usuario) FindFM.getMap().get("USUARIO_BUSCA");
+            activity.getFragmentManager().beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(activity, HttpUtils.buildUrl(getResources(),"account", usuario.getId())))
+                    .commit();
+            FindFM.getMap().remove("USUARIO_BUSCA");
+        }
     }
 
     @Override
@@ -223,6 +228,17 @@ public class Feed_Fragment extends Fragment {
         switch (item.getItemId()){
             case R.id.action_refresh:
                 getFeed();
+                return true;
+            case R.id.action_busca:
+                try {
+                    activity.getOptionsMenu().getItem(2).setVisible(true);
+                } catch (Exception e){
+
+                }
+                String path = "BuscaUsuario";
+                Bundle param = new Bundle();
+                param.putString("origem", "perfil");
+                Util.open_form_withParam(activity, SearchUsuario.class, path, param);
                 return true;
         }
 
