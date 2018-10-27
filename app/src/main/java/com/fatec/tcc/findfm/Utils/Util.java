@@ -36,7 +36,6 @@ public class Util {
         intent.putExtra(paramBundlePath, paramBundle);
         startActivity(origem, intent, null );
     }
-
     /**
      * Abre nova activity e não permite que seja possivel voltar à tela anterior pelo botão return
      * @param origem Context da aplicação
