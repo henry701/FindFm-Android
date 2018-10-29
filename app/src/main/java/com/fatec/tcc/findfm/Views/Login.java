@@ -100,6 +100,13 @@ public class Login extends AppCompatActivity {
         Util.open_form(getApplicationContext(), Registrar.class);
     }
 
+    public void lb_termos_Click(View v){
+        AlertDialogUtils.newSimpleDialog__OneButton(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                "Fechar",
+                (dialog, which) -> { }).show();
+    }
+
+
     public void getUser(Activity activity) {
         JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
                 (       activity,

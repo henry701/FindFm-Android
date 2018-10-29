@@ -61,6 +61,7 @@ public class Feed_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
             activity.getSupportActionBar().setTitle("FindFM - Home");
+            activity.getOptionsMenu().getItem(3).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();
         }

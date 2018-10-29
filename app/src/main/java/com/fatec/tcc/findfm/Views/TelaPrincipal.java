@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
@@ -62,6 +63,18 @@ public class TelaPrincipal extends AppCompatActivity
 
         binding.navView.setNavigationItemSelectedListener(this);
         binding.navView.getMenu().getItem(0).setChecked(true);
+
+        if(!FindFM.isUsuarioAceitouTermos(this) && !TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))) {
+            AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                    "Aceito os termos", "Não aceito os termos",
+                    (dialog, which) -> FindFM.usuarioAceitaTermos(this),
+                    (dialog, which) -> onBackPressed()).show();
+        } else if (TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))){
+            AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                    "Aceito os termos", "Não aceito os termos",
+                    (dialog, which) -> {},
+                    (dialog, which) -> onBackPressed()).show();
+        }
 
         init();
     }

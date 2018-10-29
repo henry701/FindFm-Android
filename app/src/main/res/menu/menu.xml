@@ -6,18 +6,19 @@
         android:orderInCategory="100"
         android:title="@string/recarregar"
         android:icon="@drawable/ic_refresh"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_editar"
         android:orderInCategory="100"
         android:title="@string/editar"
         android:icon="@drawable/ic_editar"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_busca"
         android:visible="false"
         android:orderInCategory="100"
+        android:icon="@drawable/ic_search"
         android:title="@string/busca_usuario"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

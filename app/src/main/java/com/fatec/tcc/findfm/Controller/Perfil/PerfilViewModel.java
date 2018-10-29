@@ -85,7 +85,9 @@ public class PerfilViewModel {
             return false;
         else {
             this.usuario = usuario;
-            this.usuario.setSenha(this.senha.get());
+            if(this.senha.get() != null) {
+                this.usuario.setSenha(this.senha.get());
+            }
             initRequests();
             return true;
         }
@@ -139,8 +141,7 @@ public class PerfilViewModel {
         if(usuario == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
-        else if ( usuario.getEmail() == null || this.senha.get() == null ||
-                this.confirmaSenha.get() == null || usuario.getTelefone() == null ){
+        else if ( usuario.getEmail() == null ||  usuario.getTelefone() == null ){
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
         }
         else if(usuario.getTelefone().getStateCode() == null && (usuario.getTelefone().getNumber() == null || usuario.getTelefone().getNumber().length() < 8)){
@@ -149,14 +150,14 @@ public class PerfilViewModel {
         else if (!Formatadores.validarEmail(usuario.getEmail())) {
             Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
         }
-        else if (this.senha.get().length() < 6){
-            Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
-        }
-        else if(this.senha.get().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty() ){
-            Toast.makeText(view.getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
-        }
-        else if ( !this.senha.get().equals(this.confirmaSenha.get())) {
-            Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
+        else if (this.senha.get() != null || this.confirmaSenha.get() != null) {
+            if (this.senha.get().length() < 6) {
+                Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
+            } else if (this.senha.get().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty()) {
+                Toast.makeText(view.getApplicationContext(), "A senha não pode ser vazia ou conter apenas caracteres de espaço!", Toast.LENGTH_SHORT).show();
+            } else if (!this.senha.get().equals(this.confirmaSenha.get())) {
+                Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
+            }
         }
         else if (usuario instanceof Contratante ){
             return validarCampos_Contratante((Contratante) usuario);

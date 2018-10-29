@@ -71,4 +71,18 @@ public class Musica {
         this.uri = uri;
         return this;
     }
+
+    @Override
+    public boolean equals(Object mus) {
+        boolean isEqual = false;
+
+        if(mus != null && mus instanceof Musica) {
+            isEqual = (
+                    (this.nome.equals(((Musica) mus).getNome())) ||
+                    (this.uri.equals(((Musica) mus).getUri()))
+            );
+        }
+
+        return isEqual;
+    }
 }

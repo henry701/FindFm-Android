@@ -51,7 +51,7 @@
                     android:id="@+id/txtLogin"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="24dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
@@ -70,7 +70,7 @@
                     android:id="@+id/txtSenha"
                     android:layout_width="282dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_password"
@@ -126,13 +126,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="50dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:onClick="lb_recuperarSenha_Click"
                     android:text="@string/perderSenha"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -154,6 +152,26 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/buttonEntrarVisitante" />
+
+                <TextView
+                    android:id="@+id/lb_termos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:lineSpacingExtra="8sp"
+                    android:onClick="lb_termos_Click"
+                    android:text="@string/labelTermos"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.503"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lb_recuperarSenha" />
 
 
             </android.support.constraint.ConstraintLayout>

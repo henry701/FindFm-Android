@@ -23,12 +23,14 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     private List<Musica> Musicas = new ArrayList<>();
     private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
+    private boolean isCadastro;
 
     public AdapterMusica() { }
 
-    public AdapterMusica(List<Musica> Musicas, Activity activity){
+    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro){
         this.Musicas = Musicas;
         this.activity = activity;
+        this.isCadastro = isCadastro;
     }
 
     public List<Musica> getMusicas(){
@@ -114,6 +116,15 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
             }
         });
 
+        if(isCadastro) {
+            holder.bindingVH.btnRemoverMusica.setVisibility(View.VISIBLE);
+            holder.bindingVH.btnRemoverMusica.setOnClickListener(v -> {
+                stopMedia();
+                Musicas.remove(musica);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, Musicas.size());
+            });
+        }
     }
 
     public void stopMedia() {

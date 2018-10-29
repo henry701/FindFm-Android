@@ -113,7 +113,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 .setMidias(new ArrayList<>())
                                 .setMusicas(new ArrayList<>()));
                 getSupportActionBar().setTitle("Novo Trabalho");
-            } else if (telaMode.equals("visualizar") || telaMode.equals("editavel")) {
+            } else if (telaMode.equals("visualizar")) {
                 Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
                 binding.incluirContent.setTrabalho(trabalho);
                 getTrabalho();
@@ -200,12 +200,23 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         for(Musica musica : trabalho.getMusicas()){
             listaMusicas = new ArrayList<>();
-            listaMusicas.add(musica);
+
+            boolean jaContem = false;
+            for(int i = 0; i < listaMusicas.size(); i++) {
+                if(listaMusicas.get(i).equals(musica)) {
+                    jaContem = true;
+                }
+            }
+
+            if(!jaContem) {
+                listaMusicas.add(musica);
+            }
+
             binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
             if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                 ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
             }
-            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
+            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -288,7 +299,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                         ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                     }
-                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
+                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     InputStream fis = getContentResolver().openInputStream(musica.getUri());
 
@@ -536,19 +547,33 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         EditText input = new EditText(this);
         final String[] titulo = {""};
-        AlertDialogUtils.newTextDialog(this, "Nova música", R.drawable.ic_audio, "Qual o nome da música?",
+        AlertDialogUtils.newTextDialog(this, "Nova música", R.drawable.ic_audio, "Qual o nome da música?\nExemplo:\"Música A - Grupo X\"",
                 "Adicionar", "Cancelar",
                 (dialog, which) -> {
                     try {
                         titulo[0] = input.getText().toString();
                         musica.setNome(titulo[0]);
-                        listaMusicas.add(musica);
+
+                        boolean jaContem = false;
+                        for(int i = 0; i < listaMusicas.size(); i++) {
+                            if(listaMusicas.get(i).equals(musica)) {
+                                jaContem = true;
+                                AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                        "Música já adicionada!", R.drawable.ic_error,
+                                        "Essa música já foi adicionada, adicione uma música diferente!",
+                                        "Ok", (dialogInterface, i1) -> {}).show();
+                            }
+                        }
+
+                        if(!jaContem) {
+                            listaMusicas.add(musica);
+                        }
 
                         binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
                         if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                             ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                         }
-                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this));
+                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         InputStream fis = getContentResolver().openInputStream(musica.getUri());
 

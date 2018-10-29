@@ -33,6 +33,7 @@
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/nao_ha_publicacoes"
             android:textAlignment="center"
             android:textColor="@color/white"

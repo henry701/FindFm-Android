@@ -58,7 +58,6 @@ import java.util.Map;
 
 public class Perfil_Fragment extends Fragment {
 
-    //TODO: BUSCA
     private static final int PICK_IMAGE = 1;
     public ActivityPerfilFragmentBinding binding;
 
@@ -345,6 +344,7 @@ public class Perfil_Fragment extends Fragment {
         binding.listaInstrumentos.setEnabled(itsMe);
 
         if(itsMe){
+            binding.lbAlterarSenha.setVisibility(View.VISIBLE);
             binding.txtSenha.setVisibility(View.VISIBLE);
             binding.txtConfirmaSenha.setVisibility(View.VISIBLE);
             binding.buttonRegistrar.setVisibility(View.VISIBLE);
@@ -355,6 +355,7 @@ public class Perfil_Fragment extends Fragment {
                 e.printStackTrace();
             }
             FindFM.setTelaAtual("PERFIL_DE_OUTRO");
+            binding.lbAlterarSenha.setVisibility(View.GONE);
             binding.txtSenha.setVisibility(View.GONE);
             binding.txtConfirmaSenha.setVisibility(View.GONE);
             binding.buttonRegistrar.setVisibility(View.GONE);

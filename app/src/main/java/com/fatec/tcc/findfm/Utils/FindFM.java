@@ -170,6 +170,17 @@ public class FindFM extends Application {
         );
     }
 
+    public static boolean isUsuarioAceitouTermos(Activity view){
+        return view.getSharedPreferences("FindFM_param", MODE_PRIVATE)
+                        .getBoolean("aceitouTermos",false);
+    }
+
+    public static void usuarioAceitaTermos(Activity view){
+        SharedPreferences.Editor editor = view.getSharedPreferences("FindFM_param", MODE_PRIVATE).edit();
+        editor.putBoolean("aceitouTermos", true);
+        editor.apply();
+    }
+
 //--------------------------------------------------------------------------------------------------
     /**
      * Tela atual

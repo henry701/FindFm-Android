@@ -7,8 +7,8 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://192.168.3.100:8083</string>
-    <string name="radio_url">http://192.168.3.100:8084</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
@@ -89,7 +89,7 @@
     <string name="navigation_drawer_open">Abrir menu lateral</string>
     <string name="navigation_drawer_close">Fechar menu lateral</string>
     <string name="sair">Sair</string>
-    <string name="busca_usuario">Buscar perfil…</string>
+    <string name="busca_usuario">Buscar usuário</string>
     <string name="busca">Buscar</string>
     <string name="inicio">Início</string>
     <string name="meu_perfil">Meu Perfil</string>
@@ -137,4 +137,17 @@
     <string name="nao_ha_anuncios">Não há anúncios para serem mostrados</string>
     <string name="sem_resultados">Não há resultados para serem mostrados</string>
     <string name="buscar">Buscar...</string>
+    <string name="alterarSenha">Preencha os campos abaixo apenas se deseja mudar de senha</string>
+    <string name="labelTermos">Termos de Uso</string>
+    <string name="termos">
+        Todo e qualquer áudio, texto, fotos, imagens, gráficos, comentários e outros conteúdos, dados ou informações que você enviar, armazenar, transmitir, enviar, trocar ou disponibilizar para ou através da Plataforma é gerado, de propriedade e controlado exclusivamente por você, e não pelo FindFM.
+        O FindFM não reivindica quaisquer direitos de propriedade do seu conteúdo e, por meio deste você reconhece e concorda expressamente que seu conteúdo continua sendo de sua exclusiva responsabilidade.
+        Sem prejuízo das condições estabelecidas, você não deve fazer upload, armazenar, distribuir, enviar, transmitir, exibir, executar, disponibilizar, continuar a disponibilizar ou comunicar ao público qualquer conteúdo para o qual você não mantenha os direitos necessários. Em particular, qualquer uso não autorizado de material protegido por direitos autorais dentro do seu conteúdo (incluindo por meio de reprodução, distribuição, modificação, adaptação, exibição pública, apresentação pública, preparação de trabalhos derivados, disponibilização ou comunicação ao público através da plataforma), independente de quem é ou se torna não autorizado em um momento posterior, pode constituir uma violação de direitos de terceiros e é estritamente proibida. Tais infrações podem resultar na rescisão de seu acesso à plataforma, conforme descrito na seção infringir repetidas abaixo, e também podem resultar em litígio civil ou processo criminal por ou em nome do detentor de direitos relevante.
+        \n
+        EXEMPLO:
+        Denúncia de violação de direitos autorais
+        Caso alguma pessoa ou empresa entenda que determinado conteúdo postado por um dos nossos usuários viola seus direitos autorais ou direitos da personalidade, pode nos enviar um e-mail (suporte@studiosol.com.br), descrevendo o fato, indicando com precisão todas as URLs (links) que contêm os respectivos conteúdos e comprovando a qualidade de titular daquele direito por meios idôneos.
+        Apesar de o Marco Civil da Internet só obrigar um provedor de aplicativos a retirar conteúdo do ar depois de receber uma ordem judicial específica, nós nos reservamos o direito de retirar o conteúdo do ar mesmo sem recebermos uma ordem judicial, sempre que detectarmos uma situação que possa consistir em grave violação de direitos. Isso não quer dizer, contudo, que nos responsabilizamos pelos danos decorrentes da manutenção do conteúdo no ar a partir do recebimento de uma notificação ou e-mail informando a suposta violação. Não, retirar o conteúdo do ar antes de receber uma ordem judicial é uma prerrogativa, um direito nosso, não propriamente uma obrigação.
+        Ainda em relação a esse tema, você, usuário, aceita plenamente que qualquer conteúdo que vier a postar em qualquer dos nossos sites seja retirado do ar sem aviso prévio. De toda forma, você será notificado a respeito de qualquer denúncia de violação de direitos envolvendo conteúdo que tiver postado, e poderá se defender, apresentando seus argumentos. Além disso, você autoriza, igualmente, que nós repassemos seus dados pessoais inseridos no cadastro, bem como os seus IPs (Internet Protocol), a pedido do Judiciário. Nenhuma dessas condutas adotadas por nós terá, portanto, o condão de lhe ocasionar prejuízos, sendo plenamente aceitas por você, que não poderá buscar indenização junto à nossa empresa.
+    </string>
 </resources>

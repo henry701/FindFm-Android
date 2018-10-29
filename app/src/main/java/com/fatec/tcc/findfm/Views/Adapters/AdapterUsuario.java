@@ -84,7 +84,6 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
             downloadService.getResource(usuario.getFotoID());
         }
 
-        //TODO colocar um on click que vai pra tela de perfil, se nao for a tela de adicionar trabalho logico
         if(isBusca) {
             holder.bindingVH.layout.setOnClickListener(v -> {
                 Util.hideSoftKeyboard(activity);
@@ -117,7 +116,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         notifyDataSetChanged();
     }
 
-    public void removeAt(Usuario usr, int position) {
+    private void removeAt(Usuario usr, int position) {
         usuarios.remove(usr);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, usuarios.size());
