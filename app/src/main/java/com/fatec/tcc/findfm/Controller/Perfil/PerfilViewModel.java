@@ -158,6 +158,12 @@ public class PerfilViewModel {
             } else if (!this.senha.get().equals(this.confirmaSenha.get())) {
                 Toast.makeText(view.getApplicationContext(), "As senhas não coincidem!", Toast.LENGTH_SHORT).show();
             }
+            else if (usuario instanceof Contratante ){
+                return validarCampos_Contratante((Contratante) usuario);
+            }
+            else if (usuario instanceof Musico ){
+                return validarCampos_Musico((Musico) usuario);
+            }
         }
         else if (usuario instanceof Contratante ){
             return validarCampos_Contratante((Contratante) usuario);

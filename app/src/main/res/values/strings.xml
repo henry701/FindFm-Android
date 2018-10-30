@@ -7,8 +7,8 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://10.0.2.2:8083</string>
-    <string name="radio_url">http://10.0.2.2:8084</string>
+    <string name="base_url">http://192.168.3.100:8083</string>
+    <string name="radio_url">http://192.168.3.100:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>

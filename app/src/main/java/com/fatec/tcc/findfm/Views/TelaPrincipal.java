@@ -119,6 +119,7 @@ public class TelaPrincipal extends AppCompatActivity
                 finishAffinity();
                 System.exit(0);
             } else {
+                binding.navView.getMenu().getItem(0).setChecked(true);
                 fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                         .commit();
@@ -162,6 +163,11 @@ public class TelaPrincipal extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         this.optionsMenu = menu;
+        try {
+            optionsMenu.getItem(2).setVisible(true);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return true;
     }
 
