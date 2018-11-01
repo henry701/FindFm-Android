@@ -35,6 +35,7 @@ public class Trabalhos_Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trabalhos_lista, container, false);
         try {
             activity.getSupportActionBar().setTitle("Meus Trabalhos");
+            activity.getOptionsMenu().getItem(1).setVisible(false);
             activity.getOptionsMenu().getItem(2).setVisible(false);
         } catch (Exception e){
             e.printStackTrace();

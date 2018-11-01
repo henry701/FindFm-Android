@@ -104,9 +104,15 @@ public class SearchUsuario extends AppCompatActivity {
                                             userList.add(usuario);
                                         }
                                     }
-                                    binding.lbSemUsuario.setVisibility(View.GONE);
-                                    binding.listaUsuarios.setVisibility(View.VISIBLE);
-                                    binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
+
+                                    if(userList.isEmpty()){
+                                        binding.lbSemUsuario.setVisibility(View.VISIBLE);
+                                        binding.listaUsuarios.setVisibility(View.GONE);
+                                    } else {
+                                        binding.lbSemUsuario.setVisibility(View.GONE);
+                                        binding.listaUsuarios.setVisibility(View.VISIBLE);
+                                        binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
+                                    }
                                 } else
                                 {
                                     binding.lbSemUsuario.setVisibility(View.VISIBLE);

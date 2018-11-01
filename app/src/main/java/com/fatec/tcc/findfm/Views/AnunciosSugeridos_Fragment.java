@@ -59,8 +59,9 @@ public class AnunciosSugeridos_Fragment extends Fragment {
         } catch (Exception e){
             e.printStackTrace();
         }
-        
+
         activity.getOptionsMenu().getItem(1).setVisible(false);
+        activity.getOptionsMenu().getItem(2).setVisible(false);
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
         binding.adicionarPost.setVisibility(View.GONE);
         binding.setPostViewModel(new PostViewModel(activity));
