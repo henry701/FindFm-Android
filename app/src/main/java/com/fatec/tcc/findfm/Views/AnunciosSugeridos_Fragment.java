@@ -55,7 +55,7 @@ public class AnunciosSugeridos_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
-            activity.getSupportActionBar().setTitle("Anúncios Sugeridos para você");
+            activity.getSupportActionBar().setTitle("Anúncios Sugeridos");
         } catch (Exception e){
             e.printStackTrace();
         }

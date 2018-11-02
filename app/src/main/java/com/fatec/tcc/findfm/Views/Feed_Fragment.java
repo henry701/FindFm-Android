@@ -60,7 +60,8 @@ public class Feed_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         try {
-            activity.getSupportActionBar().setTitle("FindFM - Home");
+            activity.getSupportActionBar().setTitle("FindFM - Feed");
+            activity.getOptionsMenu().getItem(1).setVisible(false);
             activity.getOptionsMenu().getItem(2).setVisible(true);
         } catch (Exception e){
             e.printStackTrace();

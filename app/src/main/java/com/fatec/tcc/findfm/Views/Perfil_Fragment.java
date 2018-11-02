@@ -350,7 +350,7 @@ public class Perfil_Fragment extends Fragment {
             binding.buttonRegistrar.setVisibility(View.VISIBLE);
         } else {
             try {
-                activity.getSupportActionBar().setTitle("Perfil de: " + usuario.getNomeCompleto().split("\\s+")[0]);
+                activity.getSupportActionBar().setTitle("Perfil: " + usuario.getNomeCompleto().split("\\s+")[0]);
             } catch (Exception e){
                 e.printStackTrace();
             }

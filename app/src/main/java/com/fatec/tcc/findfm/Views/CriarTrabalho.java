@@ -84,6 +84,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
     private List<FileReference> filesToUpload = new ArrayList<>();
     private List<Musica> listaMusicas = new ArrayList<>();
+    private List<String> musicasEnviadas = new ArrayList<>();
     private Menu optionsMenu;
 
     @Override
@@ -149,7 +150,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         for(FileReference midia : trabalho.getMidias()) {
 
-            if(midia.getContentType().contains("img")) {
+            if(midia.getContentType().contains("img") && midia.getId() != null) {
                 DownloadResourceService downloadService = new DownloadResourceService(this);
                 downloadService.addObserver((download, arg) -> {
                     if (download instanceof DownloadResourceService) {
@@ -178,7 +179,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 dialog.show();
             }
 
-            if(midia.getContentType().contains("vid")) {
+            if(midia.getContentType().contains("vid") && midia.getId() != null) {
                 try {
                     Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
 
@@ -420,7 +421,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     resourceService.uploadFiles(midia.getConteudo(), midia.getContentType());
                 }
                 if(filesToUpload.isEmpty()){
-                    initRequest(binding.incluirContent.getTrabalho());
+                    if(listaMusicas.isEmpty()) {
+                        initRequestTrabalho();
+                    } else {
+                        for(Musica musica : listaMusicas){
+                            createMusica(musica);
+                        }
+                    }
                 }
                 break;
             case R.id.action_refresh:
@@ -531,10 +538,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             while (-1 != (n = fis.read(buf)))
                 baos.write(buf, 0, n);
 
-            filesToUpload.add( new FileReference()
+            FileReference fileReference = new FileReference()
                     .setContentType("video/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(u)))
-                    .setConteudo(baos.toByteArray())
-            );
+                    .setConteudo(baos.toByteArray());
+            filesToUpload.add( fileReference );
+            binding.incluirContent.getTrabalho().getMidias().add(fileReference);
             checkTelaMode();
         } catch (Exception e){
             e.printStackTrace();
@@ -574,18 +582,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                             ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                         }
                         binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        InputStream fis = getContentResolver().openInputStream(musica.getUri());
-
-                        byte[] buf = new byte[1024];
-                        int n;
-                        while (-1 != (n = fis.read(buf)))
-                            baos.write(buf, 0, n);
-
-                        filesToUpload.add( new FileReference()
-                                .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())))
-                                .setConteudo(baos.toByteArray())
-                        );
                         checkTelaMode();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -623,7 +619,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         checkTelaMode();
     }
 
-    private void initRequest(Trabalho trabalho) {
+    private void initRequestTrabalho() {
         JsonTypedRequest<Trabalho, ResponseBody, ErrorResponse> trabalhoRequest = new JsonTypedRequest<>(
                 this,
                 HttpMethod.POST.getCodigo(),
@@ -641,14 +637,10 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 (dialog, id) -> {
                                     dialog.dismiss();
                                     FindFM.setTelaAtual("TRABALHO_CRIADO");
-                                    binding.incluirContent.setTrabalho(
-                                            new Trabalho()
-                                                    .setId(response.getData().toString())
-                                                    .setMidias(new ArrayList<>()));
+                                    binding.incluirContent.getTrabalho().setId(response.getData().toString());
                                     telaMode = "visualizar";
                                     getTrabalho();
                                 }).create().show();
-
                     }
                 },
                 (ErrorResponse error) -> {
@@ -675,6 +667,83 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         dialog.setMessage("Publicando, aguarde...");
         dialog.show();
         trabalhoRequest.execute();
+    }
+
+    private void createMusica(Musica musica){
+        UploadResourceService uploadMusica = new UploadResourceService(this);
+        uploadMusica.addObserver((o, arg) -> {
+            if(o instanceof UploadResourceService){
+                runOnUiThread(() -> {
+                    if (arg instanceof String) {
+                        String result = (String) arg;
+                        String[] resultados = result.split(",");
+                        if(resultados.length == 1){
+                            return;
+                        }
+                        musica.setIdResource(resultados[1]);
+                        JsonTypedRequest<Musica, ResponseBody, ErrorResponse> musicaRequest = new JsonTypedRequest<>(
+                                this, HttpMethod.POST.getCodigo(), Musica.class, ResponseBody.class, ErrorResponse.class,
+                                HttpUtils.buildUrl(getResources(), "song", "create"), null,
+                                (ResponseBody response) -> {
+                                    this.dialog.hide();
+                                    if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                        Trabalho trabalho = binding.incluirContent.getTrabalho();
+                                        musica.setIdResource(response.getData().toString());
+                                        trabalho.getMusicas().add(musica);
+
+                                        binding.incluirContent.setTrabalho(trabalho);
+                                        musicasEnviadas.add(musica.getNome());
+
+                                        for (Musica mus: listaMusicas){
+                                            if(!musicasEnviadas.contains(mus.getNome())){
+                                                return;
+                                            }
+                                        }
+
+                                        initRequestTrabalho();
+
+                                    }
+                                },
+                                (ErrorResponse error) -> {
+                                    dialog.hide();
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                            "Ops!", R.drawable.ic_error,
+                                            error.getMessage(), "OK",
+                                            (dialog, id) -> {
+                                            }).create().show();
+                                },
+                                (VolleyError error) -> {
+                                    dialog.hide();
+                                    error.printStackTrace();
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                            "Ops!", R.drawable.ic_error,
+                                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                                    "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                            (dialog, id) -> {
+                                            }).create().show();
+                                }
+                        );
+
+                        musicaRequest.setRequest(musica);
+                        dialog.setMessage("Publicando música, aguarde...");
+                        dialog.show();
+                        musicaRequest.execute();
+                    }
+                });
+            }
+        });
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            InputStream fis = getContentResolver().openInputStream(musica.getUri());
+
+            byte[] buf = new byte[1024];
+            int n;
+            while (-1 != (n = fis.read(buf)))
+                baos.write(buf, 0, n);
+            uploadMusica.uploadFiles(baos.toByteArray(), "mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -752,7 +821,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     filesToUpload.removeAll(filesToRemove);
 
                     if(filesToUpload.isEmpty()){
-                        initRequest(binding.incluirContent.getTrabalho());
+                        if(listaMusicas.isEmpty()) {
+                            initRequestTrabalho();
+                        } else {
+                            for(Musica musica : listaMusicas){
+                                createMusica(musica);
+                            }
+                        }
                     }
                 }
             });

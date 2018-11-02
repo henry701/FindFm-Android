@@ -108,7 +108,7 @@
     <string name="publicar">Publicar</string>
     <string name="editar">Editar</string>
     <string name="recarregar">Recarregar</string>
-    <string name="sua_publicacao">Adicione um texto…</string>
+    <string name="sua_publicacao">Adicione uma descrição pra seu trabalho…</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
     <string name="codigo_de_recuperacao">Código de recuperação</string>
@@ -129,7 +129,7 @@
     <string name="descricao">Adicione uma descrição…</string>
     <string name="integrantes">Integrantes</string>
     <string name="sem_integrantes">Não há integrantes</string>
-    <string name="original">Trabalho original?</string>
+    <string name="original">Esse é um trabalho original?</string>
     <string name="adicionar">Adicionar</string>
     <string name="musicas">Músicas</string>
     <string name="sem_musicas">Não há músicas para serem mostradas</string>
