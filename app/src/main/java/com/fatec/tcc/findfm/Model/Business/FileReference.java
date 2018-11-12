@@ -3,7 +3,7 @@ package com.fatec.tcc.findfm.Model.Business;
 public class FileReference {
 
     private String id;
-    private String contentType;
+    private FileInfo fileInfo;
     private byte[] conteudo;
 
     public String getId() {
@@ -15,12 +15,12 @@ public class FileReference {
         return this;
     }
 
-    public String getContentType() {
-        return contentType;
+    public FileInfo getFileInfo() {
+        return fileInfo == null ? this.fileInfo = new FileInfo() : fileInfo;
     }
 
-    public FileReference setContentType(String contentType) {
-        this.contentType = contentType;
+    public FileReference setFileInfo(FileInfo fileInfo) {
+        this.fileInfo = fileInfo;
         return this;
     }
 
@@ -30,6 +30,17 @@ public class FileReference {
 
     public FileReference setConteudo(byte[] conteudo) {
         this.conteudo = conteudo;
+        return this;
+    }
+
+    public String getContentType()
+    {
+        return this.getFileInfo().getFileMetadata().getContentType();
+    }
+
+    public FileReference setContentType(String contentType)
+    {
+        this.getFileInfo().getFileMetadata().setContentType(contentType);
         return this;
     }
 }
