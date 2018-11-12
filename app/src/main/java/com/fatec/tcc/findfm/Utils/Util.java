@@ -3,8 +3,13 @@ package com.fatec.tcc.findfm.Utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
+
+import java.util.List;
+import java.util.Locale;
 
 import static android.support.v4.content.ContextCompat.startActivity;
 
@@ -71,5 +76,23 @@ public class Util {
                         Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(
                 activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public static Address getLocalizacao(Context context, double latitude, double longitude){
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> locais;
+        try {
+            locais = geocoder.getFromLocation(latitude, longitude, 10);
+            if (locais.size() > 0 ){
+                for (Address local : locais){
+                    if(local.getLocality() != null && local.getLocality().length() > 0){
+                        return  local;
+                    }
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

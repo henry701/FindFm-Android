@@ -1,14 +1,21 @@
 package com.fatec.tcc.findfm.Views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -156,6 +163,22 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 binding.incluirContent.getPost().setTitulo("");
                 tipo = "ad";
             }
+
+            if(TiposUsuario.MUSICO.equals(binding.incluirContent.getPost().getAutor().getTipoUsuario())) {
+                try {
+                    getSupportActionBar().setTitle("Publicação");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    getSupportActionBar().setTitle("Anúncio");
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
             if(TiposUsuario.CONTRATANTE.equals(post.getAutor().getTipoUsuario()))
@@ -172,7 +195,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         binding.incluirContent.listaComentarios.setLayoutManager(new LinearLayoutManager(this));
         binding.incluirContent.listaComentarios.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
+        getCidade();
     }
 
     private void preencherTela(Post post){
@@ -853,6 +876,30 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     }
                 }
             });
+        }
+    }
+
+
+    private String getCidade(){
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Address endereco = Util.getLocalizacao(this, location.getLatitude(), location.getLongitude());
+        return endereco.getLocality();
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1000:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    Address endereco = Util.getLocalizacao(this, location.getLatitude(), location.getLongitude());
+                } else {
+                    Toast.makeText(this, "Permissão negada!", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 }
