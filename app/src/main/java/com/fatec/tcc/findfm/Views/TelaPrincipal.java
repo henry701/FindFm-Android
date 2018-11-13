@@ -1,12 +1,18 @@
 package com.fatec.tcc.findfm.Views;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Address;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,6 +32,8 @@ import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityTelaPrincipalBinding;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -33,6 +41,8 @@ import java.util.Observer;
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer{
 
+    private Address localizacaoAtual;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private ProgressDialog dialog;
     private FragmentManager fragmentManager;
     private MenuItem radioMenu;
@@ -299,5 +309,70 @@ public class TelaPrincipal extends AppCompatActivity
 
     public Menu getOptionsMenu() {
         return optionsMenu;
+    }
+
+    public boolean getCidade() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
+                        R.string.texto_localizacao_permissao, "OK", (dialogInterface, i) -> {
+                            ActivityCompat.requestPermissions(TelaPrincipal.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    MY_PERMISSIONS_REQUEST_LOCATION);
+                        });
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        }
+        else {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            Activity activity = this;
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                            //TODO: Gravar no FindFM essas informações
+                        }
+                    });
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                        Activity activity = this;
+                        mFusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(this, location -> {
+                                    if (location != null) {
+                                        localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                                        //TODO: Gravar no FindFM essas informações
+                                    }
+                                });
+                    }
+
+                } else {
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
+                            R.string.texto_localizacao_sem_permissao, "OK", (dialogInterface, i) -> {
+                                ActivityCompat.requestPermissions(TelaPrincipal.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            });
+                }
+                return;
+            }
+
+        }
     }
 }

@@ -169,4 +169,6 @@
         </p>
         \n
     </string>
+    <string name="texto_localizacao_permissao">Precisamos da sua permissão para acessar sua localização.</string>
+    <string name="texto_localizacao_sem_permissao">Para melhor experiência, precisamos da sua permissão para acessar sua localização.</string>
 </resources>

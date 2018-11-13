@@ -1,22 +1,20 @@
 package com.fatec.tcc.findfm.Views;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
-import android.location.Location;
-import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,6 +65,8 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -81,6 +81,8 @@ import java.util.concurrent.TimeUnit;
 public class CriarPost extends AppCompatActivity implements Observer{
 
     private ActivityCriarPostBinding binding;
+    private Address localizacaoAtual;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
@@ -117,8 +119,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
             MidiaUtils.setImagemPerfilToImageView(imageView, this);
             binding.incluirContent.setPost(
                     new Post()
-                        .setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this)))
-                        .setMidias(new ArrayList<>()));
+                            .setAutor(new Usuario().setNomeCompleto(FindFM.getNomeUsuario(this)).setTipoUsuario(FindFM.getTipoUsuario(this)))
+                            .setMidias(new ArrayList<>()));
             if(FindFM.getTipoUsuario(this) != TiposUsuario.CONTRATANTE){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
             } else {
@@ -152,8 +154,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if(telaMode.equals("criando")){
             binding.incluirContent.setPost(
                     new Post()
-                        .setAutor(FindFM.getUsuario())
-                        .setMidias(new ArrayList<>()));
+                            .setAutor(FindFM.getUsuario())
+                            .setMidias(new ArrayList<>()));
             MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
             if(!TiposUsuario.CONTRATANTE.equals(FindFM.getTipoUsuario(this))){
                 binding.incluirContent.txtTitulo.setVisibility(View.GONE);
@@ -707,8 +709,8 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                     FindFM.setTelaAtual("POST_CRIADO");
                                     binding.incluirContent.setPost(
                                             new Post()
-                                                .setId(response.getData().toString())
-                                                .setMidias(new ArrayList<>()));
+                                                    .setId(response.getData().toString())
+                                                    .setMidias(new ArrayList<>()));
                                     telaMode = "visualizar";
                                     isVisitante = false;
                                     getPost(); }).create().show();
@@ -879,27 +881,68 @@ public class CriarPost extends AppCompatActivity implements Observer{
         }
     }
 
+    public boolean getCidade() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
-    private String getCidade(){
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        Address endereco = Util.getLocalizacao(this, location.getLatitude(), location.getLongitude());
-        return endereco.getLocality();
-
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
+                        R.string.texto_localizacao_permissao, "OK", (dialogInterface, i) -> {
+                            ActivityCompat.requestPermissions(CriarPost.this,
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    MY_PERMISSIONS_REQUEST_LOCATION);
+                        });
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        }
+        else {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            Activity activity = this;
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                            //TODO: Gravar no FindFM essas informações
+                        }
+                    });
+            return true;
+        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case 1000:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    Address endereco = Util.getLocalizacao(this, location.getLatitude(), location.getLongitude());
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                        Activity activity = this;
+                        mFusedLocationClient.getLastLocation()
+                                .addOnSuccessListener(this, location -> {
+                                    if (location != null) {
+                                        localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                                        //TODO: Gravar no FindFM essas informações
+                                    }
+                                });
+                    }
+
                 } else {
-                    Toast.makeText(this, "Permissão negada!", Toast.LENGTH_SHORT).show();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
+                            R.string.texto_localizacao_sem_permissao, "OK", (dialogInterface, i) -> {
+                                ActivityCompat.requestPermissions(CriarPost.this,
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
+                            });
                 }
+                return;
+            }
+
         }
     }
 }
