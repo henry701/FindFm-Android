@@ -80,8 +80,9 @@ import java.util.concurrent.TimeUnit;
 
 public class CriarPost extends AppCompatActivity implements Observer{
 
+    private FusedLocationProviderClient locationClient;
     private ActivityCriarPostBinding binding;
-    private Address localizacaoAtual;
+    private Address localizacaoAtual = null;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
@@ -168,13 +169,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
             if(TiposUsuario.MUSICO.equals(binding.incluirContent.getPost().getAutor().getTipoUsuario())) {
                 try {
-                    getSupportActionBar().setTitle("Publicação");
+                    getSupportActionBar().setTitle("Nova Publicação");
                 } catch (Exception e){
                     e.printStackTrace();
                 }
             } else {
                 try {
-                    getSupportActionBar().setTitle("Anúncio");
+                    getSupportActionBar().setTitle("Novo Anúncio");
                 } catch (Exception e){
                     e.printStackTrace();
                 }
@@ -900,12 +901,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
             return false;
         }
         else {
-            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            locationClient = LocationServices.getFusedLocationProviderClient(this);
             Activity activity = this;
-            mFusedLocationClient.getLastLocation()
+            locationClient.getLastLocation()
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+
                             //TODO: Gravar no FindFM essas informações
                         }
                     });
@@ -921,9 +923,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                        locationClient = LocationServices.getFusedLocationProviderClient(this);
                         Activity activity = this;
-                        mFusedLocationClient.getLastLocation()
+                        locationClient.getLastLocation()
                                 .addOnSuccessListener(this, location -> {
                                     if (location != null) {
                                         localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
