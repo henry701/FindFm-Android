@@ -81,7 +81,7 @@
                     android:backgroundTint="@color/white"
                     android:ems="10"
                     android:gravity="top"
-                    android:hint="@string/sua_publicacao"
+                    android:hint="@string/seu_trabalho"
                     android:inputType="textMultiLine"
                     android:maxLength="300"
                     android:text="@={trabalho.descricao}"

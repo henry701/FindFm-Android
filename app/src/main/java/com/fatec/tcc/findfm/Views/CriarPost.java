@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -720,14 +721,20 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 },
                 (ErrorResponse error) -> {
                     dialog.hide();
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            error.getMessage(),"OK",
-                            (dialog, id) -> { }).create().show();
+                    String mensagem = "";
+                    if(error != null) {
+                        Log.e("[ERRO-Response]CriaPost", error.getMessage());
+                        mensagem = error.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog, id) -> { }).create().show();
                 },
                 (VolleyError error) -> {
                     dialog.hide();
-                    error.printStackTrace();
+                    if(error != null) {
+                        Log.e("[ERRO-Volley]CriarPost", error.getMessage());
+                        error.printStackTrace();
+                    }
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Ocorreu um erro ao tentar conectar com nossos servidores." +
@@ -764,7 +771,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
                                 "Sucesso!", R.drawable.ic_error,
-                                "Comentário cadastrado com sucesso","OK",
+                                "Comentário adicionado com sucesso","OK",
                                 (dialog, id) -> {
                                     binding.incluirContent.txtComentar.setText("");
                                     this.dialog.setMessage("Carregando...");
@@ -775,14 +782,20 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 },
                 (ErrorResponse error) -> {
                     dialog.hide();
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            error.getMessage(),"OK",
-                            (dialog, id) -> { }).create().show();
+                    String mensagem = "";
+                    if(error != null) {
+                        Log.e("[ERRO-Response]Comentar", error.getMessage());
+                        mensagem = error.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog, id) -> { }).create().show();
                 },
                 (VolleyError error) -> {
                     dialog.hide();
-                    error.printStackTrace();
+                    if(error != null) {
+                        Log.e("[ERRO-Volley]Comentar", error.getMessage());
+                        error.printStackTrace();
+                    }
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Ocorreu um erro ao tentar conectar com nossos servidores." +

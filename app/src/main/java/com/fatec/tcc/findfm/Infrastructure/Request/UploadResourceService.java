@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Infrastructure.Request;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.BinaryTypedRequest;
@@ -37,11 +38,15 @@ public class UploadResourceService extends Observable{
                     }
                 },
                 (ErrorResponse error) -> {
+                    if(error != null)
+                        Log.e("[ERRO]Upload Service", error.getMessage());
                     String retorno = contentType;
                     setChanged();
                     notifyObservers(retorno);
                 },
                 (VolleyError error) -> {
+                    if(error != null)
+                        Log.e("[ERRO]Upload Service", error.getMessage());
                     String retorno = contentType;
                     setChanged();
                     notifyObservers(retorno);

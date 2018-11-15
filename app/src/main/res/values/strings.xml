@@ -109,6 +109,7 @@
     <string name="editar">Editar</string>
     <string name="recarregar">Recarregar</string>
     <string name="sua_publicacao">Adicione uma descrição pra seu trabalho…</string>
+    <string name="seu_trabalho">Adicione uma descrição pra seu trabalho…</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
     <string name="codigo_de_recuperacao">Código de recuperação</string>

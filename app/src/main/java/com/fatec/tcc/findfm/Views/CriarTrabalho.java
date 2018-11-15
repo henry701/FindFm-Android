@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -259,7 +260,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         } else if (telaMode.equals("criando")) {
             try {
-                getSupportActionBar().setTitle("Novo trabalho");
+                getSupportActionBar().setTitle("Novo Trabalho");
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -602,6 +603,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
         }
         filesToUpload.removeAll(filesToRemove);
+        binding.incluirContent.getTrabalho().getMidias().removeAll(filesToRemove);
         checkTelaMode();
     }
 
@@ -616,6 +618,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
         }
         filesToUpload.removeAll(filesToRemove);
+        binding.incluirContent.getTrabalho().getMidias().removeAll(filesToRemove);
         checkTelaMode();
     }
 
@@ -645,21 +648,25 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 },
                 (ErrorResponse error) -> {
                     dialog.hide();
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            error.getMessage(), "OK",
-                            (dialog, id) -> {
-                            }).create().show();
+                    String mensagem = "";
+                    if(error != null) {
+                        Log.e("[ERRO-Response]WorkAdd", error.getMessage());
+                        mensagem = error.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog, id) -> { }).create().show();
                 },
                 (VolleyError error) -> {
                     dialog.hide();
-                    error.printStackTrace();
+                    if(error != null) {
+                        Log.e("[ERRO-Response]Comentar", error.getMessage());
+                       error.printStackTrace();
+                    }
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Ocorreu um erro ao tentar conectar com nossos servidores." +
                                     "\nVerifique sua conexão com a Internet e tente novamente", "OK",
-                            (dialog, id) -> {
-                            }).create().show();
+                            (dialog, id) -> { }).create().show();
                 }
         );
 
@@ -706,21 +713,25 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 },
                                 (ErrorResponse error) -> {
                                     dialog.hide();
-                                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                            "Ops!", R.drawable.ic_error,
-                                            error.getMessage(), "OK",
-                                            (dialog, id) -> {
-                                            }).create().show();
+                                    String mensagem = "";
+                                    if(error != null) {
+                                        Log.e("[ERRO-Response]Música", error.getMessage());
+                                        mensagem = error.getMessage();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog, id) -> { }).create().show();
                                 },
                                 (VolleyError error) -> {
                                     dialog.hide();
-                                    error.printStackTrace();
+                                    if(error != null) {
+                                        Log.e("[ERRO-Volley]Música", error.getMessage());
+                                        error.printStackTrace();
+                                    }
                                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                                             "Ops!", R.drawable.ic_error,
                                             "Ocorreu um erro ao tentar conectar com nossos servidores." +
                                                     "\nVerifique sua conexão com a Internet e tente novamente", "OK",
-                                            (dialog, id) -> {
-                                            }).create().show();
+                                            (dialog, id) -> { }).create().show();
                                 }
                         );
 

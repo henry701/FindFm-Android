@@ -103,7 +103,7 @@
                     android:drawableLeft="@drawable/ic_phone"
                     android:hint="Contato: (11) 91234-1234 \nClique para ligar"
                     android:onClick="@{clickListener::onClick}"
-                    android:text="@{`Contato: ` + post.autor.telefone.telefoneFormatado + `\nClique para ligar`}"
+                    android:text="@{`Contato: ` + post.autor.telefone.telefoneFormatado}"
                     android:textAlignment="viewStart"
                     android:textColor="@color/white"
                     android:textSize="14sp"

@@ -36,12 +36,14 @@ public class DownloadResourceService extends Observable {
                     }
                 },
                 (ErrorResponse error) -> {
-                    Log.e("[ERRO]Download Service", error.getMessage());
+                    if(error != null)
+                        Log.e("[ERRO]Download Service", error.getMessage());
                     setChanged();
                     notifyObservers(null);
                 },
                 (VolleyError error) -> {
-                    Log.e("[ERRO]Download Service", error.getMessage());
+                    if (error != null)
+                        Log.e("[ERRO]Download Service", error.getMessage());
                     setChanged();
                     notifyObservers(null);
                 },
