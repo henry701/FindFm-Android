@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -121,24 +122,28 @@ public class RegistrarMusico extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]Instrume", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
-                            dialog.hide();
-                            error.printStackTrace();
                             TextView lb_selecione_titulo = findViewById(R.id.lb_selecione_titulo);
                             lb_selecione_titulo.setVisibility(View.GONE);
                             rc.setVisibility(View.GONE);
 
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            dialog.hide();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]Instrume", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
         dialog.show();

@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,8 +27,8 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.JsonUtils;
+import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterInstrumentos;
 import com.fatec.tcc.findfm.Views.Login;
@@ -101,20 +102,24 @@ public class RegistrarMusicoViewModel {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(view,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]Registro", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
                             dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(view,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]Registro", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
     }

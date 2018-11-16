@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,11 +83,13 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                             holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
                             holder.bindingVH.executePendingBindings();
                         } else{
+                            Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
                             AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                     "Ops!", R.drawable.ic_error,
                                     "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id1) -> { holder.bindingVH.executePendingBindings(); }).create().show();
+                                            "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
+                                    (dialog, id1) -> {
+                                    }).create().show();
                         }
 
                     });

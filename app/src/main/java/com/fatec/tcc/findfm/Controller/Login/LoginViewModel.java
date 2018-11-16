@@ -3,6 +3,7 @@ package com.fatec.tcc.findfm.Controller.Login;
 import android.app.ProgressDialog;
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -103,20 +104,24 @@ public class LoginViewModel {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(view,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]Login", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
                             dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(view,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]Login", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(view, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
     }

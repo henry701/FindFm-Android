@@ -7,6 +7,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -68,20 +69,24 @@ public class RecuperarSenha extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]RecSenha", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
                             dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]RecSenha", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
     }
@@ -118,20 +123,24 @@ public class RecuperarSenha extends AppCompatActivity {
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]RecSenh2", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
                             dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]RecSenh2", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
     }

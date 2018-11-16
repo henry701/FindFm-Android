@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.android.volley.Request;
@@ -122,23 +123,27 @@ public class SearchUsuario extends AppCompatActivity {
                         },
                         (ErrorResponse errorResponse) ->
                         {
-                            this.dialog.hide();
                             binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            dialog.hide();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]FindUser", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
-                            this.dialog.hide();
                             binding.listaUsuarios.setAdapter(new AdapterUsuario(userList, this, true));
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            dialog.hide();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]FindUser", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
         userList = new HashSet<>();

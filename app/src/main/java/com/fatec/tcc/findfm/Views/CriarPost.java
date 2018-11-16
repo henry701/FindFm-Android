@@ -217,10 +217,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
                                 binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
                             } else {
+                                Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
                                 AlertDialogUtils.newSimpleDialog__OneButton(this,
                                         "Ops!", R.drawable.ic_error,
                                         "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                                "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                                "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
                                         (dialog, id1) -> {
                                         }).create().show();
                             }
@@ -262,10 +263,11 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             .commit();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e("[ERRO-Download]MUS", "Erro ao baixar binário da música");
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Não foi possível obter a música." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente", "OK",
+                                    "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
                             (dialog, id1) -> {
                             }).create().show();
                 }
@@ -288,11 +290,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
                             binding.incluirContent.circularImageView.setImageBitmap(ext_pic);
                             binding.incluirContent.scrollView2.scrollTo(0,0);
                         } else{
+                            Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
                             AlertDialogUtils.newSimpleDialog__OneButton(this,
                                     "Ops!", R.drawable.ic_error,
                                     "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id1) -> { }).create().show();
+                                            "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
+                                    (dialog, id1) -> {
+                                    }).create().show();
                         }
 
                         dialog.hide();
@@ -373,6 +377,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if(telaMode.equals("visualizar") || telaMode.equals("editavel")){
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
+            binding.incluirContent.txtData.setVisibility(View.VISIBLE);
 
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
@@ -390,7 +395,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             }
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
-            //binding.incluirContent.txtTelefone.setVisibility(View.GONE);
+            binding.incluirContent.txtData.setVisibility(View.GONE);
             binding.incluirContent.textView5.setVisibility(View.GONE);
             binding.incluirContent.listaComentarios.setVisibility(View.GONE);
             binding.incluirContent.txtComentar.setVisibility(View.GONE);
@@ -471,20 +476,24 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         (ErrorResponse errorResponse) ->
                         {
                             dialog.hide();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    errorResponse.getMessage(),"OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]GetPost", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         },
-                        (VolleyError error) ->
+                        (VolleyError errorResponse) ->
                         {
                             dialog.hide();
-                            error.printStackTrace();
-                            AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                    (dialog, id) -> { }).create().show();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]GetPost", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
                         }
                 );
         try {
@@ -719,27 +728,27 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                     }
                 },
-                (ErrorResponse error) -> {
+                (ErrorResponse errorResponse) ->
+                {
                     dialog.hide();
-                    String mensagem = "";
-                    if(error != null) {
-                        Log.e("[ERRO-Response]CriaPost", error.getMessage());
-                        mensagem = error.getMessage();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Response]CriaPost", errorResponse.getMessage());
+                        mensagem = errorResponse.getMessage();
                     }
                     AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
                             mensagem, "OK", (dialog, id) -> { }).create().show();
                 },
-                (VolleyError error) -> {
+                (VolleyError errorResponse) ->
+                {
                     dialog.hide();
-                    if(error != null) {
-                        Log.e("[ERRO-Volley]CriarPost", error.getMessage());
-                        error.printStackTrace();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Volley]CriaPost", errorResponse.getMessage());
+                        errorResponse.printStackTrace();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                            (dialog, id) -> { }).create().show();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog, id) -> { }).create().show();
                 }
         );
 
@@ -780,27 +789,27 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
                     }
                 },
-                (ErrorResponse error) -> {
+                (ErrorResponse errorResponse) ->
+                {
                     dialog.hide();
-                    String mensagem = "";
-                    if(error != null) {
-                        Log.e("[ERRO-Response]Comentar", error.getMessage());
-                        mensagem = error.getMessage();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Response]Comentar", errorResponse.getMessage());
+                        mensagem = errorResponse.getMessage();
                     }
                     AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
                             mensagem, "OK", (dialog, id) -> { }).create().show();
                 },
-                (VolleyError error) -> {
+                (VolleyError errorResponse) ->
+                {
                     dialog.hide();
-                    if(error != null) {
-                        Log.e("[ERRO-Volley]Comentar", error.getMessage());
-                        error.printStackTrace();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Volley]Comentar", errorResponse.getMessage());
+                        errorResponse.printStackTrace();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(this,
-                            "Ops!", R.drawable.ic_error,
-                            "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                            (dialog, id) -> { }).create().show();
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog, id) -> { }).create().show();
                 }
         );
         postRequest.setRequest(new ComentarRequest(binding.incluirContent.txtComentar.getText().toString()));
@@ -852,11 +861,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     Exception error = (Exception) arg;
                     dialog.hide();
                     error.printStackTrace();
+                    Log.e("[ERRO-Upload]", "Erro ao fazer upload!");
                     AlertDialogUtils.newSimpleDialog__OneButton(this,
                             "Ops!", R.drawable.ic_error,
                             "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                            (dialog, id) -> {
+                                    "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
+                            (dialog, id1) -> {
                             }).create().show();
                 }
                 else if (arg instanceof String) {
@@ -866,11 +876,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     //Por algum motivo as vezes não retorna o id, isso é só pra nao dar exception
                     if(resultados.length == 1){
                         dialog.hide();
+                        Log.e("[ERRO-Upload]", "Erro ao fazer upload! Não retornou ID!");
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
                                 "Ops!", R.drawable.ic_error,
                                 "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                        "\nVerifique sua conexão com a Internet e tente novamente","OK",
-                                (dialog, id) -> { }).create().show();
+                                        "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
+                                (dialog, id1) -> {
+                                }).create().show();
                         return;
                     }
 
