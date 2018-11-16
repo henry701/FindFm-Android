@@ -46,7 +46,7 @@ public class Trabalhos_Fragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        FindFM.setTelaAtual("MEUS_POSTS");
+        FindFM.setTelaAtual("TRABALHOS");
         super.onActivityCreated(savedInstanceState);
     }
 

@@ -104,7 +104,7 @@ public class RecuperarSenha extends AppCompatActivity {
                                 this.dialog.dismiss();
                                 binding.lbInstrucao.setText(R.string.nova_senha);
                                 binding.txtCodigo.setVisibility(View.INVISIBLE);
-
+                                binding.buttonEnviar.setVisibility(View.INVISIBLE);
                                 EditText novaSenha = findViewById(R.id.txtNovaSenha);
                                 novaSenha.setVisibility(View.VISIBLE);
                                 novaSenha.setText(senha);
