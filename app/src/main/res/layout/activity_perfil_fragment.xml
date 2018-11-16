@@ -75,10 +75,11 @@
 
                 <EditText
                     android:id="@+id/txtNomeCompleto"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="51dp"
+                    android:layout_marginEnd="48dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
                     android:ems="10"
@@ -94,11 +95,11 @@
 
                 <EditText
                     android:id="@+id/txtTelefone"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="51dp"
+                    android:layout_marginEnd="48dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_phone"
                     android:ems="10"
@@ -113,11 +114,11 @@
 
                 <EditText
                     android:id="@+id/txtEmail"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="51dp"
+                    android:layout_marginEnd="48dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_email"
                     android:ems="10"
@@ -132,9 +133,11 @@
 
                 <EditText
                     android:id="@+id/txtSobre"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="123dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="48dp"
                     android:backgroundTint="@color/white"
                     android:ems="10"
                     android:gravity="top"
@@ -150,11 +153,11 @@
 
                 <LinearLayout
                     android:id="@+id/linearContratante"
-                    android:layout_width="284dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="51dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="51dp"
+                    android:layout_marginEnd="48dp"
                     android:orientation="vertical"
                     android:visibility="@{usuario.tipoUsuario.equals(TiposUsuario.CONTRATANTE) ? View.VISIBLE : View.GONE }"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +166,7 @@
 
                     <EditText
                         android:id="@+id/txtInauguracao"
-                        android:layout_width="282dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@color/white"
@@ -183,7 +186,7 @@
 
                     <EditText
                         android:id="@+id/txtCapacidadeLocal"
-                        android:layout_width="282dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
@@ -199,7 +202,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
@@ -210,7 +213,7 @@
 
                         <EditText
                             android:id="@+id/txtCidadeContratante"
-                            android:layout_width="172dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -226,7 +229,7 @@
                         <Spinner
                             android:id="@+id/cb_uf_contratante"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="109dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -242,7 +245,7 @@
 
                     <EditText
                         android:id="@+id/txtEndereco"
-                        android:layout_width="282dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
@@ -259,8 +262,8 @@
 
                     <EditText
                         android:id="@+id/txtNumeroEndereco"
-                        android:layout_width="137dp"
-                        android:layout_height="54dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="70dp"
                         android:layout_marginTop="8dp"
                         android:backgroundTint="@color/white"
@@ -278,11 +281,11 @@
 
                 <LinearLayout
                     android:id="@+id/linearMusico"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="17dp"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="17dp"
+                    android:layout_marginEnd="48dp"
                     android:orientation="vertical"
                     android:visibility="@{usuario.tipoUsuario.equals(TiposUsuario.MUSICO) ? View.VISIBLE : View.GONE }"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -291,9 +294,8 @@
 
                     <EditText
                         android:id="@+id/txtNascimento"
-                        android:layout_width="282dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@color/white"
                         android:clickable="true"
@@ -309,9 +311,8 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="32dp"
                         android:layout_marginBottom="8dp"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -320,7 +321,7 @@
 
                         <EditText
                             android:id="@+id/txtCidadeMusico"
-                            android:layout_width="172dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -336,7 +337,7 @@
                         <Spinner
                             android:id="@+id/cb_uf_musico"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="109dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -360,13 +361,15 @@
                         android:text="@string/escolha_instrumento"
                         android:textAlignment="center"
                         android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/listaInstrumentos"
-                        android:layout_width="350dp"
-                        android:layout_height="174dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
                         android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
@@ -374,11 +377,16 @@
 
                 <TextView
                     android:id="@+id/lb_alterarSenha"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="48dp"
                     android:text="@string/alterarSenha"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.503"
                     app:layout_constraintStart_toStartOf="parent"
@@ -387,7 +395,7 @@
 
                 <EditText
                     android:id="@+id/txtSenha"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="51dp"
                     android:layout_marginTop="8dp"
@@ -407,7 +415,7 @@
 
                 <EditText
                     android:id="@+id/txtConfirmaSenha"
-                    android:layout_width="282dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="51dp"
                     android:layout_marginTop="16dp"
@@ -427,12 +435,12 @@
 
                 <Button
                     android:id="@+id/buttonRegistrar"
-                    android:layout_width="88dp"
-                    android:layout_height="32dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginEnd="148dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="148dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginEnd="148dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/btn_bg"
                     android:onClick="@{viewModel::btnRegistrar_Click}"
                     android:text="@string/salvar"

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="postViewModel"
             type="com.fatec.tcc.findfm.Controller.Posts.PostViewModel"/>
     </data>
     <android.support.design.widget.CoordinatorLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,8 +16,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listaPosts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+            android:layout_height="match_parent" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/adicionar_post"
@@ -25,8 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:onClick="@{postViewModel::addButton}"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:onClick="@{postViewModel::addButton}"
+            app:layout_anchor="@+id/listaPosts"
+            app:layout_anchorGravity="bottom|center_vertical|end"
             app:srcCompat="@drawable/ic_adicionar" />
 
         <TextView

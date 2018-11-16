@@ -7,8 +7,9 @@
     <string name="base_url">http://192.168.3.100:8083</string>
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
-    <string name="base_url">http://192.168.3.100:8083</string>
-    <string name="radio_url">http://192.168.3.100:8084</string>
+
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
@@ -108,7 +109,7 @@
     <string name="publicar">Publicar</string>
     <string name="editar">Editar</string>
     <string name="recarregar">Recarregar</string>
-    <string name="sua_publicacao">Adicione uma descrição pra seu trabalho…</string>
+    <string name="sua_publicacao">Adicione uma descrição…</string>
     <string name="seu_trabalho">Adicione uma descrição pra seu trabalho…</string>
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
@@ -122,16 +123,16 @@
     <string name="comentarios">Comentários</string>
     <string name="sem_comentarios">Não há comentários para sem mostrados</string>
     <string name="escreva_comentario">Escreva seu comentário</string>
-    <string name="comentar">Comentar</string>
+    <string name="comentar">Comentar\t</string>
     <string name="curtir">Curtir</string>
     <string name="descurtir">Descurtir</string>
-    <string name="biografia">Biografia</string>
+    <string name="biografia">Biografia…</string>
     <string name="sem_trabalhos">Não há trabalhos para serem mostrados</string>
     <string name="descricao">Adicione uma descrição…</string>
     <string name="integrantes">Integrantes</string>
     <string name="sem_integrantes">Não há integrantes</string>
     <string name="original">Esse é um trabalho original?</string>
-    <string name="adicionar">Adicionar</string>
+    <string name="adicionar">Adicionar\t</string>
     <string name="musicas">Músicas</string>
     <string name="sem_musicas">Não há músicas para serem mostradas</string>
     <string name="anuncios_sugeridos">Anúncios Sugeridos</string>

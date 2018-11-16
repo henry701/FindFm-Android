@@ -54,11 +54,9 @@ public class Registrar extends AppCompatActivity {
 
     public void btnRegistrar_Click(View v){
         AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                "Aceito os termos", "Não aceito os termos",
-                (dialog, which) -> {
-                    binding.getViewModel().registrar();
-                },
-                (dialog, which) -> { onBackPressed(); }).show();
+                "Aceito", "Não aceito",
+                (dialog, which) -> binding.getViewModel().registrar(),
+                (dialog, which) -> {}).show();
 
     }
 

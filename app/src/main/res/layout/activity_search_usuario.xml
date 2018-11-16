@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:backgroundTint="@color/white"
             android:drawableLeft="@drawable/ic_search"
             android:ems="10"
@@ -23,7 +24,7 @@
             android:inputType="textPersonName"
             android:maxLength="40"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/btnBusca"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,44 +32,44 @@
             android:id="@+id/btnBusca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/btn_bg"
             android:text="@string/busca"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/lb_semUsuario"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtBusca" />
 
         <TextView
             android:id="@+id/lb_semUsuario"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/sem_resultados"
             android:textAlignment="center"
             android:textColor="@color/white"
+            android:textSize="16sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtBusca" />
+            app:layout_constraintTop_toBottomOf="@+id/btnBusca" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listaUsuarios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lb_semUsuario"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/btnBusca" />
     </android.support.constraint.ConstraintLayout>
 </layout>

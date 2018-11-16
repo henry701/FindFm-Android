@@ -71,12 +71,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:onClick="@{postViewModel::addButton}"
             app:backgroundTint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/space"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/space"
             app:srcCompat="@drawable/ic_adicionar" />
 
         <TextView
@@ -107,7 +107,7 @@
         <Space
             android:id="@+id/space"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="45dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

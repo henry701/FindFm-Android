@@ -76,12 +76,12 @@ public class TelaPrincipal extends AppCompatActivity
 
         if(!FindFM.isUsuarioAceitouTermos(this) && !TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))) {
             AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                    "Aceito os termos", "Não aceito os termos",
+                    "Aceito", "Não aceito",
                     (dialog, which) -> FindFM.usuarioAceitaTermos(this),
                     (dialog, which) -> onBackPressed()).show();
         } else if (TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))){
             AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                    "Aceito os termos", "Não aceito os termos",
+                    "Aceito", "Não aceito",
                     (dialog, which) -> {},
                     (dialog, which) -> onBackPressed()).show();
         }

@@ -25,7 +25,7 @@
             android:layout_marginBottom="4dp"
             android:gravity="top|left"
             android:text="@{musica.nome}"
-            android:textAlignment="gravity"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -37,10 +37,10 @@
 
         <Button
             android:id="@+id/btnPlay"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/ic_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnPause"
@@ -48,8 +48,8 @@
 
         <Button
             android:id="@+id/btnPause"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
@@ -61,11 +61,11 @@
 
         <Button
             android:id="@+id/btnStop"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/ic_stop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/btnPause"
@@ -74,9 +74,9 @@
         <SeekBar
             android:id="@+id/duracaoBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_height="26dp"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/btnPlay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

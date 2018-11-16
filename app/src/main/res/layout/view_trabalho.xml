@@ -11,21 +11,23 @@
             name="clickListener"
             type="android.view.View.OnClickListener" />
     </data>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/bg_preto_transparente">
 
         <TextView
             android:id="@+id/txt_musicas_trabalho"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
             android:onClick="@{clickListener::onClick}"
+            android:text="Músicas"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
@@ -34,14 +36,14 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearMidia"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            tools:text="Músicas" />
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <TextView
-            android:id="@+id/txt_subtitulo"
+            android:id="@+id/txt_original"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="15dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:hint="Publicado em: 32/13/2059 23:59:59"
             android:onClick="@{clickListener::onClick}"
@@ -58,7 +60,7 @@
 
         <TextView
             android:id="@+id/txt_feats"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -77,11 +79,11 @@
 
         <TextView
             android:id="@+id/lb_titulo_post"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="32dp"
             android:gravity="top|left"
             android:onClick="@{clickListener::onClick}"
             android:text="@={post.titulo}"
@@ -97,29 +99,28 @@
 
         <TextView
             android:id="@+id/lb_descricao"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="147dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
             android:onClick="@{clickListener::onClick}"
-            android:text="@={post.descricao}"
+            android:text="Descrição"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/linearMidia"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_subtitulo"
+            app:layout_constraintTop_toBottomOf="@+id/txt_original"
             app:layout_constraintVertical_bias="0.052"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            tools:text="Descrição" />
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <LinearLayout
             android:id="@+id/linearMidia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,40 +162,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnLike"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="55dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/like"
-            android:text="@{post.likes}"
-            android:textColor="@color/red"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="visible"
-            app:layout_constraintEnd_toStartOf="@+id/btnComent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_feats" />
-
-        <Button
-            android:id="@+id/btnComent"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="44dp"
-            android:layout_marginStart="253dp"
-            android:background="@drawable/comment"
-            android:onClick="@{clickListener::onClick}"
-            android:text="@{post.comentarios != null ? String.valueOf(post.comentarios.size()) : `0`}"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btnLike"
-            app:layout_constraintTop_toTopOf="@+id/btnLike" />
-
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -204,23 +171,23 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/view_feats"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:clipToPadding="false"
-            app:layout_constraintEnd_toEndOf="@+id/btnComent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_feats" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/view_musicas"
-            android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_musicas_trabalho" />
