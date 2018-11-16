@@ -35,6 +35,17 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <ImageButton
+                    android:id="@+id/btnDenunciar"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="9dp"
+                    android:background="@drawable/ic_report"
+                    android:onClick="btnDenunciar_Click"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="@+id/txtTitulo"
+                    app:layout_constraintTop_toTopOf="@+id/checkOriginal" />
+
                 <EditText
                     android:id="@+id/txtTitulo"
                     android:layout_width="match_parent"

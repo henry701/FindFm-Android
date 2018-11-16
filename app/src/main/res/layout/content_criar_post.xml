@@ -38,6 +38,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <ImageButton
+                    android:id="@+id/btnDenunciar"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/ic_report"
+                    android:onClick="btnDenunciar_Click"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/txtNome"
+                    app:layout_constraintTop_toTopOf="@+id/txtNome" />
+
                 <com.github.siyamed.shapeimageview.CircularImageView
                     android:id="@+id/circularImageView"
                     android:layout_width="130dp"
@@ -87,6 +99,7 @@
                     android:id="@+id/txtLocalizacao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:hint="São Paulo - SP"
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -101,6 +114,7 @@
                     android:id="@+id/txtTelefone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:clickable="true"
                     android:drawableLeft="@drawable/ic_phone"
                     android:hint="Contato: (11) 91234-1234 \nClique para ligar"
@@ -110,7 +124,6 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/txtTitulo"
                     app:layout_constraintEnd_toEndOf="@+id/txtNome"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@+id/txtNome"

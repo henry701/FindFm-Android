@@ -32,6 +32,7 @@ import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
+import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -243,7 +244,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         if (telaMode.equals("visualizar")) {
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
-
+            binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
             binding.incluirContent.checkOriginal.setEnabled(false);
@@ -269,6 +270,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 optionsMenu.getItem(0).setVisible(true);
                 optionsMenu.getItem(1).setVisible(false);
             }
+            binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.incluirContent.checkOriginal.setOnClickListener(view -> {
                 if(binding.incluirContent.checkOriginal.isChecked()) {
                     binding.incluirContent.checkOriginal.setChecked(false);
@@ -593,6 +595,68 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 },
                 (dialog, which) -> { }, input).show();
 
+    }
+
+    public void btnDenunciar_Click(View v){
+        EditText input = new EditText(this);
+        AlertDialogUtils.newTextDialog(this, "Denunciar trabalho", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências",
+                "Denunciar", "Cancelar",
+                (dialog, which) -> {
+                    try {
+                        String idTrabalho = binding.incluirContent.getTrabalho().getId();
+                        String denuncia = input.getText().toString();
+                        Usuario denunciante = FindFM.getUsuario();
+                        //TODO
+                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                                this,
+                                HttpMethod.POST.getCodigo(),
+                                ComentarRequest.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(getResources(),"work/report/" + idTrabalho),
+                                null,
+                                (ResponseBody response) -> {
+                                    this.dialog.hide();
+                                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                        AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                                "Sucesso!", R.drawable.ic_error,
+                                                "Denúncia enviada com sucesso!","OK",
+                                                (dialog1, id) -> this.dialog.setMessage("Carregando...")).create().show();
+                                    }
+                                },
+                                (ErrorResponse errorResponse) ->
+                                {
+                                    this.dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
+                                        mensagem = errorResponse.getMessage();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                },
+                                (VolleyError errorResponse) ->
+                                {
+                                    this.dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
+                                        errorResponse.printStackTrace();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                }
+                        );
+                        //reportRequest.setRequest();
+                        this.dialog.setMessage("Enviando denúncia, aguarde...");
+                        this.dialog.show();
+                        reportRequest.execute();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                (dialog, which) -> { }, input).show();
     }
 
     public void btnRemoverImagem_Click(View v){
