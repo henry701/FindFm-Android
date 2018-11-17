@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,15 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Comentario;
 import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
+import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -108,7 +112,6 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                 Util.open_form_withParam__no_return(activity, TelaPrincipal.class, "CriarPost", bundle);
             }
         };
-
         holder.bindingVH.fotoPerfil.setOnClickListener(irPerfil);
         holder.bindingVH.txtNome.setOnClickListener(irPerfil);
 
@@ -167,6 +170,13 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                     "Ops!", R.drawable.ic_error,
                     "Essa ação requer que você esteja logado com uma conta\nLogue ou crie uma conta","OK",
                     (dialog, id) -> { }).create().show());
+        } else {
+            if (!comentario.getComentador().getId().equals(FindFM.getUsuario().getId())) {
+                holder.bindingVH.lbDescricao.setOnLongClickListener(v -> {
+                    denunciar("Comentário", comentario.getId());
+                    return true;
+                });
+            }
         }
 
 
@@ -175,6 +185,72 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
         }else {
             holder.bindingVH.btnLike.setText(R.string.curtir);
         }
+    }
+
+    private void denunciar(String tipo, String idItem){
+        ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        EditText input = new EditText(activity);
+        AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
+                "Denunciar", "Cancelar",
+                (dialog1, which) -> {
+                    try {
+                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.POST.getCodigo(),
+                                Denuncia.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(),"report"),
+                                null,
+                                (ResponseBody response) -> {
+                                    dialog.hide();
+                                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                                "Sucesso!", R.drawable.ic_error,
+                                                "Denúncia enviada com sucesso!","OK",
+                                                (dialog2, id) -> dialog.setMessage("Carregando...")).create().show();
+                                    }
+                                },
+                                (ErrorResponse errorResponse) ->
+                                {
+                                    dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
+                                        mensagem = errorResponse.getMessage();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                },
+                                (VolleyError errorResponse) ->
+                                {
+                                    dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
+                                        errorResponse.printStackTrace();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                }
+                        );
+                        reportRequest.setRequest(new Denuncia()
+                                .setId(idItem)
+                                .setContato(FindFM.getUsuario().getId())
+                                .setMotivo(input.getText().toString())
+                                .setTipo(tipo)
+                        );
+                        dialog.setMessage("Enviando denúncia, aguarde...");
+                        dialog.show();
+                        reportRequest.execute();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                (dialog2, which) -> { }, input).show();
     }
 
     @Override

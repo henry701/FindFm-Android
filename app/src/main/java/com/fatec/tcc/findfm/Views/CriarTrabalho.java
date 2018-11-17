@@ -30,9 +30,10 @@ import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.FileReference;
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Musico;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
-import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
+import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
@@ -81,7 +82,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
     private ProgressDialog dialog;
-
+    private boolean isVisitante;
     private String telaMode = "criando";
 
     private List<FileReference> filesToUpload = new ArrayList<>();
@@ -104,6 +105,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (param != null) {
                 if (!param.isEmpty()) {
                     telaMode = param.getString("telaMode");
+                    isVisitante = param.getBoolean("visitante");
                 }
             }
 
@@ -163,6 +165,10 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 Bitmap ext_pic = BitmapFactory.decodeStream(input);
                                 binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
                                 binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+                                binding.incluirContent.fotoPublicacao.setOnLongClickListener(v -> {
+                                    denunciar("Imagem", midia.getId());
+                                    return true;
+                                });
                             } else {
                                 Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
                                 AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -196,6 +202,12 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     exoPlayer.prepare(mediaSource);
                     exoPlayer.seekTo(100);
                     binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+                    if(!isVisitante) {
+                        binding.incluirContent.videoView.setOnLongClickListener(v -> {
+                            denunciar("Vídeo", midia.getId());
+                            return true;
+                        });
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -220,7 +232,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                 ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
             }
-            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
+            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -254,6 +266,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.btnAdicionarPessoa.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
+            if(!isVisitante) {
+                optionsMenu.getItem(2).setVisible(true);
+            } else {
+                optionsMenu.getItem(2).setVisible(false);
+            }
             try {
                 getSupportActionBar().setTitle("Trabalho");
             } catch (Exception e){
@@ -269,6 +286,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (optionsMenu != null) {
                 optionsMenu.getItem(0).setVisible(true);
                 optionsMenu.getItem(1).setVisible(false);
+                optionsMenu.getItem(2).setVisible(false);
             }
             binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.incluirContent.checkOriginal.setOnClickListener(view -> {
@@ -304,7 +322,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                         ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                     }
-                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
+                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     InputStream fis = getContentResolver().openInputStream(musica.getUri());
 
@@ -438,6 +456,9 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 break;
             case R.id.action_refresh:
                 getTrabalho();
+                break;
+            case R.id.action_report:
+                denunciar("Trabalho", binding.incluirContent.getTrabalho().getId());
                 break;
         }
 
@@ -587,7 +608,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                             ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                         }
-                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode)));
+                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
                         checkTelaMode();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -597,23 +618,19 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
     }
 
-    public void btnDenunciar_Click(View v){
+    private void denunciar(String tipo, String idItem){
         EditText input = new EditText(this);
-        AlertDialogUtils.newTextDialog(this, "Denunciar trabalho", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências",
+        AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
                 "Denunciar", "Cancelar",
                 (dialog, which) -> {
                     try {
-                        String idTrabalho = binding.incluirContent.getTrabalho().getId();
-                        String denuncia = input.getText().toString();
-                        Usuario denunciante = FindFM.getUsuario();
-                        //TODO
-                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
                                 this,
                                 HttpMethod.POST.getCodigo(),
-                                ComentarRequest.class,
+                                Denuncia.class,
                                 ResponseBody.class,
                                 ErrorResponse.class,
-                                HttpUtils.buildUrl(getResources(),"work/report/" + idTrabalho),
+                                HttpUtils.buildUrl(getResources(),"report"),
                                 null,
                                 (ResponseBody response) -> {
                                     this.dialog.hide();
@@ -647,11 +664,15 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                             mensagem, "OK", (dialog2, id) -> { }).create().show();
                                 }
                         );
-                        //reportRequest.setRequest();
+                        reportRequest.setRequest(new Denuncia()
+                                .setId(idItem)
+                                .setContato(FindFM.getUsuario().getId())
+                                .setMotivo(input.getText().toString())
+                                .setTipo(tipo)
+                        );
                         this.dialog.setMessage("Enviando denúncia, aguarde...");
                         this.dialog.show();
                         reportRequest.execute();
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -97,17 +97,17 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lista_posts"
             android:layout_width="match_parent"
-            android:layout_height="412dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/space"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fotoCapa"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/fotoCapa" />
 
-        <Space
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/space"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:background="@color/black_overlay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

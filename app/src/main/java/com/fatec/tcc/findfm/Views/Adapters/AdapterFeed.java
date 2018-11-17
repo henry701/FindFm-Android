@@ -120,13 +120,13 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                                         }).create().show();
                             }
 
-                            activity.getDialog().hide();
+                            //activity.getDialog().hide();
 
                         });
                     }
                 });
                 downloadService.getResource(midia.getId());
-                activity.getDialog().show();
+                //activity.getDialog().show();
             }
 
             if(midia.getContentType().contains("vid")) {
@@ -189,13 +189,13 @@ public class AdapterFeed extends RecyclerView.Adapter<AdapterFeed.ViewHolder> {
                                     }).create().show();
                         }
 
-                        activity.getDialog().hide();
+                        //activity.getDialog().hide();
 
                     });
                 }
             });
             downloadService.getResource(post.getAutor().getFotoID());
-            activity.getDialog().show();
+            //activity.getDialog().show();
         }
 
         holder.bindingVH.btnLike.setOnClickListener(

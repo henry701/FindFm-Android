@@ -1,18 +1,31 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.SeekBar;
 
+import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Musica;
+import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
+import com.fatec.tcc.findfm.Utils.HttpMethod;
+import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.databinding.FragmentAudioBinding;
 
 import java.util.ArrayList;
@@ -24,13 +37,15 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
     private boolean isCadastro;
+    private boolean isVisitante;
 
     public AdapterMusica() { }
 
-    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro){
+    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro, boolean isVisitante){
         this.Musicas = Musicas;
         this.activity = activity;
         this.isCadastro = isCadastro;
+        this.isVisitante = isVisitante;
     }
 
     public List<Musica> getMusicas(){
@@ -124,6 +139,13 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position, Musicas.size());
             });
+        } else {
+            if(!isVisitante) {
+                holder.bindingVH.relativeLayout.setOnLongClickListener(v -> {
+                    denunciar("Música", musica.getIdResource());
+                    return true;
+                });
+            }
         }
     }
 
@@ -145,6 +167,72 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         this.Musicas = Musicas;
         this.activity = activity;
         notifyDataSetChanged();
+    }
+
+    private void denunciar(String tipo, String idItem){
+        ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        EditText input = new EditText(activity);
+        AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
+                "Denunciar", "Cancelar",
+                (dialog1, which) -> {
+                    try {
+                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                                activity,
+                                HttpMethod.POST.getCodigo(),
+                                Denuncia.class,
+                                ResponseBody.class,
+                                ErrorResponse.class,
+                                HttpUtils.buildUrl(activity.getResources(),"report"),
+                                null,
+                                (ResponseBody response) -> {
+                                    dialog.hide();
+                                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                                "Sucesso!", R.drawable.ic_error,
+                                                "Denúncia enviada com sucesso!","OK",
+                                                (dialog2, id) -> dialog.setMessage("Carregando...")).create().show();
+                                    }
+                                },
+                                (ErrorResponse errorResponse) ->
+                                {
+                                    dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
+                                        mensagem = errorResponse.getMessage();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                },
+                                (VolleyError errorResponse) ->
+                                {
+                                    dialog.hide();
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    if(errorResponse != null) {
+                                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
+                                        errorResponse.printStackTrace();
+                                    }
+                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                                }
+                        );
+                        reportRequest.setRequest(new Denuncia()
+                                .setId(idItem)
+                                .setContato(FindFM.getUsuario().getId())
+                                .setMotivo(input.getText().toString())
+                                .setTipo(tipo)
+                        );
+                        dialog.setMessage("Enviando denúncia, aguarde...");
+                        dialog.show();
+                        reportRequest.execute();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                (dialog2, which) -> { }, input).show();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

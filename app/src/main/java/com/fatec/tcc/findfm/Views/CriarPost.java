@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +38,7 @@ import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
 import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
+import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -85,7 +85,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
     private FusedLocationProviderClient locationClient;
     private ActivityCriarPostBinding binding;
-    private Address localizacaoAtual = null;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
@@ -218,6 +217,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 Bitmap ext_pic = BitmapFactory.decodeStream(input);
                                 binding.incluirContent.fotoPublicacao.setImageBitmap(ext_pic);
                                 binding.incluirContent.fotoPublicacao.setVisibility(View.VISIBLE);
+                                if(!isVisitante && !post.getAutor().getId().equals(FindFM.getUsuario().getId())) {
+                                    binding.incluirContent.fotoPublicacao.setOnLongClickListener(v -> {
+                                        denunciar("Imagem", midia.getId());
+                                        return true;
+                                    });
+                                }
                             } else {
                                 Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
                                 AlertDialogUtils.newSimpleDialog__OneButton(this,
@@ -251,6 +256,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     exoPlayer.prepare(mediaSource);
                     exoPlayer.seekTo(100);
                     binding.incluirContent.videoView.setVisibility(View.VISIBLE);
+                    if(!isVisitante && !post.getAutor().getId().equals(FindFM.getUsuario().getId())) {
+                        binding.incluirContent.videoView.setOnLongClickListener(v -> {
+                            denunciar("Vídeo", midia.getId());
+                            return true;
+                        });
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -260,6 +271,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 try {
                     Uri uri = Uri.parse(HttpUtils.buildUrl(getResources(), "resource/" + midia.getId()));
                     binding.incluirContent.frameAudio.setVisibility(View.VISIBLE);
+                    if(!isVisitante && !post.getAutor().getId().equals(FindFM.getUsuario().getId())) {
+                        binding.incluirContent.frameAudio.setOnLongClickListener(v -> {
+                            denunciar("Música", midia.getId());
+                            return true;
+                        });
+                    }
                     getFragmentManager().beginTransaction().replace(R.id.frame_audio,
                             new Audio_Fragment(this, uri))
                             .commit();
@@ -381,19 +398,28 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtDesc.setEnabled(false);
             binding.incluirContent.txtData.setVisibility(View.VISIBLE);
             //binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
+            binding.incluirContent.txtTelefone.setVisibility(View.VISIBLE);
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
             binding.fabAudio.setVisibility(View.INVISIBLE);
-
+            binding.incluirContent.textView5.setVisibility(View.VISIBLE);
+            binding.incluirContent.txtComentar.setVisibility(View.VISIBLE);
+            binding.incluirContent.btnComentar.setVisibility(View.VISIBLE);
             binding.incluirContent.btnRemoverImagem.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
             binding.incluirContent.btnRemoverAudio.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
+            if(!isVisitante) {
+                optionsMenu.getItem(2).setVisible(true);
+            } else {
+                optionsMenu.getItem(2).setVisible(false);
+            }
         } else if (telaMode.equals("editando") || telaMode.equals("criando")){
             if(optionsMenu != null) {
                 optionsMenu.getItem(0).setVisible(true);
                 optionsMenu.getItem(1).setVisible(false);
+                optionsMenu.getItem(2).setVisible(false);
             }
             //binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.incluirContent.txtTitulo.setEnabled(true);
@@ -425,10 +451,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
 
         if(telaMode.equals("criando")) {
             binding.incluirContent.txtData.setVisibility(View.GONE);
+            binding.incluirContent.txtTelefone.setVisibility(View.GONE);
         }
 
         if(telaMode.equals("editavel") && optionsMenu != null){
             optionsMenu.getItem(0).setVisible(false);
+            optionsMenu.getItem(2).setVisible(false);
         }
 
         //Diferenciar post de anuncio
@@ -530,6 +558,12 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 break;
             case R.id.action_refresh:
                 getPost();
+                break;
+            case R.id.action_report:
+                if(tipo.equals("post"))
+                    denunciar("Publicação", binding.incluirContent.getPost().getId());
+                else
+                    denunciar("Anúncio", binding.incluirContent.getPost().getId());
                 break;
         }
 
@@ -771,23 +805,19 @@ public class CriarPost extends AppCompatActivity implements Observer{
         postRequest.execute();
     }
 
-    public void btnDenunciar_Click(View v){
+    private void denunciar(String tipo, String idItem){
         EditText input = new EditText(this);
-        AlertDialogUtils.newTextDialog(this, "Denunciar trabalho", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências",
+        AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
                 "Denunciar", "Cancelar",
                 (dialog, which) -> {
                     try {
-                        String idTrabalho = binding.incluirContent.getPost().getId();
-                        String denuncia = input.getText().toString();
-                        Usuario denunciante = FindFM.getUsuario();
-                        //TODO
-                        JsonTypedRequest<ComentarRequest, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
                                 this,
                                 HttpMethod.POST.getCodigo(),
-                                ComentarRequest.class,
+                                Denuncia.class,
                                 ResponseBody.class,
                                 ErrorResponse.class,
-                                HttpUtils.buildUrl(getResources(),"work/report/" + idTrabalho),
+                                HttpUtils.buildUrl(getResources(),"report"),
                                 null,
                                 (ResponseBody response) -> {
                                     this.dialog.hide();
@@ -821,11 +851,15 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                             mensagem, "OK", (dialog2, id) -> { }).create().show();
                                 }
                         );
-                        //reportRequest.setRequest();
+                        reportRequest.setRequest(new Denuncia()
+                                .setId(idItem)
+                                .setContato(FindFM.getUsuario().getId())
+                                .setMotivo(input.getText().toString())
+                                .setTipo(tipo)
+                        );
                         this.dialog.setMessage("Enviando denúncia, aguarde...");
                         this.dialog.show();
                         reportRequest.execute();
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

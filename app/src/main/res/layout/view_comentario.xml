@@ -18,15 +18,14 @@
             android:id="@+id/lb_descricao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="44dp"
             android:text="@={comentario.comentario}"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNome"
             tools:text="Descrição" />
 
@@ -46,7 +45,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/fotoPerfil"
             app:layout_constraintTop_toBottomOf="@+id/txtNome"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.48"
             tools:text="Publicado em: 05/05/2018 22:00:05" />
 
         <TextView
