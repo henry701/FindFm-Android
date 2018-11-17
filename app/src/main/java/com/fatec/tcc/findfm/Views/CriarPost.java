@@ -38,6 +38,7 @@ import com.fatec.tcc.findfm.Model.Business.Post;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.ComentarRequest;
+import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
 import com.fatec.tcc.findfm.Model.Http.Request.PostRequest;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -379,7 +380,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
             binding.incluirContent.txtData.setVisibility(View.VISIBLE);
-            binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
+            //binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
             binding.fabAudio.setVisibility(View.INVISIBLE);
@@ -394,7 +395,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 optionsMenu.getItem(0).setVisible(true);
                 optionsMenu.getItem(1).setVisible(false);
             }
-            binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
+            //binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.incluirContent.txtTitulo.setEnabled(true);
             binding.incluirContent.txtDesc.setEnabled(true);
             binding.incluirContent.txtData.setVisibility(View.GONE);
@@ -757,7 +758,9 @@ public class CriarPost extends AppCompatActivity implements Observer{
         PostRequest param = new PostRequest();
         param.setTitulo(post.getTitulo())
                 .setDescricao(post.getDescricao())
-                .setMidias(post.getMidias());
+                .setMidias(post.getMidias())
+                .setCoordenada((Coordenada) FindFM.getMap().get("coordenadas"));
+
         postRequest.setRequest(param);
         try {
             getFragmentManager().findFragmentById(R.id.frame_audio).onDestroy();
@@ -995,10 +998,13 @@ public class CriarPost extends AppCompatActivity implements Observer{
             locationClient.getLastLocation()
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
-                            localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
-
-                            //TODO: Gravar no FindFM essas informações
+                            Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                        } else {
+                            Util.requestLocalizacao(this);
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        Util.requestLocalizacao(this);
                     });
             return true;
         }
@@ -1008,8 +1014,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         locationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -1017,12 +1022,15 @@ public class CriarPost extends AppCompatActivity implements Observer{
                         locationClient.getLastLocation()
                                 .addOnSuccessListener(this, location -> {
                                     if (location != null) {
-                                        localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
-                                        //TODO: Gravar no FindFM essas informações
+                                        Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                                    } else {
+                                        Util.requestLocalizacao(this);
                                     }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Util.requestLocalizacao(this);
                                 });
                     }
-
                 } else {
                     AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
                             R.string.texto_localizacao_sem_permissao, "OK", (dialogInterface, i) -> {

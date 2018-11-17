@@ -6,7 +6,14 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
+
+import com.android.volley.VolleyError;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.BinaryTypedRequest;
+import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
+import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 
 import java.util.List;
 import java.util.Locale;
@@ -78,7 +85,7 @@ public class Util {
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    public static Address getLocalizacao(Context context, double latitude, double longitude){
+    public static void getLocalizacao(Context context, double latitude, double longitude){
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> locais;
         try {
@@ -86,13 +93,60 @@ public class Util {
             if (locais.size() > 0 ){
                 for (Address local : locais){
                     if(local.getLocality() != null && local.getLocality().length() > 0){
-                        return  local;
+                        Coordenada coordenada = new Coordenada()
+                                .setCity(local.getLocality())
+                                .setRegion_code(local.getAdminArea())
+                                .setLatitude(latitude)
+                                .setLongitude(longitude);
+                        FindFM.getMap().put("coordenadas", coordenada);
                     }
                 }
             }
         } catch (Exception e){
             e.printStackTrace();
+            Log.e("[ERRO-Response]Posicao", e.getMessage());
         }
-        return null;
+    }
+
+    public static void requestLocalizacao(Activity activity){
+
+        BinaryTypedRequest<BinaryResponse, ErrorResponse> coordenadas = new BinaryTypedRequest<>(
+                activity,
+                HttpMethod.GET.getCodigo(),
+                BinaryResponse.class,
+                ErrorResponse.class,
+                "https://ipapi.co/latlong/",
+                null,
+                (BinaryResponse response) -> {
+
+                    if(response.getData() != null) {
+                        try {
+                            String str = new String(response.getData(), "UTF-8");
+                            String[] array = str.split(",");
+                            Double latitude = Double.valueOf(array[0]);
+                            Double longitude = Double.valueOf(array[1]);
+                            Coordenada coordenada = new Coordenada()
+                                    .setLatitude(latitude)
+                                    .setLongitude(longitude);
+                            FindFM.getMap().put("coordenadas", coordenada);
+                        } catch (Exception error) {
+                            error.printStackTrace();
+                            Log.e("[ERRO] Get Coordenadas", error.getMessage());
+                        }
+                    }
+                },
+                (ErrorResponse error) -> {
+                    if(error != null)
+                        Log.e("[ERRO] Get Coordenadas", error.getMessage());
+
+                },
+                (VolleyError error) -> {
+                    if (error != null)
+                        Log.e("[ERRO] Get Coordenadas", error.getMessage());
+
+                },
+                null
+        );
+        coordenadas.execute();
     }
 }

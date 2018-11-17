@@ -97,6 +97,7 @@ public class SearchUsuario extends AppCompatActivity {
                                         }
                                         usuario.setTipoUsuario(TiposUsuario.fromKind(user.getKind()));
                                         usuario.setNomeCompleto(user.getFullName());
+                                        usuario.setSobre(user.getSobre());
                                         if(apenasMusicos) {
                                             if (TiposUsuario.MUSICO.equals(usuario.getTipoUsuario())) {
                                                 userList.add(usuario);

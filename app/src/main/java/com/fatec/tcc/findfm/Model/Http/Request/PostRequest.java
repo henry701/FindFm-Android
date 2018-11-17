@@ -8,6 +8,7 @@ public class PostRequest {
 
     private String titulo;
     private String descricao;
+    private Coordenada coordenada;
     private List<FileReference> midias;
 
     public String getTitulo() {
@@ -34,6 +35,15 @@ public class PostRequest {
 
     public PostRequest setMidias(List<FileReference> midias) {
         this.midias = midias;
+        return this;
+    }
+
+    public Coordenada getCoordenada() {
+        return coordenada;
+    }
+
+    public PostRequest setCoordenada(Coordenada coordenada) {
+        this.coordenada = coordenada;
         return this;
     }
 }

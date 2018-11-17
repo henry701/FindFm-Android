@@ -335,9 +335,13 @@ public class TelaPrincipal extends AppCompatActivity
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
-                            localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
-                            //TODO: Gravar no FindFM essas informações
+                            Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                        } else {
+                            Util.requestLocalizacao(this);
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        Util.requestLocalizacao(this);
                     });
             return true;
         }
@@ -347,8 +351,7 @@ public class TelaPrincipal extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -356,12 +359,15 @@ public class TelaPrincipal extends AppCompatActivity
                         mFusedLocationClient.getLastLocation()
                                 .addOnSuccessListener(this, location -> {
                                     if (location != null) {
-                                        localizacaoAtual = Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
-                                        //TODO: Gravar no FindFM essas informações
+                                        Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
+                                    } else {
+                                        Util.requestLocalizacao(this);
                                     }
+                                })
+                                .addOnFailureListener(e -> {
+                                    Util.requestLocalizacao(this);
                                 });
                     }
-
                 } else {
                     AlertDialogUtils.newSimpleDialog__OneButton(this, "Atenção!", R.drawable.ic_error,
                             R.string.texto_localizacao_sem_permissao, "OK", (dialogInterface, i) -> {

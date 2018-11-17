@@ -213,7 +213,7 @@
 
                         <EditText
                             android:id="@+id/txtCidadeContratante"
-                            android:layout_width="wrap_content"
+                            android:layout_width="172dp"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -229,7 +229,7 @@
                         <Spinner
                             android:id="@+id/cb_uf_contratante"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="wrap_content"
+                            android:layout_width="109dp"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -321,7 +321,7 @@
 
                         <EditText
                             android:id="@+id/txtCidadeMusico"
-                            android:layout_width="wrap_content"
+                            android:layout_width="172dp"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -337,7 +337,7 @@
                         <Spinner
                             android:id="@+id/cb_uf_musico"
                             style="@style/Widget.AppCompat.Spinner.Underlined"
-                            android:layout_width="wrap_content"
+                            android:layout_width="109dp"
                             android:layout_height="54dp"
                             android:backgroundTint="@color/white"
                             android:drawableLeft="@drawable/ic_local"
@@ -355,9 +355,8 @@
                         android:id="@+id/lb_selecione_titulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         android:text="@string/escolha_instrumento"
                         android:textAlignment="center"
                         android:textColor="@color/white"
