@@ -202,12 +202,11 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     exoPlayer.prepare(mediaSource);
                     exoPlayer.seekTo(100);
                     binding.incluirContent.videoView.setVisibility(View.VISIBLE);
-                    if(!isVisitante) {
-                        binding.incluirContent.videoView.setOnLongClickListener(v -> {
-                            denunciar("Vídeo", midia.getId());
-                            return true;
-                        });
-                    }
+                    binding.incluirContent.videoView.setOnLongClickListener(v -> {
+                        denunciar("Vídeo", midia.getId());
+                        return true;
+                    });
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -266,11 +265,8 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.btnAdicionarPessoa.setVisibility(View.GONE);
             optionsMenu.getItem(0).setVisible(false);
             optionsMenu.getItem(1).setVisible(true);
-            if(!isVisitante) {
-                optionsMenu.getItem(2).setVisible(true);
-            } else {
-                optionsMenu.getItem(2).setVisible(false);
-            }
+            optionsMenu.getItem(2).setVisible(true);
+
             try {
                 getSupportActionBar().setTitle("Trabalho");
             } catch (Exception e){
@@ -619,66 +615,84 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     }
 
     private void denunciar(String tipo, String idItem){
-        EditText input = new EditText(this);
-        AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
+        EditText motivo = new EditText(this);
+        EditText contato = new EditText(this);
+        motivo.setHint("Escreva aqui sua denúncia.");
+        contato.setHint("Seu nome e e-mail para contato.");
+        AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report,
+                "Diga-nos o que está errado e tomaremos as devidas providências!",
                 "Denunciar", "Cancelar",
-                (dialog, which) -> {
-                    try {
-                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
-                                this,
-                                HttpMethod.POST.getCodigo(),
-                                Denuncia.class,
-                                ResponseBody.class,
-                                ErrorResponse.class,
-                                HttpUtils.buildUrl(getResources(),"report"),
-                                null,
-                                (ResponseBody response) -> {
-                                    this.dialog.hide();
-                                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                        AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                                "Sucesso!", R.drawable.ic_error,
-                                                "Denúncia enviada com sucesso!","OK",
-                                                (dialog1, id) -> this.dialog.setMessage("Carregando...")).create().show();
+                (dialog, which) ->
+                        AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report,
+                                "Diga-nos como podemos te contatar para falar sobre essa denúncia.",
+                                "Denunciar", "Cancelar",
+                                (dialog4, which4) -> {
+                                    if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
+                                            contato.getText() != null && !"".equals(contato.getText().toString()) ) {
+                                        String denuncia = motivo.getText().toString();
+                                        String denunciante = contato.getText().toString();
+                                        initDenunciarRequest(idItem, denuncia, denunciante, tipo);
+                                    } else {
+                                        Toast.makeText(this, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
                                     }
                                 },
-                                (ErrorResponse errorResponse) ->
-                                {
-                                    this.dialog.hide();
-                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                                    if(errorResponse != null) {
-                                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
-                                        mensagem = errorResponse.getMessage();
-                                    }
-                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
-                                },
-                                (VolleyError errorResponse) ->
-                                {
-                                    this.dialog.hide();
-                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                                    if(errorResponse != null) {
-                                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
-                                        errorResponse.printStackTrace();
-                                    }
-                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
-                                }
-                        );
-                        reportRequest.setRequest(new Denuncia()
-                                .setId(idItem)
-                                .setContato(FindFM.getUsuario().getId())
-                                .setMotivo(input.getText().toString())
-                                .setTipo(tipo)
-                        );
-                        this.dialog.setMessage("Enviando denúncia, aguarde...");
-                        this.dialog.show();
-                        reportRequest.execute();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                                (dialog2, which2) -> { }, motivo).show(),
+                (dialog, which) -> { }, motivo).show();
+    }
+
+    private void initDenunciarRequest(String idItem, String motivo, String contato, String tipo){
+        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                this,
+                HttpMethod.POST.getCodigo(),
+                Denuncia.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                HttpUtils.buildUrl(getResources(),"report"),
+                null,
+                (ResponseBody response) -> {
+                    this.dialog.hide();
+                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                        AlertDialogUtils.newSimpleDialog__OneButton(this,
+                                "Sucesso!", R.drawable.ic_error,
+                                "Denúncia enviada com sucesso!","OK",
+                                (dialog1, id) -> this.dialog.setMessage("Carregando...")).create().show();
                     }
                 },
-                (dialog, which) -> { }, input).show();
+                (ErrorResponse errorResponse) ->
+                {
+                    this.dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
+                        mensagem = errorResponse.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                },
+                (VolleyError errorResponse) ->
+                {
+                    this.dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
+                        errorResponse.printStackTrace();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                }
+        );
+
+        reportRequest.setRequest(new Denuncia()
+                .setId(idItem)
+                .setContato(contato)
+                .setMotivo(motivo)
+                .setTipo(tipo)
+        );
+        this.dialog.setMessage("Enviando denúncia, aguarde...");
+        this.dialog.show();
+        reportRequest.execute();
     }
+
 
     public void btnRemoverImagem_Click(View v){
         List<FileReference> filesToRemove = new ArrayList<>();

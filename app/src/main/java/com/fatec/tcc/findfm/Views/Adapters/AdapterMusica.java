@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
@@ -23,7 +24,6 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
-import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.databinding.FragmentAudioBinding;
@@ -140,12 +140,10 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 notifyItemRangeChanged(position, Musicas.size());
             });
         } else {
-            if(!isVisitante) {
-                holder.bindingVH.relativeLayout.setOnLongClickListener(v -> {
-                    denunciar("Música", musica.getIdResource());
-                    return true;
-                });
-            }
+            holder.bindingVH.relativeLayout.setOnLongClickListener(v -> {
+                denunciar("Música", musica.getIdResource());
+                return true;
+            });
         }
     }
 
@@ -170,70 +168,88 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     }
 
     private void denunciar(String tipo, String idItem){
+        EditText motivo = new EditText(activity);
+        EditText contato = new EditText(activity);
+        motivo.setHint("Escreva aqui sua denúncia.");
+        contato.setHint("Seu nome e e-mail para contato.");
+        AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report,
+                "Diga-nos o que está errado e tomaremos as devidas providências!",
+                "Denunciar", "Cancelar",
+                (dialog, which) ->
+                        AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report,
+                                "Diga-nos como podemos te contatar para falar sobre essa denúncia.",
+                                "Denunciar", "Cancelar",
+                                (dialog4, which4) -> {
+                                    if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
+                                            contato.getText() != null && !"".equals(contato.getText().toString()) ) {
+                                        String denuncia = motivo.getText().toString();
+                                        String denunciante = contato.getText().toString();
+                                        initDenunciarRequest(idItem, denuncia, denunciante, tipo);
+                                    } else {
+                                        Toast.makeText(activity, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                (dialog2, which2) -> { }, motivo).show(),
+                (dialog, which) -> { }, motivo).show();
+    }
+
+    private void initDenunciarRequest(String idItem, String motivo, String contato, String tipo){
         ProgressDialog dialog = new ProgressDialog(activity);
         dialog.setMessage("Carregando...");
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
-        EditText input = new EditText(activity);
-        AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report, "Diga-nos o que está errado e tomaremos as devidas providências!",
-                "Denunciar", "Cancelar",
-                (dialog1, which) -> {
-                    try {
-                        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
-                                activity,
-                                HttpMethod.POST.getCodigo(),
-                                Denuncia.class,
-                                ResponseBody.class,
-                                ErrorResponse.class,
-                                HttpUtils.buildUrl(activity.getResources(),"report"),
-                                null,
-                                (ResponseBody response) -> {
-                                    dialog.hide();
-                                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                                "Sucesso!", R.drawable.ic_error,
-                                                "Denúncia enviada com sucesso!","OK",
-                                                (dialog2, id) -> dialog.setMessage("Carregando...")).create().show();
-                                    }
-                                },
-                                (ErrorResponse errorResponse) ->
-                                {
-                                    dialog.hide();
-                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                                    if(errorResponse != null) {
-                                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
-                                        mensagem = errorResponse.getMessage();
-                                    }
-                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
-                                },
-                                (VolleyError errorResponse) ->
-                                {
-                                    dialog.hide();
-                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                                    if(errorResponse != null) {
-                                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
-                                        errorResponse.printStackTrace();
-                                    }
-                                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                                            mensagem, "OK", (dialog2, id) -> { }).create().show();
-                                }
-                        );
-                        reportRequest.setRequest(new Denuncia()
-                                .setId(idItem)
-                                .setContato(FindFM.getUsuario().getId())
-                                .setMotivo(input.getText().toString())
-                                .setTipo(tipo)
-                        );
-                        dialog.setMessage("Enviando denúncia, aguarde...");
-                        dialog.show();
-                        reportRequest.execute();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
+                activity,
+                HttpMethod.POST.getCodigo(),
+                Denuncia.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                HttpUtils.buildUrl(activity.getResources(),"report"),
+                null,
+                (ResponseBody response) -> {
+                    dialog.hide();
+                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                "Sucesso!", R.drawable.ic_error,
+                                "Denúncia enviada com sucesso!","OK",
+                                (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
                     }
                 },
-                (dialog2, which) -> { }, input).show();
+                (ErrorResponse errorResponse) ->
+                {
+                    dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
+                        mensagem = errorResponse.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                },
+                (VolleyError errorResponse) ->
+                {
+                    dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
+                        errorResponse.printStackTrace();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                }
+        );
+
+        reportRequest.setRequest(new Denuncia()
+                .setId(idItem)
+                .setContato(contato)
+                .setMotivo(motivo)
+                .setTipo(tipo)
+        );
+        dialog.setMessage("Enviando denúncia, aguarde...");
+        dialog.show();
+        reportRequest.execute();
     }
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
