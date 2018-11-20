@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -191,14 +192,15 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
     private void denunciar(String tipo, String idItem){
         EditText motivo = new EditText(activity);
         EditText contato = new EditText(activity);
-        motivo.setHint("Escreva aqui sua denúncia.");
-        contato.setHint("Seu nome e e-mail para contato.");
+        InputFilter[] filtros =new InputFilter[] {new InputFilter.LengthFilter(60)};
+        motivo.setFilters(filtros);
+        contato.setFilters(filtros);
         AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report,
-                "Diga-nos o que está errado e tomaremos as devidas providências!",
+                "Diga-nos o que está errado e tomaremos as devidas providências!\nEscreva aqui sua denúncia:",
                 "Denunciar", "Cancelar",
                 (dialog, which) ->
                         AlertDialogUtils.newTextDialog(activity, "Denunciar " + tipo + " ?", R.drawable.ic_report,
-                                "Diga-nos como podemos te contatar para falar sobre essa denúncia.",
+                                "Diga-nos como podemos te contatar para falar sobre essa denúncia.\nSeu nome e e-mail para contato:",
                                 "Denunciar", "Cancelar",
                                 (dialog4, which4) -> {
                                     if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
@@ -210,7 +212,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                                         Toast.makeText(activity, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
                                     }
                                 },
-                                (dialog2, which2) -> { }, motivo).show(),
+                                (dialog2, which2) -> { },contato).show(),
                 (dialog, which) -> { }, motivo).show();
     }
 

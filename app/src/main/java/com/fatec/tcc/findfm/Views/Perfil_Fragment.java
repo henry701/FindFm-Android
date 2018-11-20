@@ -221,6 +221,7 @@ public class Perfil_Fragment extends Fragment {
                                 this.usuario.setFotoID(null);
                                 this.usuario.setFoto(null);
                                 this.usuario.setSobre(user.getSobre());
+                                this.usuario.setVisitas(Long.parseLong(user.getVisits()));
                                 if(user.getAvatar() != null){
                                     if(user.getAvatar().get_id() != null){
                                         this.usuario.setFotoID(user.getAvatar().get_id());
@@ -366,6 +367,16 @@ public class Perfil_Fragment extends Fragment {
             binding.txtSenha.setVisibility(View.GONE);
             binding.txtConfirmaSenha.setVisibility(View.GONE);
             binding.buttonRegistrar.setVisibility(View.GONE);
+        }
+
+        if(usuario.getId().equals(FindFM.getUsuario().getId())){
+            try {
+                activity.getSupportActionBar().setTitle("Meu Perfil");
+                binding.lbVisitas.setVisibility(View.VISIBLE);
+                binding.lbVisitas.setText(String.format("Visitas: %d", usuario.getVisitas()));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         if(usuario.getFotoID() != null && itsMe){

@@ -24,6 +24,7 @@ public class User {
     private String sobre;
     private LinkedTreeMap<String, Double> habilidades;
     private List<Musica> musicas;
+    private String visits;
 
     public ArrayList<Instrumento> getIntrumentos() {
         ArrayList<Instrumento> instrumentos = new ArrayList<>();
@@ -115,6 +116,14 @@ public class User {
 
     public void setSobre(String sobre) {
         this.sobre = sobre;
+    }
+
+    public String getVisits() {
+        return visits;
+    }
+
+    public void setVisits(String visits) {
+        this.visits = visits;
     }
 
     public class Avatar {

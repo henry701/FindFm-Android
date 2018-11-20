@@ -13,6 +13,7 @@ public class Usuario {
     private String foto;
     private TiposUsuario tipoUsuario;
     private String sobre;
+    private long visitas;
 
     public Usuario(){}
 
@@ -138,5 +139,13 @@ public class Usuario {
 
     public void setSobre(String sobre) {
         this.sobre = sobre;
+    }
+
+    public long getVisitas() {
+        return visitas;
+    }
+
+    public void setVisitas(long visitas) {
+        this.visitas = visitas;
     }
 }

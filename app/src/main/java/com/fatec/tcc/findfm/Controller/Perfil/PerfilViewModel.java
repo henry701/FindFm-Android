@@ -151,7 +151,7 @@ public class PerfilViewModel {
         else if (!Formatadores.validarEmail(usuario.getEmail())) {
             Toast.makeText(view.getApplicationContext(), "Insira um e-mail válido!", Toast.LENGTH_SHORT).show();
         }
-        else if (this.senha.get() != null || this.confirmaSenha.get() != null) {
+        else if (this.senha.get() != null && this.confirmaSenha.get() != null && (!this.senha.get().isEmpty() && !this.confirmaSenha.get().isEmpty())) {
             if (this.senha.get().length() < 6) {
                 Toast.makeText(view.getApplicationContext(), "A senha não pode ter menos de 6 caracteres!", Toast.LENGTH_SHORT).show();
             } else if (this.senha.get().trim().isEmpty() || this.confirmaSenha.get().trim().isEmpty()) {

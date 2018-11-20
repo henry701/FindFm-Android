@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -756,7 +757,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                             new Post()
                                                     .setId(response.getData().toString())
                                                     .setMidias(new ArrayList<>()));
-                                    telaMode = "visualizar";
+                                    telaMode = "editavel";
                                     isVisitante = false;
                                     getPost(); }).create().show();
 
@@ -805,14 +806,15 @@ public class CriarPost extends AppCompatActivity implements Observer{
     private void denunciar(String tipo, String idItem){
         EditText motivo = new EditText(this);
         EditText contato = new EditText(this);
-        motivo.setHint("Escreva aqui sua denúncia.");
-        contato.setHint("Seu nome e e-mail para contato.");
+        InputFilter[] filtros =new InputFilter[] {new InputFilter.LengthFilter(60)};
+        motivo.setFilters(filtros);
+        contato.setFilters(filtros);
         AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report,
-                "Diga-nos o que está errado e tomaremos as devidas providências!",
+                "Diga-nos o que está errado e tomaremos as devidas providências!\nEscreva aqui sua denúncia:",
                 "Denunciar", "Cancelar",
                 (dialog, which) ->
                         AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report,
-                        "Diga-nos como podemos te contatar para falar sobre essa denúncia.",
+                        "Diga-nos como podemos te contatar para falar sobre essa denúncia.\nSeu nome e e-mail para contato:",
                         "Denunciar", "Cancelar",
                         (dialog4, which4) -> {
                             if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
@@ -824,7 +826,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                 Toast.makeText(this, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
                             }
                         },
-                        (dialog2, which2) -> { }, motivo).show(),
+                        (dialog2, which2) -> { }, contato).show(),
                 (dialog, which) -> { }, motivo).show();
     }
 
