@@ -75,7 +75,6 @@
                     android:drawableEnd="@null"
                     android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
                     android:drawableRight="@null"
-                    android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
                     android:text="@string/original"
                     android:textColor="@android:color/background_light"
                     android:textSize="14sp"

@@ -25,15 +25,16 @@ public class User {
     private LinkedTreeMap<String, Double> habilidades;
     private List<Musica> musicas;
     private String visits;
+    private String musicsRadio;
 
     public ArrayList<Instrumento> getIntrumentos() {
         ArrayList<Instrumento> instrumentos = new ArrayList<>();
 
-        if(habilidades != null) {
-            for (String key : habilidades.keySet()) {
+        if(getHabilidades() != null) {
+            for (String key : getHabilidades().keySet()) {
                 instrumentos.add(
                         new Instrumento(key.toUpperCase().charAt(0) + key.substring(1, key.length()),
-                                NivelHabilidade.from(habilidades.get(key).intValue())));
+                                NivelHabilidade.from(getHabilidades().get(key).intValue())));
             }
         }
         return instrumentos;
@@ -124,6 +125,26 @@ public class User {
 
     public void setVisits(String visits) {
         this.visits = visits;
+    }
+
+    public LinkedTreeMap<String, Double> getHabilidades() {
+        return habilidades;
+    }
+
+    public List<Musica> getMusicas() {
+        return musicas;
+    }
+
+    public void setMusicas(List<Musica> musicas) {
+        this.musicas = musicas;
+    }
+
+    public String getMusicsRadio() {
+        return musicsRadio;
+    }
+
+    public void setMusicsRadio(String musicsRadio) {
+        this.musicsRadio = musicsRadio;
     }
 
     public class Avatar {

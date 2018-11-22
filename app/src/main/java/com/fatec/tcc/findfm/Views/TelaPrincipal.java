@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Address;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -41,7 +40,6 @@ import java.util.Observer;
 public class TelaPrincipal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer{
 
-    private Address localizacaoAtual;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private ProgressDialog dialog;
     private FragmentManager fragmentManager;
@@ -102,18 +100,20 @@ public class TelaPrincipal extends AppCompatActivity
 
         if(bundle != null) {
             if (bundle.getString("id_usuario") != null){
+                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                 fragmentManager.beginTransaction().replace(R.id.frame_content,
                         new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", bundle.getString("id_usuario"))))
                         .commit();
                 return;
             } else if (bundle.getBoolean("euMesmo") == true){
+                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                 fragmentManager.beginTransaction().replace(R.id.frame_content,
                         new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
                         .commit();
                 return;
             }
         }
-
+        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                 .commit();
     }
@@ -131,6 +131,7 @@ public class TelaPrincipal extends AppCompatActivity
             } else {
                 binding.navView.getMenu().getItem(0).setChecked(true);
                 fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                 fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                         .commit();
             }
@@ -197,30 +198,35 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                             .commit();
                 }
                 break;
             case R.id.meu_perfil:
                 if(!tela.equals("MEU_PERFIL")) {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
                             .commit();
                 }
                 break;
             case R.id.meus_posts:
                 if(!tela.equals("MEUS_POSTS")) {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
                             .commit();
                 }
                 break;
             case R.id.anuncio_sugerido:
                 if(!tela.equals("ANUNCIOS_SUGERIDOS")) {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new AnunciosSugeridos_Fragment(this))
                             .commit();
                 }
                 break;
             case R.id.trabalhos:
                 if(!tela.equals("TRABALHOS")) {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
                     fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this))
                             .commit();
                 }

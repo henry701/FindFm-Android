@@ -25,6 +25,7 @@ import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
 import com.fatec.tcc.findfm.databinding.FragmentAudioBinding;
@@ -38,15 +39,15 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
     private boolean isCadastro;
-    private boolean isVisitante;
+    private boolean isAutor;
 
     public AdapterMusica() { }
 
-    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro, boolean isVisitante){
+    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro, boolean isAutor){
         this.Musicas = Musicas;
         this.activity = activity;
         this.isCadastro = isCadastro;
-        this.isVisitante = isVisitante;
+        this.isAutor = isAutor;
     }
 
     public List<Musica> getMusicas(){
@@ -133,6 +134,8 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         });
 
         if(isCadastro) {
+            holder.bindingVH.lbReproducoesMusica.setVisibility(View.GONE);
+            holder.bindingVH.checkRadio.setVisibility(View.GONE);
             holder.bindingVH.btnRemoverMusica.setVisibility(View.VISIBLE);
             holder.bindingVH.btnRemoverMusica.setOnClickListener(v -> {
                 stopMedia();
@@ -145,6 +148,28 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 denunciar("Música", musica.getIdResource());
                 return true;
             });
+
+            if(isAutor){
+                holder.bindingVH.lbReproducoesMusica.setVisibility(View.VISIBLE);
+                holder.bindingVH.checkRadio.setVisibility(View.VISIBLE);
+                holder.bindingVH.checkRadio.setOnClickListener(v -> {
+                    Long selecionadasRadio = FindFM.getUsuario().getSelecionadasRadio();
+                    if ( selecionadasRadio >= 3) {
+                        AlertDialogUtils.newSimpleDialog__OneButton(activity, "Atenção!", R.drawable.ic_error,
+                                "Você já selecionou 3 (três) músicas para a rádio.", "OK", null).show();
+                    } else {
+                        if (!holder.bindingVH.checkRadio.isChecked()) {
+                            holder.bindingVH.checkRadio.setChecked(true);
+                        } else {
+                            holder.bindingVH.checkRadio.setChecked(false);
+                        }
+                        musica.setAutorizadoRadio(holder.bindingVH.checkRadio.isChecked());
+                        FindFM.getUsuario().setSelecionadasRadio(selecionadasRadio++);
+                    }
+                });
+
+            }
+
         }
     }
 

@@ -8,8 +8,8 @@
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
 
-    <string name="base_url">http://192.168.3.100:8083</string>
-    <string name="radio_url">http://192.168.3.100:8084</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
@@ -101,6 +101,7 @@
     <string name="radio_carregando">Carregando Rádio</string>
     <string name="radio_tocar">Tocar Rádio</string>
     <string name="radio_pausar">Pausar Rádio</string>
+    <string name="permite_radio">Autorizada Rádio</string>
     <string name="instrucao_recuperar_senha">Insira seu e-mail e iremos entrar em contato com você</string>
     <string name="enviar">Enviar</string>
     <string name="continuar">Continuar</string>
@@ -141,7 +142,7 @@
     <string name="buscar">Buscar...</string>
     <string name="denunciar">Denunciar</string>
     <string name="alterarSenha">Preencha os campos abaixo apenas se deseja mudar de senha</string>
-    <string name="labelTermos">Termos de Uso</string>
+    <string name="labelTermos">Nossos <b>Termos de Uso</b></string>
     <string name="visitas">Visitas:</string>
     <string name="termos">
         <p>

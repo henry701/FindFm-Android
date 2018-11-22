@@ -119,11 +119,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 .setMidias(new ArrayList<>())
                                 .setMusicas(new ArrayList<>()));
                 getSupportActionBar().setTitle("Novo Trabalho");
-            } else if (telaMode.equals("visualizar")) {
+            } 
+            else if (telaMode.equals("visualizar")) {
                 Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
                 binding.incluirContent.setTrabalho(trabalho);
-                getTrabalho();
-                getSupportActionBar().setTitle(binding.incluirContent.getTrabalho().getNome());
+                checkTelaMode();
+                preencherTela(trabalho);
+                getSupportActionBar().setTitle(trabalho.getNome());
             }
 
         } catch (Exception e){
@@ -232,7 +234,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                 ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
             }
-            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
+            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), "editavel".equals(telaMode)));
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -443,7 +445,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 }
                 if(filesToUpload.isEmpty()){
                     if(listaMusicas.isEmpty()) {
-                        initRequestTrabalho();
+                        criarTrabalhoRequest();
                     } else {
                         for(Musica musica : listaMusicas){
                             createMusica(musica);
@@ -694,8 +696,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         this.dialog.show();
         reportRequest.execute();
     }
-
-
+    
     public void btnRemoverImagem_Click(View v){
         List<FileReference> filesToRemove = new ArrayList<>();
         for(FileReference midia : filesToUpload){
@@ -726,7 +727,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         checkTelaMode();
     }
 
-    private void initRequestTrabalho() {
+    private void criarTrabalhoRequest() {
         JsonTypedRequest<Trabalho, ResponseBody, ErrorResponse> trabalhoRequest = new JsonTypedRequest<>(
                 this,
                 HttpMethod.POST.getCodigo(),
@@ -811,7 +812,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                             }
                                         }
 
-                                        initRequestTrabalho();
+                                        criarTrabalhoRequest();
 
                                     }
                                 },
@@ -937,7 +938,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
                     if(filesToUpload.isEmpty()){
                         if(listaMusicas.isEmpty()) {
-                            initRequestTrabalho();
+                            criarTrabalhoRequest();
                         } else {
                             for(Musica musica : listaMusicas){
                                 createMusica(musica);

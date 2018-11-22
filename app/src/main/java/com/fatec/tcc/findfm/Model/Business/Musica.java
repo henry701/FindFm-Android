@@ -9,6 +9,7 @@ public class Musica {
     private long duracao;
     private boolean autoral;
     private boolean autorizadoRadio;
+    private Long reproducoes;
     private Uri uri;
 
     public Musica(){}
@@ -84,5 +85,14 @@ public class Musica {
         }
 
         return isEqual;
+    }
+
+    public String getReproducoes() {
+        return reproducoes.toString();
+    }
+
+    public Musica setReproducoes(long reproducoes) {
+        this.reproducoes = reproducoes;
+        return this;
     }
 }

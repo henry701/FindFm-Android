@@ -14,6 +14,7 @@ public class Usuario {
     private TiposUsuario tipoUsuario;
     private String sobre;
     private long visitas;
+    private long selecionadasRadio;
 
     public Usuario(){}
 
@@ -147,5 +148,13 @@ public class Usuario {
 
     public void setVisitas(long visitas) {
         this.visitas = visitas;
+    }
+
+    public long getSelecionadasRadio() {
+        return selecionadasRadio;
+    }
+
+    public void setSelecionadasRadio(long selecionadasRadio) {
+        this.selecionadasRadio = selecionadasRadio;
     }
 }

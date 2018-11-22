@@ -15,6 +15,42 @@
         android:layout_height="wrap_content"
         android:background="#41000000">
 
+        <CheckedTextView
+            android:id="@+id/checkRadio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:button="?android:attr/listChoiceIndicatorMultiple"
+            android:buttonTint="@color/white"
+            android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+            android:drawableEnd="@null"
+            android:drawableRight="@null"
+            android:text="@string/permite_radio"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:theme="@style/temaCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lb_reproducoes_Musica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:gravity="top|left"
+            android:text="@{`Reproduções: ` + musica.reproducoes}"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkRadio"
+            tools:text="Reproduções: 1235" />
+
         <TextView
             android:id="@+id/lb_titulo_Musica"
             android:layout_width="wrap_content"
@@ -32,7 +68,7 @@
             app:layout_constraintBottom_toTopOf="@+id/duracaoBar"
             app:layout_constraintEnd_toStartOf="@+id/btnRemoverMusica"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkRadio"
             tools:text="Marquin DJ - Sampley de Guitarra" />
 
         <Button

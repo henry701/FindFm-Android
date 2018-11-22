@@ -41,6 +41,7 @@ public class Trabalhos_Fragment extends Fragment {
             e.printStackTrace();
         }
         binding.adicionarTrabalho.setOnClickListener(this.adicionar_trabalho_click());
+        //binding.listaTrabalhos.setAdapter( new AdapterTrabalhos());
         return binding.getRoot();
     }
 
