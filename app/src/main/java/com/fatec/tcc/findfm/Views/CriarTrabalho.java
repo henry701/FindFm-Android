@@ -90,7 +90,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private List<Musica> listaMusicas = new ArrayList<>();
     private List<String> musicasEnviadas = new ArrayList<>();
     private Menu optionsMenu;
-
+    //TODO: para pegar o trabalho: pega o id do perfil (account/id), e ai vai retornar o trabalho
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +119,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 .setMidias(new ArrayList<>())
                                 .setMusicas(new ArrayList<>()));
                 getSupportActionBar().setTitle("Novo Trabalho");
+                binding.incluirContent.btnDenunciar.setVisibility(View.GONE);
             } 
             else if (telaMode.equals("visualizar")) {
                 Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
@@ -126,6 +127,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 checkTelaMode();
                 preencherTela(trabalho);
                 getSupportActionBar().setTitle(trabalho.getNome());
+                binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception e){
@@ -258,7 +260,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         if (telaMode.equals("visualizar")) {
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
-            binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
+            binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
             binding.incluirContent.checkOriginal.setEnabled(false);
@@ -287,7 +289,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 optionsMenu.getItem(1).setVisible(false);
                 optionsMenu.getItem(2).setVisible(false);
             }
-            binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
+            binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
             binding.incluirContent.checkOriginal.setOnClickListener(view -> {
                 if(binding.incluirContent.checkOriginal.isChecked()) {
                     binding.incluirContent.checkOriginal.setChecked(false);

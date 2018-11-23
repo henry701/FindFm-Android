@@ -47,23 +47,23 @@
                     android:id="@+id/lb_visitas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="8dp"
                     android:text="@string/visitas"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/circularImageView" />
+                    app:layout_constraintEnd_toStartOf="@+id/txtNomeCompleto"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/txtNomeCompleto"
+                    app:layout_constraintTop_toBottomOf="@+id/circularImageView" />
 
                 <ImageButton
                     android:id="@+id/btnRemoverImagem"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/ic_remover"
                     android:contentDescription="@string/foto_perfil"
                     android:onClick="btnRemoverImagem_Click"
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="48dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="48dp"
                     android:backgroundTint="@color/white"
                     android:drawableLeft="@drawable/ic_login"
@@ -106,7 +106,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/txtTelefone"
-                    app:layout_constraintTop_toBottomOf="@+id/circularImageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/lb_visitas" />
 
                 <EditText
                     android:id="@+id/txtTelefone"
@@ -370,8 +370,8 @@
                         android:id="@+id/lb_selecione_titulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/escolha_instrumento"
                         android:textAlignment="center"
                         android:textColor="@color/white"

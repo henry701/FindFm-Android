@@ -120,7 +120,7 @@ public class User {
     }
 
     public String getVisits() {
-        return visits;
+        return visits == null ? "0" : visits;
     }
 
     public void setVisits(String visits) {

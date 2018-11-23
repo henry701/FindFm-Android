@@ -183,7 +183,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     e.printStackTrace();
                 }
             }
-
+            getCidade();
 
         } else if(telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             Post post = (Post) FindFM.getMap().get("post");
@@ -201,7 +201,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
         binding.incluirContent.listaComentarios.setLayoutManager(new LinearLayoutManager(this));
         binding.incluirContent.listaComentarios.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        getCidade();
+
     }
 
     private void preencherTela(Post post){
@@ -1089,7 +1089,6 @@ public class CriarPost extends AppCompatActivity implements Observer{
                                         MY_PERMISSIONS_REQUEST_LOCATION);
                             });
                 }
-                return;
             }
 
         }

@@ -17,7 +17,6 @@ import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Views.Audio_Fragment;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewTrabalhoBinding;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -121,25 +120,6 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                     holder.bindingVH.videoView.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
-            }
-
-            if(midia.getContentType().contains("mus")) {
-                try {
-                    Uri uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + midia.getId()));
-                    holder.bindingVH.frameAudio.setVisibility(View.VISIBLE);
-                    activity.getFragmentManager().beginTransaction().replace(R.id.frame_audio,
-                            new Audio_Fragment(activity, uri))
-                            .commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("[ERRO-Download]MUS", "Erro ao baixar binário da música");
-                    AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                            "Ops!", R.drawable.ic_error,
-                            "Não foi possível obter a música." +
-                                    "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
-                            (dialog, id1) -> {
-                            }).create().show();
                 }
             }
         }

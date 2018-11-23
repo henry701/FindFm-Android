@@ -5,8 +5,8 @@
     <data>
         <import type="android.view.View"/>
         <variable
-            name="post"
-            type="com.fatec.tcc.findfm.Model.Business.Post"/>
+            name="trabalho"
+            type="com.fatec.tcc.findfm.Model.Business.Trabalho"/>
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
@@ -45,18 +45,16 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:hint="Publicado em:\n32/13/2059 23:59:59"
             android:onClick="@{clickListener::onClick}"
-            android:text="@{`Publicado em:\n` + post.data}"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="10sp"
             android:textStyle="italic"
-            android:visibility="@{post.data != null ? View.VISIBLE : View.GONE}"
+            android:text="@{trabalho.original.equals(`true`) ? `Trabalho Original` : `Trabalho não Original`}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/lb_titulo_post"
             app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
-            tools:text="Cover Iron Maiden" />
+            tools:text="Trabalho Original" />
 
         <TextView
             android:id="@+id/txt_feats"
@@ -86,12 +84,12 @@
             android:layout_marginEnd="32dp"
             android:gravity="top|left"
             android:onClick="@{clickListener::onClick}"
-            android:text="@={post.titulo}"
+            android:text="@={trabalho.nome}"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:visibility="@{post.titulo != null ? View.VISIBLE : View.GONE}"
+            android:visibility="@{trabalho.nome != null ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -105,10 +103,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:onClick="@{clickListener::onClick}"
-            android:text="Descrição"
+            android:text="@{trabalho.descricao}"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:visibility="@{post.descricao != null ? View.VISIBLE : View.GONE}"
+            android:visibility="@{trabalho.descricao != null ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/linearMidia"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -148,16 +146,6 @@
                 android:layout_height="300dp"
                 android:background="#000000"
                 android:contentDescription="Video"
-                android:visibility="gone" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="16dp" />
-
-            <FrameLayout
-                android:id="@+id/frame_audio"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:visibility="gone" />
 
         </LinearLayout>

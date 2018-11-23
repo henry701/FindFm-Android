@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
+import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -113,9 +114,10 @@ public class TelaPrincipal extends AppCompatActivity
                 return;
             }
         }
-        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+        //fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
         fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
                 .commit();
+        getCidade();
     }
 
     @Override
@@ -343,6 +345,11 @@ public class TelaPrincipal extends AppCompatActivity
                         if (location != null) {
                             Util.getLocalizacao(activity, location.getLatitude(), location.getLongitude());
                         } else {
+                            Util.requestLocalizacao(this);
+                        }
+
+                        Coordenada coordenada = (Coordenada) FindFM.getMap().get("coordenadas");
+                        if(coordenada == null){
                             Util.requestLocalizacao(this);
                         }
                     })
