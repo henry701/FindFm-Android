@@ -5,6 +5,7 @@ import com.fatec.tcc.findfm.Model.Business.Instrumento;
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.NivelHabilidade;
 import com.fatec.tcc.findfm.Model.Business.Telefone;
+import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class User {
     private List<Musica> musicas;
     private String visits;
     private String musicsRadio;
+    private List<TrabalhoResponse> trabalhos;
 
     public ArrayList<Instrumento> getIntrumentos() {
         ArrayList<Instrumento> instrumentos = new ArrayList<>();
@@ -145,6 +147,26 @@ public class User {
 
     public void setMusicsRadio(String musicsRadio) {
         this.musicsRadio = musicsRadio;
+    }
+
+    public List<Trabalho> getTrabalhos() {
+        List<Trabalho> trabalhos = new ArrayList<>();
+        for(TrabalhoResponse trabalhoResponse : this.trabalhos){
+            Trabalho trabalho = new Trabalho();
+            trabalho.setId(trabalhoResponse.getId());
+            trabalho.setMusicos(trabalhoResponse.getMusicos());
+            trabalho.setDescricao(trabalhoResponse.getDescricao());
+            trabalho.setNome(trabalhoResponse.getNome());
+            trabalho.setOriginal(trabalhoResponse.getOriginal());
+            trabalho.setMidias(trabalhoResponse.getMidias());
+            trabalho.setMusicas(trabalhoResponse.getMusicas());
+        }
+
+        return trabalhos;
+    }
+
+    public void setTrabalhos(List<TrabalhoResponse> trabalhos) {
+        this.trabalhos = trabalhos;
     }
 
     public class Avatar {

@@ -88,7 +88,7 @@ public class Musica {
     }
 
     public String getReproducoes() {
-        return reproducoes.toString();
+        return reproducoes == null ? "0" : reproducoes.toString();
     }
 
     public Musica setReproducoes(long reproducoes) {

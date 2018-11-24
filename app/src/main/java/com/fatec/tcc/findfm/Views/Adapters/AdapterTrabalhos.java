@@ -35,21 +35,22 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.ViewHolder> {
 
     private List<Trabalho> trabalhos = new ArrayList<>();
     private TelaPrincipal activity;
-    private boolean isVisitante;
+    private boolean isAutor;
 
     public AdapterTrabalhos() {
     }
 
-    public AdapterTrabalhos(List<Trabalho> trabalhos, TelaPrincipal activity, boolean isVisitante){
+    public AdapterTrabalhos(List<Trabalho> trabalhos, TelaPrincipal activity, boolean isAutor){
         this.trabalhos = trabalhos;
         this.activity = activity;
-        this.isVisitante = isVisitante;
+        this.isAutor = isAutor;
     }
 
     public List<Trabalho> getTrabalhos(){
@@ -124,7 +125,9 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
             }
         }
 
-        //holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(trabalho.getMusicos(), this, false));
+        holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, isAutor));
+
+        holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false));
         /*
         holder.bindingVH.setClickListener(v -> {
             if(trabalho.getAutor().getId().equals(FindFM.getUsuario().getId())){

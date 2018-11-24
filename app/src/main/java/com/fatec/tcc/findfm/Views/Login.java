@@ -151,6 +151,7 @@ public class Login extends AppCompatActivity {
                                                 Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
                                         );
                                         musico.setInstrumentos(user.getIntrumentos());
+                                        musico.setTrabalhos(user.getTrabalhos());
                                         FindFM.setMusico(musico);
                                         break;
                                 }

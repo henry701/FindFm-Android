@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.Adapters.AdapterTrabalhos;
 import com.fatec.tcc.findfm.databinding.ActivityTrabalhosListaBinding;
 
 public class Trabalhos_Fragment extends Fragment {
@@ -41,7 +42,8 @@ public class Trabalhos_Fragment extends Fragment {
             e.printStackTrace();
         }
         binding.adicionarTrabalho.setOnClickListener(this.adicionar_trabalho_click());
-        //binding.listaTrabalhos.setAdapter( new AdapterTrabalhos());
+
+        binding.listaTrabalhos.setAdapter( new AdapterTrabalhos(FindFM.getMusico().getTrabalhos(), activity, true));
         return binding.getRoot();
     }
 

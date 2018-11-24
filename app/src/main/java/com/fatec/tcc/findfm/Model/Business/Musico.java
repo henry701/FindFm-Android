@@ -9,6 +9,7 @@ public class Musico extends Usuario {
     private String cidade;
     private String uf;
     private List<Instrumento> instrumentos;
+    private List<Trabalho> trabalhos;
 
     public Musico(){}
 
@@ -68,5 +69,13 @@ public class Musico extends Usuario {
 
     public String getLocalizacaoFormatada() {
         return this.cidade + " - " + this.uf;
+    }
+
+    public List<Trabalho> getTrabalhos() {
+        return trabalhos;
+    }
+
+    public void setTrabalhos(List<Trabalho> trabalhos) {
+        this.trabalhos = trabalhos;
     }
 }
