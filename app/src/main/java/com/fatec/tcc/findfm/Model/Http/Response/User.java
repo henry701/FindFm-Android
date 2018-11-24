@@ -160,6 +160,7 @@ public class User {
             trabalho.setOriginal(trabalhoResponse.getOriginal());
             trabalho.setMidias(trabalhoResponse.getMidias());
             trabalho.setMusicas(trabalhoResponse.getMusicas());
+            trabalhos.add(trabalho);
         }
 
         return trabalhos;
