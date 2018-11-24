@@ -1,11 +1,8 @@
 package com.fatec.tcc.findfm.Model.Http.Response;
 
-import com.fatec.tcc.findfm.Model.Business.Estados;
 import com.fatec.tcc.findfm.Model.Business.FileReference;
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Musico;
-import com.fatec.tcc.findfm.Model.Business.Telefone;
-import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,17 +52,8 @@ public class TrabalhoResponse {
             if(musico.getAvatar() != null) {
                 usuario.setFotoID(musico.getAvatar().get_id());
             }
-            usuario.setTipoUsuario(TiposUsuario.fromKind(musico.getKind()));
             usuario.setNomeCompleto(musico.getFullName());
-            usuario.setEmail(musico.getEmail());
-            usuario.setTelefone(new Telefone(musico.getTelefone().getStateCode(), musico.getTelefone().getNumber()));
-            usuario.setNascimento(musico.getDate());
-            usuario.setCidade(musico.getEndereco().getCidade());
-            usuario.setUf(
-                    Estados.fromNome( musico.getEndereco().getEstado() ).getSigla()
-            );
-            usuario.setInstrumentos(musico.getIntrumentos());
-            usuario.setTrabalhos(musico.getTrabalhos());
+            usuario.setSobre(musico.getSobre());
             musicos.add(usuario);
         }
         return musicos;
