@@ -307,6 +307,22 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearContratante">
 
+                    <Button
+                        android:id="@+id/buttonTrabalhos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/btn_bg"
+                        android:drawableLeft="@drawable/ic_trabalho"
+                        android:onClick="@{viewModel::btnTrabalhos_Click}"
+                        android:text="@string/ver_trabalhos"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtConfirmaSenha" />
+
                     <EditText
                         android:id="@+id/txtNascimento"
                         android:layout_width="match_parent"

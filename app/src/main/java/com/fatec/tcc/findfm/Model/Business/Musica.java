@@ -6,6 +6,7 @@ public class Musica {
     
     private String idResource;
     private String nome;
+    private FileReference audioReference;
     private long duracao;
     private boolean autoral;
     private boolean autorizadoRadio;
@@ -94,5 +95,13 @@ public class Musica {
     public Musica setReproducoes(long reproducoes) {
         this.reproducoes = reproducoes;
         return this;
+    }
+
+    public FileReference getAudioReference() {
+        return audioReference;
+    }
+
+    public void setAudioReference(FileReference audioReference) {
+        this.audioReference = audioReference;
     }
 }

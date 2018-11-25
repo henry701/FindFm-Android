@@ -130,7 +130,7 @@ public class Login extends AppCompatActivity {
                                 usuario.setNomeCompleto(user.getFullName());
                                 usuario.setEmail(user.getEmail());
                                 usuario.setTelefone(new Telefone(user.getTelefone().getStateCode(), user.getTelefone().getNumber()));
-
+                                usuario.setSobre(user.getSobre());
                                 FindFM.setUsuario(usuario);
 
                                 switch (usuario.getTipoUsuario()){

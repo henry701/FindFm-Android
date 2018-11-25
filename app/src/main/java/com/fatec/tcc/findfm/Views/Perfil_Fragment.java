@@ -184,6 +184,12 @@ public class Perfil_Fragment extends Fragment {
         }
     }
 
+    public void btnTrabalhos_Click(View v){
+        activity.getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.frame_content)).commit();
+        activity.getFragmentManager().beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(activity, URL)).commit();
+
+    }
+
     private Telefone getTelefone(){
         Telefone telefone1 = new Telefone();
 
@@ -285,6 +291,7 @@ public class Perfil_Fragment extends Fragment {
                                                 Estados.fromNome( user.getEndereco().getEstado() ).getSigla()
                                         );
                                         musico.setInstrumentos(user.getIntrumentos());
+                                        musico.setTrabalhos(user.getTrabalhos());
                                         binding.cbUfMusico.setSelection(Estados.fromSigla(musico.getUf()).getIndex());
                                         binding.setMusico(musico);
                                         binding.getViewModel().setNascimento(new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(musico.getNascimento()));

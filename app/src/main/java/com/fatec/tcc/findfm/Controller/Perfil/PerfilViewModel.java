@@ -138,6 +138,10 @@ public class PerfilViewModel {
         fragment.btnRegistrar_Click(v);
     }
 
+    public void btnTrabalhos_Click(View v){
+        fragment.btnTrabalhos_Click(v);
+    }
+
     private boolean validarCampos(Usuario usuario){
         if(usuario == null) {
             Toast.makeText(view.getApplicationContext(), "Preencha todos os campos!", Toast.LENGTH_SHORT).show();

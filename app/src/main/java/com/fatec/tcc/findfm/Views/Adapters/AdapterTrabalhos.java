@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,8 +126,12 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
             }
         }
 
+        holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
+        holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
         holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, isAutor));
 
+        holder.bindingVH.viewFeats.setLayoutManager(new LinearLayoutManager(activity));
+        holder.bindingVH.viewFeats.setVisibility(View.VISIBLE);
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false));
         /*
         holder.bindingVH.setClickListener(v -> {

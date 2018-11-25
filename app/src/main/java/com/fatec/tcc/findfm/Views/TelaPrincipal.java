@@ -229,7 +229,7 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.trabalhos:
                 if(!tela.equals("TRABALHOS")) {
                     fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this))
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
                             .commit();
                 }
                 break;

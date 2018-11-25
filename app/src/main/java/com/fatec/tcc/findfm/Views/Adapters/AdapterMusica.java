@@ -68,7 +68,12 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     @Override
     public void onBindViewHolder(AdapterMusica.ViewHolder holder, int position) {
         Musica musica = Musicas.get(position);
-        Uri uri = musica.getUri();
+        Uri uri;
+        if(musica.getUri() == null){
+            uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + musica.getIdResource()));
+        } else {
+            uri = musica.getUri();
+        }
         holders.add(holder);
         holder.bindingVH.setMusica(musica);
         holder.bindingVH.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
