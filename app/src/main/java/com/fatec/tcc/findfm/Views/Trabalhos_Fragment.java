@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.fatec.tcc.findfm.Views.Adapters.AdapterTrabalhos;
 import com.fatec.tcc.findfm.databinding.ActivityTrabalhosListaBinding;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Trabalhos_Fragment extends Fragment {
 
@@ -59,6 +61,7 @@ public class Trabalhos_Fragment extends Fragment {
         } catch (Exception e){
             e.printStackTrace();
         }
+
         binding.adicionarTrabalho.setOnClickListener(this.adicionar_trabalho_click());
         return binding.getRoot();
     }
@@ -105,6 +108,9 @@ public class Trabalhos_Fragment extends Fragment {
                                     binding.listaTrabalhos.setVisibility(View.VISIBLE);
                                     binding.listaTrabalhos.setLayoutManager(new LinearLayoutManager(activity));
                                     binding.listaTrabalhos.setAdapter(new AdapterTrabalhos(this.usuario.getTrabalhos(), activity, true));
+                                    DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+                                    itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
+                                    binding.listaTrabalhos.addItemDecoration(itemDecorator);
                                 } else {
                                     binding.lbSemTrabalho.setVisibility(View.VISIBLE);
                                 }

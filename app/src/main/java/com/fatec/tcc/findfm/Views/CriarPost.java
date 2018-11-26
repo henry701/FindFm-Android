@@ -197,10 +197,10 @@ public class CriarPost extends AppCompatActivity implements Observer{
         if (telaMode.equals("editavel")){
             MidiaUtils.setImagemPerfilToImageView(binding.incluirContent.circularImageView, this);
         }
-
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
         binding.incluirContent.listaComentarios.setLayoutManager(new LinearLayoutManager(this));
-        binding.incluirContent.listaComentarios.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        binding.incluirContent.listaComentarios.addItemDecoration(itemDecorator);
 
     }
 

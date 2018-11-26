@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AnunciosSugeridos_Fragment extends Fragment {
 
@@ -67,9 +68,10 @@ public class AnunciosSugeridos_Fragment extends Fragment {
         binding.adicionarPost.setVisibility(View.GONE);
         binding.setPostViewModel(new PostViewModel(activity));
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
-        binding.listaPosts.addItemDecoration(
-                new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-        );
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
+        binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
+        binding.listaPosts.addItemDecoration(itemDecorator);
         return binding.getRoot();
     }
 

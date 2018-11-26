@@ -7,6 +7,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.fatec.tcc.findfm.databinding.ActivityRegistrarMusicoBinding;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RegistrarMusico extends AppCompatActivity {
 
@@ -112,7 +114,9 @@ public class RegistrarMusico extends AppCompatActivity {
                                             new Instrumento(instrumento, NivelHabilidade.INICIANTE)
                                     );
                                 }
-
+                                DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+                                itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
+                                rc.addItemDecoration(itemDecorator);
                                 rc.setAdapter( new AdapterInstrumentos(instrumentos, this, true) );
                                 RecyclerView.LayoutManager layout = new LinearLayoutManager(this,
                                         LinearLayoutManager.VERTICAL, false);

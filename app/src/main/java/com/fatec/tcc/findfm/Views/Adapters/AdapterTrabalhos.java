@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.ViewHolder> {
 
@@ -129,10 +131,14 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
         holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
         holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, isAutor));
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
+        holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
 
         holder.bindingVH.viewFeats.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewFeats.setVisibility(View.VISIBLE);
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false));
+        holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
         /*
         holder.bindingVH.setClickListener(v -> {
             if(trabalho.getAutor().getId().equals(FindFM.getUsuario().getId())){

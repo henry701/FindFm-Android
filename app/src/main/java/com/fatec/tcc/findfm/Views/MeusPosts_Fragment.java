@@ -36,6 +36,7 @@ import com.fatec.tcc.findfm.databinding.ActivityMeusPostsFragmentBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MeusPosts_Fragment extends Fragment {
 
@@ -70,10 +71,11 @@ public class MeusPosts_Fragment extends Fragment {
         activity.getOptionsMenu().getItem(2).setVisible(false);
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_meus_posts_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity));
+
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
+        binding.listaPosts.addItemDecoration(itemDecorator);
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
-        binding.listaPosts.addItemDecoration(
-                new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-        );
         return binding.getRoot();
     }
 

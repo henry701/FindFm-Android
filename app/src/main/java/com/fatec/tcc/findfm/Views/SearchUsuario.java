@@ -30,6 +30,7 @@ import com.fatec.tcc.findfm.databinding.ActivitySearchUsuarioBinding;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class SearchUsuario extends AppCompatActivity {
@@ -48,12 +49,11 @@ public class SearchUsuario extends AppCompatActivity {
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_search_usuario);
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
         binding.listaUsuarios.setLayoutManager(new LinearLayoutManager(this));
-        binding.listaUsuarios.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        );
+        binding.listaUsuarios.addItemDecoration(itemDecorator);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search_usuario);
 
         Bundle param = getIntent().getBundleExtra("BuscaUsuario");
         if (param != null) {

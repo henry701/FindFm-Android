@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Feed_Fragment extends Fragment {
 
@@ -71,10 +72,10 @@ public class Feed_Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_feed_fragment, container, false);
         binding.setPostViewModel(new PostViewModel(activity));
 
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
         binding.listaPosts.setLayoutManager(new LinearLayoutManager(activity));
-        binding.listaPosts.addItemDecoration(
-                new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
-        );
+        binding.listaPosts.addItemDecoration(itemDecorator);
         byte[] imagePerfil = FindFM.getFotoPrefBytes(getActivity());
         if(imagePerfil != null) {
             binding.fotoPerfil.setImageBitmap(BitmapFactory.decodeByteArray(imagePerfil, 0, imagePerfil.length));

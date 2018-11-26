@@ -146,7 +146,10 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         FloatingActionButton video = findViewById(R.id.fab_video);
         video.setOnClickListener(view -> startActivityForResult(Intent.createChooser(MidiaUtils.pickVideoIntent(), "Escolha o video"), PICK_VIDEO));
 
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
         binding.incluirContent.listaMusicas.setLayoutManager(new LinearLayoutManager(this));
+        binding.incluirContent.listaMusicas.addItemDecoration(itemDecorator);
         binding.incluirContent.btnAdicionarMusica.setOnClickListener(v -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha a música"), PICK_AUDIO));
         binding.incluirContent.btnAdicionarPessoa.setOnClickListener(v -> Util.open_form(getApplicationContext(), SearchUsuario.class));
         dialog = new ProgressDialog(this);
