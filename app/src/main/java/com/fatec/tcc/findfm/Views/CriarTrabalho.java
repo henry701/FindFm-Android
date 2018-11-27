@@ -662,7 +662,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                "Sucesso!", R.drawable.ic_error,
+                                "Sucesso!", R.drawable.ic_save,
                                 "Denúncia enviada com sucesso!","OK",
                                 (dialog1, id) -> this.dialog.setMessage("Carregando...")).create().show();
                     }

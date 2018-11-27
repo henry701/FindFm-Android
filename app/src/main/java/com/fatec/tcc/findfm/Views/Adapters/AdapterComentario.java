@@ -233,7 +233,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                     dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                "Sucesso!", R.drawable.ic_error,
+                                "Sucesso!", R.drawable.ic_save,
                                 "Denúncia enviada com sucesso!","OK",
                                 (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
                     }

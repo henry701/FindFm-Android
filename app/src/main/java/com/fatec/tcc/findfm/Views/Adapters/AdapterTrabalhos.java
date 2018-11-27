@@ -1,5 +1,6 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -73,6 +74,11 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
     @Override
     public void onBindViewHolder(AdapterTrabalhos.ViewHolder holder, int position) {
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Carregando...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        
         Trabalho trabalho = trabalhos.get(position);
         holder.bindingVH.setTrabalho(trabalho);
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
@@ -100,12 +106,12 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                                         (dialog, id1) -> {
                                         }).create().show();
                             }
-                            activity.getDialog().hide();
+                            progressDialog.hide();
                         });
                     }
                 });
                 downloadService.getResource(midia.getId());
-                activity.getDialog().show();
+                progressDialog.show();
             }
 
             if(midia.getContentType().contains("vid")) {
@@ -130,6 +136,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
         holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
+        //TODO: na lista, não mostrar o checkbox editavel
         holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, isAutor));
         DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
@@ -137,7 +144,8 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
         holder.bindingVH.viewFeats.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewFeats.setVisibility(View.VISIBLE);
-        holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false));
+        //TODO: na lista, clicar leva pro perfil
+        holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false, true));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
         /*
         holder.bindingVH.setClickListener(v -> {
@@ -158,6 +166,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
             }
         });
         */
+        progressDialog.hide();
     }
 
     @Override

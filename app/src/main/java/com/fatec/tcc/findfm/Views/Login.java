@@ -84,8 +84,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void btnEntrarVisitante_Click(View v) {
-        FindFM.setUsuario(new Usuario().setNomeCompleto("Visitante")
-                .setTipoUsuario(TiposUsuario.VISITANTE));
+        FindFM.setUsuario(
+                new Usuario()
+                .setNomeCompleto("Visitante")
+                .setTipoUsuario(TiposUsuario.VISITANTE)
+                .setId("VAZIO")
+        );
+
         FindFM.setMusico(new Musico(new Usuario().setNomeCompleto("Visitante")
                 .setTipoUsuario(TiposUsuario.VISITANTE)));
         FindFM.setFotoPref(this, null);

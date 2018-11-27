@@ -249,7 +249,7 @@ public class PerfilViewModel {
                                         break;
                                 }
                                 AlertDialogUtils.newSimpleDialog__OneButton(view,
-                                        "", R.drawable.ic_save,
+                                        "Sucesso!", R.drawable.ic_save,
                                         "Perfil atualizado com sucesso!","OK",
                                         (dialog, id) -> {
                                             fragment.getUser();

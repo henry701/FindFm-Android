@@ -49,10 +49,6 @@ public class SearchUsuario extends AppCompatActivity {
         } catch (Exception e){
             e.printStackTrace();
         }
-        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
-        binding.listaUsuarios.setLayoutManager(new LinearLayoutManager(this));
-        binding.listaUsuarios.addItemDecoration(itemDecorator);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search_usuario);
 
         Bundle param = getIntent().getBundleExtra("BuscaUsuario");
@@ -67,6 +63,10 @@ public class SearchUsuario extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setInverseBackgroundForced(false);
 
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecorator.setDrawable(Objects.requireNonNull(getDrawable(R.drawable.divider)));
+        binding.listaUsuarios.setLayoutManager(new LinearLayoutManager(this));
+        binding.listaUsuarios.addItemDecoration(itemDecorator);
         binding.btnBusca.setOnClickListener(v -> {
             if(binding.txtBusca.getText() != null && !binding.txtBusca.getText().toString().isEmpty()){
                 buscarUser(binding.txtBusca.getText().toString());

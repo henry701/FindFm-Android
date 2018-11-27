@@ -173,6 +173,10 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                     }
                 });
 
+            } else {
+                holder.bindingVH.lbReproducoesMusica.setVisibility(View.VISIBLE);
+                holder.bindingVH.checkRadio.setVisibility(View.GONE);
+                holder.bindingVH.btnRemoverMusica.setVisibility(View.GONE);
             }
 
         }

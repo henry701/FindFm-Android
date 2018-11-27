@@ -73,18 +73,6 @@ public class TelaPrincipal extends AppCompatActivity
         binding.navView.setNavigationItemSelectedListener(this);
         binding.navView.getMenu().getItem(0).setChecked(true);
 
-        if(!FindFM.isUsuarioAceitouTermos(this) && !TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))) {
-            AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                    "Aceito", "Não aceito",
-                    (dialog, which) -> FindFM.usuarioAceitaTermos(this),
-                    (dialog, which) -> onBackPressed()).show();
-        } else if (TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))){
-            AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                    "Aceito", "Não aceito",
-                    (dialog, which) -> {},
-                    (dialog, which) -> onBackPressed()).show();
-        }
-
         init();
     }
 
@@ -101,22 +89,53 @@ public class TelaPrincipal extends AppCompatActivity
 
         if(bundle != null) {
             if (bundle.getString("id_usuario") != null){
-                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                fragmentManager.beginTransaction().replace(R.id.frame_content,
-                        new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", bundle.getString("id_usuario"))))
-                        .commit();
+                if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                    fragmentManager.beginTransaction().add(R.id.frame_content,
+                            new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", bundle.getString("id_usuario"))))
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                    fragmentManager.beginTransaction().replace(R.id.frame_content,
+                            new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(), "account", bundle.getString("id_usuario"))))
+                            .commit();
+                }
                 return;
             } else if (bundle.getBoolean("euMesmo") == true){
-                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                fragmentManager.beginTransaction().replace(R.id.frame_content,
-                        new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
-                        .commit();
+                if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                    fragmentManager.beginTransaction().add(R.id.frame_content,
+                            new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                    fragmentManager.beginTransaction().replace(R.id.frame_content,
+                            new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                            .commit();
+                }
+
                 return;
             }
+        } else {
+            if(!FindFM.isUsuarioAceitouTermos(this) && !TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))) {
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                        "Aceito", "Não aceito",
+                        (dialog, which) -> FindFM.usuarioAceitaTermos(this),
+                        (dialog, which) -> onBackPressed()).show();
+            } else if (TiposUsuario.VISITANTE.equals(FindFM.getTipoUsuario(this))){
+                AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                        "Aceito", "Não aceito",
+                        (dialog, which) -> {},
+                        (dialog, which) -> onBackPressed()).show();
+            }
         }
-        //fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-        fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
-                .commit();
+
+        if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+            fragmentManager.beginTransaction().add(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+            fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                    .commit();
+        }
         getCidade();
     }
 
@@ -133,9 +152,17 @@ public class TelaPrincipal extends AppCompatActivity
             } else {
                 binding.navView.getMenu().getItem(0).setChecked(true);
                 fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
-                        .commit();
+
+                if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                    fragmentManager.beginTransaction().add(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                            .commit();
+                }
+
+
             }
         }
     }
@@ -200,37 +227,62 @@ public class TelaPrincipal extends AppCompatActivity
             case R.id.inicio:
                 if(!tela.equals("HOME")) {
                     fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
-                            .commit();
+                    if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                        fragmentManager.beginTransaction().add(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                        fragmentManager.beginTransaction().replace(R.id.frame_content, new Feed_Fragment(this, TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())))
+                                .commit();
+                    }
                 }
                 break;
             case R.id.meu_perfil:
                 if(!tela.equals("MEU_PERFIL")) {
-                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
-                            .commit();
+                    if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                        fragmentManager.beginTransaction().add(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                        fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                                .commit();
+                    }
                 }
                 break;
             case R.id.meus_posts:
                 if(!tela.equals("MEUS_POSTS")) {
-                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
-                            .commit();
+                    if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                        fragmentManager.beginTransaction().add(R.id.frame_content, new MeusPosts_Fragment(this))
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                        fragmentManager.beginTransaction().replace(R.id.frame_content, new MeusPosts_Fragment(this))
+                                .commit();
+                    }
                 }
                 break;
             case R.id.anuncio_sugerido:
                 if(!tela.equals("ANUNCIOS_SUGERIDOS")) {
-                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new AnunciosSugeridos_Fragment(this))
-                            .commit();
+                    if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                        fragmentManager.beginTransaction().add(R.id.frame_content, new AnunciosSugeridos_Fragment(this))
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                        fragmentManager.beginTransaction().replace(R.id.frame_content, new AnunciosSugeridos_Fragment(this))
+                                .commit();
+                    }
                 }
                 break;
             case R.id.trabalhos:
                 if(!tela.equals("TRABALHOS")) {
-                    fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
-                    fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
-                            .commit();
+                    if(fragmentManager.findFragmentById(R.id.frame_content) == null){
+                        fragmentManager.beginTransaction().add(R.id.frame_content, new Trabalhos_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentById(R.id.frame_content)).commit();
+                        fragmentManager.beginTransaction().replace(R.id.frame_content, new Trabalhos_Fragment(this, HttpUtils.buildUrl(getResources(),"account", "me")))
+                                .commit();
+                    }
                 }
                 break;
             case R.id.playRadio:

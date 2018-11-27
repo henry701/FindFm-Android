@@ -15,7 +15,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/bg_preto_transparente">
 
         <TextView
@@ -46,11 +46,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:onClick="@{clickListener::onClick}"
+            android:text="@{trabalho.original.equals(`true`) ? `Trabalho Original` : `Trabalho não Original`}"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="10sp"
             android:textStyle="italic"
-            android:text="@{trabalho.original.equals(`true`) ? `Trabalho Original` : `Trabalho não Original`}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/lb_titulo_post"
             app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"

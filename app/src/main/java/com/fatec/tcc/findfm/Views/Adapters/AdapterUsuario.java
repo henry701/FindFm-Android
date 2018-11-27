@@ -1,6 +1,7 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,6 +31,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
     private Set<Musico> usuarios = new HashSet<>();
     private Activity activity;
     private boolean isBusca;
+    private boolean apenasVisualizar = false;
 
     public AdapterUsuario() {
     }
@@ -38,6 +40,13 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         this.usuarios = musicos;
         this.isBusca = isBusca;
         this.activity = activity;
+    }
+
+    public AdapterUsuario(Set<Musico> musicos, Activity activity, boolean isBusca, boolean apenasVisualizar){
+        this.usuarios = musicos;
+        this.isBusca = isBusca;
+        this.activity = activity;
+        this.apenasVisualizar = apenasVisualizar;
     }
 
     public Set<Musico> getUsuarios(){
@@ -57,6 +66,10 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
 
     @Override
     public void onBindViewHolder(AdapterUsuario.ViewHolder holder, int position) {
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Carregando...");
+        progressDialog.setCancelable(false);
+
         Usuario usuario = (Usuario) usuarios.toArray()[position];
         holder.bindingVH.setUsuario(usuario);
 
@@ -80,11 +93,13 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                                     (dialog, id1) -> {
                                     }).create().show();
                         }
+                        progressDialog.hide();
 
                     });
                 }
             });
             downloadService.getResource(usuario.getFotoID());
+            progressDialog.show();
         }
 
         if(isBusca) {
@@ -94,14 +109,17 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 activity.onBackPressed();
             });
         } else {
-            if(!FindFM.getUsuario().getId().equals(usuario.getId())) {
-                holder.bindingVH.btnRemoverUsuario.setVisibility(View.VISIBLE);
-                holder.bindingVH.btnRemoverUsuario.setOnClickListener(v -> {
-                    removeAt(usuario, position);
-                });
+            if(!apenasVisualizar) {
+                if (!FindFM.getUsuario().getId().equals(usuario.getId())) {
+                    holder.bindingVH.btnRemoverUsuario.setVisibility(View.VISIBLE);
+                    holder.bindingVH.btnRemoverUsuario.setOnClickListener(v -> {
+                        removeAt(usuario, position);
+                    });
 
+                }
             }
         }
+        progressDialog.hide();
     }
 
     @Override
