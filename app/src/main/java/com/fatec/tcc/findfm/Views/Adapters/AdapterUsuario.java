@@ -108,6 +108,13 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 FindFM.getMap().put("USUARIO_BUSCA", usuario);
                 activity.onBackPressed();
             });
+
+            if(apenasVisualizar){
+                holder.bindingVH.layout.setOnClickListener(v -> {
+                    Util.hideSoftKeyboard(activity);
+                    FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                });
+            }
         } else {
             if(!apenasVisualizar) {
                 if (!FindFM.getUsuario().getId().equals(usuario.getId())) {
@@ -117,6 +124,8 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                     });
 
                 }
+            } else {
+                holder.bindingVH.btnRemoverUsuario.setVisibility(View.GONE);
             }
         }
         progressDialog.hide();

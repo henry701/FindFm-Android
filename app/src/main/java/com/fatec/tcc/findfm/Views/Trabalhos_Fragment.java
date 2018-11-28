@@ -55,7 +55,11 @@ public class Trabalhos_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trabalhos_lista, container, false);
         try {
-            activity.getSupportActionBar().setTitle("Meus Trabalhos");
+            if(!URL.contains("account/me")){
+                activity.getSupportActionBar().setTitle("Trabalhos");
+            } else {
+                activity.getSupportActionBar().setTitle("Meus Trabalhos");
+            }
             activity.getOptionsMenu().getItem(1).setVisible(false);
             activity.getOptionsMenu().getItem(2).setVisible(false);
         } catch (Exception e){
@@ -114,7 +118,6 @@ public class Trabalhos_Fragment extends Fragment {
                                 } else {
                                     binding.lbSemTrabalho.setVisibility(View.VISIBLE);
                                 }
-                                //binding.executePendingBindings();
                             }
                         },
                         (ErrorResponse errorResponse) ->

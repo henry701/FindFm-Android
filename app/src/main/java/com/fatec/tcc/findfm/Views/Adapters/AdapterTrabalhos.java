@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +16,15 @@ import android.view.ViewGroup;
 
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Model.Business.FileReference;
+import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
+import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.CriarTrabalho;
 import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewTrabalhoBinding;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -84,6 +89,26 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
         holder.bindingVH.videoView.setVisibility(View.GONE);
 
+        holder.bindingVH.setClickListener(v -> {
+            progressDialog.show();
+            if(isAutor){
+                String path = "CriarTrabalho";
+                Bundle param = new Bundle();
+                FindFM.getMap().put("trabalho", trabalho);
+                param.putString("telaMode", "editavel");
+                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
+                Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
+            } else {
+                String path = "CriarPost";
+                Bundle param = new Bundle();
+                FindFM.getMap().put("trabalho", trabalho);
+                param.putString("telaMode", "visualizar");
+                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
+                Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
+            }
+            progressDialog.dismiss();
+        });
+
         for(FileReference midia : trabalho.getMidias()) {
 
             if(midia.getContentType().contains("img")) {
@@ -136,8 +161,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
         holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
-        //TODO: na lista, não mostrar o checkbox editavel
-        holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, isAutor));
+        holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, false));
         DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
@@ -147,25 +171,6 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
         //TODO: na lista, clicar leva pro perfil
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false, true));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
-        /*
-        holder.bindingVH.setClickListener(v -> {
-            if(trabalho.getAutor().getId().equals(FindFM.getUsuario().getId())){
-                String path = "CriarTrabalho";
-                Bundle param = new Bundle();
-                FindFM.getMap().put("trabalho", trabalho);
-                param.putString("telaMode", "editavel");
-                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
-                Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
-            } else {
-                String path = "CriarTrabalho";
-                Bundle param = new Bundle();
-                FindFM.getMap().put("trabalho", trabalho);
-                param.putString("telaMode", "visualizar");
-                param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
-                Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
-            }
-        });
-        */
         progressDialog.hide();
     }
 

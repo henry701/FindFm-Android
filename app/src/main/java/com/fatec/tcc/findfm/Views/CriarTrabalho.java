@@ -119,15 +119,13 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                 .setMidias(new ArrayList<>())
                                 .setMusicas(new ArrayList<>()));
                 getSupportActionBar().setTitle("Novo Trabalho");
-                binding.incluirContent.btnDenunciar.setVisibility(View.GONE);
-            } 
-            else if (telaMode.equals("visualizar")) {
+            }
+            else {
                 Trabalho trabalho = (Trabalho) FindFM.getMap().get("trabalho");
                 binding.incluirContent.setTrabalho(trabalho);
                 checkTelaMode();
                 preencherTela(trabalho);
                 getSupportActionBar().setTitle(trabalho.getNome());
-                binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             }
 
         } catch (Exception e){
@@ -254,16 +252,15 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.listaPessoas.setLayoutManager(new LinearLayoutManager(this));
             binding.incluirContent.listaPessoas.addItemDecoration(
                     new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), this, false));
+            binding.incluirContent.listaPessoas.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), this, false, true));
         }
 
     }
 
     private void checkTelaMode() {
-        if (telaMode.equals("visualizar")) {
+        if (telaMode.equals("visualizar") || telaMode.equals("editavel")) {
             binding.incluirContent.txtTitulo.setEnabled(false);
             binding.incluirContent.txtDesc.setEnabled(false);
-            binding.incluirContent.btnDenunciar.setVisibility(View.VISIBLE);
             binding.fabFoto.setVisibility(View.INVISIBLE);
             binding.fabVideo.setVisibility(View.INVISIBLE);
             binding.incluirContent.checkOriginal.setEnabled(false);
@@ -271,9 +268,14 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             binding.incluirContent.btnRemoverVideo.setVisibility(View.GONE);
             binding.incluirContent.btnAdicionarMusica.setVisibility(View.GONE);
             binding.incluirContent.btnAdicionarPessoa.setVisibility(View.GONE);
-            optionsMenu.getItem(0).setVisible(false);
-            optionsMenu.getItem(1).setVisible(true);
-            optionsMenu.getItem(2).setVisible(true);
+
+            try {
+                optionsMenu.getItem(0).setVisible(false);
+                optionsMenu.getItem(1).setVisible(true);
+                optionsMenu.getItem(2).setVisible(true);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
 
             try {
                 getSupportActionBar().setTitle("Trabalho");
@@ -287,12 +289,15 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             } catch (Exception e){
                 e.printStackTrace();
             }
-            if (optionsMenu != null) {
-                optionsMenu.getItem(0).setVisible(true);
-                optionsMenu.getItem(1).setVisible(false);
-                optionsMenu.getItem(2).setVisible(false);
+            try{
+                if (optionsMenu != null) {
+                    optionsMenu.getItem(0).setVisible(true);
+                    optionsMenu.getItem(1).setVisible(false);
+                    optionsMenu.getItem(2).setVisible(false);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
-            binding.incluirContent.btnDenunciar.setVisibility(View.INVISIBLE);
             binding.incluirContent.checkOriginal.setOnClickListener(view -> {
                 if(binding.incluirContent.checkOriginal.isChecked()) {
                     binding.incluirContent.checkOriginal.setChecked(false);
