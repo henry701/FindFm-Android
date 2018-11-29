@@ -102,7 +102,7 @@ public class Trabalhos_Fragment extends Fragment {
                         null,
                         (ResponseBody response) ->
                         {
-                            activity.getDialog().hide();
+                            activity.getDialog().dismiss();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
                                 this.usuario.setId(user.getId());
@@ -122,7 +122,7 @@ public class Trabalhos_Fragment extends Fragment {
                         },
                         (ErrorResponse errorResponse) ->
                         {
-                            activity.getDialog().hide();
+                            activity.getDialog().dismiss();
                             String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                             if(errorResponse != null) {
                                 Log.e("[ERRO-Response]GetTrab", errorResponse.getMessage());
@@ -133,7 +133,7 @@ public class Trabalhos_Fragment extends Fragment {
                         },
                         (VolleyError errorResponse) ->
                         {
-                            activity.getDialog().hide();
+                            activity.getDialog().dismiss();
                             String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                             if(errorResponse != null) {
                                 Log.e("[ERRO-Volley]GetTrab", errorResponse.getMessage());

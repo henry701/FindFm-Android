@@ -1,6 +1,5 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -79,18 +78,12 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
     @Override
     public void onBindViewHolder(AdapterTrabalhos.ViewHolder holder, int position) {
-        ProgressDialog progressDialog = new ProgressDialog(activity);
-        progressDialog.setMessage("Carregando...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        
         Trabalho trabalho = trabalhos.get(position);
         holder.bindingVH.setTrabalho(trabalho);
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
         holder.bindingVH.videoView.setVisibility(View.GONE);
 
         holder.bindingVH.setClickListener(v -> {
-            progressDialog.show();
             if(isAutor){
                 String path = "CriarTrabalho";
                 Bundle param = new Bundle();
@@ -106,7 +99,6 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                 param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
             }
-            progressDialog.dismiss();
         });
 
         for(FileReference midia : trabalho.getMidias()) {
@@ -131,12 +123,10 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                                         (dialog, id1) -> {
                                         }).create().show();
                             }
-                            progressDialog.hide();
                         });
                     }
                 });
                 downloadService.getResource(midia.getId());
-                progressDialog.show();
             }
 
             if(midia.getContentType().contains("vid")) {
@@ -171,7 +161,6 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
         //TODO: na lista, clicar leva pro perfil
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false, true));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
-        progressDialog.hide();
     }
 
     @Override
