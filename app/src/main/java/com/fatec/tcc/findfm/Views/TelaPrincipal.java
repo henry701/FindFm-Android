@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
+import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
@@ -449,6 +450,15 @@ public class TelaPrincipal extends AppCompatActivity
                 return;
             }
 
+        }
+    }
+
+    public void goToPerfil() {
+        if(FindFM.getMap().containsKey("USUARIO_BUSCA")){
+            Usuario usuario = (Usuario) FindFM.getMap().get("USUARIO_BUSCA");
+            fragmentManager.beginTransaction().replace(R.id.frame_content, new Perfil_Fragment(this, HttpUtils.buildUrl(getResources(),"account", usuario.getId())))
+                    .commit();
+            FindFM.getMap().remove("USUARIO_BUSCA");
         }
     }
 }

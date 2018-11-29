@@ -283,6 +283,8 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                 e.printStackTrace();
             }
 
+            preencherTela(binding.incluirContent.getTrabalho());
+
         } else if (telaMode.equals("criando")) {
             try {
                 getSupportActionBar().setTitle("Novo Trabalho");

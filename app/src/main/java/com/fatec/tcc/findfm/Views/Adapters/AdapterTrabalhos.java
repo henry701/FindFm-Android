@@ -51,6 +51,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
     private List<Trabalho> trabalhos = new ArrayList<>();
     private TelaPrincipal activity;
     private boolean isAutor;
+    private List<AdapterTrabalhos.ViewHolder> holders = new ArrayList<>();
 
     public AdapterTrabalhos() {
     }
@@ -79,6 +80,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
     @Override
     public void onBindViewHolder(AdapterTrabalhos.ViewHolder holder, int position) {
         Trabalho trabalho = trabalhos.get(position);
+        this.holders.add(holder);
         holder.bindingVH.setTrabalho(trabalho);
         holder.bindingVH.fotoPublicacao.setVisibility(View.GONE);
         holder.bindingVH.videoView.setVisibility(View.GONE);
@@ -161,6 +163,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
         //TODO: na lista, clicar leva pro perfil
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false, true));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
+        activity.getDialog().dismiss();
     }
 
     @Override
@@ -169,6 +172,16 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
             return 0;
         }
         return trabalhos.size();
+    }
+
+    public void stopMedia() {
+        try {
+            for(AdapterTrabalhos.ViewHolder holder : holders) {
+                ((AdapterMusica) holder.bindingVH.viewMusicas.getAdapter()).stopMedia();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

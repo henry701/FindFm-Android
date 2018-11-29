@@ -19,6 +19,7 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Util;
+import com.fatec.tcc.findfm.Views.TelaPrincipal;
 import com.fatec.tcc.findfm.databinding.ViewUsuarioBinding;
 
 import java.io.ByteArrayInputStream;
@@ -126,6 +127,15 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                 }
             } else {
                 holder.bindingVH.btnRemoverUsuario.setVisibility(View.GONE);
+                try {
+                    if(activity instanceof TelaPrincipal)
+                        holder.bindingVH.layout.setOnClickListener(v -> {
+                            FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                            ((TelaPrincipal) activity).goToPerfil();
+                        });
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
         progressDialog.hide();

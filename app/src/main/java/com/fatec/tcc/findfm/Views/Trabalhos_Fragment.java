@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,7 +103,6 @@ public class Trabalhos_Fragment extends Fragment {
                         null,
                         (ResponseBody response) ->
                         {
-                            activity.getDialog().dismiss();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
                                 this.usuario.setId(user.getId());
@@ -146,4 +146,21 @@ public class Trabalhos_Fragment extends Fragment {
         registrarRequest.execute();
         activity.getDialog().show();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            getView().setOnKeyListener((v, keyCode, event) -> {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    ((AdapterTrabalhos) binding.listaTrabalhos.getAdapter()).stopMedia();
+                    return true;
+                }
+                return false;
+            });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -19,63 +19,6 @@
         android:background="@color/bg_preto_transparente">
 
         <TextView
-            android:id="@+id/txt_musicas_trabalho"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
-            android:onClick="@{clickListener::onClick}"
-            android:text="Músicas"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearMidia"
-            app:layout_constraintVertical_chainStyle="spread_inside" />
-
-        <TextView
-            android:id="@+id/txt_original"
-            android:layout_width="wrap_content"
-            android:layout_height="15dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:onClick="@{clickListener::onClick}"
-            android:text="@{trabalho.original.equals(`true`) ? `Trabalho Original` : `Trabalho não Original`}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/lb_titulo_post"
-            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
-            tools:text="Trabalho Original" />
-
-        <TextView
-            android:id="@+id/txt_feats"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
-            android:onClick="@{clickListener::onClick}"
-            android:text="Participações:"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_musicas" />
-
-        <TextView
             android:id="@+id/lb_titulo_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,6 +37,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Um trab bem maneiro" />
+
+        <TextView
+            android:id="@+id/txt_original"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{clickListener::onClick}"
+            android:text="@{trabalho.original.equals(`true`) ? `Trabalho Original` : `Trabalho não Original`}"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/lb_titulo_post"
+            app:layout_constraintTop_toBottomOf="@+id/lb_titulo_post"
+            tools:text="Trabalho Original" />
 
         <TextView
             android:id="@+id/lb_descricao"
@@ -157,18 +118,57 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
+        <TextView
+            android:id="@+id/txt_feats"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
+            android:onClick="@{clickListener::onClick}"
+            android:text="Participações:"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_musicas" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/view_feats"
-            android:onClick="@{clickListener::onClick}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:clipToPadding="false"
+            android:onClick="@{clickListener::onClick}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_feats" />
+
+        <TextView
+            android:id="@+id/txt_musicas_trabalho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="Jóse de pereira barbosa roger Jóse augusto de pereira barros"
+            android:onClick="@{clickListener::onClick}"
+            android:text="Músicas"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearMidia"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/view_musicas"

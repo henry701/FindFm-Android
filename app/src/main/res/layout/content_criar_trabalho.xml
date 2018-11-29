@@ -50,9 +50,9 @@
                     android:text="@={trabalho.nome}"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.492"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkOriginal" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <CheckedTextView
                     android:id="@+id/checkOriginal"
@@ -61,8 +61,8 @@
                     android:layout_marginTop="16dp"
                     android:button="?android:attr/listChoiceIndicatorMultiple"
                     android:buttonTint="@color/white"
-                    android:drawableEnd="@null"
                     android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+                    android:drawableEnd="@null"
                     android:drawableRight="@null"
                     android:text="@string/original"
                     android:textColor="@android:color/background_light"
@@ -70,9 +70,8 @@
                     android:textStyle="bold"
                     android:theme="@style/temaCheck"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
                 <EditText
                     android:id="@+id/txtDesc"
@@ -90,15 +89,117 @@
                     android:text="@={trabalho.descricao}"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/checkOriginal" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoverImagem"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverImagem_Click"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/fotoPublicacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#000000"
+                    android:contentDescription="Imagem"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtDesc"
+                    app:srcCompat="@drawable/capaplaceholder_photo" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoverVideo"
+                    android:layout_width="34dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/ic_remover"
+                    android:contentDescription="@string/foto_perfil"
+                    android:onClick="btnRemoverVideo_Click"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/videoView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                    android:id="@+id/videoView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="#000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
+
+                <TextView
+                    android:id="@+id/lb_listaMusicas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/musicas"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/videoView" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listaMusicas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lb_listaMusicas" />
+
+                <Button
+                    android:id="@+id/btnAdicionarMusica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/btn_bg"
+                    android:drawableLeft="@drawable/ic_add_musica"
+                    android:paddingLeft="8dp"
+                    android:text="@string/adicionar"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
+                    app:layout_constraintTop_toBottomOf="@+id/listaMusicas" />
 
                 <TextView
                     android:id="@+id/lbParticipantes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="32dp"
                     android:text="@string/integrantes"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -107,7 +208,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtDesc" />
+                    app:layout_constraintTop_toBottomOf="@+id/btnAdicionarMusica" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/listaPessoas"
@@ -128,122 +229,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@drawable/btn_bg"
-                    android:drawableLeft="@drawable/ic_add_pessoas"
-                    android:paddingLeft="8dp"
-                    android:text="@string/adicionar"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas" />
-
-                <ImageButton
-                    android:id="@+id/btnRemoverImagem"
-                    android:layout_width="34dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/ic_remover"
-                    android:contentDescription="@string/foto_perfil"
-                    android:onClick="btnRemoverImagem_Click"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/fotoPublicacao"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas" />
-
-                <ImageView
-                    android:id="@+id/fotoPublicacao"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="#000000"
-                    android:contentDescription="Imagem"
-                    app:layout_constraintBottom_toTopOf="@+id/videoView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnAdicionarPessoa"
-                    app:srcCompat="@drawable/capaplaceholder_photo" />
-
-                <ImageButton
-                    android:id="@+id/btnRemoverVideo"
-                    android:layout_width="34dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/ic_remover"
-                    android:contentDescription="@string/foto_perfil"
-                    android:onClick="btnRemoverVideo_Click"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/videoView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                    android:id="@+id/videoView"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="#000000"
-                    android:contentDescription="Video"
-                    app:layout_constraintBottom_toTopOf="@+id/lb_listaMusicas"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fotoPublicacao" />
-
-                <TextView
-                    android:id="@+id/lb_listaMusicas"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/musicas"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/videoView" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/listaMusicas"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="32dp"
-                    app:layout_constraintBottom_toTopOf="@+id/btnAdicionarMusica"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lb_listaMusicas" />
-
-                <Button
-                    android:id="@+id/btnAdicionarMusica"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="50dp"
                     android:background="@drawable/btn_bg"
-                    android:drawableLeft="@drawable/ic_add_musica"
+                    android:drawableLeft="@drawable/ic_add_pessoas"
                     android:paddingLeft="8dp"
                     android:text="@string/adicionar"
                     android:textAlignment="center"
@@ -253,7 +241,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/listaMusicas" />
+                    app:layout_constraintTop_toBottomOf="@+id/listaPessoas" />
 
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
