@@ -16,27 +16,37 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
+import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
+import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
+import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityTelaPrincipalBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -76,6 +86,17 @@ public class TelaPrincipal extends AppCompatActivity
         binding.navView.getMenu().getItem(0).setChecked(true);
 
         init();
+
+        Bundle action = getIntent().getExtras();
+        if(action != null && action.getString("DO") != null) {
+            if (action.getString("DO").equals("volume")) {
+                Log.i("NotificationReturnSlot", "volume");
+                //Your code
+            } else if (action.getString("DO").equals("stopNotification")) {
+                //Your code
+                Log.i("NotificationReturnSlot", "stopNotification");
+            }
+        }
     }
 
     private void init(){
@@ -460,5 +481,49 @@ public class TelaPrincipal extends AppCompatActivity
                     .commit();
             FindFM.getMap().remove("USUARIO_BUSCA");
         }
+    }
+
+    private void radioInfo(){
+        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> radioInfos = new JsonTypedRequest<>
+                (       this,
+                        Request.Method.GET,
+                        Usuario.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(),"radioInfo"),
+                        null,
+                        (ResponseBody response) ->
+                        {
+                            getDialog().hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                Musica musica = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("song"), Musica.class);
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            getDialog().hide();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]GetRadio", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
+                        },
+                        (VolleyError errorResponse) ->
+                        {
+                            getDialog().hide();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]GetRadio", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
+                        }
+                );
+
+        radioInfos.execute();
+        getDialog().show();
     }
 }
