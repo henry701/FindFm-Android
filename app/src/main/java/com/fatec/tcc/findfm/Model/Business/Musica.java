@@ -3,7 +3,8 @@ package com.fatec.tcc.findfm.Model.Business;
 import android.net.Uri;
 
 public class Musica {
-    
+
+    private String id;
     private String idResource;
     private String nome;
     private FileReference audioReference;
@@ -103,5 +104,13 @@ public class Musica {
 
     public void setAudioReference(FileReference audioReference) {
         this.audioReference = audioReference;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

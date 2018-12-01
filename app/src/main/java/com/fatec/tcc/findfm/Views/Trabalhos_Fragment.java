@@ -103,6 +103,7 @@ public class Trabalhos_Fragment extends Fragment {
                         null,
                         (ResponseBody response) ->
                         {
+                            activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
                                 this.usuario.setId(user.getId());

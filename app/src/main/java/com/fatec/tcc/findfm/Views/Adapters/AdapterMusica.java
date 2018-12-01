@@ -173,6 +173,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                         }
                         musica.setAutorizadoRadio(holder.bindingVH.checkRadio.isChecked());
                         FindFM.getUsuario().setSelecionadasRadio(selecionadasRadio++);
+                        initAutorizarRequest(musica);
                     }
                 });
 
@@ -249,7 +250,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                     dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                "Sucesso!", R.drawable.ic_error,
+                                "Sucesso!", R.drawable.ic_save,
                                 "Denúncia enviada com sucesso!","OK",
                                 (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
                     }
@@ -289,6 +290,57 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         reportRequest.execute();
     }
 
+    private void initAutorizarRequest(Musica param){
+        ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setMessage("Carregando...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        JsonTypedRequest<Musica, ResponseBody, ErrorResponse> updateRequest = new JsonTypedRequest<>(
+                activity,
+                HttpMethod.POST.getCodigo(),
+                Musica.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                HttpUtils.buildUrl(activity.getResources(),"song", "modify", param.getId()),
+                null,
+                (ResponseBody response) -> {
+                    dialog.hide();
+                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                "Sucesso!", R.drawable.ic_save,
+                                "Autorização atualizada com sucesso!","OK",
+                                (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
+                    }
+                },
+                (ErrorResponse errorResponse) ->
+                {
+                    dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Response]AttMusic", errorResponse.getMessage());
+                        mensagem = errorResponse.getMessage();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                },
+                (VolleyError errorResponse) ->
+                {
+                    dialog.hide();
+                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                    if(errorResponse != null) {
+                        Log.e("[ERRO-Volley]AttMusic", errorResponse.getMessage());
+                        errorResponse.printStackTrace();
+                    }
+                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                            mensagem, "OK", (dialog2, id) -> { }).create().show();
+                }
+        );
+
+        updateRequest.setRequest(param);
+        dialog.setMessage("Atualizando música, aguarde...");
+        dialog.show();
+        updateRequest.execute();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 

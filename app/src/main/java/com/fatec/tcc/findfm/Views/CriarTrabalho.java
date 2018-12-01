@@ -853,7 +853,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         );
 
                         musicaRequest.setRequest(musica);
-                        dialog.setMessage("Publicando música, aguarde...");
+                        dialog.setMessage("Publicando músicas, aguarde...");
                         dialog.show();
                         musicaRequest.execute();
                     }

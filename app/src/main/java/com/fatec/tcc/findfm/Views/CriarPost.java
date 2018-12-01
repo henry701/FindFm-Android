@@ -896,7 +896,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                     this.dialog.hide();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                "Sucesso!", R.drawable.ic_error,
+                                "Sucesso!", R.drawable.ic_save,
                                 "Comentário adicionado com sucesso","OK",
                                 (dialog, id) -> {
                                     binding.incluirContent.txtComentar.setText("");
