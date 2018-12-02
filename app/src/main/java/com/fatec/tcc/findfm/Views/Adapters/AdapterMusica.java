@@ -17,7 +17,6 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.fatec.tcc.findfm.Controller.Midia.NotificacaoController;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
@@ -93,7 +92,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
 
         // Start
         holder.bindingVH.btnPlay.setOnClickListener(v -> {
-            NotificacaoController nPanel = new NotificacaoController(activity);
+            //NotificacaoController nPanel = new NotificacaoController(activity);
 
             holder.mediaPlayer.start();
             holder.startPlayProgressUpdater();

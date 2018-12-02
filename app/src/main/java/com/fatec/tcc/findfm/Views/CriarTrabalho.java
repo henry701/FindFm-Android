@@ -23,7 +23,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
@@ -33,7 +32,6 @@ import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Trabalho;
-import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -44,7 +42,6 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMusica;
@@ -90,7 +87,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private List<Musica> listaMusicas = new ArrayList<>();
     private List<String> musicasEnviadas = new ArrayList<>();
     private Menu optionsMenu;
-    //TODO: para pegar o trabalho: pega o id do perfil (account/id), e ai vai retornar o trabalho
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -271,7 +268,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
             try {
                 optionsMenu.getItem(0).setVisible(false);
-                optionsMenu.getItem(1).setVisible(true);
+                optionsMenu.getItem(1).setVisible(false);
                 optionsMenu.getItem(2).setVisible(true);
             } catch (Exception e){
                 e.printStackTrace();
@@ -390,54 +387,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         return true;
     }
 
-    private void getTrabalho() {
-        JsonTypedRequest<Usuario, ResponseBody, ErrorResponse> getTrabalho = new JsonTypedRequest<>
-                (this,
-                        Request.Method.GET,
-                        Usuario.class,
-                        ResponseBody.class,
-                        ErrorResponse.class,
-                        HttpUtils.buildUrl(getResources(), "work", binding.incluirContent.getTrabalho().getId()),
-                        null,
-                        (ResponseBody response) ->
-                        {
-                            dialog.hide();
-                            if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                Trabalho trabalhoResponse = JsonUtils.jsonConvert(response.getData(), Trabalho.class);
-                                binding.incluirContent.setTrabalho(trabalhoResponse);
-                                binding.incluirContent.executePendingBindings();
-                                checkTelaMode();
-                                preencherTela(binding.incluirContent.getTrabalho());
-                            }
-                        },
-                        (ErrorResponse errorResponse) ->
-                        {
-                            dialog.hide();
-                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                            if(errorResponse != null) {
-                                Log.e("[ERRO-Response]WorkGet", errorResponse.getMessage());
-                                mensagem = errorResponse.getMessage();
-                            }
-                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                                    mensagem, "OK", (dialog, id) -> { }).create().show();
-                        },
-                        (VolleyError errorResponse) ->
-                        {
-                            dialog.hide();
-                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                            if(errorResponse != null) {
-                                Log.e("[ERRO-Volley]WorkGet", errorResponse.getMessage());
-                                errorResponse.printStackTrace();
-                            }
-                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                                    mensagem, "OK", (dialog, id) -> { }).create().show();
-                        }
-                );
-
-        getTrabalho.execute();
-        dialog.show();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Util.hideSoftKeyboard(this);
@@ -464,9 +413,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         }
                     }
                 }
-                break;
-            case R.id.action_refresh:
-                getTrabalho();
                 break;
             case R.id.action_report:
                 denunciar("Trabalho", binding.incluirContent.getTrabalho().getId());
@@ -759,7 +705,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                     FindFM.setTelaAtual("TRABALHO_CRIADO");
                                     binding.incluirContent.getTrabalho().setId(response.getData().toString());
                                     telaMode = "visualizar";
-                                    getTrabalho();
+                                    checkTelaMode();
                                 }).create().show();
                     }
                 },
@@ -812,7 +758,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                     this.dialog.hide();
                                     if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                         Trabalho trabalho = binding.incluirContent.getTrabalho();
-                                        musica.setIdResource(response.getData().toString());
+                                        musica.setId(response.getData().toString());
                                         trabalho.getMusicas().add(musica);
 
                                         binding.incluirContent.setTrabalho(trabalho);
