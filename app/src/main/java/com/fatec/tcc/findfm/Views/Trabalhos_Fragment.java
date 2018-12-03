@@ -58,6 +58,7 @@ public class Trabalhos_Fragment extends Fragment {
         try {
             if(!URL.contains("account/me")){
                 activity.getSupportActionBar().setTitle("Trabalhos");
+                binding.adicionarTrabalho.setVisibility(View.GONE);
             } else {
                 activity.getSupportActionBar().setTitle("Meus Trabalhos");
             }
@@ -152,6 +153,9 @@ public class Trabalhos_Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         try {
+            if( !FindFM.getTelaAtual().equals("CRIAR_TRABALHO")) {
+                getUser();
+            }
             getView().setOnKeyListener((v, keyCode, event) -> {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     ((AdapterTrabalhos) binding.listaTrabalhos.getAdapter()).stopMedia();

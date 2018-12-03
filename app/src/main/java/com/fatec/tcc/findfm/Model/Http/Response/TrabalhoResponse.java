@@ -15,7 +15,7 @@ public class TrabalhoResponse {
     private boolean original;
     private List<FileReference> midias;
     private List<Musica> musicas;
-    private List<User> musicos;
+    private List<MusicoResponse> musicos;
 
     public String getNome() {
         return nome;
@@ -46,20 +46,20 @@ public class TrabalhoResponse {
 
     public List<Musico> getMusicos() {
         List<Musico> musicos = new ArrayList<>();
-        for(User musico : this.musicos){
+        for(MusicoResponse musico : this.musicos){
             Musico usuario = new Musico();
-            usuario.setId(musico.getId());
-            if(musico.getAvatar() != null) {
-                usuario.setFotoID(musico.getAvatar().get_id());
+            usuario.setId(musico.usuario.getId());
+            if(musico.usuario.getAvatar() != null) {
+                usuario.setFotoID(musico.usuario.getAvatar().get_id());
             }
-            usuario.setNomeCompleto(musico.getFullName());
-            usuario.setSobre(musico.getSobre());
+            usuario.setNomeCompleto(musico.usuario.getFullName());
+            usuario.setSobre(musico.usuario.getSobre());
             musicos.add(usuario);
         }
         return musicos;
     }
 
-    public TrabalhoResponse setMusicos(List<User> musicos) {
+    public TrabalhoResponse setMusicos(List<MusicoResponse> musicos) {
         this.musicos = musicos;
         return this;
     }
@@ -98,4 +98,18 @@ public class TrabalhoResponse {
         this.musicas = musicas;
         return this;
     }
+
+    public class MusicoResponse {
+        private User usuario;
+
+        public User getUsuario() {
+            return usuario;
+        }
+
+        public MusicoResponse setUsuario(User usuario) {
+            this.usuario = usuario;
+            return this;
+        }
+    }
+
 }

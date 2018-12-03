@@ -269,7 +269,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             try {
                 optionsMenu.getItem(0).setVisible(false);
                 optionsMenu.getItem(1).setVisible(false);
-                optionsMenu.getItem(2).setVisible(true);
+                optionsMenu.getItem(2).setVisible(!(telaMode.equals("editavel")));
             } catch (Exception e){
                 e.printStackTrace();
             }

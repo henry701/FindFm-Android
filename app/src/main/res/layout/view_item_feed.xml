@@ -26,7 +26,7 @@
             android:layout_marginEnd="8dp"
             android:hint="Jóse augusto de pereira barbosa roger"
             android:onClick="@{clickListener::onClick}"
-            android:text="Anúncio sugerido"
+            android:text="@string/anuncio_sugerido"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="18sp"

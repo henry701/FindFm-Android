@@ -40,7 +40,9 @@ public class Audio_Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_audio, container, false);
 
         binding.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
-
+        binding.lbTituloMusica.setVisibility(View.GONE);
+        binding.checkRadio.setVisibility(View.GONE);
+        binding.lbReproducoesMusica.setVisibility(View.GONE);
         if(mediaPlayer != null){
             mediaPlayer.release();
         }
