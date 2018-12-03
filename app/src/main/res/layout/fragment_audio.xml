@@ -32,6 +32,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:theme="@style/temaCheck"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +47,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/checkRadio"
             tools:text="Reproduções: 1235" />

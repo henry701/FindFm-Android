@@ -23,6 +23,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.DownloadResourceService;
 import com.fatec.tcc.findfm.Infrastructure.Request.UploadResourceService;
@@ -42,6 +43,7 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.Views.Adapters.AdapterMusica;
@@ -67,6 +69,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
@@ -80,7 +83,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
     private ProgressDialog dialog;
-    private boolean isVisitante;
+    private String idAutor;
     private String telaMode = "criando";
 
     private List<FileReference> filesToUpload = new ArrayList<>();
@@ -103,7 +106,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (param != null) {
                 if (!param.isEmpty()) {
                     telaMode = param.getString("telaMode");
-                    isVisitante = param.getBoolean("visitante");
+                    idAutor = param.getString("idAutor");
                 }
             }
 
@@ -234,7 +237,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                 ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
             }
-            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), "editavel".equals(telaMode)));
+            binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), "editavel".equals(telaMode), idAutor));
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -330,7 +333,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                         ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                     }
-                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
+                    binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()), ""));
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     InputStream fis = getContentResolver().openInputStream(musica.getUri());
 
@@ -565,7 +568,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
                             ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                         }
-                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario())));
+                        binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()), ""));
                         checkTelaMode();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -828,6 +831,50 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
     public void setTrabalho(Trabalho param) {
         binding.incluirContent.setTrabalho(param);
+    }
+
+    private void getMusicas(String idMusica){
+        JsonTypedRequest<Musica, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
+                (       this,
+                        Request.Method.GET,
+                        Musica.class,
+                        ResponseBody.class,
+                        ErrorResponse.class,
+                        HttpUtils.buildUrl(getResources(), "song", idAutor, idMusica),
+                        null,
+                        (ResponseBody response) ->
+                        {
+                            dialog.hide();
+                            if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                Musica musica = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()), Musica.class);
+                                listaMusicas.add(musica);
+                            }
+                        },
+                        (ErrorResponse errorResponse) ->
+                        {
+                            dialog.dismiss();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Response]GetMusic", errorResponse.getMessage());
+                                mensagem = errorResponse.getMessage();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
+                        },
+                        (VolleyError errorResponse) ->
+                        {
+                            dialog.dismiss();
+                            String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                            if(errorResponse != null) {
+                                Log.e("[ERRO-Volley]GetMusic", errorResponse.getMessage());
+                                errorResponse.printStackTrace();
+                            }
+                            AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                    mensagem, "OK", (dialog, id) -> { }).create().show();
+                        }
+                );
+        registrarRequest.execute();
+        dialog.show();
     }
 
     @Override

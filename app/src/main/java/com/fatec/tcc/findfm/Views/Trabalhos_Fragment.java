@@ -113,7 +113,12 @@ public class Trabalhos_Fragment extends Fragment {
                                     binding.lbSemTrabalho.setVisibility(View.GONE);
                                     binding.listaTrabalhos.setVisibility(View.VISIBLE);
                                     binding.listaTrabalhos.setLayoutManager(new LinearLayoutManager(activity));
-                                    binding.listaTrabalhos.setAdapter(new AdapterTrabalhos(this.usuario.getTrabalhos(), activity, (FindFM.getUsuario().getId().equals(this.usuario.getId()))));
+                                    binding.listaTrabalhos.setAdapter(
+                                            new AdapterTrabalhos(this.usuario.getTrabalhos(), activity,
+                                                (FindFM.getUsuario().getId().equals(this.usuario.getId())),
+                                                this.usuario.getId()
+                                            )
+                                    );
                                     DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
                                     itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
                                     binding.listaTrabalhos.addItemDecoration(itemDecorator);

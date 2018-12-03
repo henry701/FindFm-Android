@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Musica;
@@ -28,13 +29,16 @@ import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpMethod;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
+import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.databinding.FragmentAudioBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder> {
 
+    private String idAutor;
     private List<Musica> Musicas = new ArrayList<>();
     private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
@@ -43,11 +47,12 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
 
     public AdapterMusica() { }
 
-    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro, boolean isAutor){
+    public AdapterMusica(List<Musica> Musicas, Activity activity, boolean isCadastro, boolean isAutor, String idAutor){
         this.Musicas = Musicas;
         this.activity = activity;
         this.isCadastro = isCadastro;
         this.isAutor = isAutor;
+        this.idAutor = idAutor;
     }
 
     public List<Musica> getMusicas(){
@@ -67,7 +72,61 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
 
     @Override
     public void onBindViewHolder(AdapterMusica.ViewHolder holder, int position) {
-        Musica musica = Musicas.get(position);
+        Musica musica1 = Musicas.get(position);
+
+        ProgressDialog dialogMusica = new ProgressDialog(activity);
+        dialogMusica.setMessage("Carregando...");
+        dialogMusica.setCancelable(false);
+        if(idAutor.equals("")){
+            putMusica(musica1, holder, position);
+        } else {
+            JsonTypedRequest<Musica, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
+                    (activity,
+                            Request.Method.GET,
+                            Musica.class,
+                            ResponseBody.class,
+                            ErrorResponse.class,
+                            HttpUtils.buildUrl(activity.getResources(), "song", idAutor, musica1.getId()),
+                            null,
+                            (ResponseBody response) ->
+                            {
+                                dialogMusica.hide();
+                                if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
+                                    Musica musica = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()), Musica.class);
+                                    putMusica(musica, holder, position);
+                                }
+                            },
+                            (ErrorResponse errorResponse) ->
+                            {
+                                dialogMusica.dismiss();
+                                String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                if (errorResponse != null) {
+                                    Log.e("[ERRO-Response]GetMusic", errorResponse.getMessage());
+                                    mensagem = errorResponse.getMessage();
+                                }
+                                AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                        mensagem, "OK", (dialog, id) -> {
+                                        }).create().show();
+                            },
+                            (VolleyError errorResponse) ->
+                            {
+                                dialogMusica.dismiss();
+                                String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                if (errorResponse != null) {
+                                    Log.e("[ERRO-Volley]GetMusic", errorResponse.getMessage());
+                                    errorResponse.printStackTrace();
+                                }
+                                AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
+                                        mensagem, "OK", (dialog, id) -> {
+                                        }).create().show();
+                            }
+                    );
+            dialogMusica.show();
+            registrarRequest.execute();
+        }
+    }
+
+    private void putMusica(Musica musica, AdapterMusica.ViewHolder holder, int position){
         Uri uri;
         if(musica.getUri() == null){
             uri = Uri.parse(HttpUtils.buildUrl(activity.getResources(), "resource/" + musica.getIdResource()));
@@ -159,6 +218,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
             if(isAutor){
                 holder.bindingVH.lbReproducoesMusica.setVisibility(View.VISIBLE);
                 holder.bindingVH.checkRadio.setVisibility(View.VISIBLE);
+                holder.bindingVH.checkRadio.setChecked(musica.isAutorizadoRadio());
                 holder.bindingVH.checkRadio.setOnClickListener(v -> {
                     Long selecionadasRadio = FindFM.getUsuario().getSelecionadasRadio();
                     if ( selecionadasRadio >= 3) {

@@ -51,15 +51,17 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
     private List<Trabalho> trabalhos = new ArrayList<>();
     private TelaPrincipal activity;
     private boolean isAutor;
+    private String idAutor;
     private List<AdapterTrabalhos.ViewHolder> holders = new ArrayList<>();
 
     public AdapterTrabalhos() {
     }
 
-    public AdapterTrabalhos(List<Trabalho> trabalhos, TelaPrincipal activity, boolean isAutor){
+    public AdapterTrabalhos(List<Trabalho> trabalhos, TelaPrincipal activity, boolean isAutor, String idAutor){
         this.trabalhos = trabalhos;
         this.activity = activity;
         this.isAutor = isAutor;
+        this.idAutor = idAutor;
     }
 
     public List<Trabalho> getTrabalhos(){
@@ -91,6 +93,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                 Bundle param = new Bundle();
                 FindFM.getMap().put("trabalho", trabalho);
                 param.putString("telaMode", "editavel");
+                param.putString("idAutor", idAutor );
                 param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
             } else {
@@ -98,6 +101,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                 Bundle param = new Bundle();
                 FindFM.getMap().put("trabalho", trabalho);
                 param.putString("telaMode", "visualizar");
+                param.putString("idAutor", idAutor );
                 param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
             }
@@ -153,7 +157,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
         holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
-        holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, false));
+        holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, false, idAutor));
         DividerItemDecoration itemDecorator = new DividerItemDecoration(activity, DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(Objects.requireNonNull(activity.getDrawable(R.drawable.divider)));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
