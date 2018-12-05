@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
+import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.Musico;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -57,7 +58,13 @@ public class Trabalhos_Fragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.activity_trabalhos_lista, container, false);
         try {
             if(!URL.contains("account/me")){
-                activity.getSupportActionBar().setTitle("Trabalhos");
+                if(activity.getSupportActionBar() != null) {
+                    if (usuario.getNomeCompleto() != null) {
+                        activity.getSupportActionBar().setTitle("Trabalhos de: " + usuario.getNomeCompleto());
+                    } else {
+                        activity.getSupportActionBar().setTitle("Trabalhos");
+                    }
+                }
                 binding.adicionarTrabalho.setVisibility(View.GONE);
             } else {
                 activity.getSupportActionBar().setTitle("Meus Trabalhos");
@@ -83,6 +90,9 @@ public class Trabalhos_Fragment extends Fragment {
         Util.hideSoftKeyboard(activity);
         switch (item.getItemId()){
             case R.id.action_refresh:
+                try {
+                    ((AdapterTrabalhos) binding.listaTrabalhos.getAdapter()).stopMedia();
+                } catch (Exception ignored){}
                 getUser();
                 return true;
         }
@@ -107,6 +117,16 @@ public class Trabalhos_Fragment extends Fragment {
                             activity.getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                 User user= JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("usuario"), User.class);
+
+                                if (user.getMusicas() != null){
+                                    int i = 0;
+                                    for (Musica musica : user.getMusicas()){
+                                        if(musica.isAutorizadoRadio())
+                                            i++;
+                                    }
+                                    FindFM.getMap().put("autorizadasRadio", i);
+                                }
+
                                 this.usuario.setId(user.getId());
                                 this.usuario.setTrabalhos(user.getTrabalhos());
                                 if(!this.usuario.getTrabalhos().isEmpty()) {

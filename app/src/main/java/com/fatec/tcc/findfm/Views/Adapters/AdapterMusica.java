@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder> {
 
-    private String idAutor;
+    private String idAutor = "";
     private List<Musica> Musicas = new ArrayList<>();
     private List<AdapterMusica.ViewHolder> holders = new ArrayList<>();
     private Activity activity;
@@ -135,8 +135,10 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         }
         holders.add(holder);
         holder.bindingVH.setMusica(musica);
+        holder.bindingVH.btnPause.setEnabled(false);
         holder.bindingVH.btnPause.setBackgroundResource(R.drawable.ic_pause_dark);
-
+        holder.bindingVH.btnStop.setEnabled(false);
+        holder.bindingVH.btnStop.setBackgroundResource(R.drawable.ic_stop_dark);
         if(holder.mediaPlayer != null){
             holder.mediaPlayer.release();
         }
@@ -164,6 +166,11 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
 
             holder.bindingVH.btnStop.setEnabled(true);
             holder.bindingVH.btnStop.setBackgroundResource(R.drawable.ic_stop);
+
+            if(!musica.isJaIncrementado()) {
+                initIncrementarRequest(idAutor, musica.getId());
+                musica.setJaIncrementado(true);
+            }
         });
 
         // Pause
@@ -220,7 +227,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 holder.bindingVH.checkRadio.setVisibility(View.VISIBLE);
                 holder.bindingVH.checkRadio.setChecked(musica.isAutorizadoRadio());
                 holder.bindingVH.checkRadio.setOnClickListener(v -> {
-                    Long selecionadasRadio = FindFM.getUsuario().getSelecionadasRadio();
+                    Integer selecionadasRadio = (Integer) FindFM.getMap().get("autorizadasRadio");
                     if ( selecionadasRadio >= 3) {
                         AlertDialogUtils.newSimpleDialog__OneButton(activity, "Atenção!", R.drawable.ic_error,
                                 "Você já selecionou 3 (três) músicas para a rádio.", "OK", null).show();
@@ -399,6 +406,22 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         dialog.setMessage("Atualizando música, aguarde...");
         dialog.show();
         updateRequest.execute();
+    }
+
+    private void initIncrementarRequest(String idAutor, String idMusica){
+        JsonTypedRequest<Musica, ResponseBody, ErrorResponse> incrementarRequest = new JsonTypedRequest<>(
+                activity,
+                HttpMethod.POST.getCodigo(),
+                Musica.class,
+                ResponseBody.class,
+                ErrorResponse.class,
+                HttpUtils.buildUrl(activity.getResources(),"song", idAutor, idMusica),
+                null,
+                (ResponseBody response) -> {},
+                (ErrorResponse errorResponse) -> {},
+                (VolleyError errorResponse) -> {}
+        );
+        incrementarRequest.execute();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

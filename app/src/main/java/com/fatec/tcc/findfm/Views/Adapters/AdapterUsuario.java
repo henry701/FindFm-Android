@@ -72,73 +72,75 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
         progressDialog.setCancelable(false);
 
         Usuario usuario = (Usuario) usuarios.toArray()[position];
-        holder.bindingVH.setUsuario(usuario);
+        if(usuario != null) {
+            holder.bindingVH.setUsuario(usuario);
 
-        if(usuario.getFotoID() != null){
-            DownloadResourceService downloadService = new DownloadResourceService(activity);
-            downloadService.addObserver( (download, arg) -> {
-                if(download instanceof DownloadResourceService) {
-                    activity.runOnUiThread(() -> {
-                        if (arg instanceof BinaryResponse) {
-                            byte[] dados = ((BinaryResponse) arg).getData();
-                            InputStream input=new ByteArrayInputStream(dados);
-                            Bitmap ext_pic = BitmapFactory.decodeStream(input);
-                            holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
-                            holder.bindingVH.executePendingBindings();
-                        } else{
-                            Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
-                            AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                    "Ops!", R.drawable.ic_error,
-                                    "Ocorreu um erro ao tentar conectar com nossos servidores." +
-                                            "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
-                                    (dialog, id1) -> {
-                                    }).create().show();
-                        }
-                        progressDialog.hide();
+            if (usuario.getFotoID() != null) {
+                DownloadResourceService downloadService = new DownloadResourceService(activity);
+                downloadService.addObserver((download, arg) -> {
+                    if (download instanceof DownloadResourceService) {
+                        activity.runOnUiThread(() -> {
+                            if (arg instanceof BinaryResponse) {
+                                byte[] dados = ((BinaryResponse) arg).getData();
+                                InputStream input = new ByteArrayInputStream(dados);
+                                Bitmap ext_pic = BitmapFactory.decodeStream(input);
+                                holder.bindingVH.fotoPerfil.setImageBitmap(ext_pic);
+                                holder.bindingVH.executePendingBindings();
+                            } else {
+                                Log.e("[ERRO-Download]IMG", "Erro ao baixar binário da imagem");
+                                AlertDialogUtils.newSimpleDialog__OneButton(activity,
+                                        "Ops!", R.drawable.ic_error,
+                                        "Ocorreu um erro ao tentar conectar com nossos servidores." +
+                                                "\nVerifique sua conexão com a Internet e tente novamente.", "OK",
+                                        (dialog, id1) -> {
+                                        }).create().show();
+                            }
+                            progressDialog.hide();
 
-                    });
-                }
-            });
-            downloadService.getResource(usuario.getFotoID());
-            progressDialog.show();
-        }
+                        });
+                    }
+                });
+                downloadService.getResource(usuario.getFotoID());
+                progressDialog.show();
+            }
 
-        if(isBusca) {
-            holder.bindingVH.layout.setOnClickListener(v -> {
-                Util.hideSoftKeyboard(activity);
-                FindFM.getMap().put("USUARIO_BUSCA", usuario);
-                activity.onBackPressed();
-            });
-
-            if(apenasVisualizar){
+            if (isBusca) {
                 holder.bindingVH.layout.setOnClickListener(v -> {
                     Util.hideSoftKeyboard(activity);
                     FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                    activity.onBackPressed();
                 });
-            }
-        } else {
-            if(!apenasVisualizar) {
-                if (!FindFM.getUsuario().getId().equals(usuario.getId())) {
-                    holder.bindingVH.btnRemoverUsuario.setVisibility(View.VISIBLE);
-                    holder.bindingVH.btnRemoverUsuario.setOnClickListener(v -> {
-                        removeAt(usuario, position);
-                    });
 
+                if (apenasVisualizar) {
+                    holder.bindingVH.layout.setOnClickListener(v -> {
+                        Util.hideSoftKeyboard(activity);
+                        FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                    });
                 }
             } else {
-                holder.bindingVH.btnRemoverUsuario.setVisibility(View.GONE);
-                try {
-                    if(activity instanceof TelaPrincipal)
-                        holder.bindingVH.layout.setOnClickListener(v -> {
-                            FindFM.getMap().put("USUARIO_BUSCA", usuario);
-                            ((TelaPrincipal) activity).goToPerfil();
+                if (!apenasVisualizar) {
+                    if (!FindFM.getUsuario().getId().equals(usuario.getId())) {
+                        holder.bindingVH.btnRemoverUsuario.setVisibility(View.VISIBLE);
+                        holder.bindingVH.btnRemoverUsuario.setOnClickListener(v -> {
+                            removeAt(usuario, position);
                         });
-                } catch (Exception e){
-                    e.printStackTrace();
+
+                    }
+                } else {
+                    holder.bindingVH.btnRemoverUsuario.setVisibility(View.GONE);
+                    try {
+                        if (activity instanceof TelaPrincipal)
+                            holder.bindingVH.layout.setOnClickListener(v -> {
+                                FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                                ((TelaPrincipal) activity).goToPerfil();
+                            });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+            progressDialog.hide();
         }
-        progressDialog.hide();
     }
 
     @Override

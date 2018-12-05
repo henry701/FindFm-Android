@@ -13,6 +13,7 @@ public class Musica {
     private boolean autorizadoRadio;
     private Long reproducoes;
     private Uri uri;
+    private boolean jaIncrementado = false;
 
     public Musica(){}
 
@@ -112,5 +113,13 @@ public class Musica {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isJaIncrementado() {
+        return jaIncrementado;
+    }
+
+    public void setJaIncrementado(boolean jaIncrementado) {
+        this.jaIncrementado = jaIncrementado;
     }
 }
