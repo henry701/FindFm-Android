@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.fatec.tcc.findfm.Controller.Registrar.RegistrarViewModel;
 import com.fatec.tcc.findfm.R;
-import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.databinding.ActivityRegistrarBinding;
 
@@ -53,10 +52,7 @@ public class Registrar extends AppCompatActivity {
     }
 
     public void btnRegistrar_Click(View v){
-        AlertDialogUtils.newSimpleDialog__TwoButtons(this, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
-                "Aceito", "Não aceito",
-                (dialog, which) -> binding.getViewModel().registrar(),
-                (dialog, which) -> {}).show();
+        binding.getViewModel().registrar();
 
     }
 

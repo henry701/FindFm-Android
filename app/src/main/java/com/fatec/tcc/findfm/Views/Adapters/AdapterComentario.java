@@ -1,7 +1,6 @@
 package com.fatec.tcc.findfm.Views.Adapters;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,7 +23,6 @@ import com.fatec.tcc.findfm.Model.Http.Request.Denuncia;
 import com.fatec.tcc.findfm.Model.Http.Response.BinaryResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
 import com.fatec.tcc.findfm.Model.Http.Response.ResponseBody;
-import com.fatec.tcc.findfm.Model.Http.Response.ResponseCode;
 import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
@@ -217,10 +215,6 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
     }
 
     private void initDenunciarRequest(String idItem, String motivo, String contato, String tipo){
-        ProgressDialog dialog = new ProgressDialog(activity);
-        dialog.setMessage("Carregando...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
         JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
                 activity,
                 HttpMethod.POST.getCodigo(),
@@ -229,36 +223,19 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                 ErrorResponse.class,
                 HttpUtils.buildUrl(activity.getResources(),"report"),
                 null,
-                (ResponseBody response) -> {
-                    dialog.hide();
-                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                "Sucesso!", R.drawable.ic_save,
-                                "Denúncia enviada com sucesso!","OK",
-                                (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
-                    }
-                },
+                (ResponseBody response) -> Toast.makeText(activity, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show(),
                 (ErrorResponse errorResponse) ->
                 {
-                    dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
-                        mensagem = errorResponse.getMessage();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 },
                 (VolleyError errorResponse) ->
                 {
-                    dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
-                    if(errorResponse != null) {
+                   if(errorResponse != null) {
                         Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
                         errorResponse.printStackTrace();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 }
         );
 
@@ -268,8 +245,7 @@ public class AdapterComentario extends RecyclerView.Adapter<AdapterComentario.Vi
                 .setMotivo(motivo)
                 .setTipo(tipo)
         );
-        dialog.setMessage("Enviando denúncia, aguarde...");
-        dialog.show();
+        Toast.makeText(activity, "Enviando denúncia...", Toast.LENGTH_SHORT).show();
         reportRequest.execute();
     }
 

@@ -8,8 +8,8 @@
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
 
-    <string name="base_url">http://192.168.43.220:8083</string>
-    <string name="radio_url">http://192.168.43.220:8084</string>
+    <string name="base_url">http://10.0.2.2:8083</string>
+    <string name="radio_url">http://10.0.2.2:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
@@ -147,7 +147,7 @@
     <string name="visitas">Visitas:</string>
     <string name="termos">
         <p>
-        Todo e qualquer áudio, texto, fotos, imagens, gráfico, comentário e outro conteúdo, dado ou informação que você enviar, armazenar, transmitir, enviar, trocar ou disponibilizar para ou através da Plataforma é gerado, de propriedade e controlado exclusivamente por você, e não pelo FindFM.
+        Todo e qualquer áudio, texto, foto, imagem, gráfico, comentário e outro conteúdo, dado ou informação que você enviar, armazenar, transmitir, enviar, trocar ou disponibilizar para ou através da Plataforma é gerado, de propriedade e controlado exclusivamente por você, e não pelo FindFM.
         </p>
         \n
         <p>

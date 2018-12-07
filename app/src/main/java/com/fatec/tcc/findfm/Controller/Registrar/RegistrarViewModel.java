@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.fatec.tcc.findfm.Model.Business.Telefone;
 import com.fatec.tcc.findfm.R;
+import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.Formatadores;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
@@ -108,14 +109,18 @@ public class RegistrarViewModel {
 
             String path = "com.fatec.tcc.findfm.Views.Registrar";
 
-            switch (tipoConta.getText().toString()){
-                case "Contratante":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarContratante.class, path, this.param);
-                    break;
-                case "Artísta":
-                    Util.open_form_withParam(view.getApplicationContext(), RegistrarMusico.class, path, this.param);
-                    break;
-            }
+            AlertDialogUtils.newSimpleDialog__TwoButtons(view, "Termos de uso - FindFM", R.drawable.ic_error, R.string.termos,
+                    "Aceito", "Não aceito",
+                    (dialog, which) -> {
+                        switch (tipoConta.getText().toString()){
+                        case "Contratante":
+                            Util.open_form_withParam(view.getApplicationContext(), RegistrarContratante.class, path, this.param);
+                            break;
+                        case "Artísta":
+                            Util.open_form_withParam(view.getApplicationContext(), RegistrarMusico.class, path, this.param);
+                            break;
+                    }},
+                    (dialog, which) -> {}).show();
         }
     }
 

@@ -77,7 +77,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         ProgressDialog dialogMusica = new ProgressDialog(activity);
         dialogMusica.setMessage("Carregando...");
         dialogMusica.setCancelable(false);
-        if(idAutor.equals("")){
+        if("".equals(idAutor)){
             putMusica(musica1, holder, position);
         } else {
             JsonTypedRequest<Musica, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
@@ -107,6 +107,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                                 AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
                                         mensagem, "OK", (dialog, id) -> {
                                         }).create().show();
+                                holder.bindingVH.btnPlay.setBackgroundResource(R.drawable.ic_play_dark);
                             },
                             (VolleyError errorResponse) ->
                             {
@@ -119,6 +120,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                                 AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
                                         mensagem, "OK", (dialog, id) -> {
                                         }).create().show();
+                                holder.bindingVH.btnPlay.setBackgroundResource(R.drawable.ic_play_dark);
                             }
                     );
             dialogMusica.show();
@@ -300,10 +302,6 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
     }
 
     private void initDenunciarRequest(String idItem, String motivo, String contato, String tipo){
-        ProgressDialog dialog = new ProgressDialog(activity);
-        dialog.setMessage("Carregando...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
         JsonTypedRequest<Denuncia, ResponseBody, ErrorResponse> reportRequest = new JsonTypedRequest<>(
                 activity,
                 HttpMethod.POST.getCodigo(),
@@ -312,36 +310,19 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 ErrorResponse.class,
                 HttpUtils.buildUrl(activity.getResources(),"report"),
                 null,
-                (ResponseBody response) -> {
-                    dialog.hide();
-                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                        AlertDialogUtils.newSimpleDialog__OneButton(activity,
-                                "Sucesso!", R.drawable.ic_save,
-                                "Denúncia enviada com sucesso!","OK",
-                                (dialog1, id) -> dialog.setMessage("Carregando...")).create().show();
-                    }
-                },
+                (ResponseBody response) -> Toast.makeText(activity, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show(),
                 (ErrorResponse errorResponse) ->
                 {
-                    dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
-                        mensagem = errorResponse.getMessage();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 },
                 (VolleyError errorResponse) ->
                 {
-                    dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
                         errorResponse.printStackTrace();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(activity, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 }
         );
 
@@ -351,8 +332,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 .setMotivo(motivo)
                 .setTipo(tipo)
         );
-        dialog.setMessage("Enviando denúncia, aguarde...");
-        dialog.show();
+        Toast.makeText(activity, "Enviando denúncia...", Toast.LENGTH_SHORT).show();
         reportRequest.execute();
     }
 

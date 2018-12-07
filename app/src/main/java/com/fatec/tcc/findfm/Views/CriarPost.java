@@ -814,19 +814,19 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 "Denunciar", "Cancelar",
                 (dialog, which) ->
                         AlertDialogUtils.newTextDialog(this, "Denunciar " + tipo + " ?", R.drawable.ic_report,
-                        "Diga-nos como podemos te contatar para falar sobre essa denúncia.\nSeu nome e e-mail para contato:",
-                        "Denunciar", "Cancelar",
-                        (dialog4, which4) -> {
-                            if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
-                                    contato.getText() != null && !"".equals(contato.getText().toString()) ) {
-                                String denuncia = motivo.getText().toString();
-                                String denunciante = contato.getText().toString();
-                                initDenunciarRequest(idItem, denuncia, denunciante, tipo);
-                            } else {
-                                Toast.makeText(this, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
-                            }
-                        },
-                        (dialog2, which2) -> { }, contato).show(),
+                                "Diga-nos como podemos te contatar para falar sobre essa denúncia.\nSeu nome e e-mail para contato:",
+                                "Denunciar", "Cancelar",
+                                (dialog4, which4) -> {
+                                    if(motivo.getText() != null && !"".equals(motivo.getText().toString()) &&
+                                            contato.getText() != null && !"".equals(contato.getText().toString()) ) {
+                                        String denuncia = motivo.getText().toString();
+                                        String denunciante = contato.getText().toString();
+                                        initDenunciarRequest(idItem, denuncia, denunciante, tipo);
+                                    } else {
+                                        Toast.makeText(this, "Preencha todos os campos para enviar denúncia!", Toast.LENGTH_SHORT).show();
+                                    }
+                                },
+                                (dialog2, which2) -> { }, contato).show(),
                 (dialog, which) -> { }, motivo).show();
     }
 
@@ -839,36 +839,19 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 ErrorResponse.class,
                 HttpUtils.buildUrl(getResources(),"report"),
                 null,
-                (ResponseBody response) -> {
-                    this.dialog.hide();
-                    if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                        AlertDialogUtils.newSimpleDialog__OneButton(this,
-                                "Sucesso!", R.drawable.ic_save,
-                                "Denúncia enviada com sucesso!","OK",
-                                (dialog1, id) -> this.dialog.setMessage("Carregando...")).create().show();
-                    }
-                },
+                (ResponseBody response) -> Toast.makeText(this, "Denúncia enviada com sucesso!", Toast.LENGTH_SHORT).show(),
                 (ErrorResponse errorResponse) ->
                 {
-                    this.dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Response]Denuncia", errorResponse.getMessage());
-                        mensagem = errorResponse.getMessage();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 },
                 (VolleyError errorResponse) ->
                 {
-                    this.dialog.hide();
-                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Volley]Denuncia", errorResponse.getMessage());
                         errorResponse.printStackTrace();
                     }
-                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
-                            mensagem, "OK", (dialog2, id) -> { }).create().show();
                 }
         );
 
@@ -878,8 +861,7 @@ public class CriarPost extends AppCompatActivity implements Observer{
                 .setMotivo(motivo)
                 .setTipo(tipo)
         );
-        this.dialog.setMessage("Enviando denúncia, aguarde...");
-        this.dialog.show();
+        Toast.makeText(this, "Enviando denúncia...", Toast.LENGTH_SHORT).show();
         reportRequest.execute();
     }
 
