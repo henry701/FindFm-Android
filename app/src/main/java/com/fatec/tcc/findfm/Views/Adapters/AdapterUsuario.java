@@ -95,7 +95,7 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                                         (dialog, id1) -> {
                                         }).create().show();
                             }
-                            progressDialog.hide();
+                            progressDialog.dismiss();
 
                         });
                     }
@@ -128,14 +128,16 @@ public class AdapterUsuario extends RecyclerView.Adapter<AdapterUsuario.ViewHold
                     }
                 } else {
                     holder.bindingVH.btnRemoverUsuario.setVisibility(View.GONE);
-                    try {
-                        if (activity instanceof TelaPrincipal)
-                            holder.bindingVH.layout.setOnClickListener(v -> {
-                                FindFM.getMap().put("USUARIO_BUSCA", usuario);
-                                ((TelaPrincipal) activity).goToPerfil();
-                            });
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if(!"TRABALHOS".equals(FindFM.getTelaAtual())) {
+                        try {
+                            if (activity instanceof TelaPrincipal)
+                                holder.bindingVH.layout.setOnClickListener(v -> {
+                                    FindFM.getMap().put("USUARIO_BUSCA", usuario);
+                                    ((TelaPrincipal) activity).goToPerfil();
+                                });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

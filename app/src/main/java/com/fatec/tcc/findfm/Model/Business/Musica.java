@@ -81,10 +81,16 @@ public class Musica {
         boolean isEqual = false;
 
         if(mus != null && mus instanceof Musica) {
-            isEqual = (
-                    (this.nome.equals(((Musica) mus).getNome())) ||
-                    (this.uri.equals(((Musica) mus).getUri()))
-            );
+            if(this.nome != null && this.uri != null) {
+                isEqual = (
+                        (this.nome.equals(((Musica) mus).getNome())) ||
+                        (this.uri.equals(((Musica) mus).getUri()))
+                );
+            } else if(this.nome == null) {
+                isEqual = (this.uri.equals(((Musica) mus).getUri()));
+            } else if(this.uri == null) {
+                isEqual = (this.nome.equals(((Musica) mus).getNome()));
+            }
         }
 
         return isEqual;

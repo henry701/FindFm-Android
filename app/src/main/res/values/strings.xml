@@ -8,8 +8,8 @@
     <string name="radio_url">http://192.168.3.100:8084</string>
     -->
 
-    <string name="base_url">http://10.0.2.2:8083</string>
-    <string name="radio_url">http://10.0.2.2:8084</string>
+    <string name="base_url">http://172.23.176.1:8083</string>
+    <string name="radio_url">http://172.23.176.1:8084</string>
 
     <string name="title_activity_registrar">FindFM - Registrar</string>
     <string name="action_settings">Configurações</string>
@@ -116,9 +116,9 @@
     <string name="tipo_de_publicacao">Tipo de publicação</string>
     <string name="instrucao_recuperar_senha_codigo">Enviamos um código no e-mail cadastrado\nVerifique sua caixa de entrada e insira-o abaixo</string>
     <string name="codigo_de_recuperacao">Código de recuperação</string>
-    <string name="nova_senha">Sua nova senha, use-a para entrar e não se esqueça de altera-lá</string>
+    <string name="nova_senha">Sua nova senha, use-a para entrar e não se esqueça de alterá-la</string>
     <string name="nao_ha_publicacoes">Não há publicações para serem mostradas</string>
-    <string name="artista">Artísta</string>
+    <string name="artista">Artista</string>
     <string name="title_activity_full_screen_video">FullScreenVideoActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

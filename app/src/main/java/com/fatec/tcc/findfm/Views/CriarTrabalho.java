@@ -97,6 +97,10 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         FindFM.setTelaAtual("CRIAR_TRABALHO");
         try {
             binding = DataBindingUtil.setContentView(this, R.layout.activity_criar_trabalho);
+            dialog = new ProgressDialog(this);
+            dialog.setMessage("Carregando...");
+            dialog.setCancelable(false);
+            dialog.setInverseBackgroundForced(false);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -151,10 +155,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         binding.incluirContent.listaMusicas.addItemDecoration(itemDecorator);
         binding.incluirContent.btnAdicionarMusica.setOnClickListener(v -> startActivityForResult(Intent.createChooser(MidiaUtils.pickAudioIntent(), "Escolha a música"), PICK_AUDIO));
         binding.incluirContent.btnAdicionarPessoa.setOnClickListener(v -> Util.open_form(getApplicationContext(), SearchUsuario.class));
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Carregando...");
-        dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
     }
 
     private void preencherTela(Trabalho trabalho) {
@@ -220,25 +220,28 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
             }
         }
 
-        for(Musica musica : trabalho.getMusicas()){
+        if(trabalho.getMusicas() != null){
             listaMusicas = new ArrayList<>();
 
-            boolean jaContem = false;
-            for(int i = 0; i < listaMusicas.size(); i++) {
-                if(listaMusicas.get(i).equals(musica)) {
-                    jaContem = true;
+            for(Musica musica : trabalho.getMusicas()) {
+                boolean jaContem = false;
+                for (int i = 0; i < listaMusicas.size(); i++) {
+                    if (listaMusicas.get(i).equals(musica)) {
+                        jaContem = true;
+                    }
+                }
+
+                if (!jaContem) {
+                    listaMusicas.add(musica);
                 }
             }
+                binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
+                if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
+                    ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
+                }
 
-            if(!jaContem) {
-                listaMusicas.add(musica);
-            }
-
-            binding.incluirContent.listaMusicas.setVisibility(View.VISIBLE);
-            if (binding.incluirContent.listaMusicas.getAdapter() != null && binding.incluirContent.listaMusicas.getAdapter() instanceof AdapterMusica){
-                ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
-            }
             binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), "editavel".equals(telaMode), idAutor));
+
         }
 
         binding.incluirContent.checkOriginal.setChecked(trabalho.isOriginal());
@@ -335,18 +338,6 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                         ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                     }
                     binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()), ""));
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    InputStream fis = getContentResolver().openInputStream(musica.getUri());
-
-                    byte[] buf = new byte[1024];
-                    int n;
-                    while (-1 != (n = fis.read(buf)))
-                        baos.write(buf, 0, n);
-
-                    filesToUpload.add( new FileReference()
-                            .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())))
-                            .setConteudo(baos.toByteArray())
-                    );
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -409,6 +400,28 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                     resourceService.uploadFiles(midia.getConteudo(), midia.getContentType());
                 }
                 if(filesToUpload.isEmpty()){
+
+                    try {
+                        listaMusicas = ((AdapterMusica)binding.incluirContent.listaMusicas.getAdapter()).getMusicas();
+
+                        for(Musica musica : listaMusicas){
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            InputStream fis = getContentResolver().openInputStream(musica.getUri());
+
+                            byte[] buf = new byte[1024];
+                            int n;
+                            while (-1 != (n = fis.read(buf)))
+                                baos.write(buf, 0, n);
+
+                            filesToUpload.add( new FileReference()
+                                    .setContentType("mus/" + MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(musica.getUri())))
+                                    .setConteudo(baos.toByteArray())
+                            );
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                     if(listaMusicas.isEmpty()) {
                         criarTrabalhoRequest();
                     } else {
@@ -570,6 +583,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                             ((AdapterMusica) binding.incluirContent.listaMusicas.getAdapter()).stopMedia();
                         }
                         binding.incluirContent.listaMusicas.setAdapter( new AdapterMusica(listaMusicas, this, "criando".equals(telaMode), TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()), ""));
+                        binding.incluirContent.getTrabalho().setMusicas(listaMusicas);
                         checkTelaMode();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -639,7 +653,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
         Toast.makeText(this, "Enviando denúncia...", Toast.LENGTH_SHORT).show();
         reportRequest.execute();
     }
-    
+
     public void btnRemoverImagem_Click(View v){
         List<FileReference> filesToRemove = new ArrayList<>();
         for(FileReference midia : filesToUpload){
@@ -689,7 +703,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
                                     dialog.dismiss();
                                     FindFM.setTelaAtual("TRABALHO_CRIADO");
                                     binding.incluirContent.getTrabalho().setId(response.getData().toString());
-                                    telaMode = "visualizar";
+                                    telaMode = "editavel";
                                     checkTelaMode();
                                 }).create().show();
                     }

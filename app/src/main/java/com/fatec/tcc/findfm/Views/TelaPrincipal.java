@@ -29,7 +29,6 @@ import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
 import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
-import com.fatec.tcc.findfm.Model.Business.Trabalho;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
 import com.fatec.tcc.findfm.Model.Http.Response.ErrorResponse;
@@ -384,10 +383,6 @@ public class TelaPrincipal extends AppCompatActivity
 
         TextView textView = binding.navView.getHeaderView(0).findViewById(R.id.txtUsuarioHeader);
         textView.setText(FindFM.getUsuario().getNomeCompleto());
-    }
-
-    public void navegarTrabalho(Trabalho trabalho, boolean isAutor){
-
     }
 
     public ProgressDialog getDialog() {

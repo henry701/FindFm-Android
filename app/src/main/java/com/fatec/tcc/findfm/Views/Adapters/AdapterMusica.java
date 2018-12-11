@@ -77,7 +77,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
         ProgressDialog dialogMusica = new ProgressDialog(activity);
         dialogMusica.setMessage("Carregando...");
         dialogMusica.setCancelable(false);
-        if("".equals(idAutor)){
+        if("".equals(idAutor) || isCadastro){
             putMusica(musica1, holder, position);
         } else {
             JsonTypedRequest<Musica, ResponseBody, ErrorResponse> registrarRequest = new JsonTypedRequest<>
@@ -90,7 +90,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                             null,
                             (ResponseBody response) ->
                             {
-                                dialogMusica.hide();
+                                dialogMusica.dismiss();
                                 if (ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                                     Musica musica = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()), Musica.class);
                                     putMusica(musica, holder, position);
@@ -350,7 +350,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 HttpUtils.buildUrl(activity.getResources(),"song", "modify", param.getId()),
                 null,
                 (ResponseBody response) -> {
-                    dialog.hide();
+                    dialog.dismiss();
                     if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
                         AlertDialogUtils.newSimpleDialog__OneButton(activity,
                                 "Sucesso!", R.drawable.ic_save,
@@ -360,7 +360,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 },
                 (ErrorResponse errorResponse) ->
                 {
-                    dialog.hide();
+                    dialog.dismiss();
                     String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Response]AttMusic", errorResponse.getMessage());
@@ -371,7 +371,7 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 },
                 (VolleyError errorResponse) ->
                 {
-                    dialog.hide();
+                    dialog.dismiss();
                     String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
                     if(errorResponse != null) {
                         Log.e("[ERRO-Volley]AttMusic", errorResponse.getMessage());

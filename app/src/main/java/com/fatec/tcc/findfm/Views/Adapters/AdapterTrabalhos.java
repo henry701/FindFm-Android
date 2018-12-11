@@ -164,7 +164,6 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
 
         holder.bindingVH.viewFeats.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewFeats.setVisibility(View.VISIBLE);
-        //TODO: na lista, clicar leva pro perfil
         holder.bindingVH.viewFeats.setAdapter(new AdapterUsuario(new HashSet<>(trabalho.getMusicos()), activity, false, true));
         holder.bindingVH.viewMusicas.addItemDecoration(itemDecorator);
         activity.getDialog().dismiss();
