@@ -168,6 +168,21 @@
             app:layout_constraintTop_toBottomOf="@+id/linearMidia"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
+        <TextView
+            android:id="@+id/lb_semMusica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/sem_musica"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_musicas_trabalho" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/view_musicas"
             android:layout_width="match_parent"
@@ -177,7 +192,7 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_musicas_trabalho" />
+            app:layout_constraintTop_toBottomOf="@+id/lb_semMusica" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

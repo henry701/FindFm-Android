@@ -27,7 +27,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.fatec.tcc.findfm.Controller.Midia.RadioController;
 import com.fatec.tcc.findfm.Infrastructure.Request.Volley.JsonTypedRequest;
-import com.fatec.tcc.findfm.Model.Business.Musica;
 import com.fatec.tcc.findfm.Model.Business.TiposUsuario;
 import com.fatec.tcc.findfm.Model.Business.Usuario;
 import com.fatec.tcc.findfm.Model.Http.Request.Coordenada;
@@ -38,7 +37,6 @@ import com.fatec.tcc.findfm.R;
 import com.fatec.tcc.findfm.Utils.AlertDialogUtils;
 import com.fatec.tcc.findfm.Utils.FindFM;
 import com.fatec.tcc.findfm.Utils.HttpUtils;
-import com.fatec.tcc.findfm.Utils.JsonUtils;
 import com.fatec.tcc.findfm.Utils.MidiaUtils;
 import com.fatec.tcc.findfm.Utils.Util;
 import com.fatec.tcc.findfm.databinding.ActivityTelaPrincipalBinding;
@@ -329,6 +327,9 @@ public class TelaPrincipal extends AppCompatActivity
                     this.radioController.pause();
                 }
                 break;
+            case R.id.infoRadio:
+                radioInfo();
+                break;
             case R.id.sair:
                 dialog.show();
                 FindFM.logoutUsuario(this);
@@ -491,7 +492,15 @@ public class TelaPrincipal extends AppCompatActivity
                         {
                             getDialog().hide();
                             if(ResponseCode.from(response.getCode()).equals(ResponseCode.GenericSuccess)) {
-                                Musica musica = JsonUtils.jsonConvert(((Map<String, Object>) response.getData()).get("song"), Musica.class);
+                                try {
+                                    String nome = ((Map<String, Object>) ((Map<String, Object>) response.getData()).get("song")).get("name").toString();
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Tocando agora!", R.drawable.ic_audio,
+                                            "Nome da Música: " + nome, "OK", null).create().show();
+                                } catch ( Exception e ){
+                                    String mensagem = "Ocorreu um erro ao tentar conectar com nossos servidores.\nVerifique sua conexão com a Internet e tente novamente.";
+                                    AlertDialogUtils.newSimpleDialog__OneButton(this, "Ops!", R.drawable.ic_error,
+                                            mensagem, "OK", (dialog, id) -> { }).create().show();
+                                }
                             }
                         },
                         (ErrorResponse errorResponse) ->

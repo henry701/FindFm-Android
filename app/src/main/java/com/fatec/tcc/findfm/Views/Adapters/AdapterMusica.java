@@ -230,17 +230,20 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
                 holder.bindingVH.checkRadio.setChecked(musica.isAutorizadoRadio());
                 holder.bindingVH.checkRadio.setOnClickListener(v -> {
                     Integer selecionadasRadio = (Integer) FindFM.getMap().get("autorizadasRadio");
-                    if ( selecionadasRadio >= 3) {
-                        AlertDialogUtils.newSimpleDialog__OneButton(activity, "Atenção!", R.drawable.ic_error,
-                                "Você já selecionou 3 (três) músicas para a rádio.", "OK", null).show();
-                    } else {
-                        if (!holder.bindingVH.checkRadio.isChecked()) {
-                            holder.bindingVH.checkRadio.setChecked(true);
+                    if (!holder.bindingVH.checkRadio.isChecked()) {
+                        if ( selecionadasRadio >= 3) {
+                            AlertDialogUtils.newSimpleDialog__OneButton(activity, "Atenção!", R.drawable.ic_error,
+                                    "Você já selecionou 3 (três) músicas para a rádio.", "OK", null).show();
                         } else {
-                            holder.bindingVH.checkRadio.setChecked(false);
+                            holder.bindingVH.checkRadio.setChecked(true);
+                            musica.setAutorizadoRadio(holder.bindingVH.checkRadio.isChecked());
+                            FindFM.getMap().put("autorizadasRadio", ++selecionadasRadio);
+                            initAutorizarRequest(musica);
                         }
+                    } else {
+                        holder.bindingVH.checkRadio.setChecked(false);
                         musica.setAutorizadoRadio(holder.bindingVH.checkRadio.isChecked());
-                        FindFM.getUsuario().setSelecionadasRadio(selecionadasRadio++);
+                        FindFM.getMap().put("autorizadasRadio", --selecionadasRadio);
                         initAutorizarRequest(musica);
                     }
                 });

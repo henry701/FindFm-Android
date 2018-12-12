@@ -155,6 +155,10 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
             }
         }
 
+        if (trabalho.getMusicas().isEmpty()){
+            holder.bindingVH.lbSemMusica.setVisibility(View.VISIBLE);
+        }
+
         holder.bindingVH.viewMusicas.setLayoutManager(new LinearLayoutManager(activity));
         holder.bindingVH.viewMusicas.setVisibility(View.VISIBLE);
         holder.bindingVH.viewMusicas.setAdapter(new AdapterMusica(trabalho.getMusicas(), activity, false, false, idAutor));

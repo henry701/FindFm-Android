@@ -556,7 +556,7 @@ public class CriarTrabalho extends AppCompatActivity implements Observer {
 
         EditText input = new EditText(this);
         final String[] titulo = {""};
-        AlertDialogUtils.newTextDialog(this, "Nova música", R.drawable.ic_audio, "Qual o nome da música?\nExemplo:\"Música A - Grupo X\"",
+        AlertDialogUtils.newTextDialog(this, "Nova música", R.drawable.ic_audio, "Qual o nome da música?\nExemplo:\"Música A - Seu Nome\"\nObs.: Coloque seu nome pra que possam te encontrar",
                 "Adicionar", "Cancelar",
                 (dialog, which) -> {
                     try {

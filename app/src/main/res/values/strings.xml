@@ -99,6 +99,7 @@
     <string name="trabalhos">Meus Trabalhos</string>
     <string name="title_activity_perfil_fragment">Perfil_fragment</string>
     <string name="radio_iniciar">Iniciar Rádio</string>
+    <string name="radio_info">O que está tocando agora?</string>
     <string name="radio_carregando">Carregando Rádio</string>
     <string name="radio_tocar">Tocar Rádio</string>
     <string name="radio_pausar">Pausar Rádio</string>
@@ -130,6 +131,7 @@
     <string name="descurtir">Descurtir</string>
     <string name="biografia">Biografia…</string>
     <string name="sem_trabalhos">Não há trabalhos para serem mostrados</string>
+    <string name="sem_musica">Não há músicas para serem mostradas</string>
     <string name="descricao">Adicione uma descrição…</string>
     <string name="integrantes">Participações</string>
     <string name="sem_integrantes">Não há integrantes</string>

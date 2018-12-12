@@ -28,6 +28,12 @@
             android:id="@+id/playRadio"
             android:icon="@drawable/ic_play"
             android:title="@string/radio_iniciar" />
+
+        <item
+            android:id="@+id/infoRadio"
+            android:icon="@drawable/ic_info"
+            android:title="@string/radio_info" />
+
         <item
             android:id="@+id/sair"
             android:icon="@drawable/ic_sair"
