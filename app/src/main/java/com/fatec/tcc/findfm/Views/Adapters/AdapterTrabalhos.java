@@ -97,7 +97,7 @@ public class AdapterTrabalhos extends RecyclerView.Adapter<AdapterTrabalhos.View
                 param.putBoolean("visitante", TiposUsuario.VISITANTE.equals(FindFM.getUsuario().getTipoUsuario()));
                 Util.open_form_withParam(activity, CriarTrabalho.class, path, param);
             } else {
-                String path = "CriarPost";
+                String path = "CriarTrabalho";
                 Bundle param = new Bundle();
                 FindFM.getMap().put("trabalho", trabalho);
                 param.putString("telaMode", "visualizar");
