@@ -155,8 +155,6 @@ public class AdapterMusica extends RecyclerView.Adapter<AdapterMusica.ViewHolder
 
         // Start
         holder.bindingVH.btnPlay.setOnClickListener(v -> {
-            //NotificacaoController nPanel = new NotificacaoController(activity);
-
             holder.mediaPlayer.start();
             holder.startPlayProgressUpdater();
 

@@ -116,7 +116,7 @@ public class RegistrarViewModel {
                         case "Contratante":
                             Util.open_form_withParam(view.getApplicationContext(), RegistrarContratante.class, path, this.param);
                             break;
-                        case "Artísta":
+                        case "Artista":
                             Util.open_form_withParam(view.getApplicationContext(), RegistrarMusico.class, path, this.param);
                             break;
                     }},
